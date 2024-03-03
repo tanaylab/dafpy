@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "daf"
+version = "0.1.0"
+description = "Data in Axes in Files"
+authors = [
+    { name = "Oren Ben-Kiki", email = "oren@ben-kiki.org" },
+]
+readme = "README.rst"
+license = { file = "LICENSE.rst" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approve :: MIT License",
+    "Operating SYstem :: OS Independent",
+]
+# required-python = ">= 3.7"
+dependencies = [
+    "juliacall"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "bumpversion",
+    "flake8",
+    "isort",
+    "mypy",
+    "mypy_extensions",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "sphinx_rtd_theme",
+    "twine",
+    "tox",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/tanaylab/daf.py"
+"Bug Tracker" = "https://github.com/tanaylab/daf.py/issues"
+
+[tool.setuptools.packages.find]
+exclude = ["htmlcov"]
