@@ -24,7 +24,7 @@ endef
 export PRINT_HELP_PYSCRIPT
 
 help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@python3 -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 clean: clean-make clean-build clean-pyc clean-test clean-docs  ## remove all build, test, coverage and Python artifacts
 
@@ -208,14 +208,14 @@ docs: .make.docs  ## generate HTML documentation
 build: .make.build  ## build the C++ extensions
 
 .make.build: $(PY_SOURCE_FILES)
-	python setup.py build
+	python3 setup.py build
 	touch $@
 
 dist: .make.dist  ## builds the release distribution package
 
 .make.dist: staged $(ALL_SOURCE_FILES)
 	rm -rf dist/
-	python setup.py sdist
+	python3 setup.py sdist
 	twine check dist/*
 	touch $@
 

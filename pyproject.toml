@@ -35,7 +35,6 @@ dev = [
     "sphinx",
     "sphinx_rtd_theme",
     "twine",
-    "tox",
 ]
 test = [
     "pytest",
