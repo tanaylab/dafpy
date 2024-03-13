@@ -19,7 +19,7 @@ FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!"))]
 
 @pytest.mark.parametrize("format_data", FORMATS)
 @pytest.mark.parametrize(
-    "scalar_data", [("version", "1.0.1", "String"), ("float32", np.float32(0.5), "Float32"), ("float", 0.5, "Float64")]
+    "scalar_data", [("version", "1.0.1", "String"), ("int8", np.int8(1), "Int8"), ("float", 0.5, "Float64")]
 )
 def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: Tuple[str, StorageScalar, str]) -> None:
     format_name, create_empty = format_data
@@ -54,7 +54,44 @@ def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: 
     )
 
     data.delete_scalar(scalar_name)
-    data.delete_scalar(scalar_name, must_exist=False)
+    assert (
+        data.description()
+        == dedent(
+            f"""
+                name: test!
+                type: {format_name}
+            """
+        )[1:]
+    )
+
+
+@pytest.mark.parametrize("format_data", FORMATS)
+@pytest.mark.parametrize("axis_data", [("cell", ["A", "B"]), ("gene", np.array(["X", "Y", "Z"]))])
+def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple[str, Sequence[str]]) -> None:
+    format_name, create_empty = format_data
+    axis_name, axis_entries = axis_data
+
+    data = create_empty()
+
+    assert len(data.axis_names()) == 0
+    assert not data.has_axis(axis_name)
+    data.add_axis(axis_name, axis_entries)
+    assert data.axis_length(axis_name) == len(axis_entries)
+    assert list(data.get_axis(axis_name)) == list(axis_entries)
+    assert set(data.axis_names()) == set([axis_name])
+    assert (
+        data.description()
+        == dedent(
+            f"""
+                name: test!
+                type: {format_name}
+                axes:
+                  {axis_name}: {len(axis_entries)} entries
+            """
+        )[1:]
+    )
+
+    data.delete_axis(axis_name)
     assert (
         data.description()
         == dedent(

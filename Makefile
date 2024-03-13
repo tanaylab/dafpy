@@ -157,7 +157,7 @@ black: .make.black  ## check format with black
 flake8: .make.flake8  ## check format with flake8
 
 .make.flake8: $(PY_SOURCE_FILES)
-	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore W503,F401,F403 $(NAME) tests
+	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore F401,E402,F403,W503 $(NAME) tests
 	touch $@
 
 reformat: stripspaces isortify blackify  ## reformat code
@@ -191,7 +191,7 @@ mypy: .make.mypy  ## check code with mypy
 pytest: .make.pytest  ## run tests on the active Python with pytest
 
 .make.pytest: $(PY_SOURCE_FILES)
-	`which pytest` -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail tests
+	`which pytest` -v -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail tests
 	touch $@
 
 .PHONY: docs

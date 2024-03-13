@@ -8,6 +8,12 @@ removed from the Python method names.
 """
 
 from typing import AbstractSet
+from typing import Any
+from typing import Sequence
+from typing import Type
+
+import numpy as np
+from juliacall import AnyValue  # type: ignore
 
 from .julia_import import jl
 from .storage_types import StorageScalar
@@ -52,6 +58,30 @@ class DafReader:
         """
         return jl.Daf.scalar_names(self.daf_jl)
 
+    def has_axis(self, axis: str) -> bool:
+        """
+        Check whether some ``axis`` exists in the ``Daf`` data set.
+        """
+        return jl.Daf.has_axis(self.daf_jl, axis)
+
+    def axis_names(self) -> AbstractSet[str]:
+        """
+        The names of the axes of the ``Daf`` data set.
+        """
+        return jl.Daf.axis_names(self.daf_jl)
+
+    def axis_length(self, axis: str) -> int:
+        """
+        The number of entries along the ``axis`` i the ``Daf`` data set.n
+        """
+        return jl.Daf.axis_length(self.daf_jl, axis)
+
+    def get_axis(self, axis: str) -> np.ndarray:
+        """
+        The unique names of the entries of some ``axis`` of the ``Daf`` data set.
+        """
+        return _pythonize_vector(jl.Daf.get_axis(self.daf_jl, axis), str)
+
 
 class DafWriter(DafReader):
     """
@@ -69,3 +99,21 @@ class DafWriter(DafReader):
         Delete a scalar property with some ``name`` from the ``Daf`` data set.
         """
         jl.Daf.delete_scalar_b(self.daf_jl, name, must_exist=must_exist)
+
+    def add_axis(self, axis: str, entries: Sequence[str]) -> None:
+        """
+        Add a new ``axis`` to the ``Daf`` data set.
+        """
+        jl.Daf.add_axis_b(self.daf_jl, axis, np.array(entries, dtype=str))
+
+    def delete_axis(self, axis: str, *, must_exist: bool = True) -> None:
+        """
+        Delete an ``axis`` from the ``Daf`` data set.
+        """
+        jl.Daf.delete_axis_b(self.daf_jl, axis, must_exist=must_exist)
+
+
+def _pythonize_vector(julia_vector: Any, dtype: Type) -> np.ndarray:
+    if len(julia_vector) == 0 or isinstance(julia_vector[0], AnyValue):
+        return np.array(list(julia_vector), dtype=dtype)
+    raise TypeError(str(type(julia_vector[0])))

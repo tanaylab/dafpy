@@ -26,6 +26,8 @@ import warnings
 
 __all__ = ["jl"]
 
+IGNORE_REIMPORT = False
+
 # Check if JuliaCall is already loaded, and if so, warn the user
 # about the relevant environment variables. If not loaded,
 # set up sensible defaults.

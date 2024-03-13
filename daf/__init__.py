@@ -10,13 +10,6 @@ __version__ = "0.1.0"
 
 # pylint: disable=wildcard-import,unused-wildcard-import
 
+from .julia_import import *  # isort: skip
 from .data import *
 from .formats import *
-from .julia_import import *
-
-
-def fake_function() -> str:
-    """
-    Fake function for testing.
-    """
-    return "Hello"
