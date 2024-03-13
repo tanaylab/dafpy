@@ -32,7 +32,6 @@ clean-make:
 	rm -fr .make.*
 
 clean-build:
-	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
@@ -106,10 +105,9 @@ backticks: .make.backticks  ## check usage of backticks in documentation
 	@OK=true; \
 	for FILE in $(PY_SOURCE_FILES) $(RST_SOURCE_FILES); \
 	do \
-	    if sed 's/``\([^`]*\)``/\1/g;s/:`\([^`]*\)`/:\1/g;s/`\([^`]*\)`_/\1_/g' "$$FILE" \
-	    | grep --label "$$FILE" -n -H '`' \
-	    | sed 's//`/g' \
-	    | grep '.'; \
+	    if ( sed 's/`genindex`/genindex/;s/``\([^`]*\)``/\1/g;s/`\([^`]*\)`_/\1_/g' "$$FILE" \
+               | grep --label "$$FILE" -n -H '`' \
+               ) \
 	    then OK=false; \
 	    fi; \
 	done; \
@@ -159,14 +157,14 @@ black: .make.black  ## check format with black
 flake8: .make.flake8  ## check format with flake8
 
 .make.flake8: $(PY_SOURCE_FILES)
-	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore W503 $(NAME) tests
+	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore W503,F401,F403 $(NAME) tests
 	touch $@
 
 reformat: stripspaces isortify blackify  ## reformat code
 
 stripspaces:  # strip trailing spaces
 	@echo stripspaces
-	@for FILE in $$(grep -l '\s$$' $$(git ls-files | grep -v setup.cfg)); \
+	@for FILE in $$(grep -l '\s$$' $$(git ls-files | grep -v docs/v)); \
 	do sed -i -s 's/\s\s*$$//' $$FILE; \
 	done
 
@@ -181,7 +179,7 @@ smells: mypy pylint  ## check for code smells
 pylint: .make.pylint  ## check code with pylint
 
 .make.pylint: $(PY_SOURCE_FILES)
-	pylint --max-line-length $(MAX_LINE_LENGTH) $(NAME) tests
+	pylint --max-line-length $(MAX_LINE_LENGTH) --disable=fixme,wrong-import-position,no-name-in-module $(NAME) tests
 	touch $@
 
 mypy: .make.mypy  ## check code with mypy
@@ -192,7 +190,7 @@ mypy: .make.mypy  ## check code with mypy
 
 pytest: .make.pytest  ## run tests on the active Python with pytest
 
-.make.pytest: .make.build
+.make.pytest: $(PY_SOURCE_FILES)
 	`which pytest` -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail tests
 	touch $@
 
@@ -203,12 +201,6 @@ docs: .make.docs  ## generate HTML documentation
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	@echo "Results in docs/v0.1.0/html/index.html"
-	touch $@
-
-build: .make.build  ## build the C++ extensions
-
-.make.build: $(PY_SOURCE_FILES)
-	python3 setup.py build
 	touch $@
 
 dist: .make.dist  ## builds the release distribution package

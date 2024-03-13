@@ -2,7 +2,7 @@
 Test fake function.
 """
 
-# pylint: disable=wildcard-import,missing-function-docstring
+# pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
 from daf import *

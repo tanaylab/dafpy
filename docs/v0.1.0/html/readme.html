@@ -82,9 +82,10 @@
   <section id="daf-py-0-1-0-data-in-axes-in-formats">
 <h1>Daf.py 0.1.0 - Data in Axes in Formats<a class="headerlink" href="#daf-py-0-1-0-data-in-axes-in-formats" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://github.com/tanaylab/Daf.jl">Daf.jl</a> is a Julia package which provides a uniform generic interface for
-accessing 1D and 2D data arranged along some set of axes. This is a much-needed generalization of the <a class="reference external" href="https://github.com/scverse/anndata">AnnData</a> functionality. This package (<code class="docutils literal notranslate"><span class="pre">Daf.py</span></code>) is a wrapper around the Julia package
-that allows accessing <code class="docutils literal notranslate"><span class="pre">Daf</span></code> data from Python, using the <a class="reference external" href="https://github.com/JuliaPy/PythonCall.jl">JuliaCall</a>
-package.</p>
+accessing 1D and 2D data arranged along some set of axes. This is a much-needed generalization of the
+<a class="reference external" href="https://github.com/scverse/anndata">AnnData</a> functionality. This package (<code class="docutils literal notranslate"><span class="pre">Daf.py</span></code>) is a wrapper around the Julia
+package that allows accessing <code class="docutils literal notranslate"><span class="pre">Daf</span></code> data from Python, using the
+<a class="reference external" href="https://github.com/JuliaPy/PythonCall.jl">JuliaCall</a> package.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>Just <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">daf</span></code>, like installing any other Python package.</p>
@@ -98,10 +99,12 @@ package.</p>
 <li><p>There is no <code class="docutils literal notranslate"><span class="pre">!</span></code> suffix for functions that modify the data (e.g., write <code class="docutils literal notranslate"><span class="pre">writer.set_scalar(&quot;version&quot;,</span> <span class="pre">&quot;1.0&quot;)</span></code> in
 Python instead of <code class="docutils literal notranslate"><span class="pre">set_scalar!(writer,</span> <span class="pre">&quot;version&quot;,</span> <span class="pre">&quot;1.0&quot;)</span></code> in Julia.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Daf.jl</span></code> supports importing and exporting <code class="docutils literal notranslate"><span class="pre">AnnData</span></code> objects. However, since it is a Julia package, these objects
-are <strong>not</strong> Python <code class="docutils literal notranslate"><span class="pre">anndata</span></code> objects; instead they use the implementation provides by the <a class="reference external" href="https://github.com/scverse/Muon.jl">Muon.jl</a> Julia package. That is, to import/export <code class="docutils literal notranslate"><span class="pre">AnnData</span></code> between <code class="docutils literal notranslate"><span class="pre">Daf</span></code> and
-Python, your best bet is to go through <code class="docutils literal notranslate"><span class="pre">h5ad</span></code> files.</p></li>
+are <strong>not</strong> Python <code class="docutils literal notranslate"><span class="pre">anndata</span></code> objects; instead they use the implementation provides by the
+<a class="reference external" href="https://github.com/scverse/Muon.jl">Muon.jl</a> Julia package. That is, to import/export <code class="docutils literal notranslate"><span class="pre">AnnData</span></code> between <code class="docutils literal notranslate"><span class="pre">Daf</span></code>
+and Python, your best bet is to go through <code class="docutils literal notranslate"><span class="pre">h5ad</span></code> files.</p></li>
 </ul>
-<p>See the Python API documentation (latest published: TODO, head revision: <a class="reference external" href="https://tanaylab.github.io/Daf.py/v0.1.0/html">here</a>) for details.</p>
+<p>See the Python API documentation (latest published: TODO, head revision:
+<a class="reference external" href="https://tanaylab.github.io/Daf.py/v0.1.0/html">here</a>) for details.</p>
 </section>
 <section id="license-mit">
 <h2>License (MIT)<a class="headerlink" href="#license-mit" title="Link to this heading">¶</a></h2>

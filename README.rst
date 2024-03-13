@@ -2,10 +2,10 @@ Daf.py 0.1.0 - Data in Axes in Formats
 ======================================
 
 `Daf.jl <https://github.com/tanaylab/Daf.jl>`_ is a Julia package which provides a uniform generic interface for
-accessing 1D and 2D data arranged along some set of axes. This is a much-needed generalization of the `AnnData
-<https://github.com/scverse/anndata>`_ functionality. This package (``Daf.py``) is a wrapper around the Julia package
-that allows accessing ``Daf`` data from Python, using the `JuliaCall <https://github.com/JuliaPy/PythonCall.jl>`_
-package.
+accessing 1D and 2D data arranged along some set of axes. This is a much-needed generalization of the
+`AnnData <https://github.com/scverse/anndata>`_ functionality. This package (``Daf.py``) is a wrapper around the Julia
+package that allows accessing ``Daf`` data from Python, using the
+`JuliaCall <https://github.com/JuliaPy/PythonCall.jl>`_ package.
 
 Installation
 ------------
@@ -24,12 +24,12 @@ The Python package provides the same API as the Julia package, with the followin
   Python instead of ``set_scalar!(writer, "version", "1.0")`` in Julia.
 
 - ``Daf.jl`` supports importing and exporting ``AnnData`` objects. However, since it is a Julia package, these objects
-  are **not** Python ``anndata`` objects; instead they use the implementation provides by the `Muon.jl
-  <https://github.com/scverse/Muon.jl>`_ Julia package. That is, to import/export ``AnnData`` between ``Daf`` and
-  Python, your best bet is to go through ``h5ad`` files.
+  are **not** Python ``anndata`` objects; instead they use the implementation provides by the
+  `Muon.jl <https://github.com/scverse/Muon.jl>`_ Julia package. That is, to import/export ``AnnData`` between ``Daf``
+  and Python, your best bet is to go through ``h5ad`` files.
 
-See the Python API documentation (latest published: TODO, head revision: `here
-<https://tanaylab.github.io/Daf.py/v0.1.0/html>`_) for details.
+See the Python API documentation (latest published: TODO, head revision:
+`here <https://tanaylab.github.io/Daf.py/v0.1.0/html>`_) for details.
 
 License (MIT)
 -------------
