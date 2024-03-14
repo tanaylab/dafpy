@@ -191,7 +191,7 @@ mypy: .make.mypy  ## check code with mypy
 pytest: .make.pytest  ## run tests on the active Python with pytest
 
 .make.pytest: $(PY_SOURCE_FILES)
-	`which pytest` -v -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail tests
+	`which pytest` -vv -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail tests
 	touch $@
 
 .PHONY: docs

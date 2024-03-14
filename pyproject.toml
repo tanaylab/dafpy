@@ -18,7 +18,9 @@ classifiers = [
 ]
 requires-python = ">= 3.12"
 dependencies = [
-    "juliacall"
+    "juliacall",
+    "numpy",
+    "pandas",
 ]
 
 [tool.setuptool]
