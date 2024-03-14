@@ -9,13 +9,31 @@ removed from the Python method names.
 
 from typing import AbstractSet
 from typing import Any
+from typing import Optional
 from typing import Sequence
+from typing import overload
+from weakref import WeakValueDictionary
 
 import numpy as np
 import pandas as pd  # type: ignore
 
 from .julia_import import jl
 from .storage_types import StorageScalar
+
+__all__ = ["Undef", "undef", "DafReader", "DafWriter"]
+
+
+class Undef:  # pylint: disable=too-few-public-methods
+    """
+    Python equivalent for Julia's ``UndefInitializer``.
+    """
+
+    def __str__(self) -> str:
+        return "undef"
+
+
+#: Python equivalent for Julia's ``undef``.
+undef = Undef()
 
 
 class DafReader:
@@ -25,6 +43,7 @@ class DafReader:
 
     def __init__(self, daf_jl) -> None:
         self.daf_jl = daf_jl
+        self.weakrefs: WeakValueDictionary[Any, Any] = WeakValueDictionary()
 
     @property
     def name(self) -> str:
@@ -84,7 +103,13 @@ class DafReader:
 
         This creates an in-memory copy of the data every time the function is called.
         """
-        return _from_julia(jl.Daf.get_axis(self.daf_jl, axis))
+        axis_version_counter = jl.Daf.axis_version_counter(self.daf_jl, axis)
+        axis_key = (axis_version_counter, axis)
+        axis_entries = self.weakrefs.get(axis_key)
+        if axis_entries is None:
+            axis_entries = _from_julia(jl.Daf.get_axis(self.daf_jl, axis))
+            self.weakrefs[axis_key] = axis_entries
+        return axis_entries
 
     def has_vector(self, axis: str, name: str) -> bool:
         """
@@ -99,42 +124,87 @@ class DafReader:
         """
         return jl.Daf.vector_names(self.daf_jl, axis)
 
+    @overload
     def get_np_vector(
         self,
         axis: str,
         name: str,
         *,
-        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | None | jl.UndefInitializer = jl.undef,
-    ) -> np.ndarray:
+        default: None,
+    ) -> Optional[np.ndarray]: ...
+
+    @overload
+    def get_np_vector(
+        self,
+        axis: str,
+        name: str,
+        *,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+    ) -> np.ndarray: ...
+
+    def get_np_vector(
+        self,
+        axis,
+        name,
+        *,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+    ) -> Optional[np.ndarray]:
         """
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
 
-        This always returns a ``numpy`` vector. If the stored data is numeric and dense, this is a zero-copy view of the
-        data stored in the ``Daf`` data set. Otherwise, a Python copy of the data as a dense ``numpy`` array is
-        returned. Since Python has no concept of sparse vectors (because "reasons"), you can't zero-copy view a sparse
-        ``Daf`` vector using the Python API.
+        This always returns a ``numpy`` vector (unless ``default`` is ``None`` and the vector does not exist). If the
+        stored data is numeric and dense, this is a zero-copy view of the data stored in the ``Daf`` data set.
+        Otherwise, a Python copy of the data as a dense ``numpy`` array is returned. Since Python has no concept of
+        sparse vectors (because "reasons"), you can't zero-copy view a sparse ``Daf`` vector using the Python API.
         """
-        return _from_julia(jl.Daf.get_vector(self.daf_jl, axis, name, default=default).array)
+        if not jl.Daf.has_vector(self.daf_jl, axis, name):
+            if default is None:
+                return None
+            return _from_julia(jl.Daf.get_vector(self.daf_jl, axis, name, default=_to_julia(default)).array)
+
+        vector_version_counter = jl.Daf.vector_version_counter(self.daf_jl, axis, name)
+        vector_key = (vector_version_counter, axis, name)
+        vector_value = self.weakrefs.get(vector_key)
+        if vector_value is None:
+            vector_value = _from_julia(jl.Daf.get_vector(self.daf_jl, axis, name).array)
+            self.weakrefs[vector_key] = vector_value
+        return vector_value
+
+    @overload
+    def get_pd_vector(
+        self,
+        axis: str,
+        name: str,
+        *,
+        default: None,
+    ) -> Optional[pd.Series]: ...
+
+    @overload
+    def get_pd_vector(
+        self,
+        axis: str,
+        name: str,
+        *,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+    ) -> pd.Series: ...
 
     def get_pd_vector(
         self,
         axis: str,
         name: str,
         *,
-        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | None | jl.UndefInitializer = jl.undef,
-    ) -> pd.Series:
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+    ) -> Optional[pd.Series]:
         """
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
 
-        This always returns a ``pandas`` series. If the stored data is numeric and dense, the values are a zero-copy
-        view of the data stored in the ``Daf`` data set. Otherwise, a Python copy of the data as a dense ``numpy`` array
-        is returned. Since Python has no concept of sparse vectors (because "reasons"), you can't zero-copy view a
-        sparse ``Daf`` vector using the Python API.
+        This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis
+        as the index.
         """
-        named = jl.Daf.get_vector(self.daf_jl, axis, name, default=default)
-        values = _from_julia(named.array)
-        names = _from_julia(jl.names(named, 1))
-        return pd.Series(values, index=names)
+        vector_value = self.get_np_vector(axis, name, default=_to_julia(default))
+        if vector_value is None:
+            return None
+        return pd.Series(vector_value, index=self.get_axis(axis))
 
 
 class DafWriter(DafReader):
@@ -190,7 +260,9 @@ class DafWriter(DafReader):
 
 
 def _to_julia(value: Any) -> Any:
-    if isinstance(value, Sequence) and not isinstance(value, np.ndarray):
+    if isinstance(value, Undef):
+        value = jl.undef
+    elif isinstance(value, Sequence) and not isinstance(value, np.ndarray):
         value = np.array(value)
     return value
 

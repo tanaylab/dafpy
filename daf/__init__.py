@@ -13,3 +13,4 @@ __version__ = "0.1.0"
 from .julia_import import *  # isort: skip
 from .data import *
 from .formats import *
+from .storage_types import *

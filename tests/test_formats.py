@@ -5,8 +5,11 @@ Test ``Daf`` storage formats.
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
+from contextlib import contextmanager
 from textwrap import dedent
+from typing import Any
 from typing import Callable
+from typing import Sequence
 from typing import Tuple
 
 import numpy as np
@@ -15,6 +18,17 @@ import pytest
 from daf import *
 
 FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!"))]
+
+
+@contextmanager
+def assertRaises(expected: str) -> None:
+    try:
+        yield
+        raise AssertionError("no exception was thrown")
+    except Exception as exception:
+        actual = str(exception)
+        if expected not in actual:
+            raise exception
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
@@ -87,6 +101,34 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
 
     assert len(data.axis_names()) == 0
     assert not data.has_axis(axis_name)
+
+
+@pytest.mark.parametrize("format_data", FORMATS)
+def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
+    format_name, create_empty = format_data
+
+    data = create_empty()
+    data.add_axis("cell", ["A", "B"])
+
+    with assertRaises(
+        dedent(
+            """
+                missing vector: foo
+                for the axis: cell
+                in the daf data: test!
+            """[
+                1:
+            ]
+        )
+    ):
+        data.get_np_vector("cell", "foo")
+
+    assert str(undef) == "undef"
+    assert data.get_np_vector("cell", "foo", default=None) is None
+    assert data.get_pd_vector("cell", "foo", default=None) is None
+    assert list(data.get_np_vector("cell", "foo", default=1)) == [1, 1]
+    assert list(data.get_np_vector("cell", "foo", default=[1, 2])) == [1, 2]
+    assert list(data.get_np_vector("cell", "foo", default=np.array([1, 2]))) == [1, 2]
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
