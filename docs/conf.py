@@ -40,7 +40,21 @@ extensions = [
 autodoc_member_order = 'bysource'
 autosectionlabel_prefix_document = True
 nitpicky = True
-nitpick_ignore = []
+nitpick_ignore = [
+    ('py:class', 'numpy.int8'),
+    ('py:class', 'numpy.int16'),
+    ('py:class', 'numpy.int32'),
+    ('py:class', 'numpy.int64'),
+    ('py:class', 'numpy.uint8'),
+    ('py:class', 'numpy.uint16'),
+    ('py:class', 'numpy.uint32'),
+    ('py:class', 'numpy.uint64'),
+    ('py:class', 'numpy.float32'),
+    ('py:class', 'numpy.float64'),
+    ('py:class', 'numpy.ndarray'),
+    ('py:class', 'pandas.core.series.Series'),
+    ('py:class', 'pandas.core.frame.DataFrame'),
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

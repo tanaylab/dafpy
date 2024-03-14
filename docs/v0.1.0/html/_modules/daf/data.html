@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>daf.data &mdash; Daf 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Daf
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">README</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Daf</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">daf.data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for daf.data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Interface of ``DafReader`` and ``DafWriter``.</span>
+
+<span class="sd">In Julia, the API is defined as a set of functions, which take the ``Daf`` object as the 1st parameter. In Python, this</span>
+<span class="sd">is implemented as member functions of the ``DafReader`` and ``DafWriter`` classes that wrap the matching Julia objects.</span>
+<span class="sd">Python also doesn&#39;t support the ``!`` trailing character in function names (to indicate modifying the object), so it is</span>
+<span class="sd">removed from the Python method names.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AbstractSet</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+<span class="kn">from</span> <span class="nn">weakref</span> <span class="kn">import</span> <span class="n">WeakValueDictionary</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>  <span class="c1"># type: ignore</span>
+
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
+<span class="kn">from</span> <span class="nn">.storage_types</span> <span class="kn">import</span> <span class="n">StorageScalar</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Undef&quot;</span><span class="p">,</span> <span class="s2">&quot;undef&quot;</span><span class="p">,</span> <span class="s2">&quot;DafReader&quot;</span><span class="p">,</span> <span class="s2">&quot;DafWriter&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Undef">
+<a class="viewcode-back" href="../../data.html#daf.data.Undef">[docs]</a>
+<span class="k">class</span> <span class="nc">Undef</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Python equivalent for Julia&#39;s ``UndefInitializer``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;undef&quot;</span></div>
+
+
+
+<span class="c1">#: Python equivalent for Julia&#39;s ``undef``.</span>
+<span class="n">undef</span> <span class="o">=</span> <span class="n">Undef</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="DafReader">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader">[docs]</a>
+<span class="k">class</span> <span class="nc">DafReader</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read-only access to ``Daf`` data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daf_jl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span> <span class="o">=</span> <span class="n">daf_jl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">:</span> <span class="n">WeakValueDictionary</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the (hopefully unique) name of the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="o">.</span><span class="n">name</span>
+
+<div class="viewcode-block" id="DafReader.description">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.description">[docs]</a>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">deep</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a (multi-line) description of the contents of ``Daf`` data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="n">deep</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.has_scalar">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.has_scalar">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether a scalar property with some ``name`` exists in the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_scalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.get_scalar">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_scalar">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StorageScalar</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of a scalar property with some ``name`` in the ``Daf`` data set.</span>
+
+<span class="sd">        Numeric scalars are always returned as ``int`` or ``float``, regardless of the specific data type they are</span>
+<span class="sd">        stored in the ``Daf`` data set (e.g., a ``UInt8`` will be returned as an ``int`` instead of a ``np.uint8``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.scalar_names">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.scalar_names">[docs]</a>
+    <span class="k">def</span> <span class="nf">scalar_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The names of the scalar properties in the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">scalar_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.has_axis">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.has_axis">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether some ``axis`` exists in the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.axis_names">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_names">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The names of the axes of the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.axis_length">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_length">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The number of entries along the ``axis`` i the ``Daf`` data set.n</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.get_axis">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_axis">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The unique names of the entries of some ``axis`` of the ``Daf`` data set.</span>
+
+<span class="sd">        This creates an in-memory copy of the data, which is cached for repeated calls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">axis_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+        <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+        <span class="n">axis_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">axis_entries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">axis_entries</span> <span class="o">=</span> <span class="n">_from_julia</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">axis_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_entries</span>
+        <span class="k">return</span> <span class="n">axis_entries</span></div>
+
+
+<div class="viewcode-block" id="DafReader.has_vector">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.has_vector">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether a vector property with some ``name`` exists for the ``axis`` in the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.vector_names">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.vector_names">[docs]</a>
+    <span class="k">def</span> <span class="nf">vector_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special ``name``</span>
+<span class="sd">        property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">vector_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_np_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_np_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="DafReader.get_np_vector">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_np_vector">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_np_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axis</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.</span>
+
+<span class="sd">        This always returns a ``numpy`` vector (unless ``default`` is ``None`` and the vector does not exist). If the</span>
+<span class="sd">        stored data is numeric and dense, this is a zero-copy view of the data stored in the ``Daf`` data set.</span>
+<span class="sd">        Otherwise, a Python copy of the data as a dense ``numpy`` array is returned (and cached for repeated calls).</span>
+<span class="sd">        Since Python has no concept of sparse vectors (because &quot;reasons&quot;), you can&#39;t zero-copy view a sparse ``Daf``</span>
+<span class="sd">        vector using the Python API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">_from_julia</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">))</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+
+        <span class="n">vector_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">vector_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">vector_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">vector_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">vector_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vector_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vector_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vector_value</span> <span class="o">=</span> <span class="n">_from_julia</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">vector_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_value</span>
+        <span class="k">return</span> <span class="n">vector_value</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_pd_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_pd_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="DafReader.get_pd_vector">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_pd_vector">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_pd_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.</span>
+
+<span class="sd">        This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis</span>
+<span class="sd">        as the index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vector_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">vector_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">vector_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="DafReader.has_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.has_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether a matrix property with some ``name`` exists for the ``rows_axis`` and the ``columns_axis`` in the</span>
+<span class="sd">        ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafReader.matrix_names">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.matrix_names">[docs]</a>
+    <span class="k">def</span> <span class="nf">matrix_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">matrix_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_np_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_np_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="DafReader.get_np_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_np_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_np_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the</span>
+<span class="sd">        ``Daf`` data set.</span>
+
+<span class="sd">        This always returns a ``numpy`` matrix (unless ``default`` is ``None`` and the matrix does not exist). Note that</span>
+<span class="sd">        by default ``numpy`` matrices are in row-major (C) layout and not in column-major (Fortran) layout. To get a</span>
+<span class="sd">        row-major matrix, simply flip the order of the axes, and call transpose on the result (which is an efficient</span>
+<span class="sd">        zero-copy operation).</span>
+
+<span class="sd">        Also note that although we call this ``get_np_matrix``, the result is a simple ``np.ndarray`` with two</span>
+<span class="sd">        dimensions (which is what you want) and **not** the deprecated ``np.matrix`` (which is to be avoided at all</span>
+<span class="sd">        costs).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">_from_julia</span><span class="p">(</span>
+                <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">array</span>
+            <span class="p">)</span>
+
+        <span class="n">matrix_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">matrix_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">matrix_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">matrix_version_counter</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">matrix_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">matrix_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matrix_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">matrix_value</span> <span class="o">=</span> <span class="n">_from_julia</span><span class="p">(</span>
+                <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span><span class="o">.</span><span class="n">array</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">matrix_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix_value</span>
+        <span class="k">return</span> <span class="n">matrix_value</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_pd_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">get_pd_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="DafReader.get_pd_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_pd_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_pd_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Undef</span> <span class="o">=</span> <span class="n">undef</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the</span>
+<span class="sd">        ``Daf`` data set.</span>
+
+<span class="sd">        This is a wrapper around ``get_np_matrix`` which returns a ``pandas`` data frame using the entry names of the</span>
+<span class="sd">        axes as the indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">matrix_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matrix_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">columns_axis</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DafWriter">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter">[docs]</a>
+<span class="k">class</span> <span class="nc">DafWriter</span><span class="p">(</span><span class="n">DafReader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read-write access to ``Daf`` data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DafWriter.set_scalar">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.set_scalar">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set.</span>
+
+<span class="sd">        You can force the data type numeric scalars are stored in by using the appropriate ``numpy`` type (e.g., a</span>
+<span class="sd">        ``np.uint8`` will be stored as a ``UInt8``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_scalar_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.delete_scalar">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.delete_scalar">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a scalar property with some ``name`` from the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">delete_scalar_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.add_axis">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.add_axis">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new ``axis`` to the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">add_axis_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">entries</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.delete_axis">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.delete_axis">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete an ``axis`` from the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">delete_axis_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.set_vector">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.set_vector">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_vector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.</span>
+
+<span class="sd">        If the provided ``value`` is numeric and dense, this passes a zero-copy view of the data to the ``Daf`` data</span>
+<span class="sd">        set. Otherwise, a Python copy of the data as a dense ``numpy`` array is made, and passed to ``Daf``. Since</span>
+<span class="sd">        Python has no concept of sparse vectors (because &quot;reasons&quot;), you can&#39;t create a sparse ``Daf`` vector using the</span>
+<span class="sd">        Python API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.delete_vector">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.delete_vector">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">delete_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.set_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.set_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.</span>
+<span class="sd">        Since ``Daf`` is implemented Julia, this should be a column-major ``matrix``, so if you have a standard</span>
+<span class="sd">        ``numpy`` matrix, flip the order of the axes and pass the ``transpose`` (which is an efficient zero-copy</span>
+<span class="sd">        operation).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_matrix_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.relayout_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.relayout_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">relayout_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the</span>
+<span class="sd">        ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with</span>
+<span class="sd">        flipped axes).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">relayout_matrix_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafWriter.delete_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.delete_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data</span>
+<span class="sd">        set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">delete_matrix_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span> <span class="nf">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Undef</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">undef</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">_from_julia</span><span class="p">(</span><span class="n">julia_vector</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">julia_vector</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="p">:</span>
+        <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">python_array</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">python_array</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2024 Weizmann Institute of Science.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

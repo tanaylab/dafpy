@@ -1,5 +1,5 @@
 """
-Data in `Axes`_ in Files.
+Data in Axes in Files.
 
 This is a thin wrapper for the ``Daf.jl`` Julia package.
 """

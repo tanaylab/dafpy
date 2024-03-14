@@ -2,7 +2,10 @@ API
 ===
 
 .. automodule:: daf
-    :members:
 
-.. automodule:: daf.import_julia
-    :members:
+.. toctree::
+
+  import_julia
+  data
+  formats
+  storage_types
