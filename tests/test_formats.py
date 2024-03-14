@@ -84,6 +84,7 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
 
     data.add_axis(axis_name, axis_entries)
 
+    assert data.has_axis(axis_name)
     assert data.axis_length(axis_name) == len(axis_entries)
     assert list(data.get_axis(axis_name)) == list(axis_entries)
     assert set(data.axis_names()) == set([axis_name])
@@ -150,6 +151,7 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     vector_entries = np.array(vector_entries)
     data.set_vector("cell", "foo", vector_entries)
 
+    assert data.has_vector("cell", "foo")
     assert set(data.vector_names("cell")) == set(["foo"])
     stored_vector = data.get_np_vector("cell", "foo")
     stored_series = data.get_pd_vector("cell", "foo")
@@ -188,3 +190,110 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     data.set_vector("cell", "foo", list(vector_entries))
     new_vector = data.get_np_vector("cell", "foo")
     assert id(new_vector) != id(stored_vector)
+
+
+@pytest.mark.parametrize("format_data", FORMATS)
+def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
+    _format_name, create_empty = format_data
+
+    data = create_empty()
+    data.add_axis("cell", ["A", "B"])
+    data.add_axis("gene", ["X", "Y", "Z"])
+
+    with assert_raises(
+        dedent(
+            """
+                missing matrix: UMIs
+                for the rows axis: cell
+                and the columns axis: gene
+                in the daf data: test!
+            """[
+                1:
+            ]
+        )
+    ):
+        data.get_np_matrix("cell", "gene", "UMIs", relayout=False)
+
+    assert str(undef) == "undef"
+    assert data.get_np_matrix("cell", "gene", "UMIs", default=None) is None
+    assert data.get_pd_matrix("cell", "gene", "UMIs", default=None) is None
+    assert np.all(data.get_np_matrix("cell", "gene", "UMIs", default=1) == np.array([[1, 1, 1], [1, 1, 1]]))
+    default_matrix = np.array([[1, 2], [3, 4], [5, 6]]).transpose()
+    assert id(data.get_np_matrix("cell", "gene", "UMIs", default=default_matrix)) == id(default_matrix)
+
+
+@pytest.mark.parametrize("format_data", FORMATS)
+def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
+    format_name, create_empty = format_data
+
+    data = create_empty()
+    data.add_axis("cell", ["A", "B"])
+    data.add_axis("gene", ["X", "Y", "Z"])
+
+    assert len(data.matrix_names("cell", "gene", relayout=False)) == 0
+    assert not data.has_matrix("cell", "gene", "UMIs", relayout=False)
+
+    row_major_umis = np.array([[1, 2], [3, 4], [5, 6]], dtype=np.int8)
+    column_major_umis = row_major_umis.transpose()
+
+    data.set_matrix("cell", "gene", "UMIs", column_major_umis, relayout=False)
+
+    assert data.has_matrix("cell", "gene", "UMIs", relayout=False)
+    assert set(data.matrix_names("cell", "gene", relayout=False)) == set(["UMIs"])
+    stored_matrix = data.get_np_matrix("cell", "gene", "UMIs", relayout=False)
+    stored_frame = data.get_pd_matrix("cell", "gene", "UMIs", relayout=False)
+    assert list(stored_frame.index) == ["A", "B"]
+    assert list(stored_frame.columns) == ["X", "Y", "Z"]
+    repeated_matrix = data.get_np_matrix("cell", "gene", "UMIs", relayout=False)
+    assert id(repeated_matrix) == id(stored_matrix)
+
+    assert np.all(stored_matrix == column_major_umis)
+    column_major_umis[1, 2] += 1
+    assert np.all(stored_matrix == column_major_umis)
+
+    assert (
+        data.description()
+        == dedent(
+            f"""
+                name: test!
+                type: {format_name}
+                axes:
+                  cell: 2 entries
+                  gene: 3 entries
+                matrices:
+                  cell,gene:
+                    UMIs: 2 x 3 x Int8 in Columns (PyArray{{Int8, 2, true, true, Int8}} - Dense)
+            """
+        )[1:]
+    )
+
+    assert not data.has_matrix("gene", "cell", "UMIs", relayout=False)
+    data.relayout_matrix("cell", "gene", "UMIs")
+    assert data.has_matrix("gene", "cell", "UMIs", relayout=False)
+    assert np.all(
+        data.get_np_matrix("cell", "gene", "UMIs", relayout=False)
+        == data.get_np_matrix("gene", "cell", "UMIs", relayout=False).transpose()
+    )
+
+    assert (
+        data.description()
+        == dedent(
+            f"""
+                name: test!
+                type: {format_name}
+                axes:
+                  cell: 2 entries
+                  gene: 3 entries
+                matrices:
+                  cell,gene:
+                    UMIs: 2 x 3 x Int8 in Columns (PyArray{{Int8, 2, true, true, Int8}} - Dense)
+                  gene,cell:
+                    UMIs: 3 x 2 x Int8 in Columns (Dense)
+            """
+        )[1:]
+    )
+
+    data.delete_matrix("cell", "gene", "UMIs")
+
+    assert len(data.matrix_names("cell", "gene")) == 0
+    assert not data.has_matrix("cell", "gene", "UMIs", relayout=False)

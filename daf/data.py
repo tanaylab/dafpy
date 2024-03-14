@@ -101,7 +101,7 @@ class DafReader:
         """
         The unique names of the entries of some ``axis`` of the ``Daf`` data set.
 
-        This creates an in-memory copy of the data every time the function is called.
+        This creates an in-memory copy of the data, which is cached for repeated calls.
         """
         axis_version_counter = jl.Daf.axis_version_counter(self.daf_jl, axis)
         axis_key = (axis_version_counter, axis)
@@ -154,8 +154,9 @@ class DafReader:
 
         This always returns a ``numpy`` vector (unless ``default`` is ``None`` and the vector does not exist). If the
         stored data is numeric and dense, this is a zero-copy view of the data stored in the ``Daf`` data set.
-        Otherwise, a Python copy of the data as a dense ``numpy`` array is returned. Since Python has no concept of
-        sparse vectors (because "reasons"), you can't zero-copy view a sparse ``Daf`` vector using the Python API.
+        Otherwise, a Python copy of the data as a dense ``numpy`` array is returned (and cached for repeated calls).
+        Since Python has no concept of sparse vectors (because "reasons"), you can't zero-copy view a sparse ``Daf``
+        vector using the Python API.
         """
         if not jl.Daf.has_vector(self.daf_jl, axis, name):
             if default is None:
@@ -205,6 +206,119 @@ class DafReader:
         if vector_value is None:
             return None
         return pd.Series(vector_value, index=self.get_axis(axis))
+
+    def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
+        """
+        Check whether a matrix property with some ``name`` exists for the ``rows_axis`` and the ``columns_axis`` in the
+        ``Daf`` data set.
+        """
+        return jl.Daf.has_matrix(self.daf_jl, rows_axis, columns_axis, name, relayout=relayout)
+
+    def matrix_names(self, rows_axis: str, columns_axis: str, *, relayout: bool = True) -> AbstractSet[str]:
+        """
+        The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
+        """
+        return jl.Daf.matrix_names(self.daf_jl, rows_axis, columns_axis, relayout=relayout)
+
+    @overload
+    def get_np_matrix(
+        self, rows_axis: str, columns_axis: str, name: str, *, default: None, relayout: bool = True
+    ) -> Optional[np.ndarray]: ...
+
+    @overload
+    def get_np_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        *,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        relayout: bool = True,
+    ) -> np.ndarray: ...
+
+    def get_np_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        *,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        relayout: bool = True,
+    ) -> Optional[np.ndarray]:
+        """
+        Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
+        ``Daf`` data set.
+
+        This always returns a ``numpy`` matrix (unless ``default`` is ``None`` and the matrix does not exist). Note that
+        by default ``numpy`` matrices are in row-major (C) layout and not in column-major (Fortran) layout. To get a
+        row-major matrix, simply flip the order of the axes, and call transpose on the result (which is an efficient
+        zero-copy operation).
+
+        Also note that although we call this ``get_np_matrix``, the result is a simple ``np.ndarray`` with two
+        dimensions (which is what you want) and **not** the deprecated ``np.matrix`` (which is to be avoided at all
+        costs).
+        """
+        if not jl.Daf.has_matrix(self.daf_jl, rows_axis, columns_axis, name, relayout=relayout):
+            if default is None:
+                return None
+            return _from_julia(
+                jl.Daf.get_matrix(
+                    self.daf_jl, rows_axis, columns_axis, name, default=_to_julia(default), relayout=relayout
+                ).array
+            )
+
+        matrix_version_counter = jl.Daf.matrix_version_counter(self.daf_jl, rows_axis, columns_axis, name)
+        matrix_key = (matrix_version_counter, rows_axis, columns_axis, name)
+        matrix_value = self.weakrefs.get(matrix_key)
+        if matrix_value is None:
+            matrix_value = _from_julia(
+                jl.Daf.get_matrix(self.daf_jl, rows_axis, columns_axis, name, relayout=relayout).array
+            )
+            self.weakrefs[matrix_key] = matrix_value
+        return matrix_value
+
+    @overload
+    def get_pd_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        *,
+        default: None,
+        relayout: bool = True,
+    ) -> Optional[pd.DataFrame]: ...
+
+    @overload
+    def get_pd_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        *,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        relayout: bool = True,
+    ) -> pd.DataFrame: ...
+
+    def get_pd_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        *,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        relayout: bool = True,
+    ) -> Optional[pd.DataFrame]:
+        """
+        Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
+        ``Daf`` data set.
+
+        This is a wrapper around ``get_np_matrix`` which returns a ``pandas`` data frame using the entry names of the
+        axes as the indices.
+        """
+        matrix_value = self.get_np_matrix(rows_axis, columns_axis, name, default=_to_julia(default), relayout=relayout)
+        if matrix_value is None:
+            return None
+        return pd.DataFrame(matrix_value, index=self.get_axis(rows_axis), columns=self.get_axis(columns_axis))
 
 
 class DafWriter(DafReader):
@@ -257,6 +371,39 @@ class DafWriter(DafReader):
         Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set.
         """
         jl.Daf.delete_vector_b(self.daf_jl, axis, name, must_exist=must_exist)
+
+    def set_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        value: np.ndarray,
+        *,
+        overwrite: bool = False,
+        relayout: bool = True,
+    ) -> None:
+        """
+        Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
+        Since ``Daf`` is implemented Julia, this should be a column-major ``matrix``, so if you have a standard
+        ``numpy`` matrix, flip the order of the axes and pass the ``transpose`` (which is an efficient zero-copy
+        operation).
+        """
+        jl.Daf.set_matrix_b(self.daf_jl, rows_axis, columns_axis, name, value, overwrite=overwrite, relayout=relayout)
+
+    def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> None:
+        """
+        Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
+        ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
+        flipped axes).
+        """
+        jl.Daf.relayout_matrix_b(self.daf_jl, rows_axis, columns_axis, name, overwrite=overwrite)
+
+    def delete_matrix(self, rows_axis: str, columns_axis: str, name: str, *, must_exist: bool = True) -> None:
+        """
+        Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data
+        set.
+        """
+        jl.Daf.delete_matrix_b(self.daf_jl, rows_axis, columns_axis, name, must_exist=must_exist)
 
 
 def _to_julia(value: Any) -> Any:
