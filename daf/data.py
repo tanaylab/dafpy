@@ -12,6 +12,7 @@ from typing import Any
 from typing import Sequence
 
 import numpy as np
+import pandas as pd  # type: ignore
 
 from .julia_import import jl
 from .storage_types import StorageScalar
@@ -109,10 +110,31 @@ class DafReader:
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
 
         This always returns a ``numpy`` vector. If the stored data is numeric and dense, this is a zero-copy view of the
-        data stored in the ``Daf`` data set. Otherwise, a Python (dense array) copy of the data is made every time the
-        function is called.
+        data stored in the ``Daf`` data set. Otherwise, a Python copy of the data as a dense ``numpy`` array is
+        returned. Since Python has no concept of sparse vectors (because "reasons"), you can't zero-copy view a sparse
+        ``Daf`` vector using the Python API.
         """
         return _from_julia(jl.Daf.get_vector(self.daf_jl, axis, name, default=default).array)
+
+    def get_pd_vector(
+        self,
+        axis: str,
+        name: str,
+        *,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | None | jl.UndefInitializer = jl.undef,
+    ) -> pd.Series:
+        """
+        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
+
+        This always returns a ``pandas`` series. If the stored data is numeric and dense, the values are a zero-copy
+        view of the data stored in the ``Daf`` data set. Otherwise, a Python copy of the data as a dense ``numpy`` array
+        is returned. Since Python has no concept of sparse vectors (because "reasons"), you can't zero-copy view a
+        sparse ``Daf`` vector using the Python API.
+        """
+        named = jl.Daf.get_vector(self.daf_jl, axis, name, default=default)
+        values = _from_julia(named.array)
+        names = _from_julia(jl.names(named, 1))
+        return pd.Series(values, index=names)
 
 
 class DafWriter(DafReader):
@@ -154,7 +176,9 @@ class DafWriter(DafReader):
         Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
 
         If the provided ``value`` is numeric and dense, this passes a zero-copy view of the data to the ``Daf`` data
-        set. Otherwise, a Python (dense array) copy of the data is made and passed to ``Daf``.
+        set. Otherwise, a Python copy of the data as a dense ``numpy`` array is made, and passed to ``Daf``. Since
+        Python has no concept of sparse vectors (because "reasons"), you can't create a sparse ``Daf`` vector using the
+        Python API.
         """
         jl.Daf.set_vector_b(self.daf_jl, axis, name, _to_julia(value), overwrite=overwrite)
 

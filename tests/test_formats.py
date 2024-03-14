@@ -94,7 +94,7 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
     "vector_data",
     [(["X", "Y"], "String"), ([1, 2], "Int64"), ([1.0, 2.0], "Float64"), (np.array([1, 2], dtype="i1"), "Int8")],
 )
-def test_np_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]) -> None:
+def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]) -> None:
     format_name, create_empty = format_data
     vector_entries, julia_type = vector_data
 
@@ -108,13 +108,17 @@ def test_np_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_dat
 
     assert set(data.vector_names("cell")) == set(["foo"])
     stored_vector = data.get_np_vector("cell", "foo")
+    stored_series = data.get_pd_vector("cell", "foo")
 
     assert list(stored_vector) == list(vector_entries)
+    assert list(stored_series.values) == list(vector_entries)
+    assert list(stored_series.index) == ["A", "B"]
     if isinstance(stored_vector[0], str):
         julia_type = f"PythonCall.Utils.Static{julia_type}{{UInt32, 1}}"
     else:
         vector_entries[0] = vector_entries[1]
         assert list(stored_vector) == list(vector_entries)
+        assert list(stored_series.values) == list(vector_entries)
     assert (
         data.description()
         == dedent(
