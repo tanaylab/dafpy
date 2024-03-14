@@ -9,6 +9,8 @@ from contextlib import contextmanager
 from textwrap import dedent
 from typing import Any
 from typing import Callable
+from typing import Iterator
+from typing import Never
 from typing import Sequence
 from typing import Tuple
 
@@ -21,11 +23,11 @@ FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!"))]
 
 
 @contextmanager
-def assertRaises(expected: str) -> None:
+def assert_raises(expected: str) -> Iterator[Never]:
     try:
-        yield
+        yield  # type: ignore
         raise AssertionError("no exception was thrown")
-    except Exception as exception:
+    except Exception as exception:  # pylint: disable=broad-exception-caught
         actual = str(exception)
         if expected not in actual:
             raise exception
@@ -105,12 +107,12 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
 
 @pytest.mark.parametrize("format_data", FORMATS)
 def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
-    format_name, create_empty = format_data
+    _format_name, create_empty = format_data
 
     data = create_empty()
     data.add_axis("cell", ["A", "B"])
 
-    with assertRaises(
+    with assert_raises(
         dedent(
             """
                 missing vector: foo
@@ -151,6 +153,8 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     assert set(data.vector_names("cell")) == set(["foo"])
     stored_vector = data.get_np_vector("cell", "foo")
     stored_series = data.get_pd_vector("cell", "foo")
+    repeated_vector = data.get_np_vector("cell", "foo")
+    assert id(repeated_vector) == id(stored_vector)
 
     assert list(stored_vector) == list(vector_entries)
     assert list(stored_series.values) == list(vector_entries)
@@ -180,3 +184,7 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
 
     assert len(data.vector_names("cell")) == 0
     assert not data.has_vector("cell", "foo")
+
+    data.set_vector("cell", "foo", list(vector_entries))
+    new_vector = data.get_np_vector("cell", "foo")
+    assert id(new_vector) != id(stored_vector)
