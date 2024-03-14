@@ -5,6 +5,8 @@ Concrete formats of ``Daf`` data sets.
 from .data import DafWriter
 from .julia_import import jl
 
+__all__ = ["MemoryDaf"]
+
 
 class MemoryDaf(DafWriter):
     """
