@@ -137,7 +137,7 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> N
 @pytest.mark.parametrize("format_data", FORMATS)
 @pytest.mark.parametrize(
     "vector_data",
-    [(["X", "Y"], "String"), ([1, 2], "Int64"), ([1.0, 2.0], "Float64"), (np.array([1, 2], dtype="i1"), "Int8")],
+    [(["X", "Y"], "String"), ([1, 2], "Int64"), ([1.0, 2.0], "Float64"), (np.array([[1, 2]], dtype="i1"), "Int8")],
 )
 def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]) -> None:
     format_name, create_empty = format_data
@@ -158,15 +158,15 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     repeated_vector = data.get_np_vector("cell", "foo")
     assert id(repeated_vector) == id(stored_vector)
 
-    assert list(stored_vector) == list(vector_entries)
-    assert list(stored_series.values) == list(vector_entries)
+    assert list(stored_vector) == list(vector_entries.reshape(-1))
+    assert list(stored_series.values) == list(vector_entries.reshape(-1))
     assert list(stored_series.index) == ["A", "B"]
     if isinstance(stored_vector[0], str):
         julia_type = f"PythonCall.Utils.Static{julia_type}{{UInt32, 1}}"
     else:
-        vector_entries[0] = vector_entries[1]
-        assert list(stored_vector) == list(vector_entries)
-        assert list(stored_series.values) == list(vector_entries)
+        vector_entries.reshape(-1)[0] = vector_entries.reshape(-1)[1]
+        assert list(stored_vector) == list(vector_entries.reshape(-1))
+        assert list(stored_series.values) == list(vector_entries.reshape(-1))
     assert (
         data.description()
         == dedent(
@@ -187,7 +187,7 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     assert len(data.vector_names("cell")) == 0
     assert not data.has_vector("cell", "foo")
 
-    data.set_vector("cell", "foo", list(vector_entries))
+    data.set_vector("cell", "foo", list(vector_entries.reshape(-1)))
     new_vector = data.get_np_vector("cell", "foo")
     assert id(new_vector) != id(stored_vector)
 

@@ -516,8 +516,10 @@
 <span class="sd">        set. Otherwise, a Python copy of the data as a dense ``numpy`` array is made, and passed to ``Daf``. Since</span>
 <span class="sd">        Python has no concept of sparse vectors (because &quot;reasons&quot;), you can&#39;t create a sparse ``Daf`` vector using the</span>
 <span class="sd">        Python API.</span>
+
+<span class="sd">        As a convenience, you can pass a 1xN or Nx1 matrix here and it will be mercifully interpreted as a vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_as_vector</span><span class="p">(</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.empty_dense_vector">
@@ -649,6 +651,14 @@
     <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="p">:</span>
         <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">python_array</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">python_array</span>
+
+
+<span class="k">def</span> <span class="nf">_as_vector</span><span class="p">(</span><span class="n">vector_ish</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vector_ish</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">vector_ish</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">vector_ish</span> <span class="o">=</span> <span class="n">vector_ish</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vector_ish</span>
 </pre></div>
 
            </div>

@@ -367,8 +367,10 @@ class DafWriter(DafReader):
         set. Otherwise, a Python copy of the data as a dense ``numpy`` array is made, and passed to ``Daf``. Since
         Python has no concept of sparse vectors (because "reasons"), you can't create a sparse ``Daf`` vector using the
         Python API.
+
+        As a convenience, you can pass a 1xN or Nx1 matrix here and it will be mercifully interpreted as a vector.
         """
-        jl.Daf.set_vector_b(self.daf_jl, axis, name, _to_julia(value), overwrite=overwrite)
+        jl.Daf.set_vector_b(self.daf_jl, axis, name, _as_vector(_to_julia(value)), overwrite=overwrite)
 
     @contextmanager
     def empty_dense_vector(self, axis: str, name: str, dtype: Type, *, overwrite: bool = False) -> Iterator[pd.Series]:
@@ -480,3 +482,11 @@ def _from_julia(julia_vector: Any) -> np.ndarray:
     if python_array.dtype == "object":
         python_array = np.array([str(obj) for obj in python_array], dtype=str)
     return python_array
+
+
+def _as_vector(vector_ish: Any) -> Any:
+    if isinstance(vector_ish, np.ndarray):
+        shape = vector_ish.shape
+        if len(shape) == 2 and (shape[0] == 1 or shape[1] == 1):
+            vector_ish = vector_ish.reshape(-1)
+    return vector_ish
