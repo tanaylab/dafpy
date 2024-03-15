@@ -86,10 +86,14 @@
 <span class="sd">removed from the Python method names.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AbstractSet</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Never</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
 <span class="kn">from</span> <span class="nn">weakref</span> <span class="kn">import</span> <span class="n">WeakValueDictionary</span>
 
@@ -516,6 +520,24 @@
         <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="DafWriter.empty_dense_vector">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.empty_dense_vector">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">empty_dense_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it</span>
+<span class="sd">        to the block (as a ``pandas`` series) to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">fill</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+            <span class="n">vector_value</span> <span class="o">=</span> <span class="n">_from_julia</span><span class="p">(</span><span class="n">named</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">vector_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span>
+
+        <span class="k">yield from</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">empty_dense_vector_b</span><span class="p">(</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">py_function_to_fulia_function</span><span class="p">(</span><span class="n">fill</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+        <span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="DafWriter.delete_vector">
 <a class="viewcode-back" href="../../data.html#daf.data.DafWriter.delete_vector">[docs]</a>
     <span class="k">def</span> <span class="nf">delete_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -546,6 +568,32 @@
         <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_matrix_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="DafWriter.empty_dense_matrix">
+<a class="viewcode-back" href="../../data.html#daf.data.DafWriter.empty_dense_matrix">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">empty_dense_matrix</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an empty dense matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the</span>
+<span class="sd">        ``Daf`` data set, and pass it to the block (as a ``pandas`` data frame) to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">fill</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+            <span class="n">matrix_value</span> <span class="o">=</span> <span class="n">_from_julia</span><span class="p">(</span><span class="n">named</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">columns_axis</span><span class="p">))</span>
+
+        <span class="k">yield from</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">empty_dense_matrix_b</span><span class="p">(</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">py_function_to_fulia_function</span><span class="p">(</span><span class="n">fill</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span>
+            <span class="n">rows_axis</span><span class="p">,</span>
+            <span class="n">columns_axis</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">_to_julia</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="DafWriter.relayout_matrix">
 <a class="viewcode-back" href="../../data.html#daf.data.DafWriter.relayout_matrix">[docs]</a>
     <span class="k">def</span> <span class="nf">relayout_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -569,8 +617,27 @@
 
 
 
+<span class="n">JULIA_TYPE_OF_PY_TYPE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nb">bool</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span>
+    <span class="nb">int</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Int64</span><span class="p">,</span>
+    <span class="nb">float</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Int8</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Int16</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Int32</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Int64</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">UInt8</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">UInt16</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">UInt32</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">UInt64</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Float32</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span>
+<span class="p">}</span>
+
+
 <span class="k">def</span> <span class="nf">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Undef</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">JULIA_TYPE_OF_PY_TYPE</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Undef</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">undef</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>

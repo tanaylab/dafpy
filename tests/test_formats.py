@@ -191,6 +191,11 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     new_vector = data.get_np_vector("cell", "foo")
     assert id(new_vector) != id(stored_vector)
 
+    if not isinstance(stored_vector[0], str):
+        with data.empty_dense_vector("cell", "foo", np.float32, overwrite=True) as empty_series:
+            empty_series.values[:] = [-1.5, 2.5]
+        assert list(data.get_np_vector("cell", "foo")) == [-1.5, 2.5]
+
 
 @pytest.mark.parametrize("format_data", FORMATS)
 def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
@@ -220,6 +225,11 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> 
     assert np.all(data.get_np_matrix("cell", "gene", "UMIs", default=1) == np.array([[1, 1, 1], [1, 1, 1]]))
     default_matrix = np.array([[1, 2], [3, 4], [5, 6]]).transpose()
     assert id(data.get_np_matrix("cell", "gene", "UMIs", default=default_matrix)) == id(default_matrix)
+
+    fill_matrix = np.array([[1.5, 2.5], [3.5, 4.5], [5.5, 6.5]]).transpose()
+    with data.empty_dense_matrix("cell", "gene", "UMIs", np.float32, overwrite=True) as empty_frame:
+        empty_frame.values[:, :] = fill_matrix
+    assert np.all(data.get_np_matrix("cell", "gene", "UMIs") == fill_matrix)
 
 
 @pytest.mark.parametrize("format_data", FORMATS)

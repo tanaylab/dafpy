@@ -24,7 +24,7 @@ import os
 import sys
 import warnings
 
-__all__ = ["jl"]
+__all__ = ["jl", "jl_version"]
 
 IGNORE_REIMPORT = False
 
@@ -67,6 +67,15 @@ from juliacall import Main  # type: ignore
 #: The interface to the Julia run-time.
 jl = Main
 
+jl.seval(
+    """
+function py_function_to_fulia_function(py_object::Py)::Function
+    return (args...; kwargs...) -> pycall(py_object, args...; kwargs...)
+end
+"""
+)
+
+#: The version of Julia being used.
 jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Daf")

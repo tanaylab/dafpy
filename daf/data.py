@@ -7,10 +7,14 @@ Python also doesn't support the ``!`` trailing character in function names (to i
 removed from the Python method names.
 """
 
+from contextlib import contextmanager
 from typing import AbstractSet
 from typing import Any
+from typing import Iterator
+from typing import Never
 from typing import Optional
 from typing import Sequence
+from typing import Type
 from typing import overload
 from weakref import WeakValueDictionary
 
@@ -366,6 +370,21 @@ class DafWriter(DafReader):
         """
         jl.Daf.set_vector_b(self.daf_jl, axis, name, _to_julia(value), overwrite=overwrite)
 
+    @contextmanager
+    def empty_dense_vector(self, axis: str, name: str, dtype: Type, *, overwrite: bool = False) -> Iterator[pd.Series]:
+        """
+        Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it
+        to the block (as a ``pandas`` series) to be filled.
+        """
+
+        def fill(named: Any) -> Iterator[Never]:
+            vector_value = _from_julia(named.array)
+            yield pd.Series(vector_value, index=self.get_axis(axis))
+
+        yield from jl.Daf.empty_dense_vector_b(
+            jl.py_function_to_fulia_function(fill), self.daf_jl, axis, name, _to_julia(dtype), overwrite=overwrite
+        )
+
     def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> None:
         """
         Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set.
@@ -390,6 +409,29 @@ class DafWriter(DafReader):
         """
         jl.Daf.set_matrix_b(self.daf_jl, rows_axis, columns_axis, name, value, overwrite=overwrite, relayout=relayout)
 
+    @contextmanager
+    def empty_dense_matrix(
+        self, rows_axis: str, columns_axis: str, name: str, dtype: Type, *, overwrite: bool = False
+    ) -> Iterator[pd.DataFrame]:
+        """
+        Create an empty dense matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
+        ``Daf`` data set, and pass it to the block (as a ``pandas`` data frame) to be filled.
+        """
+
+        def fill(named: Any) -> Iterator[Never]:
+            matrix_value = _from_julia(named.array)
+            yield pd.DataFrame(matrix_value, index=self.get_axis(rows_axis), columns=self.get_axis(columns_axis))
+
+        yield from jl.Daf.empty_dense_matrix_b(
+            jl.py_function_to_fulia_function(fill),
+            self.daf_jl,
+            rows_axis,
+            columns_axis,
+            name,
+            _to_julia(dtype),
+            overwrite=overwrite,
+        )
+
     def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> None:
         """
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
@@ -406,8 +448,27 @@ class DafWriter(DafReader):
         jl.Daf.delete_matrix_b(self.daf_jl, rows_axis, columns_axis, name, must_exist=must_exist)
 
 
+JULIA_TYPE_OF_PY_TYPE = {
+    bool: jl.Bool,
+    int: jl.Int64,
+    float: jl.Float64,
+    np.int8: jl.Int8,
+    np.int16: jl.Int16,
+    np.int32: jl.Int32,
+    np.int64: jl.Int64,
+    np.uint8: jl.UInt8,
+    np.uint16: jl.UInt16,
+    np.uint32: jl.UInt32,
+    np.uint64: jl.UInt64,
+    np.float32: jl.Float32,
+    np.float64: jl.Float64,
+}
+
+
 def _to_julia(value: Any) -> Any:
-    if isinstance(value, Undef):
+    if isinstance(value, type):
+        value = JULIA_TYPE_OF_PY_TYPE[value]
+    elif isinstance(value, Undef):
         value = jl.undef
     elif isinstance(value, Sequence) and not isinstance(value, np.ndarray):
         value = np.array(value)
