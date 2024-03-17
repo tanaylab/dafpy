@@ -23,12 +23,8 @@ This code is based on the code from the ``pysr`` Python package, adapted to our 
 import os
 import sys
 import warnings
-from contextlib import contextmanager
-from typing import Any
-from typing import Callable
-from typing import Iterator
 
-__all__ = ["jl", "jl_version", "jl_do", "UndefInitializer", "Undef"]
+__all__ = ["jl", "jl_version", "UndefInitializer", "Undef"]
 
 IGNORE_REIMPORT = False
 
@@ -100,20 +96,3 @@ class UndefInitializer:
 #: A Python value to use instead of Julia's ``undef``. We need this to allow ``@overload`` to work in the presence of
 #: ``undef``.
 Undef = UndefInitializer()
-
-
-@contextmanager
-def jl_do(jl_caller: Callable, *args: Any, **kwargs: Any) -> Iterator[Any]:
-    """
-    Invoke ``jl_caller`` in a ``with`` statement - similarly to a ``do`` block in Julia. The ``jl_caller`` must take a
-    function as the 1st argument, and return the result of its invocation. This would not be needed if/when this
-    `issue <https://github.com/JuliaPy/PythonCall.jl/issues/474>`_ is resolved.
-    """
-
-    def capture(*args: Any) -> Iterator[Any]:
-        if len(args) == 1:
-            yield args[0]
-        else:
-            yield args
-
-    yield from jl_caller(jl.py_function_to_fulia_function(capture), *args, **kwargs)

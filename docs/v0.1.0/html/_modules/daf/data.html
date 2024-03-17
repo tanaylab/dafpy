@@ -100,7 +100,6 @@
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">Undef</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">UndefInitializer</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl_do</span>
 <span class="kn">from</span> <span class="nn">.storage_types</span> <span class="kn">import</span> <span class="n">StorageScalar</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DafReader&quot;</span><span class="p">,</span> <span class="s2">&quot;DafWriter&quot;</span><span class="p">]</span>
@@ -583,10 +582,12 @@
 <span class="sd">        to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_vector!&gt;`_ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">jl_do</span><span class="p">(</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">empty_dense_vector_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">empty_vector</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">empty_vector</span><span class="p">)</span></div>
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.empty_sparse_vector">
@@ -604,17 +605,14 @@
 <span class="sd">        tuple of ``(data, indices, indptr)`` for Python&#39;s ``csc_matrix``. First, ``numpy`` (that is, ``scipy``) has no</span>
 <span class="sd">        concept of sparse vectors. In addition ``nzind`` is 1-based (Julia) and not 0-based (Python).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">jl_do</span><span class="p">(</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">empty_sparse_vector_b</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span>
-            <span class="n">axis</span><span class="p">,</span>
-            <span class="n">name</span><span class="p">,</span>
-            <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span>
-            <span class="n">nnz</span><span class="p">,</span>
-            <span class="n">_to_julia</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span>
-            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">sparse_vector_vectors</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span> <span class="k">for</span> <span class="n">julia_array</span> <span class="ow">in</span> <span class="n">sparse_vector_vectors</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+        <span class="n">nzind</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_sparse_vector_b</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzind</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">))</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_sparse_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nzind</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.delete_vector">
@@ -664,16 +662,14 @@
 <span class="sd">        ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_matrix!&gt;`_ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">jl_do</span><span class="p">(</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">empty_dense_matrix_b</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span>
-            <span class="n">rows_axis</span><span class="p">,</span>
-            <span class="n">columns_axis</span><span class="p">,</span>
-            <span class="n">name</span><span class="p">,</span>
-            <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span>
-            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">empty_matrix</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">empty_matrix</span><span class="p">)</span></div>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_dense_matrix_b</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_dense_matrix_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.empty_sparse_matrix">
@@ -702,18 +698,16 @@
 <span class="sd">        Python uses 0-based indexing. For this reason, sparse data can&#39;t ever be zero-copy between Julia and Python.</span>
 <span class="sd">        Sigh.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">jl_do</span><span class="p">(</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">empty_sparse_matrix_b</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span>
-            <span class="n">rows_axis</span><span class="p">,</span>
-            <span class="n">columns_axis</span><span class="p">,</span>
-            <span class="n">name</span><span class="p">,</span>
-            <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span>
-            <span class="n">nnz</span><span class="p">,</span>
-            <span class="n">_to_julia</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span>
-            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">sparse_matrix_vectors</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span> <span class="k">for</span> <span class="n">julia_array</span> <span class="ow">in</span> <span class="n">sparse_matrix_vectors</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+        <span class="n">colptr</span><span class="p">,</span> <span class="n">rowval</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_sparse_matrix_b</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">colptr</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">rowval</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">))</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_sparse_matrix_b</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">colptr</span><span class="p">,</span> <span class="n">rowval</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+            <span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">daf_jl</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.relayout_matrix">

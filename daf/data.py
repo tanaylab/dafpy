@@ -21,7 +21,6 @@ import scipy.sparse as sp  # type: ignore
 from .julia_import import Undef
 from .julia_import import UndefInitializer
 from .julia_import import jl
-from .julia_import import jl_do
 from .storage_types import StorageScalar
 
 __all__ = ["DafReader", "DafWriter"]
@@ -434,10 +433,12 @@ class DafWriter(DafReader):
         to the block to be filled. See the Julia
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_vector!>`_ for details.
         """
-        with jl_do(
-            jl.Daf.empty_dense_vector_b, self.daf_jl, axis, name, _to_julia(eltype), overwrite=overwrite
-        ) as empty_vector:
-            yield _from_julia_array(empty_vector)
+        vector = jl.Daf.get_empty_dense_vector_b(self.daf_jl, axis, name, _to_julia(eltype), overwrite=overwrite)
+        try:
+            yield _from_julia_array(vector)
+            jl.Daf.filled_empty_dense_vector_b(self.daf_jl, axis, name, vector, overwrite=overwrite)
+        finally:
+            jl.Daf.end_write_lock(self.daf_jl)
 
     @contextmanager
     def empty_sparse_vector(
@@ -452,17 +453,14 @@ class DafWriter(DafReader):
         tuple of ``(data, indices, indptr)`` for Python's ``csc_matrix``. First, ``numpy`` (that is, ``scipy``) has no
         concept of sparse vectors. In addition ``nzind`` is 1-based (Julia) and not 0-based (Python).
         """
-        with jl_do(
-            jl.Daf.empty_sparse_vector_b,
-            self.daf_jl,
-            axis,
-            name,
-            _to_julia(eltype),
-            nnz,
-            _to_julia(indtype),
-            overwrite=overwrite,
-        ) as sparse_vector_vectors:
-            yield tuple(_from_julia_array(julia_array) for julia_array in sparse_vector_vectors)  # type: ignore
+        nzind, nzval, extra = jl.Daf.get_empty_sparse_vector_b(
+            self.daf_jl, axis, name, _to_julia(eltype), nnz, _to_julia(indtype), overwrite=overwrite
+        )
+        try:
+            yield (_from_julia_array(nzind), _from_julia_array(nzval))
+            jl.Daf.filled_empty_sparse_vector_b(self.daf_jl, axis, name, nzind, nzval, extra, overwrite=overwrite)
+        finally:
+            jl.Daf.end_write_lock(self.daf_jl)
 
     def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> None:
         """
@@ -503,16 +501,14 @@ class DafWriter(DafReader):
         ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_matrix!>`_ for details.
         """
-        with jl_do(
-            jl.Daf.empty_dense_matrix_b,
-            self.daf_jl,
-            rows_axis,
-            columns_axis,
-            name,
-            _to_julia(eltype),
-            overwrite=overwrite,
-        ) as empty_matrix:
-            yield _from_julia_array(empty_matrix)
+        matrix = jl.Daf.get_empty_dense_matrix_b(
+            self.daf_jl, rows_axis, columns_axis, name, _to_julia(eltype), overwrite=overwrite
+        )
+        try:
+            yield _from_julia_array(matrix)
+            jl.Daf.filled_empty_dense_matrix_b(self.daf_jl, rows_axis, columns_axis, name, matrix, overwrite=overwrite)
+        finally:
+            jl.Daf.end_write_lock(self.daf_jl)
 
     @contextmanager
     def empty_sparse_matrix(
@@ -538,18 +534,16 @@ class DafWriter(DafReader):
         Python uses 0-based indexing. For this reason, sparse data can't ever be zero-copy between Julia and Python.
         Sigh.
         """
-        with jl_do(
-            jl.Daf.empty_sparse_matrix_b,
-            self.daf_jl,
-            rows_axis,
-            columns_axis,
-            name,
-            _to_julia(eltype),
-            nnz,
-            _to_julia(indtype),
-            overwrite=overwrite,
-        ) as sparse_matrix_vectors:
-            yield tuple(_from_julia_array(julia_array) for julia_array in sparse_matrix_vectors)  # type: ignore
+        colptr, rowval, nzval, extra = jl.Daf.get_empty_sparse_matrix_b(
+            self.daf_jl, rows_axis, columns_axis, name, _to_julia(eltype), nnz, _to_julia(indtype), overwrite=overwrite
+        )
+        try:
+            yield (_from_julia_array(colptr), _from_julia_array(rowval), _from_julia_array(nzval))
+            jl.Daf.filled_empty_sparse_matrix_b(
+                self.daf_jl, rows_axis, columns_axis, name, colptr, rowval, nzval, extra, overwrite=overwrite
+            )
+        finally:
+            jl.Daf.end_write_lock(self.daf_jl)
 
     def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> None:
         """

@@ -102,12 +102,8 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;jl&quot;</span><span class="p">,</span> <span class="s2">&quot;jl_version&quot;</span><span class="p">,</span> <span class="s2">&quot;jl_do&quot;</span><span class="p">,</span> <span class="s2">&quot;UndefInitializer&quot;</span><span class="p">,</span> <span class="s2">&quot;Undef&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;jl&quot;</span><span class="p">,</span> <span class="s2">&quot;jl_version&quot;</span><span class="p">,</span> <span class="s2">&quot;UndefInitializer&quot;</span><span class="p">,</span> <span class="s2">&quot;Undef&quot;</span><span class="p">]</span>
 
 <span class="n">IGNORE_REIMPORT</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -182,26 +178,6 @@
 <span class="c1">#: A Python value to use instead of Julia&#39;s ``undef``. We need this to allow ``@overload`` to work in the presence of</span>
 <span class="c1">#: ``undef``.</span>
 <span class="n">Undef</span> <span class="o">=</span> <span class="n">UndefInitializer</span><span class="p">()</span>
-
-
-<div class="viewcode-block" id="jl_do">
-<a class="viewcode-back" href="../../import_julia.html#daf.julia_import.jl_do">[docs]</a>
-<span class="nd">@contextmanager</span>
-<span class="k">def</span> <span class="nf">jl_do</span><span class="p">(</span><span class="n">jl_caller</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Invoke ``jl_caller`` in a ``with`` statement - similarly to a ``do`` block in Julia. The ``jl_caller`` must take a</span>
-<span class="sd">    function as the 1st argument, and return the result of its invocation. This would not be needed if/when this</span>
-<span class="sd">    `issue &lt;https://github.com/JuliaPy/PythonCall.jl/issues/474&gt;`_ is resolved.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">args</span>
-
-    <span class="k">yield from</span> <span class="n">jl_caller</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">py_function_to_fulia_function</span><span class="p">(</span><span class="n">capture</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
 </pre></div>
 
            </div>

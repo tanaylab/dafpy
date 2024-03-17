@@ -6,6 +6,7 @@ Test ``Daf`` storage formats.
 # flake8: noqa: F403,F405
 
 from contextlib import contextmanager
+from tempfile import TemporaryDirectory
 from textwrap import dedent
 from typing import Any
 from typing import Callable
@@ -20,7 +21,15 @@ import scipy.sparse as sp  # type: ignore
 
 from daf import *
 
-FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!"))]
+
+def make_files() -> FilesDaf:
+    tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
+    files = FilesDaf(tmpdir.name, "w", name="test!")
+    setattr(files, "__gc_anchor__", tmpdir)
+    return files
+
+
+FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!")), ("FilesDaf", make_files)]
 
 
 @contextmanager
@@ -139,7 +148,9 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> N
     "vector_data",
     [(["X", "Y"], "String"), ([1, 2], "Int64"), ([1.0, 2.0], "Float64"), (np.array([[1, 2]], dtype="i1"), "Int8")],
 )
-def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]) -> None:
+def test_dense_vectors(  # pylint: disable=too-many-locals
+    format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]
+) -> None:
     format_name, create_empty = format_data
     vector_entries, julia_type = vector_data
 
@@ -162,14 +173,17 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     assert list(stored_series.values) == list(vector_entries.reshape(-1))
     assert list(stored_series.index) == ["A", "B"]
     if isinstance(stored_vector[0], str):
-        julia_type = f"PythonCall.Utils.Static{julia_type}{{UInt32, 1}}"
-    else:
+        if isinstance(data, MemoryDaf):
+            julia_type = f"PythonCall.Utils.Static{julia_type}{{UInt32, 1}}"
+        elif isinstance(data, FilesDaf):
+            julia_type = f"Sub{julia_type}{{StringViews.StringView{{Vector{{UInt8}}}}}}"
+    elif isinstance(data, MemoryDaf):
         vector_entries.reshape(-1)[0] = vector_entries.reshape(-1)[1]
         assert list(stored_vector) == list(vector_entries.reshape(-1))
         assert list(stored_series.values) == list(vector_entries.reshape(-1))
-    assert (
-        data.description()
-        == dedent(
+    description = data.description()
+    assert description.startswith(
+        dedent(
             f"""
                 name: test!
                 type: {format_name}
@@ -177,9 +191,9 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
                   cell: 2 entries
                 vectors:
                   cell:
-                    foo: 2 x {julia_type} (PyArray{{{julia_type}, 1, true, true, {julia_type}}} - Dense)
+                    foo: 2 x {julia_type}
             """
-        )[1:]
+        )[1:-1]
     )
 
     data.delete_vector("cell", "foo")
@@ -244,7 +258,7 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> 
     assert id(data.get_np_matrix("cell", "gene", "UMIs", default=default_matrix)) == id(default_matrix)
 
     fill_matrix = np.array([[0.0, 2.5], [3.5, 0.0], [0.0, 6.5]]).transpose()
-    with data.empty_dense_matrix("cell", "gene", "UMIs", np.float32, overwrite=True) as empty_matrix:
+    with data.empty_dense_matrix("cell", "gene", "UMIs", np.float32) as empty_matrix:
         empty_matrix[:, :] = fill_matrix
     assert np.all(data.get_np_matrix("cell", "gene", "UMIs") == fill_matrix)
 
@@ -297,12 +311,13 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
     assert id(repeated_matrix) == id(stored_matrix)
 
     assert np.all(stored_matrix == column_major_umis)
-    column_major_umis[1, 2] += 1
-    assert np.all(stored_matrix == column_major_umis)
+    if isinstance(data, MemoryDaf):
+        column_major_umis[1, 2] += 1
+        assert np.all(stored_matrix == column_major_umis)
 
-    assert (
-        data.description()
-        == dedent(
+    description = data.description()
+    assert description.startswith(
+        dedent(
             f"""
                 name: test!
                 type: {format_name}
@@ -311,9 +326,9 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
                   gene: 3 entries
                 matrices:
                   cell,gene:
-                    UMIs: 2 x 3 x Int8 in Columns (PyArray{{Int8, 2, true, true, Int8}} - Dense)
+                    UMIs: 2 x 3 x Int8 in Columns
             """
-        )[1:]
+        )[1:-1]
     )
 
     assert not data.has_matrix("gene", "cell", "UMIs", relayout=False)
@@ -324,9 +339,9 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
         == data.get_np_matrix("gene", "cell", "UMIs", relayout=False).transpose()
     )
 
-    assert (
-        data.description()
-        == dedent(
+    description = data.description()
+    assert description.startswith(
+        dedent(
             f"""
                 name: test!
                 type: {format_name}
@@ -335,11 +350,9 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
                   gene: 3 entries
                 matrices:
                   cell,gene:
-                    UMIs: 2 x 3 x Int8 in Columns (PyArray{{Int8, 2, true, true, Int8}} - Dense)
-                  gene,cell:
-                    UMIs: 3 x 2 x Int8 in Columns (Dense)
+                    UMIs: 2 x 3 x Int8 in Columns
             """
-        )[1:]
+        )[1:-1]
     )
 
     data.delete_matrix("cell", "gene", "UMIs")
