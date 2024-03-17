@@ -54,6 +54,7 @@ nitpick_ignore = [
     ('py:class', 'numpy.ndarray'),
     ('py:class', 'pandas.core.series.Series'),
     ('py:class', 'pandas.core.frame.DataFrame'),
+    ('py:class', 'scipy.sparse._csc.csc_matrix'),
 ]
 
 # Add any paths that contain templates here, relative to this directory.

@@ -21,6 +21,7 @@ dependencies = [
     "juliacall",
     "numpy",
     "pandas",
+    "scipy",
 ]
 
 [tool.setuptool]

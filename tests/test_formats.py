@@ -16,6 +16,7 @@ from typing import Tuple
 
 import numpy as np
 import pytest
+import scipy.sparse as sp  # type: ignore
 
 from daf import *
 
@@ -126,7 +127,6 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> N
     ):
         data.get_np_vector("cell", "foo")
 
-    assert str(undef) == "undef"
     assert data.get_np_vector("cell", "foo", default=None) is None
     assert data.get_pd_vector("cell", "foo", default=None) is None
     assert list(data.get_np_vector("cell", "foo", default=1)) == [1, 1]
@@ -191,10 +191,28 @@ def test_dense_vectors(format_data: Tuple[str, Callable[[], DafWriter]], vector_
     new_vector = data.get_np_vector("cell", "foo")
     assert id(new_vector) != id(stored_vector)
 
-    if not isinstance(stored_vector[0], str):
-        with data.empty_dense_vector("cell", "foo", np.float32, overwrite=True) as empty_series:
-            empty_series.values[:] = [-1.5, 2.5]
-        assert list(data.get_np_vector("cell", "foo")) == [-1.5, 2.5]
+    if isinstance(stored_vector[0], str):
+        return
+
+    with data.empty_dense_vector("cell", "foo", np.float32, overwrite=True) as empty_vector:
+        empty_vector[:] = [-1.5, 2.5]
+    assert np.all(data.get_np_vector("cell", "foo") == np.array([-1.5, 2.5]))
+
+    with data.empty_sparse_vector("cell", "foo", np.float32, 1, np.int8, overwrite=True) as (
+        nzind,
+        nzval,
+    ):
+        nzind[0] = 2
+        nzval[0] = 2.5
+    assert np.all(data.get_pd_vector("cell", "foo").values == np.array([0.0, 2.5]))
+
+    sparse_vector = sp.csc_matrix(np.array([[2.5, 0.0]]))
+    data.set_vector("cell", "foo", sparse_vector, overwrite=True)
+    assert np.all(data.get_np_vector("cell", "foo") == np.array([2.5, 0.0]))
+
+    sparse_vector = sp.csr_matrix(np.array([[0.0, 2.5]]))
+    data.set_vector("cell", "foo", sparse_vector, overwrite=True)
+    assert np.all(data.get_np_vector("cell", "foo") == np.array([0.0, 2.5]))
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
@@ -219,17 +237,38 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> 
     ):
         data.get_np_matrix("cell", "gene", "UMIs", relayout=False)
 
-    assert str(undef) == "undef"
     assert data.get_np_matrix("cell", "gene", "UMIs", default=None) is None
     assert data.get_pd_matrix("cell", "gene", "UMIs", default=None) is None
     assert np.all(data.get_np_matrix("cell", "gene", "UMIs", default=1) == np.array([[1, 1, 1], [1, 1, 1]]))
     default_matrix = np.array([[1, 2], [3, 4], [5, 6]]).transpose()
     assert id(data.get_np_matrix("cell", "gene", "UMIs", default=default_matrix)) == id(default_matrix)
 
-    fill_matrix = np.array([[1.5, 2.5], [3.5, 4.5], [5.5, 6.5]]).transpose()
-    with data.empty_dense_matrix("cell", "gene", "UMIs", np.float32, overwrite=True) as empty_frame:
-        empty_frame.values[:, :] = fill_matrix
+    fill_matrix = np.array([[0.0, 2.5], [3.5, 0.0], [0.0, 6.5]]).transpose()
+    with data.empty_dense_matrix("cell", "gene", "UMIs", np.float32, overwrite=True) as empty_matrix:
+        empty_matrix[:, :] = fill_matrix
     assert np.all(data.get_np_matrix("cell", "gene", "UMIs") == fill_matrix)
+
+    sparse_matrix = sp.csc_matrix(fill_matrix)
+    with data.empty_sparse_matrix("cell", "gene", "UMIs", np.float32, sparse_matrix.nnz, np.int8, overwrite=True) as (
+        colptr,
+        rowval,
+        nzval,
+    ):
+        colptr[:] = sparse_matrix.indptr[:]
+        colptr += 1
+        rowval[:] = sparse_matrix.indices[:]
+        rowval += 1
+        nzval[:] = sparse_matrix.data[:]
+    assert isinstance(data.get_np_matrix("cell", "gene", "UMIs"), sp.csc_matrix)
+    assert np.all(data.get_pd_matrix("cell", "gene", "UMIs").values == fill_matrix)
+
+    fill_matrix = np.array([[0.0, 1.5], [2.5, 0.0], [0.0, 3.5]]).transpose()
+    data.set_matrix("cell", "gene", "UMIs", sp.csc_matrix(fill_matrix), overwrite=True)
+    assert isinstance(data.get_np_matrix("cell", "gene", "UMIs"), sp.csc_matrix)
+    assert np.all(data.get_pd_matrix("cell", "gene", "UMIs").values == fill_matrix)
+
+    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (transposed Sparse 50%)"):
+        data.set_matrix("cell", "gene", "UMIs", sp.csr_matrix(fill_matrix), overwrite=True)
 
 
 @pytest.mark.parametrize("format_data", FORMATS)

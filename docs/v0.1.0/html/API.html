@@ -1,182 +1,919 @@
+
 <!DOCTYPE html>
+
 <html class="writer-html5" lang="en" data-content_root="./">
+
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API &mdash; Daf 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=01f34227"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="julia_import" href="import_julia.html" />
-    <link rel="prev" title="Daf.py 0.1.0 - Data in Axes in Formats" href="readme.html" /> 
+<title>API &mdash; Daf 0.1.0 documentation
+</title>
+      
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      
+<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  
+<!--[if lt IE 9]>
+    
+<script src="_static/js/html5shiv.min.js">
+</script>
+  
+<![endif]-->
+  
+        
+<script src="_static/jquery.js?v=5d32c60e">
+</script>
+        
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
+</script>
+        
+<script src="_static/documentation_options.js?v=01f34227">
+</script>
+        
+<script src="_static/doctools.js?v=888ff710">
+</script>
+        
+<script src="_static/sphinx_highlight.js?v=dc90522c">
+</script>
+    
+<script src="_static/js/theme.js">
+</script>
+    
+<link rel="index" title="Index" href="genindex.html" />
+    
+<link rel="search" title="Search" href="search.html" />
+    
+<link rel="next" title="julia_import" href="import_julia.html" />
+    
+<link rel="prev" title="Daf.py 0.1.0 - Data in Axes in Formats" href="readme.html" /> 
+
 </head>
 
+
 <body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+<div class="wy-grid-for-nav">
+    
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      
+<div class="wy-side-scroll">
+        
+<div class="wy-side-nav-search" >
 
           
           
-          <a href="index.html" class="icon icon-home">
+          
+<a href="index.html" class="icon icon-home">
             Daf
-              <img src="_static/logo.svg" class="logo" alt="Logo"/>
-          </a>
-              <div class="version">
+              
+<img src="_static/logo.svg" class="logo" alt="Logo"/>
+          
+</a>
+              
+<div class="version">
                 0.1.0
-              </div>
+              
+</div>
+
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+<form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    
+<input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    
+<input type="hidden" name="check_keywords" value="yes" />
+    
+<input type="hidden" name="area" value="default" />
+  
+</form>
+
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
-</ul>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="import_julia.html">julia_import</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html">data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="formats.html">formats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="storage_types.html">storage_types</a></li>
-</ul>
-</li>
-</ul>
-
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Daf</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">API</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/API.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
+        
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="module-daf">
-<span id="api"></span><h1>API<a class="headerlink" href="#module-daf" title="Link to this heading">¶</a></h1>
-<p>Data in Axes in Files.</p>
-<p>This is a thin wrapper for the <code class="docutils literal notranslate"><span class="pre">Daf.jl</span></code> Julia package.</p>
-<div class="toctree-wrapper compound">
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="import_julia.html">julia_import</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="import_julia.html#daf.julia_import.jl"><code class="docutils literal notranslate"><span class="pre">jl</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="import_julia.html#daf.julia_import.jl_version"><code class="docutils literal notranslate"><span class="pre">jl_version</span></code></a></li>
-</ul>
+
+<li class="toctree-l1">
+<a class="reference internal" href="readme.html">README
+</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data.html#daf.data.Undef"><code class="docutils literal notranslate"><span class="pre">Undef</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#daf.data.undef"><code class="docutils literal notranslate"><span class="pre">undef</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#daf.data.DafReader"><code class="docutils literal notranslate"><span class="pre">DafReader</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.name"><code class="docutils literal notranslate"><span class="pre">DafReader.name</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.description"><code class="docutils literal notranslate"><span class="pre">DafReader.description()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.has_scalar"><code class="docutils literal notranslate"><span class="pre">DafReader.has_scalar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.get_scalar"><code class="docutils literal notranslate"><span class="pre">DafReader.get_scalar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.scalar_names"><code class="docutils literal notranslate"><span class="pre">DafReader.scalar_names()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.has_axis"><code class="docutils literal notranslate"><span class="pre">DafReader.has_axis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.axis_names"><code class="docutils literal notranslate"><span class="pre">DafReader.axis_names()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.axis_length"><code class="docutils literal notranslate"><span class="pre">DafReader.axis_length()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.get_axis"><code class="docutils literal notranslate"><span class="pre">DafReader.get_axis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.has_vector"><code class="docutils literal notranslate"><span class="pre">DafReader.has_vector()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.vector_names"><code class="docutils literal notranslate"><span class="pre">DafReader.vector_names()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.get_np_vector"><code class="docutils literal notranslate"><span class="pre">DafReader.get_np_vector()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.get_pd_vector"><code class="docutils literal notranslate"><span class="pre">DafReader.get_pd_vector()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.has_matrix"><code class="docutils literal notranslate"><span class="pre">DafReader.has_matrix()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.matrix_names"><code class="docutils literal notranslate"><span class="pre">DafReader.matrix_names()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.get_np_matrix"><code class="docutils literal notranslate"><span class="pre">DafReader.get_np_matrix()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafReader.get_pd_matrix"><code class="docutils literal notranslate"><span class="pre">DafReader.get_pd_matrix()</span></code></a></li>
+
 </ul>
+
+<ul class="current">
+
+<li class="toctree-l1 current">
+<a class="current reference internal" href="#">API
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html">julia_import
+</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#daf.data.DafWriter"><code class="docutils literal notranslate"><span class="pre">DafWriter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.set_scalar"><code class="docutils literal notranslate"><span class="pre">DafWriter.set_scalar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.delete_scalar"><code class="docutils literal notranslate"><span class="pre">DafWriter.delete_scalar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.add_axis"><code class="docutils literal notranslate"><span class="pre">DafWriter.add_axis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.delete_axis"><code class="docutils literal notranslate"><span class="pre">DafWriter.delete_axis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.set_vector"><code class="docutils literal notranslate"><span class="pre">DafWriter.set_vector()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.empty_dense_vector"><code class="docutils literal notranslate"><span class="pre">DafWriter.empty_dense_vector()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.delete_vector"><code class="docutils literal notranslate"><span class="pre">DafWriter.delete_vector()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.set_matrix"><code class="docutils literal notranslate"><span class="pre">DafWriter.set_matrix()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.empty_dense_matrix"><code class="docutils literal notranslate"><span class="pre">DafWriter.empty_dense_matrix()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.relayout_matrix"><code class="docutils literal notranslate"><span class="pre">DafWriter.relayout_matrix()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#daf.data.DafWriter.delete_matrix"><code class="docutils literal notranslate"><span class="pre">DafWriter.delete_matrix()</span></code></a></li>
-</ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="data.html">data
+</a>
 </li>
-</ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="formats.html">formats
+</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="formats.html">formats</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="formats.html#daf.formats.MemoryDaf"><code class="docutils literal notranslate"><span class="pre">MemoryDaf</span></code></a></li>
-</ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html">storage_types
+</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="storage_types.html">storage_types</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="storage_types.html#daf.storage_types.StorageNumber"><code class="docutils literal notranslate"><span class="pre">StorageNumber</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="storage_types.html#daf.storage_types.StorageScalar"><code class="docutils literal notranslate"><span class="pre">StorageScalar</span></code></a></li>
+
 </ul>
+
 </li>
+
 </ul>
+
+        
 </div>
+      
+</div>
+    
+</nav>
+
+    
+<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+<nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          
+<i data-toggle="wy-nav-top" class="fa fa-bars">
+</i>
+          
+<a href="index.html">Daf
+</a>
+      
+</nav>
+
+      
+<div class="wy-nav-content">
+        
+<div class="rst-content">
+          
+<div role="navigation" aria-label="Page navigation">
+  
+<ul class="wy-breadcrumbs">
+      
+<li>
+<a href="index.html" class="icon icon-home" aria-label="Home">
+</a>
+</li>
+      
+<li class="breadcrumb-item active">API
+</li>
+      
+<li class="wy-breadcrumbs-aside">
+            
+<a href="_sources/API.rst.txt" rel="nofollow"> View page source
+</a>
+      
+</li>
+  
+</ul>
+  
+<hr/>
+
+</div>
+          
+<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           
+<div itemprop="articleBody">
+             
+  
+<section id="module-daf">
+
+<span id="api">
+</span>
+<h1>API
+<a class="headerlink" href="#module-daf" title="Link to this heading">¶
+</a>
+</h1>
+
+<p>Data in Axes in Files.
+</p>
+
+<p>This is a thin wrapper for the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf.jl
+</span>
+</code> Julia package, with the following adaptations:
+</p>
+
+<ul class="simple">
+
+<li>
+<p>In Julia, the API is defined as a set of functions, which take the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> object as the 1st parameter. In Python,
+this is implemented as member functions of the 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code> and 
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code> classes that wrap the matching Julia
+objects (e.g., Julia’s 
+<code class="docutils literal notranslate">
+<span class="pre">get_vector(data,
+</span> 
+<span class="pre">&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;is_marker&quot;)
+</span>
+</code> becomes
+Python’s 
+<code class="docutils literal notranslate">
+<span class="pre">data.get_vector(&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;is_marker&quot;)
+</span>
+</code>.
+</p>
+</li>
+
+<li>
+<p>Python doesn’t support the 
+<code class="docutils literal notranslate">
+<span class="pre">!
+</span>
+</code> trailing character in function names (to indicate modifying the object), so it is
+removed from the wrapper Python method names (e.g., Julia’s 
+<code class="docutils literal notranslate">
+<span class="pre">set_vector!(data,
+</span> 
+<span class="pre">&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;is_marker&quot;,
+</span> 
+<span class="pre">mask)
+</span>
+</code> becomes
+Python’s 
+<code class="docutils literal notranslate">
+<span class="pre">data.set_vector(&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;is_marker&quot;,
+</span> 
+<span class="pre">mask)
+</span>
+</code>.
+</p>
+</li>
+
+<li>
+<p>Python wrappers for Julia functions that take a callback as their first parameter should be invoked using the 
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span>
+</code>
+statement (e.g., Julia’s 
+<code class="docutils literal notranslate">
+<span class="pre">empty_dense_vector(data,
+</span> 
+<span class="pre">&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;is_marker&quot;)
+</span> 
+<span class="pre">do
+</span> 
+<span class="pre">empty_vector
+</span> 
+<span class="pre">...
+</span> 
+<span class="pre">end
+</span>
+</code> becomes Python’s
+
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span> 
+<span class="pre">data.empty_dense_vector(&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;is_marker&quot;)
+</span> 
+<span class="pre">as
+</span> 
+<span class="pre">empty_vector:
+</span> 
+<span class="pre">...
+</span>
+</code>. Since Python only allows a single
+parameter to 
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span>
+</code> blocks, if Julia provides multiple such parameters (e.g. 
+<code class="docutils literal notranslate">
+<span class="pre">empty_sparse_*
+</span>
+</code>), they are packed in
+a tuple.
+</p>
+</li>
+
+<li>
+<p>Dense numeric data (that is, 
+<code class="docutils literal notranslate">
+<span class="pre">np.ndarray
+</span>
+</code>) is passed as a zero-copy between Python and Julia. Passing anything else
+creates an in-memory copy. This, alas, includes sparse matrices, because Julia uses 1-based indices in the internal
+sparse representation, while Python uses zero-based indices (e.g Julia’s 
+<code class="docutils literal notranslate">
+<span class="pre">colptr
+</span>
+</code> is equal to 1 plus Python’s
+
+<code class="docutils literal notranslate">
+<span class="pre">indptr
+</span>
+</code>). This forces us to copy and increment/decrement these indices when passing the data between the languages.
+Also note that when invoking 
+<code class="docutils literal notranslate">
+<span class="pre">empty_sparse_*
+</span>
+</code>, you should fill the empty indices array(s) with Julia (1-based)
+values.
+</p>
+</li>
+
+<li>
+<p>Julia “likes” column-major matrices. All the matrices given to and returned by the API are therefore in column-major
+layout. In contrast, Python “likes” row-major matrices. To convert between the two, flip the order of the axes, and
+
+<code class="docutils literal notranslate">
+<span class="pre">transpose
+</span>
+</code> the data. This is a zero-copy view so is very efficient (e.g., to get a row-major UMIs matrix with a row
+per cell and a column per gene, write 
+<code class="docutils literal notranslate">
+<span class="pre">data.get_np_matrix(&quot;gene&quot;,
+</span> 
+<span class="pre">&quot;cell&quot;,
+</span> 
+<span class="pre">&quot;UMIs&quot;).transpose()
+</span>
+</code>).
+</p>
+</li>
+
+<li>
+<p>Python has no notion of sparse vectors because “reasons”, while Julia (and R) sensibly do support them. Therefore
+reading a sparse Julia 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> vector automatically converts it to a dense Python 
+<code class="docutils literal notranslate">
+<span class="pre">numpy
+</span>
+</code> one. You can however still
+store sparse vectors from Python into 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> by passing a sparse matrix with a single row or column, or by calling
+
+<code class="docutils literal notranslate">
+<span class="pre">empty_sparse_vector
+</span>
+</code>.
+</p>
+</li>
+
+<li>
+<p>Sparse matrices are not supported inside 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code>. Therefore reading sparse 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data into a 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code>
+
+<code class="docutils literal notranslate">
+<span class="pre">DataFrame
+</span>
+</code> automatically converts it to a dense Python 
+<code class="docutils literal notranslate">
+<span class="pre">numpy
+</span>
+</code> matrix. Therefore, you should take care not to ask
+for a data frame of a large sparse matrix (e.g., the UMIs matrix of a large data set), as this will consume a 
+<em>lot
+</em> of
+memory.
+</p>
+</li>
+
+</ul>
+
+<p>Otherwise, the API works “just the same” :-) The documentation therefore mostly just links to the relevant entry in the
+Julia 
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/index.html">documentation
+</a>.
+</p>
+
+<div class="toctree-wrapper compound">
+
+<ul>
+
+<li class="toctree-l1">
+<a class="reference internal" href="import_julia.html">julia_import
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html#daf.julia_import.jl">
+<code class="docutils literal notranslate">
+<span class="pre">jl
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html#daf.julia_import.jl_version">
+<code class="docutils literal notranslate">
+<span class="pre">jl_version
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html#daf.julia_import.jl_do">
+<code class="docutils literal notranslate">
+<span class="pre">jl_do()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html#daf.julia_import.UndefInitializer">
+<code class="docutils literal notranslate">
+<span class="pre">UndefInitializer
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html#daf.julia_import.Undef">
+<code class="docutils literal notranslate">
+<span class="pre">Undef
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l1">
+<a class="reference internal" href="data.html">data
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="data.html#daf.data.DafReader">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code>
+</a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.name">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.name
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.description">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.description()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.has_scalar">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.has_scalar()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_scalar">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_scalar()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.scalar_names">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.scalar_names()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.has_axis">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.has_axis()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.axis_names">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.axis_names()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.axis_length">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.axis_length()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_axis">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_axis()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.has_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.has_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.vector_names">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.vector_names()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_np_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_np_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_pd_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_pd_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.has_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.has_matrix()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.matrix_names">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.matrix_names()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_np_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_np_matrix()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_pd_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_pd_matrix()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="data.html#daf.data.DafWriter">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code>
+</a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.set_scalar">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.set_scalar()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.delete_scalar">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.delete_scalar()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.add_axis">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.add_axis()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.delete_axis">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.delete_axis()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.set_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.set_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.empty_dense_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.empty_dense_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.empty_sparse_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.empty_sparse_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.delete_vector">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.delete_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.set_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.set_matrix()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.empty_dense_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.empty_dense_matrix()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.empty_sparse_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.empty_sparse_matrix()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.relayout_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.relayout_matrix()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafWriter.delete_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.delete_matrix()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l1">
+<a class="reference internal" href="formats.html">formats
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="formats.html#daf.formats.MemoryDaf">
+<code class="docutils literal notranslate">
+<span class="pre">MemoryDaf
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l1">
+<a class="reference internal" href="storage_types.html">storage_types
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html#daf.storage_types.StorageNumber">
+<code class="docutils literal notranslate">
+<span class="pre">StorageNumber
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html#daf.storage_types.StorageScalar">
+<code class="docutils literal notranslate">
+<span class="pre">StorageScalar
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+</div>
+
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="readme.html" class="btn btn-neutral float-left" title="Daf.py 0.1.0 - Data in Axes in Formats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="import_julia.html" class="btn btn-neutral float-right" title="julia_import" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+           
+</div>
+          
+</div>
+          
+<footer>
+<div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        
+<a href="readme.html" class="btn btn-neutral float-left" title="Daf.py 0.1.0 - Data in Axes in Formats" accesskey="p" rel="prev">
+<span class="fa fa-arrow-circle-left" aria-hidden="true">
+</span> Previous
+</a>
+        
+<a href="import_julia.html" class="btn btn-neutral float-right" title="julia_import" accesskey="n" rel="next">Next 
+<span class="fa fa-arrow-circle-right" aria-hidden="true">
+</span>
+</a>
+    
+</div>
 
-  <hr/>
+  
+<hr/>
 
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023-2024 Weizmann Institute of Science.</p>
-  </div>
+  
+<div role="contentinfo">
+    
+<p>&#169; Copyright 2023-2024 Weizmann Institute of Science.
+</p>
+  
+</div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with 
+<a href="https://www.sphinx-doc.org/">Sphinx
+</a> using a
+    
+<a href="https://github.com/readthedocs/sphinx_rtd_theme">theme
+</a>
+    provided by 
+<a href="https://readthedocs.org">Read the Docs
+</a>.
    
 
+
 </footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
+        
+</div>
+      
+</div>
+    
+</section>
+  
+</div>
+  
+<script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  
+</script> 
+
 
 </body>
+
 </html>

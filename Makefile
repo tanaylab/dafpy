@@ -157,7 +157,7 @@ black: .make.black  ## check format with black
 flake8: .make.flake8  ## check format with flake8
 
 .make.flake8: $(PY_SOURCE_FILES)
-	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore F401,E402,F403,W503,E704 $(NAME) tests
+	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore F401,E402,F403,W503,E704,E722 $(NAME) tests
 	touch $@
 
 reformat: stripspaces isortify blackify  ## reformat code
@@ -179,7 +179,7 @@ smells: mypy pylint  ## check for code smells
 pylint: .make.pylint  ## check code with pylint
 
 .make.pylint: $(PY_SOURCE_FILES)
-	pylint --max-line-length $(MAX_LINE_LENGTH) --disable=fixme,wrong-import-position,no-name-in-module,too-many-arguments $(NAME) tests
+	pylint --max-line-length $(MAX_LINE_LENGTH) --disable=fixme,wrong-import-position,no-name-in-module,too-many-arguments,too-few-public-methods,bare-except $(NAME) tests
 	touch $@
 
 mypy: .make.mypy  ## check code with mypy
@@ -191,7 +191,7 @@ mypy: .make.mypy  ## check code with mypy
 pytest: .make.pytest  ## run tests on the active Python with pytest
 
 .make.pytest: $(PY_SOURCE_FILES)
-	`which pytest` -vv -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail tests
+	`which pytest` -vv -s --cov=$(NAME) --cov-report=html --cov-report=term --no-cov-on-fail --maxfail=1 tests
 	touch $@
 
 .PHONY: docs
@@ -200,6 +200,7 @@ docs: .make.docs  ## generate HTML documentation
 .make.docs: $(DOCS_SOURCE_FILES) $(PY_SOURCE_FILES) $(RST_SOURCE_FILES)
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
+	sed -i 's/</\n</g' docs/v0.1.0/html/*.html
 	@echo "Results in docs/v0.1.0/html/index.html"
 	touch $@
 

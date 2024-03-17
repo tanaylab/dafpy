@@ -23,8 +23,12 @@ This code is based on the code from the ``pysr`` Python package, adapted to our 
 import os
 import sys
 import warnings
+from contextlib import contextmanager
+from typing import Any
+from typing import Callable
+from typing import Iterator
 
-__all__ = ["jl", "jl_version"]
+__all__ = ["jl", "jl_version", "jl_do", "UndefInitializer", "Undef"]
 
 IGNORE_REIMPORT = False
 
@@ -67,6 +71,16 @@ from juliacall import Main  # type: ignore
 #: The interface to the Julia run-time.
 jl = Main
 
+#: The version of Julia being used.
+jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
+
+jl.seval("using Daf")
+
+jl.seval("import LinearAlgebra")
+
+jl.seval("import SparseArrays")
+
+#: This would not be needed if/when this `issue <https://github.com/JuliaPy/PythonCall.jl/issues/477>`_ is resolved.
 jl.seval(
     """
 function py_function_to_fulia_function(py_object::Py)::Function
@@ -75,7 +89,31 @@ end
 """
 )
 
-#: The version of Julia being used.
-jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
-jl.seval("using Daf")
+class UndefInitializer:
+    """
+    A Python class to use instead of Julia's ``UndefInitializer``. We need this to allow ``@overload`` to work in the
+    presence of ``Undef``.
+    """
+
+
+#: A Python value to use instead of Julia's ``undef``. We need this to allow ``@overload`` to work in the presence of
+#: ``undef``.
+Undef = UndefInitializer()
+
+
+@contextmanager
+def jl_do(jl_caller: Callable, *args: Any, **kwargs: Any) -> Iterator[Any]:
+    """
+    Invoke ``jl_caller`` in a ``with`` statement - similarly to a ``do`` block in Julia. The ``jl_caller`` must take a
+    function as the 1st argument, and return the result of its invocation. This would not be needed if/when this
+    `issue <https://github.com/JuliaPy/PythonCall.jl/issues/474>`_ is resolved.
+    """
+
+    def capture(*args: Any) -> Iterator[Any]:
+        if len(args) == 1:
+            yield args[0]
+        else:
+            yield args
+
+    yield from jl_caller(jl.py_function_to_fulia_function(capture), *args, **kwargs)

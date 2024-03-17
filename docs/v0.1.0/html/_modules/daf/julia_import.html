@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>daf.julia_import &mdash; Daf 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Daf
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">README</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Daf</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">daf.julia_import</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for daf.julia_import</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Import the Julia environment.</span>
+
+<span class="sd">This provides additional functionality on top of ``juliapkg`` (which automatically downloads Julia packages for us). It</span>
+<span class="sd">will import the ``juliacall`` module to create a Julia environment (as ``jl``), and uses it to import the ``Daf.jl``</span>
+<span class="sd">Julia package.</span>
+
+<span class="sd">You can control the behavior using the following environment variables:</span>
+
+<span class="sd">* ``PYTHON_JULIACALL_HANDLE_SIGNALS`` (by default, ``yes``). This is needed to avoid segfaults when calling</span>
+<span class="sd">  Julia from Python.</span>
+
+<span class="sd">* ``PYTHON_JULIACALL_THREADS`` (by default, ``auto``). By default Julia will use all the threads available</span>
+<span class="sd">  in the machine. On machines with hyper-threading you may want to specify only half the number of threads (that is,</span>
+<span class="sd">  just have one thread per physical core) as that should provide better performance for compute-intensive (as opposed to</span>
+<span class="sd">  IO-intensive) code.</span>
+
+<span class="sd">* ``PYTHON_JULIACALL_OPTLEVEL`` (by default, ``3``).</span>
+
+<span class="sd">This code is based on the code from the ``pysr`` Python package, adapted to our needs.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;jl&quot;</span><span class="p">,</span> <span class="s2">&quot;jl_version&quot;</span><span class="p">,</span> <span class="s2">&quot;jl_do&quot;</span><span class="p">,</span> <span class="s2">&quot;UndefInitializer&quot;</span><span class="p">,</span> <span class="s2">&quot;Undef&quot;</span><span class="p">]</span>
+
+<span class="n">IGNORE_REIMPORT</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># Check if JuliaCall is already loaded, and if so, warn the user</span>
+<span class="c1"># about the relevant environment variables. If not loaded,</span>
+<span class="c1"># set up sensible defaults.</span>
+<span class="k">if</span> <span class="s2">&quot;juliacall&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;juliacall module already imported. &quot;</span>
+        <span class="s2">&quot;Make sure that you have set the environment variable &quot;</span>
+        <span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS=yes to avoid segfaults. &quot;</span>
+        <span class="s2">&quot;Also note that Daf will not be able to configure &quot;</span>
+        <span class="s2">&quot;PYTHON_JULIACALL_THREADS or PYTHON_JULIACALL_OPTLEVEL for you.&quot;</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS environment variable is set to something other than &#39;yes&#39; or &#39;&#39;. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;You will experience segfaults if running with multithreading.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_THREADS&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;PYTHON_JULIACALL_THREADS environment variable is set to something other than &#39;auto&#39;, &quot;</span>
+            <span class="s2">&quot;so Daf was not able to set it. You may wish to set it to &#39;auto&#39; for full use &quot;</span>
+            <span class="s2">&quot;of your CPU.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># TODO: Remove these when juliapkg lets you specify this</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">default</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_THREADS&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_OPTLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">juliacall</span> <span class="kn">import</span> <span class="n">Main</span>  <span class="c1"># type: ignore</span>
+
+<span class="c1">#: The interface to the Julia run-time.</span>
+<span class="n">jl</span> <span class="o">=</span> <span class="n">Main</span>
+
+<span class="c1">#: The version of Julia being used.</span>
+<span class="n">jl_version</span> <span class="o">=</span> <span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">minor</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Daf&quot;</span><span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import LinearAlgebra&quot;</span><span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import SparseArrays&quot;</span><span class="p">)</span>
+
+<span class="c1">#: This would not be needed if/when this `issue &lt;https://github.com/JuliaPy/PythonCall.jl/issues/477&gt;`_ is resolved.</span>
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">function py_function_to_fulia_function(py_object::Py)::Function</span>
+<span class="sd">    return (args...; kwargs...) -&gt; pycall(py_object, args...; kwargs...)</span>
+<span class="sd">end</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="UndefInitializer">
+<a class="viewcode-back" href="../../import_julia.html#daf.julia_import.UndefInitializer">[docs]</a>
+<span class="k">class</span> <span class="nc">UndefInitializer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Python class to use instead of Julia&#39;s ``UndefInitializer``. We need this to allow ``@overload`` to work in the</span>
+<span class="sd">    presence of ``Undef``.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<span class="c1">#: A Python value to use instead of Julia&#39;s ``undef``. We need this to allow ``@overload`` to work in the presence of</span>
+<span class="c1">#: ``undef``.</span>
+<span class="n">Undef</span> <span class="o">=</span> <span class="n">UndefInitializer</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="jl_do">
+<a class="viewcode-back" href="../../import_julia.html#daf.julia_import.jl_do">[docs]</a>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">jl_do</span><span class="p">(</span><span class="n">jl_caller</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Invoke ``jl_caller`` in a ``with`` statement - similarly to a ``do`` block in Julia. The ``jl_caller`` must take a</span>
+<span class="sd">    function as the 1st argument, and return the result of its invocation. This would not be needed if/when this</span>
+<span class="sd">    `issue &lt;https://github.com/JuliaPy/PythonCall.jl/issues/474&gt;`_ is resolved.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">args</span>
+
+    <span class="k">yield from</span> <span class="n">jl_caller</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">py_function_to_fulia_function</span><span class="p">(</span><span class="n">capture</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2024 Weizmann Institute of Science.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

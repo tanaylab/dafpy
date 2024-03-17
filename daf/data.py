@@ -1,48 +1,36 @@
 """
-Interface of ``DafReader`` and ``DafWriter``.
-
-In Julia, the API is defined as a set of functions, which take the ``Daf`` object as the 1st parameter. In Python, this
-is implemented as member functions of the ``DafReader`` and ``DafWriter`` classes that wrap the matching Julia objects.
-Python also doesn't support the ``!`` trailing character in function names (to indicate modifying the object), so it is
-removed from the Python method names.
+Interface of ``DafReader`` and ``DafWriter``. See the Julia
+`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html>`_ for details.
 """
 
 from contextlib import contextmanager
 from typing import AbstractSet
 from typing import Any
 from typing import Iterator
-from typing import Never
 from typing import Optional
 from typing import Sequence
+from typing import Tuple
 from typing import Type
 from typing import overload
 from weakref import WeakValueDictionary
 
 import numpy as np
 import pandas as pd  # type: ignore
+import scipy.sparse as sp  # type: ignore
 
+from .julia_import import Undef
+from .julia_import import UndefInitializer
 from .julia_import import jl
+from .julia_import import jl_do
 from .storage_types import StorageScalar
 
-__all__ = ["Undef", "undef", "DafReader", "DafWriter"]
-
-
-class Undef:  # pylint: disable=too-few-public-methods
-    """
-    Python equivalent for Julia's ``UndefInitializer``.
-    """
-
-    def __str__(self) -> str:
-        return "undef"
-
-
-#: Python equivalent for Julia's ``undef``.
-undef = Undef()
+__all__ = ["DafReader", "DafWriter"]
 
 
 class DafReader:
     """
-    Read-only access to ``Daf`` data.
+    Read-only access to ``Daf`` data. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html>`_ for details.
     """
 
     def __init__(self, daf_jl) -> None:
@@ -58,19 +46,22 @@ class DafReader:
 
     def description(self, *, deep: bool = False) -> str:
         """
-        Return a (multi-line) description of the contents of ``Daf`` data.
+        Return a (multi-line) description of the contents of ``Daf`` data. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.description>`_ for details.
         """
         return jl.Daf.description(self.daf_jl, deep=deep)
 
     def has_scalar(self, name: str) -> bool:
         """
-        Check whether a scalar property with some ``name`` exists in the ``Daf`` data set.
+        Check whether a scalar property with some ``name`` exists in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.has_scalar>`_ for details.
         """
         return jl.Daf.has_scalar(self.daf_jl, name)
 
     def get_scalar(self, name: str) -> StorageScalar:
         """
-        Get the value of a scalar property with some ``name`` in the ``Daf`` data set.
+        Get the value of a scalar property with some ``name`` in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_scalar>`_ for details.
 
         Numeric scalars are always returned as ``int`` or ``float``, regardless of the specific data type they are
         stored in the ``Daf`` data set (e.g., a ``UInt8`` will be returned as an ``int`` instead of a ``np.uint8``).
@@ -79,31 +70,36 @@ class DafReader:
 
     def scalar_names(self) -> AbstractSet[str]:
         """
-        The names of the scalar properties in the ``Daf`` data set.
+        The names of the scalar properties in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalar_names>`_ for details.
         """
         return jl.Daf.scalar_names(self.daf_jl)
 
     def has_axis(self, axis: str) -> bool:
         """
-        Check whether some ``axis`` exists in the ``Daf`` data set.
+        Check whether some ``axis`` exists in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.has_axis>`_ for details.
         """
         return jl.Daf.has_axis(self.daf_jl, axis)
 
     def axis_names(self) -> AbstractSet[str]:
         """
-        The names of the axes of the ``Daf`` data set.
+        The names of the axes of the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_names>`_ for details.
         """
         return jl.Daf.axis_names(self.daf_jl)
 
     def axis_length(self, axis: str) -> int:
         """
-        The number of entries along the ``axis`` i the ``Daf`` data set.n
+        The number of entries along the ``axis`` i the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_length>`_ for details.
         """
         return jl.Daf.axis_length(self.daf_jl, axis)
 
     def get_axis(self, axis: str) -> np.ndarray:
         """
-        The unique names of the entries of some ``axis`` of the ``Daf`` data set.
+        The unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_axis>`_ for details.
 
         This creates an in-memory copy of the data, which is cached for repeated calls.
         """
@@ -111,20 +107,22 @@ class DafReader:
         axis_key = (axis_version_counter, axis)
         axis_entries = self.weakrefs.get(axis_key)
         if axis_entries is None:
-            axis_entries = _from_julia(jl.Daf.get_axis(self.daf_jl, axis))
+            axis_entries = _from_julia_array(jl.Daf.get_axis(self.daf_jl, axis))
             self.weakrefs[axis_key] = axis_entries
         return axis_entries
 
     def has_vector(self, axis: str, name: str) -> bool:
         """
-        Check whether a vector property with some ``name`` exists for the ``axis`` in the ``Daf`` data set.
+        Check whether a vector property with some ``name`` exists for the ``axis`` in the ``Daf`` data set. See the
+        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.has_vector>`_ for details.
         """
         return jl.Daf.has_vector(self.daf_jl, axis, name)
 
     def vector_names(self, axis: str) -> AbstractSet[str]:
         """
         The names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special ``name``
-        property.
+        property. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vector_names>`_ for details.
         """
         return jl.Daf.vector_names(self.daf_jl, axis)
 
@@ -143,7 +141,7 @@ class DafReader:
         axis: str,
         name: str,
         *,
-        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
     ) -> np.ndarray: ...
 
     def get_np_vector(
@@ -151,10 +149,11 @@ class DafReader:
         axis,
         name,
         *,
-        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
     ) -> Optional[np.ndarray]:
         """
-        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
+        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_vector>`_ for details.
 
         This always returns a ``numpy`` vector (unless ``default`` is ``None`` and the vector does not exist). If the
         stored data is numeric and dense, this is a zero-copy view of the data stored in the ``Daf`` data set.
@@ -165,13 +164,13 @@ class DafReader:
         if not jl.Daf.has_vector(self.daf_jl, axis, name):
             if default is None:
                 return None
-            return _from_julia(jl.Daf.get_vector(self.daf_jl, axis, name, default=_to_julia(default)).array)
+            return _from_julia_array(jl.Daf.get_vector(self.daf_jl, axis, name, default=_to_julia(default)).array)
 
         vector_version_counter = jl.Daf.vector_version_counter(self.daf_jl, axis, name)
         vector_key = (vector_version_counter, axis, name)
         vector_value = self.weakrefs.get(vector_key)
         if vector_value is None:
-            vector_value = _from_julia(jl.Daf.get_vector(self.daf_jl, axis, name).array)
+            vector_value = _from_julia_array(jl.Daf.get_vector(self.daf_jl, axis, name).array)
             self.weakrefs[vector_key] = vector_value
         return vector_value
 
@@ -190,7 +189,7 @@ class DafReader:
         axis: str,
         name: str,
         *,
-        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
     ) -> pd.Series: ...
 
     def get_pd_vector(
@@ -198,10 +197,11 @@ class DafReader:
         axis: str,
         name: str,
         *,
-        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
     ) -> Optional[pd.Series]:
         """
-        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
+        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_vector>`_ for details.
 
         This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis
         as the index.
@@ -214,20 +214,22 @@ class DafReader:
     def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
         """
         Check whether a matrix property with some ``name`` exists for the ``rows_axis`` and the ``columns_axis`` in the
-        ``Daf`` data set.
+        ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.has_matrix>`_ for details.
         """
         return jl.Daf.has_matrix(self.daf_jl, rows_axis, columns_axis, name, relayout=relayout)
 
     def matrix_names(self, rows_axis: str, columns_axis: str, *, relayout: bool = True) -> AbstractSet[str]:
         """
-        The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
+        The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set. See the
+        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrix_names>`_ for details.
         """
         return jl.Daf.matrix_names(self.daf_jl, rows_axis, columns_axis, relayout=relayout)
 
     @overload
     def get_np_matrix(
         self, rows_axis: str, columns_axis: str, name: str, *, default: None, relayout: bool = True
-    ) -> Optional[np.ndarray]: ...
+    ) -> Optional[np.ndarray | sp.csc_matrix]: ...
 
     @overload
     def get_np_matrix(
@@ -236,9 +238,9 @@ class DafReader:
         columns_axis: str,
         name: str,
         *,
-        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
         relayout: bool = True,
-    ) -> np.ndarray: ...
+    ) -> np.ndarray | sp.csc_matrix: ...
 
     def get_np_matrix(
         self,
@@ -246,26 +248,29 @@ class DafReader:
         columns_axis: str,
         name: str,
         *,
-        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
         relayout: bool = True,
-    ) -> Optional[np.ndarray]:
+    ) -> Optional[np.ndarray | sp.csc_matrix]:
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
-        ``Daf`` data set.
+        ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_matrix>`_ for details.
 
-        This always returns a ``numpy`` matrix (unless ``default`` is ``None`` and the matrix does not exist). Note that
-        by default ``numpy`` matrices are in row-major (C) layout and not in column-major (Fortran) layout. To get a
-        row-major matrix, simply flip the order of the axes, and call transpose on the result (which is an efficient
-        zero-copy operation).
+        This always returns a column-major ``numpy`` matrix or a ``scipy`` sparse ``csc_matrix``, (unless ``default`` is
+        ``None`` and the matrix does not exist). If the stored data is numeric and dense, this is a zero-copy view of
+        the data stored in the ``Daf`` data set.
 
-        Also note that although we call this ``get_np_matrix``, the result is a simple ``np.ndarray`` with two
-        dimensions (which is what you want) and **not** the deprecated ``np.matrix`` (which is to be avoided at all
-        costs).
+        Note that by default ``numpy`` matrices are in row-major (C) layout and not in column-major (Fortran) layout. To
+        get a row-major matrix, simply flip the order of the axes, and call transpose on the result (which is an
+        efficient zero-copy operation). This will also (zero-copy) convert the ``csc_matrix`` into a ``csr_matrix``.
+
+        Also note that although we call this ``get_np_matrix``, the result is **not** the deprecated ``np.matrix``
+        (which is to be avoided at all costs).
         """
         if not jl.Daf.has_matrix(self.daf_jl, rows_axis, columns_axis, name, relayout=relayout):
             if default is None:
                 return None
-            return _from_julia(
+            return _from_julia_array(
                 jl.Daf.get_matrix(
                     self.daf_jl, rows_axis, columns_axis, name, default=_to_julia(default), relayout=relayout
                 ).array
@@ -275,7 +280,7 @@ class DafReader:
         matrix_key = (matrix_version_counter, rows_axis, columns_axis, name)
         matrix_value = self.weakrefs.get(matrix_key)
         if matrix_value is None:
-            matrix_value = _from_julia(
+            matrix_value = _from_julia_array(
                 jl.Daf.get_matrix(self.daf_jl, rows_axis, columns_axis, name, relayout=relayout).array
             )
             self.weakrefs[matrix_key] = matrix_value
@@ -299,7 +304,7 @@ class DafReader:
         columns_axis: str,
         name: str,
         *,
-        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
         relayout: bool = True,
     ) -> pd.DataFrame: ...
 
@@ -309,19 +314,26 @@ class DafReader:
         columns_axis: str,
         name: str,
         *,
-        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | Undef = undef,
+        default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
         relayout: bool = True,
     ) -> Optional[pd.DataFrame]:
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
-        ``Daf`` data set.
+        ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_matrix>`_ for details.
 
         This is a wrapper around ``get_np_matrix`` which returns a ``pandas`` data frame using the entry names of the
-        axes as the indices.
+        axes as the indices. Since ``pandas`` data frames can't contain a sparse matrix, the data will always be
+        in a dense ``numpy`` matrix, so take care not to invoke this for a too-large sparse data matrix.
+
+        This is not to be confused with ``get_frame`` which returns a "real" ``pandas`` data frame, with arbitrary
+        (query) columns, possibly using a different data type for each.
         """
         matrix_value = self.get_np_matrix(rows_axis, columns_axis, name, default=_to_julia(default), relayout=relayout)
         if matrix_value is None:
             return None
+        if sp.issparse(matrix_value):
+            matrix_value = matrix_value.toarray()
         return pd.DataFrame(matrix_value, index=self.get_axis(rows_axis), columns=self.get_axis(columns_axis))
 
 
@@ -332,7 +344,8 @@ class DafWriter(DafReader):
 
     def set_scalar(self, name: str, value: StorageScalar, *, overwrite: bool = False) -> None:
         """
-        Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set.
+        Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.set_scalar!>`_ for details.
 
         You can force the data type numeric scalars are stored in by using the appropriate ``numpy`` type (e.g., a
         ``np.uint8`` will be stored as a ``UInt8``).
@@ -341,55 +354,120 @@ class DafWriter(DafReader):
 
     def delete_scalar(self, name: str, *, must_exist: bool = True) -> None:
         """
-        Delete a scalar property with some ``name`` from the ``Daf`` data set.
+        Delete a scalar property with some ``name`` from the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.delete_scalar!>`_ for details.
         """
         jl.Daf.delete_scalar_b(self.daf_jl, name, must_exist=must_exist)
 
     def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray) -> None:
         """
-        Add a new ``axis`` to the ``Daf`` data set.
+        Add a new ``axis`` to the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.add_axis!>`_ for details.
         """
         jl.Daf.add_axis_b(self.daf_jl, axis, _to_julia(entries))
 
     def delete_axis(self, axis: str, *, must_exist: bool = True) -> None:
         """
-        Delete an ``axis`` from the ``Daf`` data set.
+        Delete an ``axis`` from the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.delete_axis!>`_ for details.
         """
         jl.Daf.delete_axis_b(self.daf_jl, axis, must_exist=must_exist)
 
     def set_vector(
-        self, axis: str, name: str, value: Sequence[StorageScalar] | np.ndarray, *, overwrite: bool = False
+        self,
+        axis: str,
+        name: str,
+        value: Sequence[StorageScalar] | np.ndarray | sp.csc_matrix | sp.csr_matrix,
+        *,
+        overwrite: bool = False,
     ) -> None:
         """
-        Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set.
+        Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.set_vector!>`_ for details.
 
         If the provided ``value`` is numeric and dense, this passes a zero-copy view of the data to the ``Daf`` data
-        set. Otherwise, a Python copy of the data as a dense ``numpy`` array is made, and passed to ``Daf``. Since
-        Python has no concept of sparse vectors (because "reasons"), you can't create a sparse ``Daf`` vector using the
-        Python API.
+        set. Otherwise, a Python copy of the data is made (as a dense ``numpy`` array), and passed to ``Daf``.
 
-        As a convenience, you can pass a 1xN or Nx1 matrix here and it will be mercifully interpreted as a vector.
+        As a convenience, you can pass a 1xN or Nx1 matrix here and it will be mercifully interpreted as a vector. This
+        allows creating sparse vectors in ``Daf`` by passing a 1xN slice of a sparse (column-major) Python matrix.
         """
+        if (isinstance(value, sp.csc_matrix) and value.shape[1] == 1) or (
+            isinstance(value, sp.csr_matrix) and value.shape[0] == 1
+        ):
+            with self.empty_sparse_vector(
+                axis,
+                name,
+                value.data.dtype,
+                value.nnz,
+                value.indptr.dtype,
+                overwrite=overwrite,
+            ) as (nzind, nzval):
+                nzind[:] = value.indices[:]
+                nzind += 1
+                nzval[:] = value.data[:]
+            return
+
+        if (isinstance(value, sp.csc_matrix) and value.shape[0] == 1) or (
+            isinstance(value, sp.csr_matrix) and value.shape[1] == 1
+        ):
+            with self.empty_sparse_vector(
+                axis,
+                name,
+                value.data.dtype,
+                value.nnz,
+                value.indptr.dtype,
+                overwrite=overwrite,
+            ) as (nzind, nzval):
+                nzind[:] = np.where(np.ediff1d(value.indptr) == 1)[0]
+                nzind += 1
+                nzval[:] = value.data[:]
+            return
+
         jl.Daf.set_vector_b(self.daf_jl, axis, name, _as_vector(_to_julia(value)), overwrite=overwrite)
 
     @contextmanager
-    def empty_dense_vector(self, axis: str, name: str, dtype: Type, *, overwrite: bool = False) -> Iterator[pd.Series]:
+    def empty_dense_vector(
+        self, axis: str, name: str, eltype: Type, *, overwrite: bool = False
+    ) -> Iterator[np.ndarray]:
         """
         Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it
-        to the block (as a ``pandas`` series) to be filled.
+        to the block to be filled. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_vector!>`_ for details.
         """
+        with jl_do(
+            jl.Daf.empty_dense_vector_b, self.daf_jl, axis, name, _to_julia(eltype), overwrite=overwrite
+        ) as empty_vector:
+            yield _from_julia_array(empty_vector)
 
-        def fill(named: Any) -> Iterator[Never]:
-            vector_value = _from_julia(named.array)
-            yield pd.Series(vector_value, index=self.get_axis(axis))
+    @contextmanager
+    def empty_sparse_vector(
+        self, axis: str, name: str, eltype: Type, nnz: int, indtype: Type, *, overwrite: bool = False
+    ) -> Iterator[Tuple[np.ndarray, np.ndarray]]:
+        """
+        Create an empty sparse vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, pass its
+        parts (``nzind`` and ``nzval``) to the block to be filled. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_vector!>`_ for details.
 
-        yield from jl.Daf.empty_dense_vector_b(
-            jl.py_function_to_fulia_function(fill), self.daf_jl, axis, name, _to_julia(dtype), overwrite=overwrite
-        )
+        Note that the code block will get a tuple of ``(nzind, nzval)`` arrays for *Julia's* ``SparseVector``, **not** a
+        tuple of ``(data, indices, indptr)`` for Python's ``csc_matrix``. First, ``numpy`` (that is, ``scipy``) has no
+        concept of sparse vectors. In addition ``nzind`` is 1-based (Julia) and not 0-based (Python).
+        """
+        with jl_do(
+            jl.Daf.empty_sparse_vector_b,
+            self.daf_jl,
+            axis,
+            name,
+            _to_julia(eltype),
+            nnz,
+            _to_julia(indtype),
+            overwrite=overwrite,
+        ) as sparse_vector_vectors:
+            yield tuple(_from_julia_array(julia_array) for julia_array in sparse_vector_vectors)  # type: ignore
 
     def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> None:
         """
-        Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set.
+        Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.delete_vector!>`_ for details.
         """
         jl.Daf.delete_vector_b(self.daf_jl, axis, name, must_exist=must_exist)
 
@@ -398,54 +476,95 @@ class DafWriter(DafReader):
         rows_axis: str,
         columns_axis: str,
         name: str,
-        value: np.ndarray,
+        value: np.ndarray | sp.csc_matrix,
         *,
         overwrite: bool = False,
         relayout: bool = True,
     ) -> None:
         """
         Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
+        See the Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.set_matrix!>`_ for
+        details.
+
         Since ``Daf`` is implemented Julia, this should be a column-major ``matrix``, so if you have a standard
-        ``numpy`` matrix, flip the order of the axes and pass the ``transpose`` (which is an efficient zero-copy
-        operation).
+        ``numpy`` or ``scipy`` row-major matrix, flip the order of the axes and pass the ``transpose`` (which is an
+        efficient zero-copy operation).
         """
-        jl.Daf.set_matrix_b(self.daf_jl, rows_axis, columns_axis, name, value, overwrite=overwrite, relayout=relayout)
+        jl.Daf.set_matrix_b(
+            self.daf_jl, rows_axis, columns_axis, name, _to_julia(value), overwrite=overwrite, relayout=relayout
+        )
 
     @contextmanager
     def empty_dense_matrix(
-        self, rows_axis: str, columns_axis: str, name: str, dtype: Type, *, overwrite: bool = False
-    ) -> Iterator[pd.DataFrame]:
+        self, rows_axis: str, columns_axis: str, name: str, eltype: Type, *, overwrite: bool = False
+    ) -> Iterator[np.ndarray]:
         """
-        Create an empty dense matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
-        ``Daf`` data set, and pass it to the block (as a ``pandas`` data frame) to be filled.
+        Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and
+        ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_matrix!>`_ for details.
         """
-
-        def fill(named: Any) -> Iterator[Never]:
-            matrix_value = _from_julia(named.array)
-            yield pd.DataFrame(matrix_value, index=self.get_axis(rows_axis), columns=self.get_axis(columns_axis))
-
-        yield from jl.Daf.empty_dense_matrix_b(
-            jl.py_function_to_fulia_function(fill),
+        with jl_do(
+            jl.Daf.empty_dense_matrix_b,
             self.daf_jl,
             rows_axis,
             columns_axis,
             name,
-            _to_julia(dtype),
+            _to_julia(eltype),
             overwrite=overwrite,
-        )
+        ) as empty_matrix:
+            yield _from_julia_array(empty_matrix)
+
+    @contextmanager
+    def empty_sparse_matrix(
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        eltype: Type,
+        nnz: int,
+        indtype: Type,
+        *,
+        overwrite: bool = False,
+    ) -> Iterator[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
+        """
+        Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and
+        ``columns_axis`` in the ``Daf`` data set, and pass its parts (``colptr``, ``rowval`` and ``nzval``) to the block
+        to be filles. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_matrix!>`_ for details.
+
+        Note that the code block will get a tuple of ``(colptr, rowval, nzval)`` arrays for Julia's ``SparseMatrixCSC``,
+        **not** a tuple of ``(data, indices, indptr)`` for Python's ``csc_matrix``. Yes, ``data`` is the same as
+        ``nzval``, but ``colptr = indptr + 1`` and ``rowval = indices + 1``, because Julia uses 1-based indexing, and
+        Python uses 0-based indexing. For this reason, sparse data can't ever be zero-copy between Julia and Python.
+        Sigh.
+        """
+        with jl_do(
+            jl.Daf.empty_sparse_matrix_b,
+            self.daf_jl,
+            rows_axis,
+            columns_axis,
+            name,
+            _to_julia(eltype),
+            nnz,
+            _to_julia(indtype),
+            overwrite=overwrite,
+        ) as sparse_matrix_vectors:
+            yield tuple(_from_julia_array(julia_array) for julia_array in sparse_matrix_vectors)  # type: ignore
 
     def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> None:
         """
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
         ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
-        flipped axes).
+        flipped axes). See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.relayout_matrix!>`_ for details.
         """
         jl.Daf.relayout_matrix_b(self.daf_jl, rows_axis, columns_axis, name, overwrite=overwrite)
 
     def delete_matrix(self, rows_axis: str, columns_axis: str, name: str, *, must_exist: bool = True) -> None:
         """
         Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data
-        set.
+        set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.delete_matrix!>`_ for details.
         """
         jl.Daf.delete_matrix_b(self.daf_jl, rows_axis, columns_axis, name, must_exist=must_exist)
 
@@ -468,17 +587,55 @@ JULIA_TYPE_OF_PY_TYPE = {
 
 
 def _to_julia(value: Any) -> Any:
+    if isinstance(value, np.dtype):
+        return JULIA_TYPE_OF_PY_TYPE[value.type]
+
     if isinstance(value, type):
-        value = JULIA_TYPE_OF_PY_TYPE[value]
-    elif isinstance(value, Undef):
-        value = jl.undef
-    elif isinstance(value, Sequence) and not isinstance(value, np.ndarray):
-        value = np.array(value)
+        return JULIA_TYPE_OF_PY_TYPE[value]
+
+    if isinstance(value, UndefInitializer):
+        return jl.undef
+
+    if isinstance(value, (sp.csc_matrix, sp.csr_matrix)):
+        colptr = jl.Vector(value.indptr)
+        rowval = jl.Vector(value.indices)
+        nzval = jl.Vector(value.data)
+
+        colptr_as_array = np.asarray(colptr)
+        rowval_as_array = np.asarray(rowval)
+
+        colptr_as_array += 1
+        rowval_as_array += 1
+
+        nrows, ncols = value.shape
+        if isinstance(value, sp.csr_matrix):
+            nrows, ncols = ncols, nrows
+
+        julia_matrix = jl.SparseArrays.SparseMatrixCSC(nrows, ncols, colptr, rowval, nzval)
+
+        if isinstance(value, sp.csr_matrix):
+            julia_matrix = jl.LinearAlgebra.transpose(julia_matrix)
+
+        return julia_matrix
+
+    if isinstance(value, Sequence) and not isinstance(value, np.ndarray):
+        return np.array(value)
+
     return value
 
 
-def _from_julia(julia_vector: Any) -> np.ndarray:
-    python_array = np.asarray(julia_vector)
+def _from_julia_array(julia_array: Any) -> np.ndarray | sp.csc_matrix:
+    try:
+        indptr = np.array(julia_array.colptr)
+        indptr -= 1
+        indices = np.array(julia_array.rowval)
+        indices -= 1
+        data = np.asarray(julia_array.nzval)
+        return sp.csc_matrix((data, indices, indptr), julia_array.shape)
+    except:
+        pass
+
+    python_array = np.asarray(julia_array)
     if python_array.dtype == "object":
         python_array = np.array([str(obj) for obj in python_array], dtype=str)
     return python_array

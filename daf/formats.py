@@ -10,7 +10,8 @@ __all__ = ["MemoryDaf"]
 
 class MemoryDaf(DafWriter):
     """
-    Simple in-memory storage.
+    Simple in-memory storage. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/memory_format.html>`_ for details.
     """
 
     def __init__(self, *, name: str = "memory") -> None:
