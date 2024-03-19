@@ -29,7 +29,14 @@ def make_files() -> FilesDaf:
     return files
 
 
-FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!")), ("FilesDaf", make_files)]
+def make_h5df() -> H5df:
+    tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
+    h5df = H5df(tmpdir.name + "/test.h5df", "w", name="test!")
+    setattr(h5df, "__gc_anchor__", tmpdir)
+    return h5df
+
+
+FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!")), ("FilesDaf", make_files), ("H5df", make_h5df)]
 
 
 @contextmanager

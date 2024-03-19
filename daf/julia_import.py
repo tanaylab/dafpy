@@ -72,17 +72,17 @@ jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Daf")
 
+jl.seval("import HDF5")
 jl.seval("import LinearAlgebra")
-
 jl.seval("import SparseArrays")
 
 #: This would not be needed if/when this `issue <https://github.com/JuliaPy/PythonCall.jl/issues/477>`_ is resolved.
 jl.seval(
     """
-function py_function_to_fulia_function(py_object::Py)::Function
-    return (args...; kwargs...) -> pycall(py_object, args...; kwargs...)
-end
-"""
+    function py_function_to_fulia_function(py_object::Py)::Function
+        return (args...; kwargs...) -> pycall(py_object, args...; kwargs...)
+    end
+    """
 )
 
 

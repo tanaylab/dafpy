@@ -148,6 +148,15 @@
 </a>
 </li>
 
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.formats.H5df">
+<code class="docutils literal notranslate">
+<span class="pre">H5df
+</span>
+</code>
+</a>
+</li>
+
 </ul>
 
 </li>
@@ -444,6 +453,139 @@
 
 <a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/files_format.html">documentation
 </a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.formats.H5df">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">H5df
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">root:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">Julia:
+</span> 
+<span class="pre">HDF5.File
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">Julia:
+</span> 
+<span class="pre">HDF5.Group
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">mode:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">'r'
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/formats.html#H5df">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.formats.H5df" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> storage format in an HDF5 disk file. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/hdf5_format.html">documentation
+</a> for details.
+</p>
+
+<p>Note that if you want to open the 
+<code class="docutils literal notranslate">
+<span class="pre">HDF5
+</span>
+</code> file yourself (e.g., to access a specific group in it as a 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data
+set), you will need to use the Julia API to do so, in order to pass the result here. That is, the current Python
+
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> API does 
+<strong>not
+</strong> support using the Python 
+<code class="docutils literal notranslate">
+<span class="pre">HDF5
+</span>
+</code> API. This is because the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> Python API is just a
+thin wrapper for the Julia 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> implementation, which doesn’t “speak Python”.
 </p>
 
 </dd>

@@ -151,17 +151,17 @@
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Daf&quot;</span><span class="p">)</span>
 
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import HDF5&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import LinearAlgebra&quot;</span><span class="p">)</span>
-
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import SparseArrays&quot;</span><span class="p">)</span>
 
 <span class="c1">#: This would not be needed if/when this `issue &lt;https://github.com/JuliaPy/PythonCall.jl/issues/477&gt;`_ is resolved.</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">function py_function_to_fulia_function(py_object::Py)::Function</span>
-<span class="sd">    return (args...; kwargs...) -&gt; pycall(py_object, args...; kwargs...)</span>
-<span class="sd">end</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function py_function_to_fulia_function(py_object::Py)::Function</span>
+<span class="sd">        return (args...; kwargs...) -&gt; pycall(py_object, args...; kwargs...)</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">)</span>
 
 

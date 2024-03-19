@@ -613,7 +613,10 @@ def _to_julia(value: Any) -> Any:
         return julia_matrix
 
     if isinstance(value, Sequence) and not isinstance(value, np.ndarray):
-        return np.array(value)
+        value = np.array(value)
+
+    if isinstance(value, np.ndarray) and value.dtype.type == np.str_:
+        value = jl.Vector(value)
 
     return value
 
