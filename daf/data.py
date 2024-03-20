@@ -20,11 +20,13 @@ import numpy as np
 import pandas as pd  # type: ignore
 import scipy.sparse as sp  # type: ignore
 
+from .julia_import import JlObject
 from .julia_import import Undef
 from .julia_import import UndefInitializer
 from .julia_import import _as_vector
 from .julia_import import _from_julia_array
 from .julia_import import _from_julia_frame
+from .julia_import import _jl_pairs
 from .julia_import import _to_julia
 from .julia_import import jl
 from .queries import Query
@@ -50,14 +52,14 @@ def _to_jl_cache_type(cache_type: Optional[CacheType]) -> jl.Daf.CacheType:
     return None
 
 
-class DafReader:
+class DafReader(JlObject):
     """
     Read-only access to ``Daf`` data. See the Julia
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html>`__ for details.
     """
 
     def __init__(self, jl_obj) -> None:
-        self.jl_obj = jl_obj
+        super().__init__(jl_obj)
         self.weakrefs: WeakValueDictionary[Any, Any] = WeakValueDictionary()
 
     @property
@@ -67,12 +69,12 @@ class DafReader:
         """
         return self.jl_obj.name
 
-    def description(self, *, deep: bool = False) -> str:
+    def description(self, *, cache: bool = False, deep: bool = False) -> str:
         """
         Return a (multi-line) description of the contents of ``Daf`` data. See the Julia
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.description>`__ for details.
         """
-        return jl.Daf.description(self.jl_obj, deep=deep)
+        return jl.Daf.description(self.jl_obj, cache=cache, deep=deep)
 
     def has_scalar(self, name: str) -> bool:
         """
@@ -432,9 +434,7 @@ class DafReader:
         column will be first and the ``age`` column will be second.
         """
         if isinstance(columns, Mapping):
-            columns = jl._pairify_columns(  # pylint: disable=protected-access
-                [(name, _to_julia(query)) for name, query in columns.items()]
-            )
+            columns = jl._pairify_columns(_jl_pairs(columns))
         else:
             columns = _to_julia(columns)
         jl_frame = jl.Daf.Queries.get_frame(self.jl_obj, axis, columns, cache=cache)

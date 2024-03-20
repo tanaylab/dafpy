@@ -99,11 +99,13 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>  <span class="c1"># type: ignore</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>  <span class="c1"># type: ignore</span>
 
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">JlObject</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">Undef</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">UndefInitializer</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_as_vector</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_from_julia_array</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_from_julia_frame</span>
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_jl_pairs</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_to_julia</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
 <span class="kn">from</span> <span class="nn">.queries</span> <span class="kn">import</span> <span class="n">Query</span>
@@ -131,14 +133,14 @@
 
 <div class="viewcode-block" id="DafReader">
 <a class="viewcode-back" href="../../data.html#daf.data.DafReader">[docs]</a>
-<span class="k">class</span> <span class="nc">DafReader</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">DafReader</span><span class="p">(</span><span class="n">JlObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read-only access to ``Daf`` data. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl_obj</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">:</span> <span class="n">WeakValueDictionary</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">()</span>
 
     <span class="nd">@property</span>
@@ -150,12 +152,12 @@
 
 <div class="viewcode-block" id="DafReader.description">
 <a class="viewcode-back" href="../../data.html#daf.data.DafReader.description">[docs]</a>
-    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">deep</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">deep</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a (multi-line) description of the contents of ``Daf`` data. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.description&gt;`__ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="n">deep</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="n">deep</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_scalar">
@@ -572,9 +574,7 @@
 <span class="sd">        column will be first and the ``age`` column will be second.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-            <span class="n">columns</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">_pairify_columns</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
-                <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">query</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">columns</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-            <span class="p">)</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">_pairify_columns</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
         <span class="n">jl_frame</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>

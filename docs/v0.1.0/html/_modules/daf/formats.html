@@ -148,44 +148,36 @@
 
 <div class="viewcode-block" id="read_only">
 <a class="viewcode-back" href="../../formats.html#daf.formats.read_only">[docs]</a>
-<span class="k">def</span> <span class="nf">read_only</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyView</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">read_only</span><span class="p">(</span><span class="n">dset</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyView</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrap a ``Daf`` data set with a ``ReadOnlyView`` to protect it against accidental modification. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.read_only&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ReadOnlyView</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">data</span>
-    <span class="k">return</span> <span class="n">ReadOnlyView</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">read_only</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dset</span><span class="p">,</span> <span class="n">ReadOnlyView</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">dset</span>
+    <span class="k">return</span> <span class="n">ReadOnlyView</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">read_only</span><span class="p">(</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="chain_reader">
 <a class="viewcode-back" href="../../formats.html#daf.formats.chain_reader">[docs]</a>
-<span class="k">def</span> <span class="nf">chain_reader</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReader</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">chain_reader</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReader</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/chains.html#Daf.Chains.chain_reader&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">DafReader</span><span class="p">(</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">chain_reader</span><span class="p">(</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">datum</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">datum</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>  <span class="c1"># pylint: disable=protected-access</span>
-        <span class="p">)</span>
-    <span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">DafReader</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">chain_reader</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dsets</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="chain_writer">
 <a class="viewcode-back" href="../../formats.html#daf.formats.chain_writer">[docs]</a>
-<span class="k">def</span> <span class="nf">chain_writer</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">chain_writer</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/chains.html#Daf.Chains.chain_writer&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">chain_writer</span><span class="p">(</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">datum</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">datum</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>  <span class="c1"># pylint: disable=protected-access</span>
-        <span class="p">)</span>
-    <span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">chain_writer</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dsets</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
 
 </pre></div>
 

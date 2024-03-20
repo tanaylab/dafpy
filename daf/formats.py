@@ -58,35 +58,27 @@ class ReadOnlyView(DafReader):
     """
 
 
-def read_only(data: DafReader, *, name: Optional[str] = None) -> ReadOnlyView:
+def read_only(dset: DafReader, *, name: Optional[str] = None) -> ReadOnlyView:
     """
     Wrap a ``Daf`` data set with a ``ReadOnlyView`` to protect it against accidental modification. See the Julia
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.read_only>`__ for details.
     """
-    if isinstance(data, ReadOnlyView):
-        return data
-    return ReadOnlyView(jl.Daf.read_only(data.jl_obj, name=name))
+    if isinstance(dset, ReadOnlyView):
+        return dset
+    return ReadOnlyView(jl.Daf.read_only(dset.jl_obj, name=name))
 
 
-def chain_reader(data: Sequence[DafReader], *, name: Optional[str] = None) -> DafReader:
+def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafReader:
     """
     Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/chains.html#Daf.Chains.chain_reader>`__ for details.
     """
-    return DafReader(
-        jl.chain_reader(
-            jl._to_daf_readers([datum.jl_obj for datum in data]), name=name  # pylint: disable=protected-access
-        )
-    )
+    return DafReader(jl.chain_reader(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))
 
 
-def chain_writer(data: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
+def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
     """
     Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/chains.html#Daf.Chains.chain_writer>`__ for details.
     """
-    return DafWriter(
-        jl.chain_writer(
-            jl._to_daf_readers([datum.jl_obj for datum in data]), name=name  # pylint: disable=protected-access
-        )
-    )
+    return DafWriter(jl.chain_writer(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))

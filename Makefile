@@ -179,7 +179,7 @@ smells: mypy pylint  ## check for code smells
 pylint: .make.pylint  ## check code with pylint
 
 .make.pylint: $(PY_SOURCE_FILES)
-	pylint --max-line-length $(MAX_LINE_LENGTH) --disable=fixme,wrong-import-position,no-name-in-module,too-many-arguments,too-many-public-methods,too-few-public-methods,bare-except $(NAME) tests
+	pylint --max-line-length $(MAX_LINE_LENGTH) --disable=fixme,protected-access,wrong-import-position,no-name-in-module,too-many-arguments,too-many-public-methods,too-few-public-methods,bare-except $(NAME) tests
 	touch $@
 
 mypy: .make.mypy  ## check code with mypy

@@ -9,6 +9,7 @@ from math import inf
 from typing import Optional
 from typing import Type
 
+from .julia_import import JlObject
 from .julia_import import _to_julia
 from .julia_import import jl
 
@@ -37,7 +38,7 @@ __all__ = [
 ]
 
 
-class QueryOperation:
+class QueryOperation(JlObject):
     """
     Base class for all query operations.
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Registry.QueryOperation>`__ for details.
@@ -45,9 +46,6 @@ class QueryOperation:
     Query operations can be chained into a ``QuerySequence`` using the ``|`` operator in Python (instead of the ``|>``
     operator in Julia).
     """
-
-    def __init__(self, jl_obj) -> None:
-        self.jl_obj = jl_obj
 
     def __or__(self, other: "QueryOperation") -> "QuerySequence":
         return QuerySequence(jl.Daf.QuerySequence(self.jl_obj, other.jl_obj))

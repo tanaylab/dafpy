@@ -56,3 +56,4 @@ from .operations import *  # isort: skip
 from .queries import *  # isort: skip
 from .data import *  # isort: skip
 from .formats import *  # isort: skip
+from .views import *  # isort: skip

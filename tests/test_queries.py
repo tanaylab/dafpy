@@ -68,26 +68,26 @@ def test_query_formatting(query_data: Tuple[Query, str]) -> None:
 
 
 def test_query_result() -> None:  # pylint: disable=too-many-statements
-    data = MemoryDaf(name="test!")
-    data.set_scalar("version", "1.0")
-    data.add_axis("cell", ["A", "B"])
-    data.add_axis("gene", ["X", "Y", "Z"])
-    data.add_axis("batch", ["U", "V", "W"])
-    data.set_vector("cell", "batch", ["U", "V"])
-    data.set_vector("cell", "age", [-1.0, 2.0])
-    data.set_vector("batch", "sex", ["Male", "Female", "Male"])
-    data.set_matrix("gene", "cell", "UMIs", np.array([[1, 2, 3], [4, 5, 6]]).transpose())
+    dset = MemoryDaf(name="test!")
+    dset.set_scalar("version", "1.0")
+    dset.add_axis("cell", ["A", "B"])
+    dset.add_axis("gene", ["X", "Y", "Z"])
+    dset.add_axis("batch", ["U", "V", "W"])
+    dset.set_vector("cell", "batch", ["U", "V"])
+    dset.set_vector("cell", "age", [-1.0, 2.0])
+    dset.set_vector("batch", "sex", ["Male", "Female", "Male"])
+    dset.set_matrix("gene", "cell", "UMIs", np.array([[1, 2, 3], [4, 5, 6]]).transpose())
 
     assert query_result_dimensions(parse_query(": version")) == 0
     assert query_result_dimensions("/ cell : age") == 1
     assert query_result_dimensions("/ cell / gene : UMIs") == 2
 
-    assert data[": version"] == "1.0"
-    assert set(data["? scalars"]) == set(["version"])  # type: ignore
-    assert set(data["/ cell ?"]) == set(["batch", "age"])  # type: ignore
-    assert set(data["/ gene / cell ?"]) == set(["UMIs"])  # type: ignore
+    assert dset[": version"] == "1.0"
+    assert set(dset["? scalars"]) == set(["version"])  # type: ignore
+    assert set(dset["/ cell ?"]) == set(["batch", "age"])  # type: ignore
+    assert set(dset["/ gene / cell ?"]) == set(["UMIs"])  # type: ignore
 
-    series = data.get_pd_query("/ cell : age")
+    series = dset.get_pd_query("/ cell : age")
     assert (
         str(series)
         == dedent(
@@ -99,7 +99,7 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
-    frame = data.get_pd_query(parse_query("/ cell / gene : UMIs"))
+    frame = dset.get_pd_query(parse_query("/ cell / gene : UMIs"))
     assert (
         str(frame)
         == dedent(
@@ -111,34 +111,34 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
-    assert np.all(data["/ cell : age"] == np.array([-1, 2]))
-    assert np.all(data["/ cell : batch"] == np.array(["U", "V"]))
-    assert np.all(data["/ cell : batch"] == ["U", "V"])
-    assert np.all(data["/ cell /gene : UMIs"] == np.array([[1, 2, 3], [4, 5, 6]]))
+    assert np.all(dset["/ cell : age"] == np.array([-1, 2]))
+    assert np.all(dset["/ cell : batch"] == np.array(["U", "V"]))
+    assert np.all(dset["/ cell : batch"] == ["U", "V"])
+    assert np.all(dset["/ cell /gene : UMIs"] == np.array([[1, 2, 3], [4, 5, 6]]))
 
-    assert np.all(data[parse_query("/ cell : age") | Abs()] == np.array([1.0, 2.0]))
-    assert np.all(data[parse_query("/ cell : age") | Clamp(min=0.5)] == np.array([0.5, 2.0]))
-    assert np.all(data[parse_query("/ cell : age") | Convert(dtype=np.int8)] == np.array([-1, 2]))
-    assert np.all(data[parse_query("/ cell : age % Abs") | Fraction()] == np.array([1 / 3, 2 / 3]))
-    assert np.all(data[parse_query("/ cell : age % Abs") | Log(base=2)] == np.array([0.0, 1.0]))
-    assert np.all(data[parse_query("/ cell : age") | Significant(high=2)] == [0, 2])
+    assert np.all(dset[parse_query("/ cell : age") | Abs()] == np.array([1.0, 2.0]))
+    assert np.all(dset[parse_query("/ cell : age") | Clamp(min=0.5)] == np.array([0.5, 2.0]))
+    assert np.all(dset[parse_query("/ cell : age") | Convert(dtype=np.int8)] == np.array([-1, 2]))
+    assert np.all(dset[parse_query("/ cell : age % Abs") | Fraction()] == np.array([1 / 3, 2 / 3]))
+    assert np.all(dset[parse_query("/ cell : age % Abs") | Log(base=2)] == np.array([0.0, 1.0]))
+    assert np.all(dset[parse_query("/ cell : age") | Significant(high=2)] == [0, 2])
 
-    assert data[parse_query("/ cell : age") | Max()] == 2
-    assert data[parse_query("/ cell : age") | Median()] == 0.5
-    assert data[parse_query("/ cell : age") | Mean()] == 0.5
-    assert data[parse_query("/ cell : age %> Mean") | Round()] == 0
-    assert data[parse_query("/ cell : age") | Quantile(p=0.5)] == 0.5
-    assert data[parse_query("/ cell : age") | Min()] == -1
-    assert data[parse_query("/ cell : age") | Std()] == 1.5
-    assert data[parse_query("/ cell : age") | StdN()] == 3.0
-    assert data[parse_query("/ cell : age") | Var()] == 2.25
-    assert data[parse_query("/ cell : age") | VarN()] == 4.5
+    assert dset[parse_query("/ cell : age") | Max()] == 2
+    assert dset[parse_query("/ cell : age") | Median()] == 0.5
+    assert dset[parse_query("/ cell : age") | Mean()] == 0.5
+    assert dset[parse_query("/ cell : age %> Mean") | Round()] == 0
+    assert dset[parse_query("/ cell : age") | Quantile(p=0.5)] == 0.5
+    assert dset[parse_query("/ cell : age") | Min()] == -1
+    assert dset[parse_query("/ cell : age") | Std()] == 1.5
+    assert dset[parse_query("/ cell : age") | StdN()] == 3.0
+    assert dset[parse_query("/ cell : age") | Var()] == 2.25
+    assert dset[parse_query("/ cell : age") | VarN()] == 4.5
 
-    data.set_matrix("cell", "gene", "UMIs", sp.csc_matrix([[0, 1, 2], [3, 4, 0]]), overwrite=True)
-    frame = data.get_pd_query(parse_query("/ cell / gene : UMIs"))
+    dset.set_matrix("cell", "gene", "UMIs", sp.csc_matrix([[0, 1, 2], [3, 4, 0]]), overwrite=True)
+    frame = dset.get_pd_query(parse_query("/ cell / gene : UMIs"))
     assert np.all(frame.values == np.array([[0, 1, 2], [3, 4, 0]]))  # type: ignore
 
-    frame = data.get_pd_frame("cell")
+    frame = dset.get_pd_frame("cell")
     assert (
         str(frame)
         == dedent(
@@ -150,7 +150,7 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
-    frame = data.get_pd_frame("cell", ["age"])
+    frame = dset.get_pd_frame("cell", ["age"])
     assert (
         str(frame)
         == dedent(
@@ -162,7 +162,7 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
-    frame = data.get_pd_frame("/ cell", {"age": ": age", "sex": ": batch => sex"})
+    frame = dset.get_pd_frame("/ cell", {"age": ": age", "sex": ": batch => sex"})
     assert (
         str(frame)
         == dedent(
@@ -174,4 +174,4 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
-    data.empty_cache(clear="MappedData")
+    dset.empty_cache(clear="MappedData")

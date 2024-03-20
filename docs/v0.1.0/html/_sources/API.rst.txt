@@ -10,4 +10,5 @@ API
   queries
   operations
   formats
+  views
   storage_types

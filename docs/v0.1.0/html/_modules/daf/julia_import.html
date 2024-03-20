@@ -103,8 +103,10 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">MutableMapping</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -158,19 +160,12 @@
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Daf&quot;</span><span class="p">)</span>
 
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import Daf.Generic.Maybe&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import DataFrames&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import HDF5&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import LinearAlgebra&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import NamedArrays&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import SparseArrays&quot;</span><span class="p">)</span>
-
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    function _pairify_columns(items::AbstractVector)::Daf.QueryColumns</span>
-<span class="sd">        return [name =&gt; query for (name, query) in items]</span>
-<span class="sd">    end</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-<span class="p">)</span>
 
 
 <div class="viewcode-block" id="UndefInitializer">
@@ -205,7 +200,19 @@
 <span class="p">}</span>
 
 
+<span class="k">class</span> <span class="nc">JlObject</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Python base class for wrapping a Julia object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl_obj</span>
+
+
 <span class="k">def</span> <span class="nf">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-return-statements</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">JlObject</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">jl_obj</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">JULIA_TYPE_OF_PY_TYPE</span><span class="p">[</span><span class="n">value</span><span class="o">.</span><span class="n">type</span><span class="p">]</span>
 
@@ -217,9 +224,6 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span>
-
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;jl_obj&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">jl_obj</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">)):</span>
         <span class="n">colptr</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
@@ -280,7 +284,7 @@
 <span class="k">def</span> <span class="nf">_from_julia_frame</span><span class="p">(</span>
     <span class="n">jl_frame</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataFrames</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">jl</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="n">jl_frame</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">getindex</span><span class="p">(</span><span class="n">jl_frame</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">Colon</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -291,6 +295,49 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}</span>
 <span class="sd">        return Vector{DafReader}(readers)</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_jl_pairs</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function _pairify_columns(items::Maybe{AbstractVector})::Maybe{Daf.QueryColumns}</span>
+<span class="sd">        if items == nothing</span>
+<span class="sd">            return nothing</span>
+<span class="sd">        else</span>
+<span class="sd">            return [name =&gt; query for (name, query) in items]</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function _pairify_axes(items::Maybe{AbstractVector})::Maybe{Daf.ViewAxes}</span>
+<span class="sd">        if items == nothing</span>
+<span class="sd">            return nothing</span>
+<span class="sd">        else</span>
+<span class="sd">            return [key =&gt; query for (key, query) in items]</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function _pairify_data(items::Maybe{AbstractVector})::Maybe{Daf.ViewData}</span>
+<span class="sd">        if items == nothing</span>
+<span class="sd">            return nothing</span>
+<span class="sd">        else</span>
+<span class="sd">            return [key =&gt; query for (key, query) in items]</span>
+<span class="sd">        end</span>
 <span class="sd">    end</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">)</span>

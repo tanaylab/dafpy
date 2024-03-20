@@ -24,8 +24,10 @@ import os
 import sys
 import warnings
 from typing import Any
-from typing import Dict
+from typing import Mapping
+from typing import MutableMapping
 from typing import Sequence
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -79,19 +81,12 @@ jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Daf")
 
+jl.seval("import Daf.Generic.Maybe")
 jl.seval("import DataFrames")
 jl.seval("import HDF5")
 jl.seval("import LinearAlgebra")
 jl.seval("import NamedArrays")
 jl.seval("import SparseArrays")
-
-jl.seval(
-    """
-    function _pairify_columns(items::AbstractVector)::Daf.QueryColumns
-        return [name => query for (name, query) in items]
-    end
-    """
-)
 
 
 class UndefInitializer:
@@ -123,7 +118,19 @@ JULIA_TYPE_OF_PY_TYPE = {
 }
 
 
+class JlObject:
+    """
+    A Python base class for wrapping a Julia object.
+    """
+
+    def __init__(self, jl_obj) -> None:
+        self.jl_obj = jl_obj
+
+
 def _to_julia(value: Any) -> Any:  # pylint: disable=too-many-return-statements
+    if isinstance(value, JlObject):
+        return value.jl_obj
+
     if isinstance(value, np.dtype):
         return JULIA_TYPE_OF_PY_TYPE[value.type]
 
@@ -135,9 +142,6 @@ def _to_julia(value: Any) -> Any:  # pylint: disable=too-many-return-statements
 
     if isinstance(value, str):
         return value
-
-    if hasattr(value, "jl_obj"):
-        return value.jl_obj
 
     if isinstance(value, (sp.csc_matrix, sp.csr_matrix)):
         colptr = jl.Vector(value.indptr)
@@ -198,7 +202,7 @@ def _as_vector(vector_ish: Any) -> Any:
 def _from_julia_frame(
     jl_frame: jl.DataFrames.DataFrame,  # type: ignore
 ) -> pd.DataFrame:
-    data: Dict[str, Any] = {}
+    data: MutableMapping[str, Any] = {}
     for name in jl.names(jl_frame):
         value = jl.getindex(jl_frame, jl.Colon(), name)
         data[str(name)] = _from_julia_array(value)
@@ -209,6 +213,49 @@ jl.seval(
     """
     function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}
         return Vector{DafReader}(readers)
+    end
+    """
+)
+
+
+def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
+    if mapping is None:
+        return None
+    return [(key, _to_julia(value)) for key, value in mapping.items()]
+
+
+jl.seval(
+    """
+    function _pairify_columns(items::Maybe{AbstractVector})::Maybe{Daf.QueryColumns}
+        if items == nothing
+            return nothing
+        else
+            return [name => query for (name, query) in items]
+        end
+    end
+    """
+)
+
+jl.seval(
+    """
+    function _pairify_axes(items::Maybe{AbstractVector})::Maybe{Daf.ViewAxes}
+        if items == nothing
+            return nothing
+        else
+            return [key => query for (key, query) in items]
+        end
+    end
+    """
+)
+
+jl.seval(
+    """
+    function _pairify_data(items::Maybe{AbstractVector})::Maybe{Daf.ViewData}
+        if items == nothing
+            return nothing
+        else
+            return [key => query for (key, query) in items]
+        end
     end
     """
 )
