@@ -369,10 +369,16 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
 
 
 def test_chains() -> None:
-    first = MemoryDaf(name="first!")
+    first_writer = MemoryDaf(name="first!")
+    first_writer.set_scalar("version", 1.0)
+
+    first = read_only(first_writer)
+    assert id(first) != id(first_writer)
+    assert id(first) == id(read_only(first))
+
     second = MemoryDaf(name="second!")
-    first.set_scalar("version", 1.0)
     second.set_scalar("version", 2.0)
+
     chain = chain_reader([first, second], name="chain!")
     assert chain.get_scalar("version") == 2.0
 

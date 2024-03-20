@@ -10,7 +10,7 @@ from .data import DafReader
 from .data import DafWriter
 from .julia_import import jl
 
-__all__ = ["MemoryDaf", "FilesDaf", "H5df", "chain_reader", "chain_writer"]
+__all__ = ["MemoryDaf", "FilesDaf", "H5df", "read_only", "chain_reader", "chain_writer"]
 
 
 class MemoryDaf(DafWriter):
@@ -48,6 +48,24 @@ class H5df(DafWriter):
         self, root: Union[str, jl.HDF5.File, jl.HDF5.Group], mode: str = "r", *, name: Optional[str] = None
     ) -> None:
         super().__init__(jl.Daf.H5df(root, mode, name=name))
+
+
+class ReadOnlyView(DafReader):
+    """
+    A wrapper for any ``DafWriter`` data, protecting it against accidental modification. This isn't typically created
+    manually; instead call ``read_only``. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.ReadOnlyView>`__ for details.
+    """
+
+
+def read_only(data: DafReader, *, name: Optional[str] = None) -> ReadOnlyView:
+    """
+    Wrap a ``Daf`` data set with a ``ReadOnlyView`` to protect it against accidental modification. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.read_only>`__ for details.
+    """
+    if isinstance(data, ReadOnlyView):
+        return data
+    return ReadOnlyView(jl.Daf.read_only(data.jl_obj, name=name))
 
 
 def chain_reader(data: Sequence[DafReader], *, name: Optional[str] = None) -> DafReader:
