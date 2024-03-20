@@ -14,7 +14,7 @@ __all__ = ["MemoryDaf", "FilesDaf", "H5df"]
 class MemoryDaf(DafWriter):
     """
     Simple in-memory storage. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/memory_format.html>`_ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/memory_format.html>`__ for details.
     """
 
     def __init__(self, *, name: str = "memory") -> None:
@@ -24,7 +24,7 @@ class MemoryDaf(DafWriter):
 class FilesDaf(DafWriter):
     """
     A ``Daf`` storage format in disk files. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/files_format.html>`_ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/files_format.html>`__ for details.
     """
 
     def __init__(self, path: str, mode: str = "r", *, name: Optional[str] = None) -> None:
@@ -34,7 +34,7 @@ class FilesDaf(DafWriter):
 class H5df(DafWriter):
     """
     A ``Daf`` storage format in an HDF5 disk file. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/hdf5_format.html>`_ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/h5df_format.html>`__ for details.
 
     Note that if you want to open the ``HDF5`` file yourself (e.g., to access a specific group in it as a ``Daf`` data
     set), you will need to use the Julia API to do so, in order to pass the result here. That is, the current Python

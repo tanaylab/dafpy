@@ -8,6 +8,9 @@
         },
         "HDF5": {
             "uuid": "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f"
+        },
+        "NamedArrays": {
+            "uuid": "86f7a689-2022-50b4-a561-43c23ac3c673"
         }
     }
 }

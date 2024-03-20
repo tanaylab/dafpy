@@ -35,6 +35,7 @@ dev = [
     "isort",
     "mypy",
     "mypy_extensions",
+    "pandas-stubs",
     "pylint",
     "pytest",
     "pytest-cov",

@@ -7,5 +7,7 @@ API
 
   import_julia
   data
+  queries
+  operations
   formats
   storage_types

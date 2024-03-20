@@ -41,7 +41,7 @@ This is a thin wrapper for the ``Daf.jl`` Julia package, with the following adap
   memory.
 
 Otherwise, the API works "just the same" :-) The documentation therefore mostly just links to the relevant entry in the
-Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/index.html>`_.
+Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/index.html>`__.
 """
 
 __author__ = "Oren Ben-Kiki"
@@ -51,6 +51,8 @@ __version__ = "0.1.0"
 # pylint: disable=wildcard-import,unused-wildcard-import
 
 from .julia_import import *  # isort: skip
-from .data import *
-from .formats import *
-from .storage_types import *
+from .storage_types import *  # isort: skip
+from .operations import *  # isort: skip
+from .queries import *  # isort: skip
+from .data import *  # isort: skip
+from .formats import *  # isort: skip

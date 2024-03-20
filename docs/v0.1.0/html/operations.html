@@ -1,0 +1,1953 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" lang="en" data-content_root="./">
+
+<head>
+  
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<title>operations &mdash; Daf 0.1.0 documentation
+</title>
+      
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      
+<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  
+<!--[if lt IE 9]>
+    
+<script src="_static/js/html5shiv.min.js">
+</script>
+  
+<![endif]-->
+  
+        
+<script src="_static/jquery.js?v=5d32c60e">
+</script>
+        
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
+</script>
+        
+<script src="_static/documentation_options.js?v=01f34227">
+</script>
+        
+<script src="_static/doctools.js?v=888ff710">
+</script>
+        
+<script src="_static/sphinx_highlight.js?v=dc90522c">
+</script>
+    
+<script src="_static/js/theme.js">
+</script>
+    
+<link rel="index" title="Index" href="genindex.html" />
+    
+<link rel="search" title="Search" href="search.html" />
+    
+<link rel="next" title="formats" href="formats.html" />
+    
+<link rel="prev" title="queries" href="queries.html" /> 
+
+</head>
+
+
+<body class="wy-body-for-nav"> 
+  
+<div class="wy-grid-for-nav">
+    
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      
+<div class="wy-side-scroll">
+        
+<div class="wy-side-nav-search" >
+
+          
+          
+          
+<a href="index.html" class="icon icon-home">
+            Daf
+              
+<img src="_static/logo.svg" class="logo" alt="Logo"/>
+          
+</a>
+              
+<div class="version">
+                0.1.0
+              
+</div>
+
+<div role="search">
+  
+<form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    
+<input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    
+<input type="hidden" name="check_keywords" value="yes" />
+    
+<input type="hidden" name="area" value="default" />
+  
+</form>
+
+</div>
+        
+</div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              
+<ul>
+
+<li class="toctree-l1">
+<a class="reference internal" href="readme.html">README
+</a>
+</li>
+
+</ul>
+
+<ul class="current">
+
+<li class="toctree-l1 current">
+<a class="reference internal" href="API.html">API
+</a>
+<ul class="current">
+
+<li class="toctree-l2">
+<a class="reference internal" href="import_julia.html">julia_import
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="data.html">data
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html">queries
+</a>
+</li>
+
+<li class="toctree-l2 current">
+<a class="current reference internal" href="#">operations
+</a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.QueryOperation">
+<code class="docutils literal notranslate">
+<span class="pre">QueryOperation
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.QuerySequence">
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.EltwiseOperation">
+<code class="docutils literal notranslate">
+<span class="pre">EltwiseOperation
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.ReductionOperation">
+<code class="docutils literal notranslate">
+<span class="pre">ReductionOperation
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Abs">
+<code class="docutils literal notranslate">
+<span class="pre">Abs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Clamp">
+<code class="docutils literal notranslate">
+<span class="pre">Clamp
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Convert">
+<code class="docutils literal notranslate">
+<span class="pre">Convert
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Fraction">
+<code class="docutils literal notranslate">
+<span class="pre">Fraction
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Log">
+<code class="docutils literal notranslate">
+<span class="pre">Log
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Max">
+<code class="docutils literal notranslate">
+<span class="pre">Max
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Median">
+<code class="docutils literal notranslate">
+<span class="pre">Median
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Mean">
+<code class="docutils literal notranslate">
+<span class="pre">Mean
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Min">
+<code class="docutils literal notranslate">
+<span class="pre">Min
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Quantile">
+<code class="docutils literal notranslate">
+<span class="pre">Quantile
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Round">
+<code class="docutils literal notranslate">
+<span class="pre">Round
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Significant">
+<code class="docutils literal notranslate">
+<span class="pre">Significant
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Std">
+<code class="docutils literal notranslate">
+<span class="pre">Std
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.StdN">
+<code class="docutils literal notranslate">
+<span class="pre">StdN
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Sum">
+<code class="docutils literal notranslate">
+<span class="pre">Sum
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.Var">
+<code class="docutils literal notranslate">
+<span class="pre">Var
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.operations.VarN">
+<code class="docutils literal notranslate">
+<span class="pre">VarN
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="formats.html">formats
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html">storage_types
+</a>
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+        
+</div>
+      
+</div>
+    
+</nav>
+
+    
+<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+<nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          
+<i data-toggle="wy-nav-top" class="fa fa-bars">
+</i>
+          
+<a href="index.html">Daf
+</a>
+      
+</nav>
+
+      
+<div class="wy-nav-content">
+        
+<div class="rst-content">
+          
+<div role="navigation" aria-label="Page navigation">
+  
+<ul class="wy-breadcrumbs">
+      
+<li>
+<a href="index.html" class="icon icon-home" aria-label="Home">
+</a>
+</li>
+          
+<li class="breadcrumb-item">
+<a href="API.html">API
+</a>
+</li>
+      
+<li class="breadcrumb-item active">operations
+</li>
+      
+<li class="wy-breadcrumbs-aside">
+            
+<a href="_sources/operations.rst.txt" rel="nofollow"> View page source
+</a>
+      
+</li>
+  
+</ul>
+  
+<hr/>
+
+</div>
+          
+<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           
+<div itemprop="articleBody">
+             
+  
+<section id="module-daf.operations">
+
+<span id="operations">
+</span>
+<h1>operations
+<a class="headerlink" href="#module-daf.operations" title="Link to this heading">¶
+</a>
+</h1>
+
+<p>A 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> query can use operations to process the data: 
+<code class="docutils literal notranslate">
+<span class="pre">EltwiseOperation
+</span>
+</code> that preserve the shape of the data, and
+
+<code class="docutils literal notranslate">
+<span class="pre">ReductionOperation
+</span>
+</code> that reduce a matrix to a vector, or a vector to a scalar. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/operations.html">documentation
+</a> for details.
+</p>
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.QueryOperation">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">QueryOperation
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#QueryOperation">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.QueryOperation" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Base class for all query operations.
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Registry.QueryOperation">documentation
+</a> for details.
+</p>
+
+<p>Query operations can be chained into a 
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code> using the 
+<code class="docutils literal notranslate">
+<span class="pre">|
+</span>
+</code> operator in Python (instead of the 
+<code class="docutils literal notranslate">
+<span class="pre">|&gt;
+</span>
+</code>
+operator in Julia).
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.QuerySequence">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">QuerySequence
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#QuerySequence">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.QuerySequence" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A sequence of 
+<code class="docutils literal notranslate">
+<span class="pre">QueryOperation
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.QuerySequence">documentation
+</a> for details.
+</p>
+
+<p>Query operations can be chained into a 
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code> using the 
+<code class="docutils literal notranslate">
+<span class="pre">|
+</span>
+</code> operator in Python (instead of the 
+<code class="docutils literal notranslate">
+<span class="pre">|&gt;
+</span>
+</code>
+operator in Julia).
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.EltwiseOperation">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">EltwiseOperation
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#EltwiseOperation">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.EltwiseOperation" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Base class for all element-wise operations. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/registry.html#Daf.Registry.EltwiseOperation">documentation
+</a> for
+details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.ReductionOperation">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ReductionOperation
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#ReductionOperation">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.ReductionOperation" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Abstract type for all reduction operations. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/registry.html#Daf.Registry.ReductionOperation">documentation
+</a> for
+details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Abs">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Abs
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Abs">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Abs" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that converts every element to its absolute value. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Abs">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Clamp">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Clamp
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">min
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">-inf
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">max
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">inf
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Clamp">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Clamp" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that converts every element to a value inside a range. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Clamp">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Convert">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Convert
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Convert">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Convert" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that converts every element to a given data type. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Convert">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Fraction">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Fraction
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Fraction">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Fraction" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that converts every element to its fraction out of the total. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Fraction">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Log">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Log
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">base
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">2.718281828459045
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">eps
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">0
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Log">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Log" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that converts every element to its logarithm. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Log">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Max">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Max
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Max">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Max" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the maximal element. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Max">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Median">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Median
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Median">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Median" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the median value. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Median">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Mean">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Mean
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Mean">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Mean" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the mean value. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Mean">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Min">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Min
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Min">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Min" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the minimal element. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Min">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Quantile">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Quantile
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">p
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Quantile">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Quantile" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the quantile value, that is, a value such that a certain fraction of the values is
+lower. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Quantile">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Round">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Round
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Round">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Round" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that converts every element to the nearest integer value. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Round">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Significant">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Significant
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">high
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">low
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">float
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Significant">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Significant" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Element-wise operation that zeros all “insignificant” values. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Significant">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Std">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Std
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Std">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Std" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the standard deviation of the values. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Std">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.StdN">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">StdN
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#StdN">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.StdN" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the standard deviation of the values, normalized (divided) by the mean of the
+values. See the Julia 
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Std">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Sum">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Sum
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">dtype
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Type
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Sum">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Sum" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that sums elements. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Sum">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.Var">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">Var
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#Var">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.Var" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the variance of the values. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Var">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.operations.VarN">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">VarN
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/operations.html#VarN">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.operations.VarN" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Reduction operation that returns the variance of the values, normalized (divided) by the mean of the values. See the
+Julia 
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Var">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+</section>
+
+
+           
+</div>
+          
+</div>
+          
+<footer>
+<div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        
+<a href="queries.html" class="btn btn-neutral float-left" title="queries" accesskey="p" rel="prev">
+<span class="fa fa-arrow-circle-left" aria-hidden="true">
+</span> Previous
+</a>
+        
+<a href="formats.html" class="btn btn-neutral float-right" title="formats" accesskey="n" rel="next">Next 
+<span class="fa fa-arrow-circle-right" aria-hidden="true">
+</span>
+</a>
+    
+</div>
+
+  
+<hr/>
+
+  
+<div role="contentinfo">
+    
+<p>&#169; Copyright 2023-2024 Weizmann Institute of Science.
+</p>
+  
+</div>
+
+  Built with 
+<a href="https://www.sphinx-doc.org/">Sphinx
+</a> using a
+    
+<a href="https://github.com/readthedocs/sphinx_rtd_theme">theme
+</a>
+    provided by 
+<a href="https://readthedocs.org">Read the Docs
+</a>.
+   
+
+
+</footer>
+        
+</div>
+      
+</div>
+    
+</section>
+  
+</div>
+  
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  
+</script> 
+
+
+</body>
+
+</html>

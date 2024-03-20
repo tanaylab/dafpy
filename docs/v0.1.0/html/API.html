@@ -126,6 +126,16 @@
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="queries.html">queries
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html">operations
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="formats.html">formats
 </a>
 </li>
@@ -654,6 +664,42 @@ Julia
 </a>
 </li>
 
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.empty_cache">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.empty_cache()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_np_query">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_np_query()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_pd_query">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_pd_query()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#daf.data.DafReader.get_pd_frame">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_pd_frame()
+</span>
+</code>
+</a>
+</li>
+
 </ul>
 
 </li>
@@ -786,6 +832,456 @@ Julia
 
 </ul>
 
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="data.html#daf.data.CacheType">
+<code class="docutils literal notranslate">
+<span class="pre">CacheType
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l1">
+<a class="reference internal" href="queries.html">queries
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.And">
+<code class="docutils literal notranslate">
+<span class="pre">And
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.AndNot">
+<code class="docutils literal notranslate">
+<span class="pre">AndNot
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.AsAxis">
+<code class="docutils literal notranslate">
+<span class="pre">AsAxis
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Axis">
+<code class="docutils literal notranslate">
+<span class="pre">Axis
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.CountBy">
+<code class="docutils literal notranslate">
+<span class="pre">CountBy
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Fetch">
+<code class="docutils literal notranslate">
+<span class="pre">Fetch
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.GroupBy">
+<code class="docutils literal notranslate">
+<span class="pre">GroupBy
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IfMissing">
+<code class="docutils literal notranslate">
+<span class="pre">IfMissing
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IfNot">
+<code class="docutils literal notranslate">
+<span class="pre">IfNot
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsEqual">
+<code class="docutils literal notranslate">
+<span class="pre">IsEqual
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsGreater">
+<code class="docutils literal notranslate">
+<span class="pre">IsGreater
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsGreaterEqual">
+<code class="docutils literal notranslate">
+<span class="pre">IsGreaterEqual
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsLess">
+<code class="docutils literal notranslate">
+<span class="pre">IsLess
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsLessEqual">
+<code class="docutils literal notranslate">
+<span class="pre">IsLessEqual
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsMatch">
+<code class="docutils literal notranslate">
+<span class="pre">IsMatch
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsNotEqual">
+<code class="docutils literal notranslate">
+<span class="pre">IsNotEqual
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.IsNotMatch">
+<code class="docutils literal notranslate">
+<span class="pre">IsNotMatch
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Lookup">
+<code class="docutils literal notranslate">
+<span class="pre">Lookup
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Names">
+<code class="docutils literal notranslate">
+<span class="pre">Names
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Or">
+<code class="docutils literal notranslate">
+<span class="pre">Or
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.OrNot">
+<code class="docutils literal notranslate">
+<span class="pre">OrNot
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Query">
+<code class="docutils literal notranslate">
+<span class="pre">Query
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.parse_query">
+<code class="docutils literal notranslate">
+<span class="pre">parse_query()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.Xor">
+<code class="docutils literal notranslate">
+<span class="pre">Xor
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.XorNot">
+<code class="docutils literal notranslate">
+<span class="pre">XorNot
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#daf.queries.query_result_dimensions">
+<code class="docutils literal notranslate">
+<span class="pre">query_result_dimensions()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l1">
+<a class="reference internal" href="operations.html">operations
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.QueryOperation">
+<code class="docutils literal notranslate">
+<span class="pre">QueryOperation
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.QuerySequence">
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.EltwiseOperation">
+<code class="docutils literal notranslate">
+<span class="pre">EltwiseOperation
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.ReductionOperation">
+<code class="docutils literal notranslate">
+<span class="pre">ReductionOperation
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Abs">
+<code class="docutils literal notranslate">
+<span class="pre">Abs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Clamp">
+<code class="docutils literal notranslate">
+<span class="pre">Clamp
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Convert">
+<code class="docutils literal notranslate">
+<span class="pre">Convert
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Fraction">
+<code class="docutils literal notranslate">
+<span class="pre">Fraction
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Log">
+<code class="docutils literal notranslate">
+<span class="pre">Log
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Max">
+<code class="docutils literal notranslate">
+<span class="pre">Max
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Median">
+<code class="docutils literal notranslate">
+<span class="pre">Median
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Mean">
+<code class="docutils literal notranslate">
+<span class="pre">Mean
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Min">
+<code class="docutils literal notranslate">
+<span class="pre">Min
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Quantile">
+<code class="docutils literal notranslate">
+<span class="pre">Quantile
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Round">
+<code class="docutils literal notranslate">
+<span class="pre">Round
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Significant">
+<code class="docutils literal notranslate">
+<span class="pre">Significant
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Std">
+<code class="docutils literal notranslate">
+<span class="pre">Std
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.StdN">
+<code class="docutils literal notranslate">
+<span class="pre">StdN
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Sum">
+<code class="docutils literal notranslate">
+<span class="pre">Sum
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.Var">
+<code class="docutils literal notranslate">
+<span class="pre">Var
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html#daf.operations.VarN">
+<code class="docutils literal notranslate">
+<span class="pre">VarN
+</span>
+</code>
+</a>
 </li>
 
 </ul>

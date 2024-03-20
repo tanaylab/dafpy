@@ -50,7 +50,7 @@
     
 <link rel="search" title="Search" href="search.html" />
     
-<link rel="next" title="formats" href="formats.html" />
+<link rel="next" title="queries" href="queries.html" />
     
 <link rel="prev" title="julia_import" href="import_julia.html" /> 
 
@@ -287,6 +287,42 @@
 </a>
 </li>
 
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.empty_cache">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.empty_cache()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.get_np_query">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_np_query()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.get_pd_query">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_pd_query()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.get_pd_frame">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.get_pd_frame()
+</span>
+</code>
+</a>
+</li>
+
 </ul>
 
 </li>
@@ -421,8 +457,27 @@
 
 </li>
 
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.data.CacheType">
+<code class="docutils literal notranslate">
+<span class="pre">CacheType
+</span>
+</code>
+</a>
+</li>
+
 </ul>
 
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html">queries
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html">operations
+</a>
 </li>
 
 <li class="toctree-l2">
@@ -545,7 +600,7 @@
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">daf_jl
+<span class="pre">jl_obj
 </span>
 </span>
 </em>
@@ -4057,12 +4112,15 @@ efficient zero-copy operation). This will also (zero-copy) convert the
 <span class="pre">pandas
 </span>
 </code> data frame using the entry names of the
-axes as the indices. Since 
+axes as the indices.
+</p>
+
+<p>Note that since 
 <code class="docutils literal notranslate">
 <span class="pre">pandas
 </span>
-</code> data frames can’t contain a sparse matrix, the data will always be
-in a dense 
+</code> data frames can’t contain a sparse matrix, the data will always be in a dense
+
 <code class="docutils literal notranslate">
 <span class="pre">numpy
 </span>
@@ -4079,6 +4137,1212 @@ in a dense
 </span>
 </code> data frame, with arbitrary
 (query) columns, possibly using a different data type for each.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.empty_cache">
+
+<span class="sig-name descname">
+<span class="pre">empty_cache
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">clear
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'MappedData'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'MemoryData'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'QueryData'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">keep
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'MappedData'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'MemoryData'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'QueryData'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">None
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.empty_cache">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.empty_cache" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Clear some cached data. By default, completely empties the caches. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Data.empty_cache!">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.get_np_query">
+
+<span class="sig-name descname">
+<span class="pre">get_np_query
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">query
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Axis" title="daf.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Lookup" title="daf.queries.Lookup">
+<span class="pre">Lookup
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Names" title="daf.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#daf.operations.QuerySequence" title="daf.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">cache
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">True
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">bool
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int8
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int16
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint8
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint16
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">ndarray
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">AbstractSet
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.get_np_query">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.get_np_query" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Apply the full 
+<code class="docutils literal notranslate">
+<span class="pre">query
+</span>
+</code> to the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data set and return the result. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.get_query">documentation
+</a> for details.
+</p>
+
+<p>If the result isn’t a scalar, and isn’t an array of names, then we return a 
+<code class="docutils literal notranslate">
+<span class="pre">numpy
+</span>
+</code> array or a 
+<code class="docutils literal notranslate">
+<span class="pre">scipy
+</span>
+</code>
+
+<code class="docutils literal notranslate">
+<span class="pre">csc_matrix
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.get_pd_query">
+
+<span class="sig-name descname">
+<span class="pre">get_pd_query
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">query
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Axis" title="daf.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Lookup" title="daf.queries.Lookup">
+<span class="pre">Lookup
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Names" title="daf.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#daf.operations.QuerySequence" title="daf.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">cache
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">True
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">bool
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int8
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int16
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint8
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint16
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Series
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">DataFrame
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">AbstractSet
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.get_pd_query">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.get_pd_query" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Similar to 
+<code class="docutils literal notranslate">
+<span class="pre">get_np_query
+</span>
+</code>, but return a 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code> series or data frame for vector and matrix data.
+</p>
+
+<p>Note that since 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code> data frames can’t contain a sparse matrix, the data will always be in a dense
+
+<code class="docutils literal notranslate">
+<span class="pre">numpy
+</span>
+</code> matrix, so take care not to invoke this for a too-large sparse data matrix.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.get_pd_frame">
+
+<span class="sig-name descname">
+<span class="pre">get_pd_frame
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Axis" title="daf.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Lookup" title="daf.queries.Lookup">
+<span class="pre">Lookup
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Names" title="daf.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#daf.operations.QuerySequence" title="daf.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">columns
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Axis" title="daf.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Lookup" title="daf.queries.Lookup">
+<span class="pre">Lookup
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#daf.queries.Names" title="daf.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#daf.operations.QuerySequence" title="daf.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">cache
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">DataFrame
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.get_pd_frame">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.get_pd_frame" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return a 
+<code class="docutils literal notranslate">
+<span class="pre">DataFrame
+</span>
+</code> containing multiple vectors of the same 
+<code class="docutils literal notranslate">
+<span class="pre">axis
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.get_frame">documentation
+</a> for details.
+</p>
+
+<p>Note this is different from 
+<code class="docutils literal notranslate">
+<span class="pre">get_pd_matrix
+</span>
+</code> which returns some 2D data as a 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code> data frame. Here, each
+column can be the result of an arbitrary query and may have a different data type.
+</p>
+
+<p>The order of the columns matters. Luckily, the default dictionary type is ordered in modern Python, so if you
+write 
+<code class="docutils literal notranslate">
+<span class="pre">columns
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">{&quot;color&quot;:
+</span> 
+<span class="pre">&quot;:
+</span> 
+<span class="pre">type
+</span> 
+<span class="pre">=&gt;
+</span> 
+<span class="pre">color&quot;,
+</span> 
+<span class="pre">&quot;age&quot;:
+</span> 
+<span class="pre">&quot;:
+</span> 
+<span class="pre">batch
+</span> 
+<span class="pre">=&gt;
+</span> 
+<span class="pre">age&quot;}
+</span>
+</code> you can trust that the 
+<code class="docutils literal notranslate">
+<span class="pre">color
+</span>
+</code>
+column will be first and the 
+<code class="docutils literal notranslate">
+<span class="pre">age
+</span>
+</code> column will be second.
 </p>
 
 </dd>
@@ -4111,7 +5375,7 @@ in a dense
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">daf_jl
+<span class="pre">jl_obj
 </span>
 </span>
 </em>
@@ -5375,7 +6639,8 @@ parts (
 </code>) to the block to be filled. See the Julia
 
 <a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_vector!">documentation
-</a> for details.
+</a> for
+details.
 </p>
 
 <p>Note that the code block will get a tuple of 
@@ -6159,7 +7424,8 @@ efficient zero-copy operation).
 to be filles. See the Julia
 
 <a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_matrix!">documentation
-</a> for details.
+</a> for
+details.
 </p>
 
 <p>Note that the code block will get a tuple of 
@@ -6516,6 +7782,56 @@ set. See the Julia
 </dl>
 
 
+<dl class="py data">
+
+<dt class="sig sig-object py" id="daf.data.CacheType">
+
+<span class="sig-prename descclassname">
+<span class="pre">daf.data.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">CacheType
+</span>
+</span>
+<a class="headerlink" href="#daf.data.CacheType" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Types of cached data inside 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Formats.CacheType">documentation
+</a> for details.
+</p>
+
+<p>alias of 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Union
+</span>
+</code>[
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>[‘MappedData’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>[‘MemoryData’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>[‘QueryData’]]
+</p>
+
+</dd>
+</dl>
+
+
 </section>
 
 
@@ -6532,7 +7848,7 @@ set. See the Julia
 </span> Previous
 </a>
         
-<a href="formats.html" class="btn btn-neutral float-right" title="formats" accesskey="n" rel="next">Next 
+<a href="queries.html" class="btn btn-neutral float-right" title="queries" accesskey="n" rel="next">Next 
 <span class="fa fa-arrow-circle-right" aria-hidden="true">
 </span>
 </a>
