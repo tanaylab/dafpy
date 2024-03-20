@@ -366,3 +366,16 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
 
     assert len(data.matrix_names("cell", "gene")) == 0
     assert not data.has_matrix("cell", "gene", "UMIs", relayout=False)
+
+
+def test_chains() -> None:
+    first = MemoryDaf(name="first!")
+    second = MemoryDaf(name="second!")
+    first.set_scalar("version", 1.0)
+    second.set_scalar("version", 2.0)
+    chain = chain_reader([first, second], name="chain!")
+    assert chain.get_scalar("version") == 2.0
+
+    chain = chain_writer([first, second], name="chain!")
+    chain.set_scalar("version", 3.0, overwrite=True)
+    assert second.get_scalar("version") == 3.0

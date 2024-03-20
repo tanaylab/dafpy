@@ -3,12 +3,14 @@ Concrete formats of ``Daf`` data sets.
 """
 
 from typing import Optional
+from typing import Sequence
 from typing import Union
 
+from .data import DafReader
 from .data import DafWriter
 from .julia_import import jl
 
-__all__ = ["MemoryDaf", "FilesDaf", "H5df"]
+__all__ = ["MemoryDaf", "FilesDaf", "H5df", "chain_reader", "chain_writer"]
 
 
 class MemoryDaf(DafWriter):
@@ -46,3 +48,27 @@ class H5df(DafWriter):
         self, root: Union[str, jl.HDF5.File, jl.HDF5.Group], mode: str = "r", *, name: Optional[str] = None
     ) -> None:
         super().__init__(jl.Daf.H5df(root, mode, name=name))
+
+
+def chain_reader(data: Sequence[DafReader], *, name: Optional[str] = None) -> DafReader:
+    """
+    Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/chains.html#Daf.Chains.chain_reader>`__ for details.
+    """
+    return DafReader(
+        jl.chain_reader(
+            jl._to_daf_readers([datum.jl_obj for datum in data]), name=name  # pylint: disable=protected-access
+        )
+    )
+
+
+def chain_writer(data: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
+    """
+    Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/chains.html#Daf.Chains.chain_writer>`__ for details.
+    """
+    return DafWriter(
+        jl.chain_writer(
+            jl._to_daf_readers([datum.jl_obj for datum in data]), name=name  # pylint: disable=protected-access
+        )
+    )

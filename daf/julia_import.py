@@ -203,3 +203,12 @@ def _from_julia_frame(
         value = jl.getindex(jl_frame, jl.Colon(), name)
         data[str(name)] = _from_julia_array(value)
     return pd.DataFrame(data)
+
+
+jl.seval(
+    """
+    function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}
+        return Vector{DafReader}(readers)
+    end
+    """
+)

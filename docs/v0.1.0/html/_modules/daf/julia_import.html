@@ -285,6 +285,15 @@
         <span class="n">value</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">getindex</span><span class="p">(</span><span class="n">jl_frame</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">Colon</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}</span>
+<span class="sd">        return Vector{DafReader}(readers)</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
 </pre></div>
 
            </div>
