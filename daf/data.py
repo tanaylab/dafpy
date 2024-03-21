@@ -45,6 +45,10 @@ JL_CACHE_TYPE = {
     "QueryData": jl.Daf.QueryData,
 }
 
+#: A key specifying some data property in ``Daf``. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Formats.DataKey>`__ for details.
+DataKey = str | Tuple[str, str] | Tuple[str, str, str]
+
 
 def _to_jl_cache_type(cache_type: Optional[CacheType]) -> jl.Daf.CacheType:
     if cache_type is not None:

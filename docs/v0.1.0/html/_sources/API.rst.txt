@@ -5,10 +5,11 @@ API
 
 .. toctree::
 
-  import_julia
+  julia_import
   data
   queries
   operations
   formats
   views
+  copies
   storage_types

@@ -124,6 +124,10 @@
     <span class="s2">&quot;QueryData&quot;</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">QueryData</span><span class="p">,</span>
 <span class="p">}</span>
 
+<span class="c1">#: A key specifying some data property in ``Daf``. See the Julia</span>
+<span class="c1">#: `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Formats.DataKey&gt;`__ for details.</span>
+<span class="n">DataKey</span> <span class="o">=</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+
 
 <span class="k">def</span> <span class="nf">_to_jl_cache_type</span><span class="p">(</span><span class="n">cache_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CacheType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">CacheType</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">cache_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

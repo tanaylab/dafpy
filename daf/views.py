@@ -8,46 +8,55 @@ from typing import Optional
 
 from .data import DafReader
 from .data import DafReadOnly
+from .data import DataKey
 from .julia_import import _jl_pairs
 from .julia_import import _to_julia
 from .julia_import import jl
+from .queries import Query
 
 __all__ = [
-    "ALL_AXES",
-    "ALL_MATRICES",
-    "ALL_SCALARS",
-    "ALL_VECTORS",
     "daf_view",
+    "ViewAxes",
+    "ViewData",
+    "ALL_SCALARS",
+    "ALL_AXES",
+    "ALL_VECTORS",
+    "ALL_MATRICES",
 ]
 
-"""
-A key to use in the ``data`` parameter of ``daf_view`` to specify all the base data scalars. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_SCALARS>`__ for details.
-"""
+#: A key to use in the ``data`` parameter of ``daf_view`` to specify all the base data scalars. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_SCALARS>`__ for details.
 ALL_SCALARS = "*"
 
-"""
-A pair to use in the ``axes`` parameter of ``daf_view`` to specify all the base data axes. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_AXES>`__ for details.
-"""
+#: A pair to use in the ``axes`` parameter of ``daf_view`` to specify all the base data axes. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_AXES>`__ for details.
 ALL_AXES = "*"
 
-"""
-A key to use in the ``data`` parameter of ``daf_view`` to specify all the vectors of the exposed axes. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_VECTORS>`__ for details.
-"""
+#: A key to use in the ``data`` parameter of ``daf_view`` to specify all the vectors of the exposed axes. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_VECTORS>`__ for details.
 ALL_VECTORS = ("*", "*")
 
-
-"""
-A key to use in the ``data`` parameter of ``daf_view`` to specify all the matrices of the exposed axes. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_MATRICES>`__ for details.
-"""
+#: A key to use in the ``data`` parameter of ``daf_view`` to specify all the matrices of the exposed axes. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ALL_MATRICES>`__ for details.
 ALL_MATRICES = ("*", "*", "*")
+
+#: Specify axes to expose from a view. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ViewAxes>`__ for details.
+#:
+#: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,
+#: and preserves the order of the entries since in Python dictionaries are ordered by default.
+ViewAxes = Mapping[str, str | Query | None]
+
+#: Specify data to expose from view. See the Julia
+#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.ViewAxes>`__ for details.
+#:
+#: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,
+#: and preserves the order of the entries since in Python dictionaries are ordered by default.
+ViewData = Mapping[DataKey, str | Query | None]
 
 
 def daf_view(
-    dset: DafReader, *, name: Optional[str] = None, axes: Optional[Mapping] = None, data: Optional[Mapping] = None
+    dset: DafReader, *, name: Optional[str] = None, axes: Optional[ViewAxes] = None, data: Optional[ViewData] = None
 ) -> DafReadOnly:
     """
     Wrap ``Daf`` data set with a read-only ``DafView``. See the Julia

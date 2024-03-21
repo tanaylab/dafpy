@@ -50,7 +50,7 @@
     
 <link rel="search" title="Search" href="search.html" />
     
-<link rel="next" title="julia_import" href="import_julia.html" />
+<link rel="next" title="julia_import" href="julia_import.html" />
     
 <link rel="prev" title="Daf.py 0.1.0 - Data in Axes in Formats" href="readme.html" /> 
 
@@ -116,7 +116,7 @@
 <ul>
 
 <li class="toctree-l2">
-<a class="reference internal" href="import_julia.html">julia_import
+<a class="reference internal" href="julia_import.html">julia_import
 </a>
 </li>
 
@@ -142,6 +142,11 @@
 
 <li class="toctree-l2">
 <a class="reference internal" href="views.html">views
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html">copies
 </a>
 </li>
 
@@ -458,12 +463,12 @@ Julia
 <ul>
 
 <li class="toctree-l1">
-<a class="reference internal" href="import_julia.html">julia_import
+<a class="reference internal" href="julia_import.html">julia_import
 </a>
 <ul>
 
 <li class="toctree-l2">
-<a class="reference internal" href="import_julia.html#daf.julia_import.jl">
+<a class="reference internal" href="julia_import.html#daf.julia_import.jl">
 <code class="docutils literal notranslate">
 <span class="pre">jl
 </span>
@@ -472,7 +477,7 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="import_julia.html#daf.julia_import.jl_version">
+<a class="reference internal" href="julia_import.html#daf.julia_import.jl_version">
 <code class="docutils literal notranslate">
 <span class="pre">jl_version
 </span>
@@ -481,7 +486,7 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="import_julia.html#daf.julia_import.UndefInitializer">
+<a class="reference internal" href="julia_import.html#daf.julia_import.UndefInitializer">
 <code class="docutils literal notranslate">
 <span class="pre">UndefInitializer
 </span>
@@ -490,7 +495,7 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="import_julia.html#daf.julia_import.Undef">
+<a class="reference internal" href="julia_import.html#daf.julia_import.Undef">
 <code class="docutils literal notranslate">
 <span class="pre">Undef
 </span>
@@ -1384,9 +1389,27 @@ Julia
 <ul>
 
 <li class="toctree-l2">
-<a class="reference internal" href="views.html#daf.views.ALL_AXES">
+<a class="reference internal" href="views.html#daf.views.daf_view">
 <code class="docutils literal notranslate">
-<span class="pre">ALL_AXES
+<span class="pre">daf_view()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="views.html#daf.views.ViewAxes">
+<code class="docutils literal notranslate">
+<span class="pre">ViewAxes
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="views.html#daf.views.ViewData">
+<code class="docutils literal notranslate">
+<span class="pre">ViewData
 </span>
 </code>
 </a>
@@ -1402,6 +1425,15 @@ Julia
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="views.html#daf.views.ALL_AXES">
+<code class="docutils literal notranslate">
+<span class="pre">ALL_AXES
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="views.html#daf.views.ALL_VECTORS">
 <code class="docutils literal notranslate">
 <span class="pre">ALL_VECTORS
@@ -1411,9 +1443,72 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="views.html#daf.views.daf_view">
+<a class="reference internal" href="views.html#daf.views.ALL_MATRICES">
 <code class="docutils literal notranslate">
-<span class="pre">daf_view()
+<span class="pre">ALL_MATRICES
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l1">
+<a class="reference internal" href="copies.html">copies
+</a>
+<ul>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html#daf.copies.copy_all">
+<code class="docutils literal notranslate">
+<span class="pre">copy_all()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html#daf.copies.EmptyData">
+<code class="docutils literal notranslate">
+<span class="pre">EmptyData
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html#daf.copies.copy_scalar">
+<code class="docutils literal notranslate">
+<span class="pre">copy_scalar()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html#daf.copies.copy_axis">
+<code class="docutils literal notranslate">
+<span class="pre">copy_axis()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html#daf.copies.copy_vector">
+<code class="docutils literal notranslate">
+<span class="pre">copy_vector()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html#daf.copies.copy_matrix">
+<code class="docutils literal notranslate">
+<span class="pre">copy_matrix()
 </span>
 </code>
 </a>
@@ -1470,7 +1565,7 @@ Julia
 </span> Previous
 </a>
         
-<a href="import_julia.html" class="btn btn-neutral float-right" title="julia_import" accesskey="n" rel="next">Next 
+<a href="julia_import.html" class="btn btn-neutral float-right" title="julia_import" accesskey="n" rel="next">Next 
 <span class="fa fa-arrow-circle-right" aria-hidden="true">
 </span>
 </a>
