@@ -32,7 +32,7 @@ from .julia_import import jl
 from .queries import Query
 from .storage_types import StorageScalar
 
-__all__ = ["DafReader", "DafWriter", "CacheType"]
+__all__ = ["DafReader", "DafReadOnly", "DafWriter", "CacheType"]
 
 
 #: Types of cached data inside ``Daf``. See the Julia
@@ -55,7 +55,7 @@ def _to_jl_cache_type(cache_type: Optional[CacheType]) -> jl.Daf.CacheType:
 class DafReader(JlObject):
     """
     Read-only access to ``Daf`` data. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html>`__ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.DafReader>`__ for details.
     """
 
     def __init__(self, jl_obj) -> None:
@@ -440,10 +440,31 @@ class DafReader(JlObject):
         jl_frame = jl.Daf.Queries.get_frame(self.jl_obj, axis, columns, cache=cache)
         return _from_julia_frame(jl_frame)
 
+    def read_only(self, *, name: Optional[str] = None) -> "DafReadOnly":
+        """
+        Wrap the ``Daf`` data sett with a ``DafReadOnlyWrapper`` to protect it against accidental modification. See the
+        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.daf_read_only>`__ for
+        details.
+        """
+        return DafReadOnly(jl.Daf.daf_read_only(self.jl_obj, name=name))
+
+
+class DafReadOnly(DafReader):
+    """
+    A read-only ``DafReader``, which doesn't allow any modification of the data. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.DafReadOnly>`__ for details.
+    """
+
+    def read_only(self, *, name: Optional[str] = None) -> "DafReadOnly":
+        if name is None:
+            return self
+        return super().read_only(name=name)
+
 
 class DafWriter(DafReader):
     """
-    Read-write access to ``Daf`` data.
+    Read-write access to ``Daf`` data. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.DafWriter>`__ for details.
     """
 
     def set_scalar(self, name: str, value: StorageScalar, *, overwrite: bool = False) -> None:

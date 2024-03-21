@@ -173,18 +173,9 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#daf.views.DafView">
+<a class="reference internal" href="#daf.views.daf_view">
 <code class="docutils literal notranslate">
-<span class="pre">DafView
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l3">
-<a class="reference internal" href="#daf.views.viewer">
-<code class="docutils literal notranslate">
-<span class="pre">viewer()
+<span class="pre">daf_view()
 </span>
 </code>
 </a>
@@ -318,7 +309,7 @@
 </span>
 </code> parameter of 
 <code class="docutils literal notranslate">
-<span class="pre">viewer
+<span class="pre">daf_view
 </span>
 </code> to specify all the vectors of the exposed axes. See the Julia
 
@@ -365,7 +356,7 @@
 </span>
 </code> parameter of 
 <code class="docutils literal notranslate">
-<span class="pre">viewer
+<span class="pre">daf_view
 </span>
 </code> to specify all the base data axes. See the Julia
 
@@ -414,7 +405,7 @@
 </span>
 </code> parameter of 
 <code class="docutils literal notranslate">
-<span class="pre">viewer
+<span class="pre">daf_view
 </span>
 </code> to specify all the matrices of the exposed axes. See the Julia
 
@@ -426,78 +417,16 @@
 </dl>
 
 
-<dl class="py class">
-
-<dt class="sig sig-object py" id="daf.views.DafView">
-
-<em class="property">
-<span class="pre">class
-</span>
-<span class="w"> 
-</span>
-</em>
-<span class="sig-prename descclassname">
-<span class="pre">daf.views.
-</span>
-</span>
-<span class="sig-name descname">
-<span class="pre">DafView
-</span>
-</span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">jl_obj
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span>
-<a class="reference internal" href="_modules/daf/views.html#DafView">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
-<a class="headerlink" href="#daf.views.DafView" title="Link to this definition">¶
-</a>
-</dt>
-
-<dd>
-<p>A read-only wrapper for any 
-<code class="docutils literal notranslate">
-<span class="pre">DafReader
-</span>
-</code> data, which exposes an arbitrary view of it as another 
-<code class="docutils literal notranslate">
-<span class="pre">DafReader
-</span>
-</code>. This
-isn’t typically created manually; instead call 
-<code class="docutils literal notranslate">
-<span class="pre">viewer
-</span>
-</code>. See the Julia
-
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.DafView">documentation
-</a> for details.
-</p>
-
-</dd>
-</dl>
-
-
 <dl class="py function">
 
-<dt class="sig sig-object py" id="daf.views.viewer">
+<dt class="sig sig-object py" id="daf.views.daf_view">
 
 <span class="sig-prename descclassname">
 <span class="pre">daf.views.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">viewer
+<span class="pre">daf_view
 </span>
 </span>
 <span class="sig-paren">(
@@ -646,29 +575,19 @@ isn’t typically created manually; instead call
 <span class="sig-return-icon">&#x2192;
 </span> 
 <span class="sig-return-typehint">
-<a class="reference internal" href="#daf.views.DafView" title="daf.views.DafView">
-<span class="pre">DafView
+<a class="reference internal" href="data.html#daf.data.DafReadOnly" title="daf.data.DafReadOnly">
+<span class="pre">DafReadOnly
 </span>
 </a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
 </span>
 </span>
-<span class="w"> 
-</span>
-<span class="pre">ReadOnlyView
-</span>
-</span>
-</span>
-<a class="reference internal" href="_modules/daf/views.html#viewer">
+<a class="reference internal" href="_modules/daf/views.html#daf_view">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#daf.views.viewer" title="Link to this definition">¶
+<a class="headerlink" href="#daf.views.daf_view" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -683,7 +602,7 @@ isn’t typically created manually; instead call
 </span>
 </code>. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.viewer">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/views.html#Daf.Views.daf_view">documentation
 </a> for details.
 </p>
 

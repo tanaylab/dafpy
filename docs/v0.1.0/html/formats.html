@@ -168,15 +168,6 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#daf.formats.read_only">
-<code class="docutils literal notranslate">
-<span class="pre">read_only()
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l3">
 <a class="reference internal" href="#daf.formats.chain_reader">
 <code class="docutils literal notranslate">
 <span class="pre">chain_reader()
@@ -636,121 +627,6 @@ thin wrapper for the Julia
 
 <dl class="py function">
 
-<dt class="sig sig-object py" id="daf.formats.read_only">
-
-<span class="sig-prename descclassname">
-<span class="pre">daf.formats.
-</span>
-</span>
-<span class="sig-name descname">
-<span class="pre">read_only
-</span>
-</span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">dset
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<a class="reference internal" href="data.html#daf.data.DafReader" title="daf.data.DafReader">
-<span class="pre">DafReader
-</span>
-</a>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="o">
-<span class="pre">*
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">name
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">ReadOnlyView
-</span>
-</span>
-</span>
-<a class="reference internal" href="_modules/daf/formats.html#read_only">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
-<a class="headerlink" href="#daf.formats.read_only" title="Link to this definition">¶
-</a>
-</dt>
-
-<dd>
-<p>Wrap a 
-<code class="docutils literal notranslate">
-<span class="pre">Daf
-</span>
-</code> data set with a 
-<code class="docutils literal notranslate">
-<span class="pre">ReadOnlyView
-</span>
-</code> to protect it against accidental modification. See the Julia
-
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.read_only">documentation
-</a> for details.
-</p>
-
-</dd>
-</dl>
-
-
-<dl class="py function">
-
 <dt class="sig sig-object py" id="daf.formats.chain_reader">
 
 <span class="sig-prename descclassname">
@@ -841,8 +717,8 @@ thin wrapper for the Julia
 <span class="sig-return-icon">&#x2192;
 </span> 
 <span class="sig-return-typehint">
-<a class="reference internal" href="data.html#daf.data.DafReader" title="daf.data.DafReader">
-<span class="pre">DafReader
+<a class="reference internal" href="data.html#daf.data.DafReadOnly" title="daf.data.DafReadOnly">
+<span class="pre">DafReadOnly
 </span>
 </a>
 </span>

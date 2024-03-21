@@ -372,16 +372,17 @@ def test_chains() -> None:
     first_writer = MemoryDaf(name="first!")
     first_writer.set_scalar("version", 1.0)
 
-    first = read_only(first_writer)
+    first = first_writer.read_only()
     assert id(first) != id(first_writer)
-    assert id(first) == id(read_only(first))
+    assert id(first) == id(first.read_only())
+    assert id(first) != id(first.read_only(name="renamed"))
 
     second = MemoryDaf(name="second!")
     second.set_scalar("version", 2.0)
 
-    chain = chain_reader([first, second], name="chain!")
-    assert chain.get_scalar("version") == 2.0
+    read_chain = chain_reader([first, second], name="chain!")
+    assert read_chain.get_scalar("version") == 2.0
 
-    chain = chain_writer([first, second], name="chain!")
-    chain.set_scalar("version", 3.0, overwrite=True)
+    write_chain = chain_writer([first, second], name="chain!")
+    write_chain.set_scalar("version", 3.0, overwrite=True)
     assert second.get_scalar("version") == 3.0

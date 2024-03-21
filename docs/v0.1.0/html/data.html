@@ -323,6 +323,37 @@
 </a>
 </li>
 
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.read_only">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.read_only()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.data.DafReadOnly">
+<code class="docutils literal notranslate">
+<span class="pre">DafReadOnly
+</span>
+</code>
+</a>
+<ul>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReadOnly.read_only">
+<code class="docutils literal notranslate">
+<span class="pre">DafReadOnly.read_only()
+</span>
+</code>
+</a>
+</li>
+
 </ul>
 
 </li>
@@ -628,7 +659,7 @@
 </span>
 </code> data. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.DafReader">documentation
 </a> for details.
 </p>
 
@@ -5382,6 +5413,251 @@ column will be first and the
 </dl>
 
 
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.read_only">
+
+<span class="sig-name descname">
+<span class="pre">read_only
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="#daf.data.DafReadOnly" title="daf.data.DafReadOnly">
+<span class="pre">DafReadOnly
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.read_only">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.read_only" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Wrap the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data sett with a 
+<code class="docutils literal notranslate">
+<span class="pre">DafReadOnlyWrapper
+</span>
+</code> to protect it against accidental modification. See the
+Julia 
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.daf_read_only">documentation
+</a> for
+details.
+</p>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.data.DafReadOnly">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.data.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">DafReadOnly
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReadOnly">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReadOnly" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A read-only 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code>, which doesn’t allow any modification of the data. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.DafReadOnly">documentation
+</a> for details.
+</p>
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReadOnly.read_only">
+
+<span class="sig-name descname">
+<span class="pre">read_only
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="#daf.data.DafReadOnly" title="daf.data.DafReadOnly">
+<span class="pre">DafReadOnly
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReadOnly.read_only">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReadOnly.read_only" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Wrap the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data sett with a 
+<code class="docutils literal notranslate">
+<span class="pre">DafReadOnlyWrapper
+</span>
+</code> to protect it against accidental modification. See the
+Julia 
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.daf_read_only">documentation
+</a> for
+details.
+</p>
+
+</dd>
+</dl>
+
+
 </dd>
 </dl>
 
@@ -5429,7 +5705,10 @@ column will be first and the
 <code class="docutils literal notranslate">
 <span class="pre">Daf
 </span>
-</code> data.
+</code> data. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.DafWriter">documentation
+</a> for details.
 </p>
 
 <dl class="py method">
