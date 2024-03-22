@@ -27,7 +27,8 @@ from .julia_import import _as_vector
 from .julia_import import _from_julia_array
 from .julia_import import _from_julia_frame
 from .julia_import import _jl_pairs
-from .julia_import import _to_julia
+from .julia_import import _to_julia_array
+from .julia_import import _to_julia_type
 from .julia_import import jl
 from .queries import Query
 from .storage_types import StorageScalar
@@ -193,7 +194,7 @@ class DafReader(JlObject):
         if not jl.Daf.has_vector(self.jl_obj, axis, name):
             if default is None:
                 return None
-            return _from_julia_array(jl.Daf.get_vector(self.jl_obj, axis, name, default=_to_julia(default)).array)
+            return _from_julia_array(jl.Daf.get_vector(self.jl_obj, axis, name, default=_to_julia_array(default)).array)
 
         vector_version_counter = jl.Daf.vector_version_counter(self.jl_obj, axis, name)
         vector_key = (vector_version_counter, axis, name)
@@ -235,7 +236,7 @@ class DafReader(JlObject):
         This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis
         as the index.
         """
-        vector_value = self.get_np_vector(axis, name, default=_to_julia(default))
+        vector_value = self.get_np_vector(axis, name, default=_to_julia_array(default))
         if vector_value is None:
             return None
         return pd.Series(vector_value, index=self.get_axis(axis))
@@ -301,7 +302,7 @@ class DafReader(JlObject):
                 return None
             return _from_julia_array(
                 jl.Daf.get_matrix(
-                    self.jl_obj, rows_axis, columns_axis, name, default=_to_julia(default), relayout=relayout
+                    self.jl_obj, rows_axis, columns_axis, name, default=_to_julia_array(default), relayout=relayout
                 ).array
             )
 
@@ -360,11 +361,13 @@ class DafReader(JlObject):
         This is not to be confused with ``get_frame`` which returns a "real" ``pandas`` data frame, with arbitrary
         (query) columns, possibly using a different data type for each.
         """
-        matrix_value = self.get_np_matrix(rows_axis, columns_axis, name, default=_to_julia(default), relayout=relayout)
+        matrix_value = self.get_np_matrix(
+            rows_axis, columns_axis, name, default=_to_julia_array(default), relayout=relayout
+        )
         if matrix_value is None:
             return None
         if sp.issparse(matrix_value):
-            matrix_value = matrix_value.toarray()
+            matrix_value = matrix_value.toarray()  # type: ignore
         return pd.DataFrame(matrix_value, index=self.get_axis(rows_axis), columns=self.get_axis(columns_axis))
 
     def empty_cache(self, *, clear: Optional[CacheType] = None, keep: Optional[CacheType] = None) -> None:
@@ -382,7 +385,7 @@ class DafReader(JlObject):
         If the result isn't a scalar, and isn't an array of names, then we return a ``numpy`` array or a ``scipy``
         ``csc_matrix``.
         """
-        result = jl.Daf.Queries.get_query(self.jl_obj, _to_julia(query), cache=cache)
+        result = jl.Daf.Queries.get_query(self.jl_obj, query, cache=cache)
         if not isinstance(result, (str, int, float, AbstractSet)):
             result = result.array
             result = _from_julia_array(result)
@@ -397,7 +400,7 @@ class DafReader(JlObject):
         Note that since ``pandas`` data frames can't contain a sparse matrix, the data will always be in a dense
         ``numpy`` matrix, so take care not to invoke this for a too-large sparse data matrix.
         """
-        result = jl.Daf.Queries.get_query(self.jl_obj, _to_julia(query), cache=cache)
+        result = jl.Daf.Queries.get_query(self.jl_obj, query, cache=cache)
         if not isinstance(result, (str, int, float, AbstractSet)):
             values = _from_julia_array(result.array)
             if sp.issparse(values):
@@ -440,7 +443,7 @@ class DafReader(JlObject):
         if isinstance(columns, Mapping):
             columns = jl._pairify_columns(_jl_pairs(columns))
         else:
-            columns = _to_julia(columns)
+            columns = _to_julia_array(columns)
         jl_frame = jl.Daf.Queries.get_frame(self.jl_obj, axis, columns, cache=cache)
         return _from_julia_frame(jl_frame)
 
@@ -493,7 +496,7 @@ class DafWriter(DafReader):
         Add a new ``axis`` to the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.add_axis!>`__ for details.
         """
-        jl.Daf.add_axis_b(self.jl_obj, axis, _to_julia(entries))
+        jl.Daf.add_axis_b(self.jl_obj, axis, _to_julia_array(entries))
 
     def delete_axis(self, axis: str, *, must_exist: bool = True) -> None:
         """
@@ -552,7 +555,7 @@ class DafWriter(DafReader):
                 nzval[:] = value.data[:]
             return
 
-        jl.Daf.set_vector_b(self.jl_obj, axis, name, _as_vector(_to_julia(value)), overwrite=overwrite)
+        jl.Daf.set_vector_b(self.jl_obj, axis, name, _as_vector(_to_julia_array(value)), overwrite=overwrite)
 
     @contextmanager
     def empty_dense_vector(
@@ -562,8 +565,11 @@ class DafWriter(DafReader):
         Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it
         to the block to be filled. See the Julia
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_vector!>`__ for details.
+
+        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
+        ``with empty_dense_vector(dset, ...) as empty_vector: ...``.
         """
-        vector = jl.Daf.get_empty_dense_vector_b(self.jl_obj, axis, name, _to_julia(eltype), overwrite=overwrite)
+        vector = jl.Daf.get_empty_dense_vector_b(self.jl_obj, axis, name, _to_julia_type(eltype), overwrite=overwrite)
         try:
             yield _from_julia_array(vector)
             jl.Daf.filled_empty_dense_vector_b(self.jl_obj, axis, name, vector, overwrite=overwrite)
@@ -580,12 +586,14 @@ class DafWriter(DafReader):
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_vector!>`__ for
         details.
 
-        Note that the code block will get a tuple of ``(nzind, nzval)`` arrays for *Julia's* ``SparseVector``, **not** a
-        tuple of ``(data, indices, indptr)`` for Python's ``csc_matrix``. First, ``numpy`` (that is, ``scipy``) has no
-        concept of sparse vectors. In addition ``nzind`` is 1-based (Julia) and not 0-based (Python).
+        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
+        ``with empty_sparse_vector(dset, ...) as (empty_nzind, empty_nzval): ...``. The arrays are to be filled with
+        *Julia's* ``SparseVector`` data, that is, ``empty_nzind`` needs to be filled with **1**-based indices (as
+        opposed to 0-based indices typically used by ``scipy.sparse``). Due to this difference in the indexing, we can't
+        zero-copy share sparse data between Python and Julia. Sigh.
         """
         nzind, nzval, extra = jl.Daf.get_empty_sparse_vector_b(
-            self.jl_obj, axis, name, _to_julia(eltype), nnz, _to_julia(indtype), overwrite=overwrite
+            self.jl_obj, axis, name, _to_julia_type(eltype), nnz, _to_julia_type(indtype), overwrite=overwrite
         )
         try:
             yield (_from_julia_array(nzind), _from_julia_array(nzval))
@@ -620,7 +628,7 @@ class DafWriter(DafReader):
         efficient zero-copy operation).
         """
         jl.Daf.set_matrix_b(
-            self.jl_obj, rows_axis, columns_axis, name, _to_julia(value), overwrite=overwrite, relayout=relayout
+            self.jl_obj, rows_axis, columns_axis, name, _to_julia_array(value), overwrite=overwrite, relayout=relayout
         )
 
     @contextmanager
@@ -631,9 +639,12 @@ class DafWriter(DafReader):
         Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and
         ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_matrix!>`__ for details.
+
+        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
+        ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.
         """
         matrix = jl.Daf.get_empty_dense_matrix_b(
-            self.jl_obj, rows_axis, columns_axis, name, _to_julia(eltype), overwrite=overwrite
+            self.jl_obj, rows_axis, columns_axis, name, _to_julia_type(eltype), overwrite=overwrite
         )
         try:
             yield _from_julia_array(matrix)
@@ -660,14 +671,21 @@ class DafWriter(DafReader):
         `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_matrix!>`__ for
         details.
 
-        Note that the code block will get a tuple of ``(colptr, rowval, nzval)`` arrays for Julia's ``SparseMatrixCSC``,
-        **not** a tuple of ``(data, indices, indptr)`` for Python's ``csc_matrix``. Yes, ``data`` is the same as
-        ``nzval``, but ``colptr = indptr + 1`` and ``rowval = indices + 1``, because Julia uses 1-based indexing, and
-        Python uses 0-based indexing. For this reason, sparse data can't ever be zero-copy between Julia and Python.
-        Sigh.
+        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
+        ``with empty_sparse_vector(dset, ...) as (empty_colptr, empty_rowval, empty_nzval): ...``. The arrays are to be
+        filled with *Julia's* ``SparseVector`` data, that is, ``empty_colptr`` and ``empty_rowval`` need to be filled
+        with **1**-based indices (as opposed to 0-based indices used by ``scipy.sparse.cs[cr]_matrix``). Due to this
+        difference in the indexing, we can't zero-copy share sparse data between Python and Julia. Sigh.
         """
         colptr, rowval, nzval, extra = jl.Daf.get_empty_sparse_matrix_b(
-            self.jl_obj, rows_axis, columns_axis, name, _to_julia(eltype), nnz, _to_julia(indtype), overwrite=overwrite
+            self.jl_obj,
+            rows_axis,
+            columns_axis,
+            name,
+            _to_julia_type(eltype),
+            nnz,
+            _to_julia_type(indtype),
+            overwrite=overwrite,
         )
         try:
             yield (_from_julia_array(colptr), _from_julia_array(rowval), _from_julia_array(nzval))

@@ -106,7 +106,8 @@
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_from_julia_array</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_from_julia_frame</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_jl_pairs</span>
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_to_julia</span>
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_to_julia_array</span>
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_to_julia_type</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
 <span class="kn">from</span> <span class="nn">.queries</span> <span class="kn">import</span> <span class="n">Query</span>
 <span class="kn">from</span> <span class="nn">.storage_types</span> <span class="kn">import</span> <span class="n">StorageScalar</span>
@@ -306,7 +307,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
-            <span class="k">return</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">))</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">))</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
 
         <span class="n">vector_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">vector_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="n">vector_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">vector_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -351,7 +352,7 @@
 <span class="sd">        This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis</span>
 <span class="sd">        as the index.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">vector_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">))</span>
+        <span class="n">vector_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">vector_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">vector_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
@@ -426,7 +427,7 @@
                 <span class="k">return</span> <span class="kc">None</span>
             <span class="k">return</span> <span class="n">_from_julia_array</span><span class="p">(</span>
                 <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">array</span>
             <span class="p">)</span>
 
@@ -488,11 +489,13 @@
 <span class="sd">        This is not to be confused with ``get_frame`` which returns a &quot;real&quot; ``pandas`` data frame, with arbitrary</span>
 <span class="sd">        (query) columns, possibly using a different data type for each.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">matrix_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span>
+        <span class="n">matrix_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span>
+            <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">matrix_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">):</span>
-            <span class="n">matrix_value</span> <span class="o">=</span> <span class="n">matrix_value</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+            <span class="n">matrix_value</span> <span class="o">=</span> <span class="n">matrix_value</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">columns_axis</span><span class="p">))</span></div>
 
 
@@ -516,7 +519,7 @@
 <span class="sd">        If the result isn&#39;t a scalar, and isn&#39;t an array of names, then we return a ``numpy`` array or a ``scipy``</span>
 <span class="sd">        ``csc_matrix``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">get_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">query</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">get_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">AbstractSet</span><span class="p">)):</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">array</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -534,7 +537,7 @@
 <span class="sd">        Note that since ``pandas`` data frames can&#39;t contain a sparse matrix, the data will always be in a dense</span>
 <span class="sd">        ``numpy`` matrix, so take care not to invoke this for a too-large sparse data matrix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">get_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">query</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">get_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">AbstractSet</span><span class="p">)):</span>
             <span class="n">values</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
@@ -580,7 +583,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">_pairify_columns</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">columns</span> <span class="o">=</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">_to_julia_array</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
         <span class="n">jl_frame</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_from_julia_frame</span><span class="p">(</span><span class="n">jl_frame</span><span class="p">)</span></div>
 
@@ -654,7 +657,7 @@
 <span class="sd">        Add a new ``axis`` to the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.add_axis!&gt;`__ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">add_axis_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">entries</span><span class="p">))</span></div>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">add_axis_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">_to_julia_array</span><span class="p">(</span><span class="n">entries</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.delete_axis">
@@ -719,7 +722,7 @@
                 <span class="n">nzval</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">data</span><span class="p">[:]</span>
             <span class="k">return</span>
 
-        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_as_vector</span><span class="p">(</span><span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+        <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_as_vector</span><span class="p">(</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.empty_dense_vector">
@@ -732,8 +735,11 @@
 <span class="sd">        Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it</span>
 <span class="sd">        to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_vector!&gt;`__ for details.</span>
+
+<span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
+<span class="sd">        ``with empty_dense_vector(dset, ...) as empty_vector: ...``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">vector</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
@@ -753,12 +759,14 @@
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_vector!&gt;`__ for</span>
 <span class="sd">        details.</span>
 
-<span class="sd">        Note that the code block will get a tuple of ``(nzind, nzval)`` arrays for *Julia&#39;s* ``SparseVector``, **not** a</span>
-<span class="sd">        tuple of ``(data, indices, indptr)`` for Python&#39;s ``csc_matrix``. First, ``numpy`` (that is, ``scipy``) has no</span>
-<span class="sd">        concept of sparse vectors. In addition ``nzind`` is 1-based (Julia) and not 0-based (Python).</span>
+<span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
+<span class="sd">        ``with empty_sparse_vector(dset, ...) as (empty_nzind, empty_nzval): ...``. The arrays are to be filled with</span>
+<span class="sd">        *Julia&#39;s* ``SparseVector`` data, that is, ``empty_nzind`` needs to be filled with **1**-based indices (as</span>
+<span class="sd">        opposed to 0-based indices typically used by ``scipy.sparse``). Due to this difference in the indexing, we can&#39;t</span>
+<span class="sd">        zero-copy share sparse data between Python and Julia. Sigh.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nzind</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_sparse_vector_b</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzind</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">))</span>
@@ -799,7 +807,7 @@
 <span class="sd">        efficient zero-copy operation).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">set_matrix_b</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span>
         <span class="p">)</span></div>
 
 
@@ -813,9 +821,12 @@
 <span class="sd">        Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and</span>
 <span class="sd">        ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_dense_matrix!&gt;`__ for details.</span>
+
+<span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
+<span class="sd">        ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">matrix</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_dense_matrix_b</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
@@ -845,14 +856,21 @@
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.empty_sparse_matrix!&gt;`__ for</span>
 <span class="sd">        details.</span>
 
-<span class="sd">        Note that the code block will get a tuple of ``(colptr, rowval, nzval)`` arrays for Julia&#39;s ``SparseMatrixCSC``,</span>
-<span class="sd">        **not** a tuple of ``(data, indices, indptr)`` for Python&#39;s ``csc_matrix``. Yes, ``data`` is the same as</span>
-<span class="sd">        ``nzval``, but ``colptr = indptr + 1`` and ``rowval = indices + 1``, because Julia uses 1-based indexing, and</span>
-<span class="sd">        Python uses 0-based indexing. For this reason, sparse data can&#39;t ever be zero-copy between Julia and Python.</span>
-<span class="sd">        Sigh.</span>
+<span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
+<span class="sd">        ``with empty_sparse_vector(dset, ...) as (empty_colptr, empty_rowval, empty_nzval): ...``. The arrays are to be</span>
+<span class="sd">        filled with *Julia&#39;s* ``SparseVector`` data, that is, ``empty_colptr`` and ``empty_rowval`` need to be filled</span>
+<span class="sd">        with **1**-based indices (as opposed to 0-based indices used by ``scipy.sparse.cs[cr]_matrix``). Due to this</span>
+<span class="sd">        difference in the indexing, we can&#39;t zero-copy share sparse data between Python and Julia. Sigh.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">colptr</span><span class="p">,</span> <span class="n">rowval</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_sparse_matrix_b</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
+            <span class="n">rows_axis</span><span class="p">,</span>
+            <span class="n">columns_axis</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span>
+            <span class="n">nnz</span><span class="p">,</span>
+            <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">colptr</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">rowval</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">))</span>

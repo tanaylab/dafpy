@@ -11,7 +11,7 @@ from .data import DafWriter
 from .data import DataKey
 from .julia_import import Undef
 from .julia_import import UndefInitializer
-from .julia_import import _to_julia
+from .julia_import import _to_julia_array
 from .julia_import import jl
 from .storage_types import StorageScalar
 
@@ -43,7 +43,7 @@ def copy_scalar(
         source=source.jl_obj,
         name=name,
         rename=rename,
-        default=_to_julia(default),
+        default=_to_julia_array(default),
         overwrite=overwrite,
     )
 
@@ -61,7 +61,7 @@ def copy_axis(
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_axis!>`__ for details.
     """
     jl.Daf.copy_axis_b(
-        destination=destination.jl_obj, source=source.jl_obj, axis=axis, rename=rename, default=_to_julia(default)
+        destination=destination.jl_obj, source=source.jl_obj, axis=axis, rename=rename, default=_to_julia_array(default)
     )
 
 
@@ -88,7 +88,7 @@ def copy_vector(
         name=name,
         reaxis=reaxis,
         rename=rename,
-        default=_to_julia(default),
+        default=_to_julia_array(default),
         empty=empty,
         overwrite=overwrite,
     )
@@ -122,7 +122,7 @@ def copy_matrix(
         rows_reaxis=rows_reaxis,
         columns_reaxis=columns_reaxis,
         rename=rename,
-        default=_to_julia(default),
+        default=_to_julia_array(default),
         empty=empty,
         relayout=relayout,
         overwrite=overwrite,

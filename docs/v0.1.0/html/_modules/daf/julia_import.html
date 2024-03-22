@@ -166,6 +166,7 @@
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import LinearAlgebra&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import NamedArrays&quot;</span><span class="p">)</span>
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import SparseArrays&quot;</span><span class="p">)</span>
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import PythonCall&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="UndefInitializer">
@@ -209,19 +210,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl_obj</span>
 
 
-<span class="k">def</span> <span class="nf">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-return-statements</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">JlObject</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">jl_obj</span>
-
+<span class="k">def</span> <span class="nf">_to_julia_type</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-return-statements</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">JULIA_TYPE_OF_PY_TYPE</span><span class="p">[</span><span class="n">value</span><span class="o">.</span><span class="n">type</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">JULIA_TYPE_OF_PY_TYPE</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">UndefInitializer</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">undef</span>
+    <span class="k">return</span> <span class="n">value</span>
 
+
+<span class="k">def</span> <span class="nf">_to_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-return-statements</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span>
 
@@ -303,7 +302,7 @@
 <span class="k">def</span> <span class="nf">_jl_pairs</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">return</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
@@ -339,6 +338,34 @@
 <span class="sd">            return [key =&gt; query for (key, query) in items]</span>
 <span class="sd">        end</span>
 <span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function pyconvert_rule_jl_object(::Type{T}, x::Py) where {T}</span>
+<span class="sd">        return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PythonCall.pyconvert_add_rule(&quot;daf.julia_import:JlObject&quot;, Any, pyconvert_rule_jl_object)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function pyconvert_rule_undef(::Type{T}, x::Py) where {T}</span>
+<span class="sd">        return PythonCall.pyconvert_return(undef)</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PythonCall.pyconvert_add_rule(&quot;daf.julia_import:UndefInitializer&quot;, UndefInitializer, pyconvert_rule_undef)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">)</span>
 </pre></div>

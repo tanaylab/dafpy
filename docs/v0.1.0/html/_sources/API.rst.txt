@@ -12,4 +12,5 @@ API
   formats
   views
   copies
+  adapters
   storage_types

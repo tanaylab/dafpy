@@ -7,7 +7,7 @@ from typing import Optional
 from typing import Type
 from typing import Union
 
-from .julia_import import _to_julia
+from .julia_import import _to_julia_type
 from .julia_import import jl
 from .operations import QueryOperation
 from .operations import QuerySequence
@@ -81,7 +81,7 @@ class IfMissing(QueryOperation):
     """
 
     def __init__(self, missing_value: StorageScalar, *, dtype: Optional[Type] = None) -> None:
-        super().__init__(jl.Daf.IfMissing(missing_value, dtype=_to_julia(dtype)))
+        super().__init__(jl.Daf.IfMissing(missing_value, dtype=_to_julia_type(dtype)))
 
 
 class IfNot(QueryOperation):
@@ -298,4 +298,4 @@ def query_result_dimensions(query: str | Query) -> int:
     Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.query_result_dimensions>`_
     for details.
     """
-    return jl.Daf.Queries.query_result_dimensions(_to_julia(query))
+    return jl.Daf.Queries.query_result_dimensions(query)

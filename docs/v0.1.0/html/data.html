@@ -527,6 +527,11 @@
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="adapters.html">adapters
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="storage_types.html">storage_types
 </a>
 </li>
@@ -6755,6 +6760,32 @@ to the block to be filled. See the Julia
 </a> for details.
 </p>
 
+<p>Note this is a Python 
+<code class="docutils literal notranslate">
+<span class="pre">contextmanager
+</span>
+</code>, that is, is meant to be used with the 
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span>
+</code> statement:
+
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span> 
+<span class="pre">empty_dense_vector(dset,
+</span> 
+<span class="pre">...)
+</span> 
+<span class="pre">as
+</span> 
+<span class="pre">empty_vector:
+</span> 
+<span class="pre">...
+</span>
+</code>.
+</p>
+
 </dd>
 </dl>
 
@@ -6960,47 +6991,51 @@ parts (
 details.
 </p>
 
-<p>Note that the code block will get a tuple of 
+<p>Note this is a Python 
 <code class="docutils literal notranslate">
-<span class="pre">(nzind,
-</span> 
-<span class="pre">nzval)
+<span class="pre">contextmanager
 </span>
-</code> arrays for 
+</code>, that is, is meant to be used with the 
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span>
+</code> statement:
+
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span> 
+<span class="pre">empty_sparse_vector(dset,
+</span> 
+<span class="pre">...)
+</span> 
+<span class="pre">as
+</span> 
+<span class="pre">(empty_nzind,
+</span> 
+<span class="pre">empty_nzval):
+</span> 
+<span class="pre">...
+</span>
+</code>. The arrays are to be filled with
+
 <em>Julia’s
 </em> 
 <code class="docutils literal notranslate">
 <span class="pre">SparseVector
 </span>
-</code>, 
-<strong>not
-</strong> a
-tuple of 
+</code> data, that is, 
 <code class="docutils literal notranslate">
-<span class="pre">(data,
-</span> 
-<span class="pre">indices,
-</span> 
-<span class="pre">indptr)
+<span class="pre">empty_nzind
 </span>
-</code> for Python’s 
+</code> needs to be filled with 
+<strong>1
+</strong>-based indices (as
+opposed to 0-based indices typically used by 
 <code class="docutils literal notranslate">
-<span class="pre">csc_matrix
+<span class="pre">scipy.sparse
 </span>
-</code>. First, 
-<code class="docutils literal notranslate">
-<span class="pre">numpy
-</span>
-</code> (that is, 
-<code class="docutils literal notranslate">
-<span class="pre">scipy
-</span>
-</code>) has no
-concept of sparse vectors. In addition 
-<code class="docutils literal notranslate">
-<span class="pre">nzind
-</span>
-</code> is 1-based (Julia) and not 0-based (Python).
+</code>). Due to this difference in the indexing, we can’t
+zero-copy share sparse data between Python and Julia. Sigh.
 </p>
 
 </dd>
@@ -7507,6 +7542,32 @@ efficient zero-copy operation).
 </a> for details.
 </p>
 
+<p>Note this is a Python 
+<code class="docutils literal notranslate">
+<span class="pre">contextmanager
+</span>
+</code>, that is, is meant to be used with the 
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span>
+</code> statement:
+
+<code class="docutils literal notranslate">
+<span class="pre">with
+</span> 
+<span class="pre">empty_dense_matrix(dset,
+</span> 
+<span class="pre">...)
+</span> 
+<span class="pre">as
+</span> 
+<span class="pre">empty_matrix:
+</span> 
+<span class="pre">...
+</span>
+</code>.
+</p>
+
 </dd>
 </dl>
 
@@ -7745,69 +7806,57 @@ to be filles. See the Julia
 details.
 </p>
 
-<p>Note that the code block will get a tuple of 
+<p>Note this is a Python 
 <code class="docutils literal notranslate">
-<span class="pre">(colptr,
-</span> 
-<span class="pre">rowval,
-</span> 
-<span class="pre">nzval)
+<span class="pre">contextmanager
 </span>
-</code> arrays for Julia’s 
+</code>, that is, is meant to be used with the 
 <code class="docutils literal notranslate">
-<span class="pre">SparseMatrixCSC
+<span class="pre">with
 </span>
-</code>,
-
-<strong>not
-</strong> a tuple of 
-<code class="docutils literal notranslate">
-<span class="pre">(data,
-</span> 
-<span class="pre">indices,
-</span> 
-<span class="pre">indptr)
-</span>
-</code> for Python’s 
-<code class="docutils literal notranslate">
-<span class="pre">csc_matrix
-</span>
-</code>. Yes, 
-<code class="docutils literal notranslate">
-<span class="pre">data
-</span>
-</code> is the same as
+</code> statement:
 
 <code class="docutils literal notranslate">
-<span class="pre">nzval
+<span class="pre">with
+</span> 
+<span class="pre">empty_sparse_vector(dset,
+</span> 
+<span class="pre">...)
+</span> 
+<span class="pre">as
+</span> 
+<span class="pre">(empty_colptr,
+</span> 
+<span class="pre">empty_rowval,
+</span> 
+<span class="pre">empty_nzval):
+</span> 
+<span class="pre">...
 </span>
-</code>, but 
+</code>. The arrays are to be
+filled with 
+<em>Julia’s
+</em> 
 <code class="docutils literal notranslate">
-<span class="pre">colptr
-</span> 
-<span class="pre">=
-</span> 
-<span class="pre">indptr
-</span> 
-<span class="pre">+
-</span> 
-<span class="pre">1
+<span class="pre">SparseVector
+</span>
+</code> data, that is, 
+<code class="docutils literal notranslate">
+<span class="pre">empty_colptr
 </span>
 </code> and 
 <code class="docutils literal notranslate">
-<span class="pre">rowval
-</span> 
-<span class="pre">=
-</span> 
-<span class="pre">indices
-</span> 
-<span class="pre">+
-</span> 
-<span class="pre">1
+<span class="pre">empty_rowval
 </span>
-</code>, because Julia uses 1-based indexing, and
-Python uses 0-based indexing. For this reason, sparse data can’t ever be zero-copy between Julia and Python.
-Sigh.
+</code> need to be filled
+with 
+<strong>1
+</strong>-based indices (as opposed to 0-based indices used by 
+<code class="docutils literal notranslate">
+<span class="pre">scipy.sparse.cs[cr]_matrix
+</span>
+</code>). Due to this
+difference in the indexing, we can’t zero-copy share sparse data between Python and Julia. Sigh.
 </p>
 
 </dd>

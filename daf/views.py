@@ -10,7 +10,6 @@ from .data import DafReader
 from .data import DafReadOnly
 from .data import DataKey
 from .julia_import import _jl_pairs
-from .julia_import import _to_julia
 from .julia_import import jl
 from .queries import Query
 
@@ -67,7 +66,5 @@ def daf_view(
     similarly for ``data``).
     """
     return DafReadOnly(
-        jl.Daf.daf_view(
-            _to_julia(dset), name=name, axes=jl._pairify_axes(_jl_pairs(axes)), data=jl._pairify_data(_jl_pairs(data))
-        )
+        jl.Daf.daf_view(dset, name=name, axes=jl._pairify_axes(_jl_pairs(axes)), data=jl._pairify_data(_jl_pairs(data)))
     )

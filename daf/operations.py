@@ -10,7 +10,7 @@ from typing import Optional
 from typing import Type
 
 from .julia_import import JlObject
-from .julia_import import _to_julia
+from .julia_import import _to_julia_type
 from .julia_import import jl
 
 __all__ = [
@@ -87,7 +87,7 @@ class Abs(EltwiseOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None) -> None:
-        super().__init__(jl.Daf.Abs(dtype=_to_julia(dtype)))
+        super().__init__(jl.Daf.Abs(dtype=_to_julia_type(dtype)))
 
 
 class Round(EltwiseOperation):
@@ -97,7 +97,7 @@ class Round(EltwiseOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None) -> None:
-        super().__init__(jl.Daf.Round(dtype=_to_julia(dtype)))
+        super().__init__(jl.Daf.Round(dtype=_to_julia_type(dtype)))
 
 
 class Clamp(EltwiseOperation):
@@ -117,7 +117,7 @@ class Convert(EltwiseOperation):
     """
 
     def __init__(self, *, dtype: Type) -> None:
-        super().__init__(jl.Daf.Convert(dtype=_to_julia(dtype)))
+        super().__init__(jl.Daf.Convert(dtype=_to_julia_type(dtype)))
 
 
 class Fraction(EltwiseOperation):
@@ -127,7 +127,7 @@ class Fraction(EltwiseOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None) -> None:
-        super().__init__(jl.Daf.Fraction(dtype=_to_julia(dtype)))
+        super().__init__(jl.Daf.Fraction(dtype=_to_julia_type(dtype)))
 
 
 class Log(EltwiseOperation):
@@ -137,7 +137,7 @@ class Log(EltwiseOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None, base: float = e, eps: float = 0) -> None:
-        super().__init__(jl.Daf.Log(dtype=_to_julia(dtype), base=base, eps=eps))
+        super().__init__(jl.Daf.Log(dtype=_to_julia_type(dtype), base=base, eps=eps))
 
 
 class Significant(EltwiseOperation):
@@ -147,7 +147,7 @@ class Significant(EltwiseOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None, high: float, low: Optional[float] = None) -> None:
-        super().__init__(jl.Daf.Significant(dtype=_to_julia(dtype), high=high, low=low))
+        super().__init__(jl.Daf.Significant(dtype=_to_julia_type(dtype), high=high, low=low))
 
 
 class Sum(ReductionOperation):
@@ -157,7 +157,7 @@ class Sum(ReductionOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None) -> None:
-        super().__init__(jl.Daf.Sum(dtype=_to_julia(dtype)))
+        super().__init__(jl.Daf.Sum(dtype=_to_julia_type(dtype)))
 
 
 class Min(ReductionOperation):
@@ -188,7 +188,7 @@ class Quantile(ReductionOperation):
     """
 
     def __init__(self, *, dtype: Optional[Type] = None, p: float) -> None:
-        super().__init__(jl.Daf.Quantile(dtype=_to_julia(dtype), p=p))
+        super().__init__(jl.Daf.Quantile(dtype=_to_julia_type(dtype), p=p))
 
 
 class Mean(ReductionOperation):

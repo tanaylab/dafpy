@@ -87,6 +87,7 @@ jl.seval("import HDF5")
 jl.seval("import LinearAlgebra")
 jl.seval("import NamedArrays")
 jl.seval("import SparseArrays")
+jl.seval("import PythonCall")
 
 
 class UndefInitializer:
@@ -127,19 +128,17 @@ class JlObject:
         self.jl_obj = jl_obj
 
 
-def _to_julia(value: Any) -> Any:  # pylint: disable=too-many-return-statements
-    if isinstance(value, JlObject):
-        return value.jl_obj
-
+def _to_julia_type(value: Any) -> Any:  # pylint: disable=too-many-return-statements
     if isinstance(value, np.dtype):
         return JULIA_TYPE_OF_PY_TYPE[value.type]
 
     if isinstance(value, type):
         return JULIA_TYPE_OF_PY_TYPE[value]
 
-    if isinstance(value, UndefInitializer):
-        return jl.undef
+    return value
 
+
+def _to_julia_array(value: Any) -> Any:  # pylint: disable=too-many-return-statements
     if isinstance(value, str):
         return value
 
@@ -221,7 +220,7 @@ jl.seval(
 def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
     if mapping is None:
         return None
-    return [(key, _to_julia(value)) for key, value in mapping.items()]
+    return list(mapping.items())
 
 
 jl.seval(
@@ -257,5 +256,33 @@ jl.seval(
             return [key => query for (key, query) in items]
         end
     end
+    """
+)
+
+jl.seval(
+    """
+    function pyconvert_rule_jl_object(::Type{T}, x::Py) where {T}
+        return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))
+    end
+    """
+)
+
+jl.seval(
+    """
+    PythonCall.pyconvert_add_rule("daf.julia_import:JlObject", Any, pyconvert_rule_jl_object)
+    """
+)
+
+jl.seval(
+    """
+    function pyconvert_rule_undef(::Type{T}, x::Py) where {T}
+        return PythonCall.pyconvert_return(undef)
+    end
+    """
+)
+
+jl.seval(
+    """
+    PythonCall.pyconvert_add_rule("daf.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
     """
 )
