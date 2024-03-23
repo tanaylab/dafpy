@@ -48,10 +48,7 @@ class QueryOperation(JlObject):
     """
 
     def __or__(self, other: "QueryOperation") -> "QuerySequence":
-        return QuerySequence(jl.Daf.QuerySequence(self.jl_obj, other.jl_obj))
-
-    def __str__(self) -> str:
-        return jl.string(self.jl_obj)
+        return QuerySequence(jl.Daf.QuerySequence(self, other))
 
 
 class QuerySequence(QueryOperation):

@@ -129,10 +129,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;QueryOperation&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QuerySequence&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">QuerySequence</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">QuerySequence</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">QuerySequence</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">QuerySequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">))</span></div>
 
 
 

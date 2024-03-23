@@ -39,8 +39,8 @@ def copy_scalar(
     Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_scalar!>`__ for details.
     """
     jl.Daf.copy_scalar_b(
-        destination=destination.jl_obj,
-        source=source.jl_obj,
+        destination=destination,
+        source=source,
         name=name,
         rename=rename,
         default=_to_julia_array(default),
@@ -61,7 +61,7 @@ def copy_axis(
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_axis!>`__ for details.
     """
     jl.Daf.copy_axis_b(
-        destination=destination.jl_obj, source=source.jl_obj, axis=axis, rename=rename, default=_to_julia_array(default)
+        destination=destination, source=source, axis=axis, rename=rename, default=_to_julia_array(default)
     )
 
 
@@ -82,8 +82,8 @@ def copy_vector(
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_vector!>`__ for details.
     """
     jl.Daf.copy_vector_b(
-        destination=destination.jl_obj,
-        source=source.jl_obj,
+        destination=destination,
+        source=source,
         axis=axis,
         name=name,
         reaxis=reaxis,
@@ -114,8 +114,8 @@ def copy_matrix(
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_matrix!>`__ for details.
     """
     jl.Daf.copy_matrix_b(
-        destination=destination.jl_obj,
-        source=source.jl_obj,
+        destination=destination,
+        source=source,
         rows_axis=rows_axis,
         columns_axis=columns_axis,
         name=name,
@@ -146,6 +146,4 @@ def copy_all(
     Copy all the content of a ``source`` ``DafReader`` into a ``destination`` ``DafWriter``. See the Julia
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_all!>`__ for details.
     """
-    jl.Daf.copy_all_b(
-        destination=destination.jl_obj, source=source.jl_obj, empty=empty, overwrite=overwrite, relayout=relayout
-    )
+    jl.Daf.copy_all_b(destination=destination, source=source, empty=empty, overwrite=overwrite, relayout=relayout)

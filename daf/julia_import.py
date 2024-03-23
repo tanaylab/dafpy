@@ -128,6 +128,9 @@ class JlObject:
     def __init__(self, jl_obj) -> None:
         self.jl_obj = jl_obj
 
+    def __str__(self) -> str:
+        return jl.string(self)
+
 
 def _to_julia_type(value: Any) -> Any:  # pylint: disable=too-many-return-statements
     if isinstance(value, np.dtype):
