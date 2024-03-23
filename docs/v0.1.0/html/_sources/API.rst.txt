@@ -7,6 +7,7 @@ API
 
   julia_import
   data
+  storage_types
   queries
   operations
   formats
@@ -14,4 +15,5 @@ API
   copies
   adapters
   concat
-  storage_types
+  anndata_format
+  generic

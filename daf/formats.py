@@ -20,8 +20,10 @@ class MemoryDaf(DafWriter):
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/memory_format.html>`__ for details.
     """
 
-    def __init__(self, *, name: str = "memory") -> None:
-        super().__init__(jl.Daf.MemoryDaf(name=name))
+    def __init__(self, jl_obj: Optional[jl.MemoryDaf] = None, *, name: str = "memory") -> None:
+        if jl_obj is None:
+            jl_obj = jl.Daf.MemoryDaf(name=name)
+        super().__init__(jl_obj)
 
 
 class FilesDaf(DafWriter):

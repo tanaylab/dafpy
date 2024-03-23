@@ -85,9 +85,10 @@ jl.seval("import Daf.Generic.Maybe")
 jl.seval("import DataFrames")
 jl.seval("import HDF5")
 jl.seval("import LinearAlgebra")
+jl.seval("import Muon")
 jl.seval("import NamedArrays")
-jl.seval("import SparseArrays")
 jl.seval("import PythonCall")
+jl.seval("import SparseArrays")
 
 
 class UndefInitializer:
