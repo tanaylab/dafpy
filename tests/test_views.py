@@ -48,7 +48,7 @@ def test_views() -> None:  # pylint: disable=too-many-statements
         )[1:]
     )
 
-    view = daf_view(
+    view = viewer(
         dset,
         name="view!",
         axes={"obs": "/ cell", "var": "/ gene"},

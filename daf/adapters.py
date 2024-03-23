@@ -27,12 +27,12 @@ from .views import ViewAxes
 from .views import ViewData
 
 __all__ = [
-    "daf_adapter",
+    "adapter",
 ]
 
 
 @contextmanager
-def daf_adapter(
+def adapter(
     view: DafWriter | DafReadOnly,
     name: Optional[str] = None,
     capture: Callable[..., DafWriter] = MemoryDaf,
@@ -43,9 +43,9 @@ def daf_adapter(
     overwrite: bool = False,
 ) -> Iterator[DafWriter]:
     """
-    Invoke a computation on a ``view`` data set; copy a ``daf_view`` of the updated data set into the base ``Daf`` data
+    Invoke a computation on a ``view`` data set; copy a ``viewer`` of the updated data set into the base ``Daf`` data
     set of the view. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.daf_adapter>`__ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.adapter>`__ for details.
     """
     writer = capture(name=jl.Daf.Adapters.get_adapter_capture_name(view, name=name))
     adapted = jl.Daf.Adapters.get_adapter_input(view, name=name, writer=writer)

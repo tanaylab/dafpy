@@ -13,4 +13,5 @@ API
   views
   copies
   adapters
+  concat
   storage_types

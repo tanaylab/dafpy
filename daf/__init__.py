@@ -59,3 +59,4 @@ from .formats import *  # isort: skip
 from .views import *  # isort: skip
 from .copies import *  # isort: skip
 from .adapters import *  # isort: skip
+from .concat import *  # isort: skip

@@ -106,14 +106,14 @@
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">ViewData</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;daf_adapter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="daf_adapter">
-<a class="viewcode-back" href="../../adapters.html#daf.adapters.daf_adapter">[docs]</a>
+<div class="viewcode-block" id="adapter">
+<a class="viewcode-back" href="../../adapters.html#daf.adapters.adapter">[docs]</a>
 <span class="nd">@contextmanager</span>
-<span class="k">def</span> <span class="nf">daf_adapter</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">adapter</span><span class="p">(</span>
     <span class="n">view</span><span class="p">:</span> <span class="n">DafWriter</span> <span class="o">|</span> <span class="n">DafReadOnly</span><span class="p">,</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">capture</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">DafWriter</span><span class="p">]</span> <span class="o">=</span> <span class="n">MemoryDaf</span><span class="p">,</span>
@@ -124,9 +124,9 @@
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">DafWriter</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Invoke a computation on a ``view`` data set; copy a ``daf_view`` of the updated data set into the base ``Daf`` data</span>
+<span class="sd">    Invoke a computation on a ``view`` data set; copy a ``viewer`` of the updated data set into the base ``Daf`` data</span>
 <span class="sd">    set of the view. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.daf_adapter&gt;`__ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.adapter&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">writer</span> <span class="o">=</span> <span class="n">capture</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Adapters</span><span class="o">.</span><span class="n">get_adapter_capture_name</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span>
     <span class="n">adapted</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Adapters</span><span class="o">.</span><span class="n">get_adapter_input</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">writer</span><span class="p">)</span>

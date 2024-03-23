@@ -450,10 +450,10 @@ class DafReader(JlObject):
     def read_only(self, *, name: Optional[str] = None) -> "DafReadOnly":
         """
         Wrap the ``Daf`` data sett with a ``DafReadOnlyWrapper`` to protect it against accidental modification. See the
-        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.daf_read_only>`__ for
+        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.ReadOnly.read_only>`__ for
         details.
         """
-        return DafReadOnly(jl.Daf.daf_read_only(self.jl_obj, name=name))
+        return DafReadOnly(jl.Daf.read_only(self.jl_obj, name=name))
 
 
 class DafReadOnly(DafReader):

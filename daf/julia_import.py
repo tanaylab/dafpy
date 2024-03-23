@@ -223,6 +223,8 @@ def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
     return list(mapping.items())
 
 
+jl.seval("_DafReadersVector = Vector{DafReader}")  # NOT F-STRING
+
 jl.seval(
     """
     function _pairify_columns(items::Maybe{AbstractVector})::Maybe{Daf.QueryColumns}
@@ -250,6 +252,18 @@ jl.seval(
 jl.seval(
     """
     function _pairify_data(items::Maybe{AbstractVector})::Maybe{Daf.ViewData}
+        if items == nothing
+            return nothing
+        else
+            return [key => query for (key, query) in items]
+        end
+    end
+    """
+)
+
+jl.seval(
+    """
+    function _pairify_merge(items::Maybe{AbstractVector})::Maybe{Daf.MergeData}
         if items == nothing
             return nothing
         else
