@@ -32,7 +32,7 @@ def reconstruct_axis(
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/reconstruction.html#Daf.Reconstruction.reconstruct_axis!>`__
     for details.
     """
-    return jl.reconstruct_axis(
+    return jl.reconstruct_axis_b(
         dset,
         existing_axis=existing_axis,
         implicit_axis=implicit_axis,
