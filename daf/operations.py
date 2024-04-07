@@ -143,8 +143,8 @@ class Significant(EltwiseOperation):
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Operations.Significant>`__ for details.
     """
 
-    def __init__(self, *, dtype: Optional[Type] = None, high: float, low: Optional[float] = None) -> None:
-        super().__init__(jl.Daf.Significant(dtype=_to_julia_type(dtype), high=high, low=low))
+    def __init__(self, *, high: float, low: Optional[float] = None) -> None:
+        super().__init__(jl.Daf.Significant(high=high, low=low))
 
 
 class Sum(ReductionOperation):

@@ -5,13 +5,10 @@ Test ``Daf`` storage formats.
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
-from contextlib import contextmanager
 from tempfile import TemporaryDirectory
 from textwrap import dedent
 from typing import Any
 from typing import Callable
-from typing import Iterator
-from typing import Never
 from typing import Sequence
 from typing import Tuple
 
@@ -20,6 +17,8 @@ import pytest
 import scipy.sparse as sp  # type: ignore
 
 from daf import *
+
+from .utilities import assert_raises
 
 
 def make_files() -> FilesDaf:
@@ -37,17 +36,6 @@ def make_h5df() -> H5df:
 
 
 FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!")), ("FilesDaf", make_files), ("H5df", make_h5df)]
-
-
-@contextmanager
-def assert_raises(expected: str) -> Iterator[Never]:
-    try:
-        yield  # type: ignore
-        raise AssertionError("no exception was thrown")
-    except Exception as exception:  # pylint: disable=broad-exception-caught
-        actual = str(exception)
-        if expected not in actual:
-            raise exception
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
@@ -288,7 +276,7 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> 
     assert isinstance(dset.get_np_matrix("cell", "gene", "UMIs"), sp.csc_matrix)
     assert np.all(dset.get_pd_matrix("cell", "gene", "UMIs").values == fill_matrix)
 
-    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (transposed Sparse 50%)"):
+    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (transposed Sparse Int32 50%)"):
         dset.set_matrix("cell", "gene", "UMIs", sp.csr_matrix(fill_matrix), overwrite=True)
 
 

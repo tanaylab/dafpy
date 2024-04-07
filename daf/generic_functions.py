@@ -15,15 +15,15 @@ __all__ = ["AbnormalHandler", "inefficient_action_handler"]
 AbnormalHandler = Literal["IgnoreHandler"] | Literal["WarnHandler"] | Literal["ErrorHandler"]
 
 JL_ABNORMAL_HANDLER = {
-    "IgnoreHandler": jl.Daf.Generic.IgnoreHandler,
-    "WarnHandler": jl.Daf.Generic.WarnHandler,
-    "ErrorHandler": jl.Daf.Generic.ErrorHandler,
+    "IgnoreHandler": jl.Daf.GenericFunctions.IgnoreHandler,
+    "WarnHandler": jl.Daf.GenericFunctions.WarnHandler,
+    "ErrorHandler": jl.Daf.GenericFunctions.ErrorHandler,
 }
 
 PY_ABNORMAL_HANDLER = {
-    jl.Daf.Generic.IgnoreHandler: "IgnoreHandler",
-    jl.Daf.Generic.WarnHandler: "WarnHandler",
-    jl.Daf.Generic.ErrorHandler: "ErrorHandler",
+    jl.Daf.GenericFunctions.IgnoreHandler: "IgnoreHandler",
+    jl.Daf.GenericFunctions.WarnHandler: "WarnHandler",
+    jl.Daf.GenericFunctions.ErrorHandler: "ErrorHandler",
 }
 
 
@@ -35,7 +35,7 @@ def inefficient_action_handler(handler: AbnormalHandler) -> AbnormalHandler:
     """
     Specify the ``AbnormalHandler`` to use when accessing a matrix in an inefficient way ("against the grain"). Returns
     the previous handler. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/matrix_layouts.html#Daf.MatrixLayouts.inefficient_action_handler>`__
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/generic_functions.html#Daf.MatrixLayouts.inefficient_action_handler>`__
     for details.
     """
-    return PY_ABNORMAL_HANDLER[jl.Daf.inefficient_action_handler(JL_ABNORMAL_HANDLER[handler])]  # type: ignore
+    return PY_ABNORMAL_HANDLER[jl.Daf.MatrixLayouts.inefficient_action_handler(JL_ABNORMAL_HANDLER[handler])]  # type: ignore

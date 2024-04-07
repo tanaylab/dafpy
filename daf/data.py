@@ -572,7 +572,7 @@ class DafWriter(DafReader):
         vector = jl.Daf.get_empty_dense_vector_b(self.jl_obj, axis, name, _to_julia_type(eltype), overwrite=overwrite)
         try:
             yield _from_julia_array(vector)
-            jl.Daf.filled_empty_dense_vector_b(self.jl_obj, axis, name, vector, overwrite=overwrite)
+            jl.Daf.filled_empty_dense_vector_b(self.jl_obj, axis, name, vector)
         finally:
             jl.Daf.end_write_lock(self.jl_obj)
 
@@ -597,7 +597,7 @@ class DafWriter(DafReader):
         )
         try:
             yield (_from_julia_array(nzind), _from_julia_array(nzval))
-            jl.Daf.filled_empty_sparse_vector_b(self.jl_obj, axis, name, nzind, nzval, extra, overwrite=overwrite)
+            jl.Daf.filled_empty_sparse_vector_b(self.jl_obj, axis, name, nzind, nzval, extra)
         finally:
             jl.Daf.end_write_lock(self.jl_obj)
 
@@ -648,7 +648,7 @@ class DafWriter(DafReader):
         )
         try:
             yield _from_julia_array(matrix)
-            jl.Daf.filled_empty_dense_matrix_b(self.jl_obj, rows_axis, columns_axis, name, matrix, overwrite=overwrite)
+            jl.Daf.filled_empty_dense_matrix_b(self.jl_obj, rows_axis, columns_axis, name, matrix)
         finally:
             jl.Daf.end_write_lock(self.jl_obj)
 
@@ -690,7 +690,7 @@ class DafWriter(DafReader):
         try:
             yield (_from_julia_array(colptr), _from_julia_array(rowval), _from_julia_array(nzval))
             jl.Daf.filled_empty_sparse_matrix_b(
-                self.jl_obj, rows_axis, columns_axis, name, colptr, rowval, nzval, extra, overwrite=overwrite
+                self.jl_obj, rows_axis, columns_axis, name, colptr, rowval, nzval, extra
             )
         finally:
             jl.Daf.end_write_lock(self.jl_obj)

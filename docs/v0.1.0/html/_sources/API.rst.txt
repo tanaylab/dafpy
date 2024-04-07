@@ -16,4 +16,5 @@ API
   adapters
   concat
   anndata_format
-  generic
+  generic_functions
+  generic_logging

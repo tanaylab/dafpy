@@ -9,8 +9,8 @@ from typing import Optional
 
 from .data import DafReader
 from .formats import MemoryDaf
-from .generic import JL_ABNORMAL_HANDLER
-from .generic import AbnormalHandler
+from .generic_functions import JL_ABNORMAL_HANDLER
+from .generic_functions import AbnormalHandler
 from .julia_import import jl
 
 
