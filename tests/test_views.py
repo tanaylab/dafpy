@@ -71,6 +71,8 @@ def test_views() -> None:  # pylint: disable=too-many-statements
             matrices:
               obs,var:
                 X: 2 x 3 x Int64 in Columns (Dense)
+              var,obs:
+                X: 3 x 2 x Int64 in Columns (PyArray{Int64, 2, true, true, Int64} - Dense)
             """
         )[1:]
     )
