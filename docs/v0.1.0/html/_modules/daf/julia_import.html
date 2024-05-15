@@ -158,6 +158,9 @@
 <span class="c1">#: The version of Julia being used.</span>
 <span class="n">jl_version</span> <span class="o">=</span> <span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">minor</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
 
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Pkg&quot;</span><span class="p">)</span>
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;Pkg.update()&quot;</span><span class="p">)</span>
+
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Daf&quot;</span><span class="p">)</span>
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import Daf.GenericTypes.Maybe&quot;</span><span class="p">)</span>
@@ -260,13 +263,20 @@
     <span class="k">return</span> <span class="n">value</span>
 
 
-<span class="k">def</span> <span class="nf">_from_julia_array</span><span class="p">(</span><span class="n">julia_array</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_from_julia_array</span><span class="p">(</span><span class="n">julia_array</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">writeable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">indptr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">julia_array</span><span class="o">.</span><span class="n">colptr</span><span class="p">)</span>
         <span class="n">indptr</span> <span class="o">-=</span> <span class="mi">1</span>
+
         <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">julia_array</span><span class="o">.</span><span class="n">rowval</span><span class="p">)</span>
         <span class="n">indices</span> <span class="o">-=</span> <span class="mi">1</span>
+
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">julia_array</span><span class="o">.</span><span class="n">nzval</span><span class="p">)</span>
+
+        <span class="n">indptr</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="n">writeable</span>
+        <span class="n">indices</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="n">writeable</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="n">writeable</span>
+
         <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indptr</span><span class="p">),</span> <span class="n">julia_array</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
@@ -274,6 +284,8 @@
     <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="p">:</span>
         <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">python_array</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">!=</span> <span class="n">writeable</span><span class="p">:</span>
+        <span class="n">python_array</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="n">writeable</span>
     <span class="k">return</span> <span class="n">python_array</span>
 
 
@@ -287,11 +299,13 @@
 
 <span class="k">def</span> <span class="nf">_from_julia_frame</span><span class="p">(</span>
     <span class="n">jl_frame</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataFrames</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">writeable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">jl</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="n">jl_frame</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">getindex</span><span class="p">(</span><span class="n">jl_frame</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">Colon</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="n">writeable</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
 

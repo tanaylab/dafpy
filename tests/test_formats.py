@@ -47,12 +47,12 @@ def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: 
     dset = create_empty()
     assert dset.name == "test!"
 
-    assert len(dset.scalar_names()) == 0
+    assert len(dset.scalars_set()) == 0
     assert not dset.has_scalar("foo")
     dset.set_scalar("foo", scalar_value)
     assert dset.has_scalar("foo")
     assert dset.get_scalar("foo") == scalar_value
-    assert set(dset.scalar_names()) == set(["foo"])
+    assert set(dset.scalars_set()) == set(["foo"])
 
     if julia_type == "String":
         scalar_value = '"' + str(scalar_value) + '"'
@@ -72,7 +72,7 @@ def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: 
     )
 
     dset.delete_scalar("foo")
-    assert len(dset.scalar_names()) == 0
+    assert len(dset.scalars_set()) == 0
     assert not dset.has_scalar("foo")
 
 
@@ -84,15 +84,18 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
 
     dset = create_empty()
 
-    assert len(dset.axis_names()) == 0
+    assert len(dset.axes_set()) == 0
     assert not dset.has_axis(axis_name)
 
     dset.add_axis(axis_name, axis_entries)
 
     assert dset.has_axis(axis_name)
     assert dset.axis_length(axis_name) == len(axis_entries)
-    assert list(dset.get_axis(axis_name)) == list(axis_entries)
-    assert set(dset.axis_names()) == set([axis_name])
+    assert list(dset.axis_array(axis_name)) == list(axis_entries)
+    assert list(sorted([(str(name), index) for (name, index) in dset.axis_dict(axis_name).items()])) == sorted(
+        [(name, index) for (index, name) in enumerate(axis_entries)]
+    )
+    assert set(dset.axes_set()) == set([axis_name])
     assert (
         dset.description()
         == dedent(
@@ -107,7 +110,7 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
 
     dset.delete_axis(axis_name)
 
-    assert len(dset.axis_names()) == 0
+    assert len(dset.axes_set()) == 0
     assert not dset.has_axis(axis_name)
 
 
@@ -143,7 +146,7 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> N
     "vector_data",
     [(["X", "Y"], "String"), ([1, 2], "Int64"), ([1.0, 2.0], "Float64"), (np.array([[1, 2]], dtype="i1"), "Int8")],
 )
-def test_dense_vectors(  # pylint: disable=too-many-locals
+def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
     format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]
 ) -> None:
     format_name, create_empty = format_data
@@ -151,14 +154,14 @@ def test_dense_vectors(  # pylint: disable=too-many-locals
 
     dset = create_empty()
     dset.add_axis("cell", ["A", "B"])
-    assert len(dset.vector_names("cell")) == 0
+    assert len(dset.vectors_set("cell")) == 0
     assert not dset.has_vector("cell", "foo")
 
     vector_entries = np.array(vector_entries)
     dset.set_vector("cell", "foo", vector_entries)
 
     assert dset.has_vector("cell", "foo")
-    assert set(dset.vector_names("cell")) == set(["foo"])
+    assert set(dset.vectors_set("cell")) == set(["foo"])
     stored_vector = dset.get_np_vector("cell", "foo")
     stored_series = dset.get_pd_vector("cell", "foo")
     repeated_vector = dset.get_np_vector("cell", "foo")
@@ -173,6 +176,8 @@ def test_dense_vectors(  # pylint: disable=too-many-locals
         elif isinstance(dset, FilesDaf):
             julia_type = f"Sub{julia_type}{{StringViews.StringView{{Vector{{UInt8}}}}}}"
     elif isinstance(dset, MemoryDaf):
+        if not vector_entries.flags.writeable:  # Due to get_np_vector above.
+            vector_entries.flags.writeable = True
         vector_entries.reshape(-1)[0] = vector_entries.reshape(-1)[1]
         assert list(stored_vector) == list(vector_entries.reshape(-1))
         assert list(stored_series.values) == list(vector_entries.reshape(-1))
@@ -193,7 +198,7 @@ def test_dense_vectors(  # pylint: disable=too-many-locals
 
     dset.delete_vector("cell", "foo")
 
-    assert len(dset.vector_names("cell")) == 0
+    assert len(dset.vectors_set("cell")) == 0
     assert not dset.has_vector("cell", "foo")
 
     dset.set_vector("cell", "foo", list(vector_entries.reshape(-1)))
@@ -276,7 +281,7 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> 
     assert isinstance(dset.get_np_matrix("cell", "gene", "UMIs"), sp.csc_matrix)
     assert np.all(dset.get_pd_matrix("cell", "gene", "UMIs").values == fill_matrix)
 
-    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (transposed Sparse Int32 50%)"):
+    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (Transpose Sparse Int32 50%)"):
         dset.set_matrix("cell", "gene", "UMIs", sp.csr_matrix(fill_matrix), overwrite=True)
 
 
@@ -288,7 +293,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
     dset.add_axis("cell", ["A", "B"])
     dset.add_axis("gene", ["X", "Y", "Z"])
 
-    assert len(dset.matrix_names("cell", "gene", relayout=False)) == 0
+    assert len(dset.matrices_set("cell", "gene", relayout=False)) == 0
     assert not dset.has_matrix("cell", "gene", "UMIs", relayout=False)
 
     row_major_umis = np.array([[1, 2], [3, 4], [5, 6]], dtype=np.int8)
@@ -297,7 +302,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
     dset.set_matrix("cell", "gene", "UMIs", column_major_umis, relayout=False)
 
     assert dset.has_matrix("cell", "gene", "UMIs", relayout=False)
-    assert set(dset.matrix_names("cell", "gene", relayout=False)) == set(["UMIs"])
+    assert set(dset.matrices_set("cell", "gene", relayout=False)) == set(["UMIs"])
     stored_matrix = dset.get_np_matrix("cell", "gene", "UMIs", relayout=False)
     stored_frame = dset.get_pd_matrix("cell", "gene", "UMIs", relayout=False)
     assert list(stored_frame.index) == ["A", "B"]
@@ -307,6 +312,8 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
 
     assert np.all(stored_matrix == column_major_umis)
     if isinstance(dset, MemoryDaf):
+        if not column_major_umis.flags.writeable:  # Due to get_np_matrix above.
+            column_major_umis.flags.writeable = True
         column_major_umis[1, 2] += 1
         assert np.all(stored_matrix == column_major_umis)
 
@@ -352,7 +359,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
 
     dset.delete_matrix("cell", "gene", "UMIs")
 
-    assert len(dset.matrix_names("cell", "gene")) == 0
+    assert len(dset.matrices_set("cell", "gene")) == 0
     assert not dset.has_matrix("cell", "gene", "UMIs", relayout=False)
 
 

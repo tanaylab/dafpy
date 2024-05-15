@@ -57,6 +57,12 @@ def _to_jl_cache_type(cache_type: Optional[CacheType]) -> jl.Daf.CacheType:
     return None
 
 
+class WeakRefAbleDict(dict):
+    """
+    Inheritance is required to allow weak reference to the built-in ``dict`` type (in CPython, anyway).
+    """
+
+
 class DafReader(JlObject):
     """
     Read-only access to ``Daf`` data. See the Julia
@@ -98,12 +104,12 @@ class DafReader(JlObject):
         """
         return jl.Daf.get_scalar(self.jl_obj, name)
 
-    def scalar_names(self) -> AbstractSet[str]:
+    def scalars_set(self) -> AbstractSet[str]:
         """
         The names of the scalar properties in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalar_names>`__ for details.
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalars_set>`__ for details.
         """
-        return jl.Daf.scalar_names(self.jl_obj)
+        return jl.Daf.scalars_set(self.jl_obj)
 
     def has_axis(self, axis: str) -> bool:
         """
@@ -112,12 +118,12 @@ class DafReader(JlObject):
         """
         return jl.Daf.has_axis(self.jl_obj, axis)
 
-    def axis_names(self) -> AbstractSet[str]:
+    def axes_set(self) -> AbstractSet[str]:
         """
-        The names of the axes of the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_names>`__ for details.
+        The set of names of the axes of the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axes_set>`__ for details.
         """
-        return jl.Daf.axis_names(self.jl_obj)
+        return jl.Daf.axes_set(self.jl_obj)
 
     def axis_length(self, axis: str) -> int:
         """
@@ -126,20 +132,34 @@ class DafReader(JlObject):
         """
         return jl.Daf.axis_length(self.jl_obj, axis)
 
-    def get_axis(self, axis: str) -> np.ndarray:
+    def axis_array(self, axis: str) -> np.ndarray:
         """
-        The unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_axis>`__ for details.
+        The array of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_array>`__ for details.
 
         This creates an in-memory copy of the data, which is cached for repeated calls.
         """
         axis_version_counter = jl.Daf.axis_version_counter(self.jl_obj, axis)
-        axis_key = (axis_version_counter, axis)
+        axis_key = (axis_version_counter, axis, True)
         axis_entries = self.weakrefs.get(axis_key)
         if axis_entries is None:
-            axis_entries = _from_julia_array(jl.Daf.get_axis(self.jl_obj, axis))
+            axis_entries = _from_julia_array(jl.Daf.axis_array(self.jl_obj, axis))
             self.weakrefs[axis_key] = axis_entries
         return axis_entries
+
+    def axis_dict(self, axis: str) -> Mapping[str, int]:
+        """
+        Return a dictionary converting ``axis`` entry names to their (0-based) integer index.
+        """
+        axis_version_counter = jl.Daf.axis_version_counter(self.jl_obj, axis)
+        axis_key = (axis_version_counter, axis, False)
+        axis_indices = self.weakrefs.get(axis_key)
+        if axis_indices is None:
+            axis_indices = WeakRefAbleDict()
+            for name, index in jl.Daf.axis_dict(self.jl_obj, axis).items():
+                axis_indices[name] = index - 1
+            self.weakrefs[axis_key] = axis_indices
+        return axis_indices
 
     def has_vector(self, axis: str, name: str) -> bool:
         """
@@ -148,13 +168,13 @@ class DafReader(JlObject):
         """
         return jl.Daf.has_vector(self.jl_obj, axis, name)
 
-    def vector_names(self, axis: str) -> AbstractSet[str]:
+    def vectors_set(self, axis: str) -> AbstractSet[str]:
         """
-        The names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special ``name``
-        property. See the Julia
-        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vector_names>`__ for details.
+        The set of names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special
+        ``name`` property. See the Julia
+        `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vectors_set>`__ for details.
         """
-        return jl.Daf.vector_names(self.jl_obj, axis)
+        return jl.Daf.vectors_set(self.jl_obj, axis)
 
     @overload
     def get_np_vector(
@@ -239,7 +259,7 @@ class DafReader(JlObject):
         vector_value = self.get_np_vector(axis, name, default=_to_julia_array(default))
         if vector_value is None:
             return None
-        return pd.Series(vector_value, index=self.get_axis(axis))
+        return pd.Series(vector_value, index=self.axis_array(axis))
 
     def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
         """
@@ -249,12 +269,12 @@ class DafReader(JlObject):
         """
         return jl.Daf.has_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout)
 
-    def matrix_names(self, rows_axis: str, columns_axis: str, *, relayout: bool = True) -> AbstractSet[str]:
+    def matrices_set(self, rows_axis: str, columns_axis: str, *, relayout: bool = True) -> AbstractSet[str]:
         """
         The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set. See the
-        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrix_names>`__ for details.
+        Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrices_set>`__ for details.
         """
-        return jl.Daf.matrix_names(self.jl_obj, rows_axis, columns_axis, relayout=relayout)
+        return jl.Daf.matrices_set(self.jl_obj, rows_axis, columns_axis, relayout=relayout)
 
     @overload
     def get_np_matrix(
@@ -368,7 +388,7 @@ class DafReader(JlObject):
             return None
         if sp.issparse(matrix_value):
             matrix_value = matrix_value.toarray()  # type: ignore
-        return pd.DataFrame(matrix_value, index=self.get_axis(rows_axis), columns=self.get_axis(columns_axis))
+        return pd.DataFrame(matrix_value, index=self.axis_array(rows_axis), columns=self.axis_array(columns_axis))
 
     def empty_cache(self, *, clear: Optional[CacheType] = None, keep: Optional[CacheType] = None) -> None:
         """
@@ -571,10 +591,10 @@ class DafWriter(DafReader):
         """
         vector = jl.Daf.get_empty_dense_vector_b(self.jl_obj, axis, name, _to_julia_type(eltype), overwrite=overwrite)
         try:
-            yield _from_julia_array(vector)
+            yield _from_julia_array(vector, writeable=True)
             jl.Daf.filled_empty_dense_vector_b(self.jl_obj, axis, name, vector)
         finally:
-            jl.Daf.end_write_lock(self.jl_obj)
+            jl.Daf.end_data_write_lock(self.jl_obj)
 
     @contextmanager
     def empty_sparse_vector(
@@ -596,10 +616,10 @@ class DafWriter(DafReader):
             self.jl_obj, axis, name, _to_julia_type(eltype), nnz, _to_julia_type(indtype), overwrite=overwrite
         )
         try:
-            yield (_from_julia_array(nzind), _from_julia_array(nzval))
+            yield (_from_julia_array(nzind, writeable=True), _from_julia_array(nzval, writeable=True))
             jl.Daf.filled_empty_sparse_vector_b(self.jl_obj, axis, name, nzind, nzval, extra)
         finally:
-            jl.Daf.end_write_lock(self.jl_obj)
+            jl.Daf.end_data_write_lock(self.jl_obj)
 
     def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> None:
         """
@@ -647,10 +667,10 @@ class DafWriter(DafReader):
             self.jl_obj, rows_axis, columns_axis, name, _to_julia_type(eltype), overwrite=overwrite
         )
         try:
-            yield _from_julia_array(matrix)
+            yield _from_julia_array(matrix, writeable=True)
             jl.Daf.filled_empty_dense_matrix_b(self.jl_obj, rows_axis, columns_axis, name, matrix)
         finally:
-            jl.Daf.end_write_lock(self.jl_obj)
+            jl.Daf.end_data_write_lock(self.jl_obj)
 
     @contextmanager
     def empty_sparse_matrix(
@@ -688,12 +708,16 @@ class DafWriter(DafReader):
             overwrite=overwrite,
         )
         try:
-            yield (_from_julia_array(colptr), _from_julia_array(rowval), _from_julia_array(nzval))
+            yield (
+                _from_julia_array(colptr, writeable=True),
+                _from_julia_array(rowval, writeable=True),
+                _from_julia_array(nzval, writeable=True),
+            )
             jl.Daf.filled_empty_sparse_matrix_b(
                 self.jl_obj, rows_axis, columns_axis, name, colptr, rowval, nzval, extra
             )
         finally:
-            jl.Daf.end_write_lock(self.jl_obj)
+            jl.Daf.end_data_write_lock(self.jl_obj)
 
     def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> None:
         """

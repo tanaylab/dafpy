@@ -64,7 +64,7 @@ def concatenate(
     else:
         merge_data = jl._pairify_merge([(key, JL_MERGE_ACTION[value]) for key, value in merge.items()])
 
-    jl.Daf.concatenate(
+    jl.Daf.concatenate_b(
         destination,
         _to_julia_array(axis),
         jl.pyconvert(jl._DafReadersVector, np.array(sources)),

@@ -145,7 +145,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">merge_data</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">_pairify_merge</span><span class="p">([(</span><span class="n">key</span><span class="p">,</span> <span class="n">JL_MERGE_ACTION</span><span class="p">[</span><span class="n">value</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">merge</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
 
-    <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">concatenate_b</span><span class="p">(</span>
         <span class="n">destination</span><span class="p">,</span>
         <span class="n">_to_julia_array</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">pyconvert</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">_DafReadersVector</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sources</span><span class="p">)),</span>

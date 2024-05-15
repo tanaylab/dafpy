@@ -79,6 +79,9 @@ jl = Main
 #: The version of Julia being used.
 jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
+jl.seval("using Pkg")
+jl.seval("Pkg.update()")
+
 jl.seval("using Daf")
 
 jl.seval("import Daf.GenericTypes.Maybe")
@@ -178,13 +181,20 @@ def _to_julia_array(value: Any) -> Any:  # pylint: disable=too-many-return-state
     return value
 
 
-def _from_julia_array(julia_array: Any) -> np.ndarray | sp.csc_matrix:
+def _from_julia_array(julia_array: Any, *, writeable: bool = False) -> np.ndarray | sp.csc_matrix:
     try:
         indptr = np.array(julia_array.colptr)
         indptr -= 1
+
         indices = np.array(julia_array.rowval)
         indices -= 1
+
         data = np.asarray(julia_array.nzval)
+
+        indptr.flags.writeable = writeable
+        indices.flags.writeable = writeable
+        data.flags.writeable = writeable
+
         return sp.csc_matrix((data, indices, indptr), julia_array.shape)
     except:
         pass
@@ -192,6 +202,8 @@ def _from_julia_array(julia_array: Any) -> np.ndarray | sp.csc_matrix:
     python_array = np.asarray(julia_array)
     if python_array.dtype == "object":
         python_array = np.array([str(obj) for obj in python_array], dtype=str)
+    if python_array.flags.writeable != writeable:
+        python_array.flags.writeable = writeable
     return python_array
 
 
@@ -205,11 +217,13 @@ def _as_vector(vector_ish: Any) -> Any:
 
 def _from_julia_frame(
     jl_frame: jl.DataFrames.DataFrame,  # type: ignore
+    *,
+    writeable: bool = False,
 ) -> pd.DataFrame:
     data: MutableMapping[str, Any] = {}
     for name in jl.names(jl_frame):
         value = jl.getindex(jl_frame, jl.Colon(), name)
-        data[str(name)] = _from_julia_array(value)
+        data[str(name)] = _from_julia_array(value, writeable=writeable)
     return pd.DataFrame(data)
 
 

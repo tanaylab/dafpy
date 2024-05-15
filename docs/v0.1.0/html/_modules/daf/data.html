@@ -136,6 +136,12 @@
     <span class="k">return</span> <span class="kc">None</span>
 
 
+<span class="k">class</span> <span class="nc">WeakRefAbleDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inheritance is required to allow weak reference to the built-in ``dict`` type (in CPython, anyway).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
 <div class="viewcode-block" id="DafReader">
 <a class="viewcode-back" href="../../data.html#daf.data.DafReader">[docs]</a>
 <span class="k">class</span> <span class="nc">DafReader</span><span class="p">(</span><span class="n">JlObject</span><span class="p">):</span>
@@ -188,14 +194,14 @@
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DafReader.scalar_names">
-<a class="viewcode-back" href="../../data.html#daf.data.DafReader.scalar_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">scalar_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="DafReader.scalars_set">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.scalars_set">[docs]</a>
+    <span class="k">def</span> <span class="nf">scalars_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The names of the scalar properties in the ``Daf`` data set. See the Julia</span>
-<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalar_names&gt;`__ for details.</span>
+<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalars_set&gt;`__ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">scalar_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">scalars_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_axis">
@@ -208,14 +214,14 @@
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DafReader.axis_names">
-<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">axis_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="DafReader.axes_set">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axes_set">[docs]</a>
+    <span class="k">def</span> <span class="nf">axes_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The names of the axes of the ``Daf`` data set. See the Julia</span>
-<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_names&gt;`__ for details.</span>
+<span class="sd">        The set of names of the axes of the ``Daf`` data set. See the Julia</span>
+<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axes_set&gt;`__ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axes_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.axis_length">
@@ -228,22 +234,39 @@
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DafReader.get_axis">
-<a class="viewcode-back" href="../../data.html#daf.data.DafReader.get_axis">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="DafReader.axis_array">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_array">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia</span>
-<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_axis&gt;`__ for details.</span>
+<span class="sd">        The array of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia</span>
+<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_array&gt;`__ for details.</span>
 
 <span class="sd">        This creates an in-memory copy of the data, which is cached for repeated calls.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">axis_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
-        <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+        <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">axis_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">axis_entries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">axis_entries</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">))</span>
+            <span class="n">axis_entries</span> <span class="o">=</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">axis_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_entries</span>
         <span class="k">return</span> <span class="n">axis_entries</span></div>
+
+
+<div class="viewcode-block" id="DafReader.axis_dict">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dictionary converting ``axis`` entry names to their (0-based) integer index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">axis_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+        <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">axis_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">axis_indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">axis_indices</span> <span class="o">=</span> <span class="n">WeakRefAbleDict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">axis_indices</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">axis_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_indices</span>
+        <span class="k">return</span> <span class="n">axis_indices</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_vector">
@@ -256,15 +279,15 @@
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DafReader.vector_names">
-<a class="viewcode-back" href="../../data.html#daf.data.DafReader.vector_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">vector_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="DafReader.vectors_set">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.vectors_set">[docs]</a>
+    <span class="k">def</span> <span class="nf">vectors_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special ``name``</span>
-<span class="sd">        property. See the Julia</span>
-<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vector_names&gt;`__ for details.</span>
+<span class="sd">        The set of names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special</span>
+<span class="sd">        ``name`` property. See the Julia</span>
+<span class="sd">        `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vectors_set&gt;`__ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">vector_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">vectors_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
 
 
     <span class="nd">@overload</span>
@@ -355,7 +378,7 @@
         <span class="n">vector_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">vector_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">vector_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">vector_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_array</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_matrix">
@@ -369,14 +392,14 @@
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DafReader.matrix_names">
-<a class="viewcode-back" href="../../data.html#daf.data.DafReader.matrix_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">matrix_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="DafReader.matrices_set">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.matrices_set">[docs]</a>
+    <span class="k">def</span> <span class="nf">matrices_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set. See the</span>
-<span class="sd">        Julia `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrix_names&gt;`__ for details.</span>
+<span class="sd">        Julia `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrices_set&gt;`__ for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">matrix_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">matrices_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span></div>
 
 
     <span class="nd">@overload</span>
@@ -496,7 +519,7 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">):</span>
             <span class="n">matrix_value</span> <span class="o">=</span> <span class="n">matrix_value</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">columns_axis</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix_value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_array</span><span class="p">(</span><span class="n">rows_axis</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_array</span><span class="p">(</span><span class="n">columns_axis</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafReader.empty_cache">
@@ -741,10 +764,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vector</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">get_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_dense_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_data_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.empty_sparse_vector">
@@ -769,10 +792,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzind</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzind</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_sparse_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nzind</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_data_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.delete_vector">
@@ -829,10 +852,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_dense_matrix_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_data_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.empty_sparse_matrix">
@@ -873,12 +896,16 @@
             <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="p">(</span><span class="n">_from_julia_array</span><span class="p">(</span><span class="n">colptr</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">rowval</span><span class="p">),</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="p">(</span>
+                <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">colptr</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">rowval</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="p">)</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">filled_empty_sparse_matrix_b</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">colptr</span><span class="p">,</span> <span class="n">rowval</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">extra</span>
             <span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
+            <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">end_data_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafWriter.relayout_matrix">

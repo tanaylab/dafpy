@@ -121,14 +121,14 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
     assert np.all(dset[parse_query("/ cell : age") | Convert(dtype=np.int8)] == np.array([-1, 2]))
     assert np.all(dset[parse_query("/ cell : age % Abs") | Fraction()] == np.array([1 / 3, 2 / 3]))
     assert np.all(dset[parse_query("/ cell : age % Abs") | Log(base=2)] == np.array([0.0, 1.0]))
-    assert np.all(dset[parse_query("/ cell : age") | Significant(high=2)] == [0, 2])
+    assert np.all(dset["/ cell : age % Significant high 2"] == [0, 2])
 
     assert dset[parse_query("/ cell : age") | Max()] == 2
+    assert dset[parse_query("/ cell : age") | Min()] == -1
     assert dset[parse_query("/ cell : age") | Median()] == 0.5
+    assert dset[parse_query("/ cell : age") | Quantile(p=0.5)] == 0.5
     assert dset[parse_query("/ cell : age") | Mean()] == 0.5
     assert dset[parse_query("/ cell : age %> Mean") | Round()] == 0
-    assert dset[parse_query("/ cell : age") | Quantile(p=0.5)] == 0.5
-    assert dset[parse_query("/ cell : age") | Min()] == -1
     assert dset[parse_query("/ cell : age") | Std()] == 1.5
     assert dset[parse_query("/ cell : age") | StdN()] == 3.0
     assert dset[parse_query("/ cell : age") | Var()] == 2.25

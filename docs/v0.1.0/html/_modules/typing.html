@@ -102,6 +102,7 @@
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">collections.abc</span>
+<span class="kn">import</span> <span class="nn">copyreg</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">operator</span>
@@ -111,12 +112,16 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">WrapperDescriptorType</span><span class="p">,</span> <span class="n">MethodWrapperType</span><span class="p">,</span> <span class="n">MethodDescriptorType</span><span class="p">,</span> <span class="n">GenericAlias</span>
 
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">_typing</span> <span class="kn">import</span> <span class="n">_idfunc</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">_idfunc</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span>
+<span class="kn">from</span> <span class="nn">_typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_idfunc</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">ParamSpec</span><span class="p">,</span>
+    <span class="n">TypeVarTuple</span><span class="p">,</span>
+    <span class="n">ParamSpecArgs</span><span class="p">,</span>
+    <span class="n">ParamSpecKwargs</span><span class="p">,</span>
+    <span class="n">TypeAliasType</span><span class="p">,</span>
+    <span class="n">Generic</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># Please keep __all__ alphabetized within each category.</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -217,6 +222,7 @@
     <span class="s1">&#39;NoReturn&#39;</span><span class="p">,</span>
     <span class="s1">&#39;NotRequired&#39;</span><span class="p">,</span>
     <span class="s1">&#39;overload&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;override&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ParamSpecArgs&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ParamSpecKwargs&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Required&#39;</span><span class="p">,</span>
@@ -227,6 +233,7 @@
     <span class="s1">&#39;TYPE_CHECKING&#39;</span><span class="p">,</span>
     <span class="s1">&#39;TypeAlias&#39;</span><span class="p">,</span>
     <span class="s1">&#39;TypeGuard&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TypeAliasType&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Unpack&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
@@ -314,16 +321,20 @@
 <span class="sd">    typically enough to uniquely identify a type.  For everything</span>
 <span class="sd">    else, we fall back on repr(obj).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GenericAlias</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="c1"># When changing this function, don&#39;t forget about</span>
+    <span class="c1"># `_collections_abc._type_repr`, which does the same thing</span>
+    <span class="c1"># and must be consistent with this one.</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="s1">&#39;builtins&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__qualname__</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="o">...</span><span class="p">:</span>
-        <span class="k">return</span><span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;...&#39;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="c1"># Special case for `repr` of types with `ParamSpec`:</span>
+        <span class="k">return</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_type_repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
     <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
 
@@ -424,6 +435,7 @@
 
 
 <span class="n">_cleanups</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">_caches</span> <span class="o">=</span> <span class="p">{}</span>
 
 
 <span class="k">def</span> <span class="nf">_tp_cache</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -432,13 +444,20 @@
 <span class="sd">    For non-hashable arguments, the original function is used as a fallback.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="n">cached</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">typed</span><span class="o">=</span><span class="n">typed</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
-        <span class="n">_cleanups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cached</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">)</span>
+        <span class="c1"># The callback &#39;inner&#39; references the newly created lru_cache</span>
+        <span class="c1"># indirectly by performing a lookup in the global &#39;_caches&#39; dictionary.</span>
+        <span class="c1"># This breaks a reference that can be problematic when combined with</span>
+        <span class="c1"># C API extensions that leak references to types. See GH-98253.</span>
+
+        <span class="n">cache</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">typed</span><span class="o">=</span><span class="n">typed</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
+        <span class="n">_caches</span><span class="p">[</span><span class="n">func</span><span class="p">]</span> <span class="o">=</span> <span class="n">cache</span>
+        <span class="n">_cleanups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">cache</span>
 
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">cached</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">_caches</span><span class="p">[</span><span class="n">func</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
                 <span class="k">pass</span>  <span class="c1"># All real errors (not unhashable args) are raised below.</span>
             <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
@@ -491,17 +510,6 @@
     <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
         <span class="k">if</span> <span class="s1">&#39;_root&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwds</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Cannot subclass special typing classes&quot;</span><span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">_Immutable</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixin to indicate that object should not be copied.&quot;&quot;&quot;</span>
-
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
 
 
 <span class="k">class</span> <span class="nc">_NotIterable</span><span class="p">:</span>
@@ -785,6 +793,15 @@
         <span class="k">return</span> <span class="n">_UnionGenericAlias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Optional&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_UnionGenericAlias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
+<span class="k">def</span> <span class="nf">_make_union</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Used from the C implementation of TypeVar.</span>
+
+<span class="sd">    TypeVar.__or__ calls this instead of returning types.UnionType</span>
+<span class="sd">    because we want to allow unions between TypeVars and strings</span>
+<span class="sd">    (forward references).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Union</span><span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">]</span>
+
 <span class="nd">@_SpecialForm</span>
 <span class="k">def</span> <span class="nf">Optional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Optional[X] is equivalent to Union[X, None].&quot;&quot;&quot;</span>
@@ -866,8 +883,7 @@
                         <span class="s2">&quot;ParamSpec variable or ellipsis.&quot;</span><span class="p">)</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Concatenate[arg, ...]: each arg must be a type.&quot;</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">_type_check</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">parameters</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">_ConcatenateGenericAlias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span>
-                                    <span class="n">_paramspec_tvars</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_ConcatenateGenericAlias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
 <span class="nd">@_SpecialForm</span>
@@ -1020,313 +1036,162 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>
 
 
-<span class="k">class</span> <span class="nc">_BoundVarianceMixin</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixin giving __init__ bound and variance arguments.</span>
+<span class="k">def</span> <span class="nf">_typevar_subst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Parameters to generic types must be types.&quot;</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="n">_type_check</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">is_argument</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">__origin__</span> <span class="ow">is</span> <span class="n">Unpack</span><span class="p">)</span> <span class="ow">or</span>
+        <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;__unpacked__&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> is not valid as type argument&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">arg</span>
 
-<span class="sd">    This is used by TypeVar and ParamSpec, which both employ the notions of</span>
-<span class="sd">    a type &#39;bound&#39; (restricting type arguments to be a subtype of some</span>
-<span class="sd">    specified type) and type &#39;variance&#39; (determining subtype relations between</span>
-<span class="sd">    generic types).</span>
+
+<span class="k">def</span> <span class="nf">_typevartuple_prepare_subst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">__parameters__</span>
+    <span class="n">typevartuple_index</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="n">typevartuple_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;More than one TypeVarTuple parameter in </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">alen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">plen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">typevartuple_index</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">plen</span> <span class="o">-</span> <span class="n">typevartuple_index</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">var_tuple_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">fillarg</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+            <span class="n">subargs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;__typing_unpacked_tuple_args__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">subargs</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">subargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">subargs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="o">...</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">var_tuple_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;More than one unpacked arbitrary-length tuple argument&quot;</span><span class="p">)</span>
+                <span class="n">var_tuple_index</span> <span class="o">=</span> <span class="n">k</span>
+                <span class="n">fillarg</span> <span class="o">=</span> <span class="n">subargs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">var_tuple_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">var_tuple_index</span><span class="p">)</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">alen</span> <span class="o">-</span> <span class="n">var_tuple_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">&gt;</span> <span class="n">alen</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Too few arguments for </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">;&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot; actual </span><span class="si">{</span><span class="n">alen</span><span class="si">}</span><span class="s2">, expected at least </span><span class="si">{</span><span class="n">plen</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">[:</span><span class="n">left</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">([</span><span class="n">fillarg</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">typevartuple_index</span> <span class="o">-</span> <span class="n">left</span><span class="p">)),</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">left</span><span class="p">:</span> <span class="n">alen</span> <span class="o">-</span> <span class="n">right</span><span class="p">]),</span>
+        <span class="o">*</span><span class="p">([</span><span class="n">fillarg</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">plen</span> <span class="o">-</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="n">typevartuple_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">alen</span> <span class="o">-</span> <span class="n">right</span><span class="p">:],</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_paramspec_subst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_type_check</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;Expected a type.&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">_is_param_expr</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a list of types, an ellipsis, &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;ParamSpec, or Concatenate. Got </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">arg</span>
+
+
+<span class="k">def</span> <span class="nf">_paramspec_prepare_subst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">__parameters__</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Too few arguments for </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Special case where Z[[int, str, bool]] == Z[int, str, bool] in PEP 612.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_param_expr</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,)</span>
+    <span class="c1"># Convert lists to tuples to help other libraries cache the results.</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">[:</span><span class="n">i</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="nd">@_tp_cache</span>
+<span class="k">def</span> <span class="nf">_generic_class_getitem</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameterizes a generic class.</span>
+
+<span class="sd">    At least, parameterizing a generic class is the *main* thing this method</span>
+<span class="sd">    does. For example, for some generic class `Foo`, this is called when we</span>
+<span class="sd">    do `Foo[int]` - there, with `cls=Foo` and `params=int`.</span>
+
+<span class="sd">    However, note that this method is also called when defining generic</span>
+<span class="sd">    classes in the first place with `class Foo(Generic[T]): ...`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> <span class="n">covariant</span><span class="p">,</span> <span class="n">contravariant</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Used to setup TypeVars and ParamSpec&#39;s bound, covariant and</span>
-<span class="sd">        contravariant attributes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">covariant</span> <span class="ow">and</span> <span class="n">contravariant</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Bivariant types are not supported.&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__covariant__</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">covariant</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__contravariant__</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">contravariant</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">bound</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bound__</span> <span class="o">=</span> <span class="n">_type_check</span><span class="p">(</span><span class="n">bound</span><span class="p">,</span> <span class="s2">&quot;Bound must be a type.&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bound__</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">(</span><span class="n">params</span><span class="p">,)</span>
 
-    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Union</span><span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">]</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_type_convert</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+    <span class="n">is_generic_or_protocol</span> <span class="o">=</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Generic</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Union</span><span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">is_generic_or_protocol</span><span class="p">:</span>
+        <span class="c1"># Generic and Protocol can only be subscripted with unique type variables.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Parameter list to </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">[...] cannot be empty&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">_is_typevar_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Parameters to </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">[...] must all be type variables &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;or parameter specification variables.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">params</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Parameters to </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">[...] must all be unique&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Subscripting a regular Generic subclass.</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span><span class="p">:</span>
+            <span class="n">prepare</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s1">&#39;__typing_prepare_subst__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prepare</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">params</span> <span class="o">=</span> <span class="n">prepare</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">_check_generic</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__covariant__</span><span class="p">:</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__contravariant__</span><span class="p">:</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;~&#39;</span>
-        <span class="k">return</span> <span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>
-
-
-<span class="k">class</span> <span class="nc">TypeVar</span><span class="p">(</span><span class="n">_Final</span><span class="p">,</span> <span class="n">_Immutable</span><span class="p">,</span> <span class="n">_BoundVarianceMixin</span><span class="p">,</span> <span class="n">_PickleUsingNameMixin</span><span class="p">,</span>
-              <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type variable.</span>
-
-<span class="sd">    Usage::</span>
-
-<span class="sd">      T = TypeVar(&#39;T&#39;)  # Can be anything</span>
-<span class="sd">      A = TypeVar(&#39;A&#39;, str, bytes)  # Must be str or bytes</span>
-
-<span class="sd">    Type variables exist primarily for the benefit of static type</span>
-<span class="sd">    checkers.  They serve as the parameters for generic types as well</span>
-<span class="sd">    as for generic function definitions.  See class Generic for more</span>
-<span class="sd">    information on generic types.  Generic functions work as follows:</span>
-
-<span class="sd">      def repeat(x: T, n: int) -&gt; List[T]:</span>
-<span class="sd">          &#39;&#39;&#39;Return a list containing n references to x.&#39;&#39;&#39;</span>
-<span class="sd">          return [x]*n</span>
-
-<span class="sd">      def longest(x: A, y: A) -&gt; A:</span>
-<span class="sd">          &#39;&#39;&#39;Return the longest of two strings.&#39;&#39;&#39;</span>
-<span class="sd">          return x if len(x) &gt;= len(y) else y</span>
-
-<span class="sd">    The latter example&#39;s signature is essentially the overloading</span>
-<span class="sd">    of (str, str) -&gt; str and (bytes, bytes) -&gt; bytes.  Also note</span>
-<span class="sd">    that if the arguments are instances of some subclass of str,</span>
-<span class="sd">    the return type is still plain str.</span>
-
-<span class="sd">    At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.</span>
-
-<span class="sd">    Type variables defined with covariant=True or contravariant=True</span>
-<span class="sd">    can be used to declare covariant or contravariant generic types.</span>
-<span class="sd">    See PEP 484 for more details. By default generic types are invariant</span>
-<span class="sd">    in all type variables.</span>
-
-<span class="sd">    Type variables can be introspected. e.g.:</span>
-
-<span class="sd">      T.__name__ == &#39;T&#39;</span>
-<span class="sd">      T.__constraints__ == ()</span>
-<span class="sd">      T.__covariant__ == False</span>
-<span class="sd">      T.__contravariant__ = False</span>
-<span class="sd">      A.__constraints__ == (str, bytes)</span>
-
-<span class="sd">    Note that only type variables defined in global scope can be pickled.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">constraints</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">covariant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">bound</span><span class="p">,</span> <span class="n">covariant</span><span class="p">,</span> <span class="n">contravariant</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">constraints</span> <span class="ow">and</span> <span class="n">bound</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Constraints cannot be combined with bound=...&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">constraints</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">constraints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;A single constraint is not allowed&quot;</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;TypeVar(name, constraint, ...): constraints must be types.&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__constraints__</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_type_check</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">constraints</span><span class="p">)</span>
-        <span class="n">def_mod</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">def_mod</span> <span class="o">!=</span> <span class="s1">&#39;typing&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="n">def_mod</span>
-
-    <span class="k">def</span> <span class="nf">__typing_subst__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Parameters to generic types must be types.&quot;</span>
-        <span class="n">arg</span> <span class="o">=</span> <span class="n">_type_check</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">is_argument</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">__origin__</span> <span class="ow">is</span> <span class="n">Unpack</span><span class="p">)</span> <span class="ow">or</span>
-            <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;__unpacked__&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> is not valid as type argument&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">arg</span>
-
-
-<span class="k">class</span> <span class="nc">TypeVarTuple</span><span class="p">(</span><span class="n">_Final</span><span class="p">,</span> <span class="n">_Immutable</span><span class="p">,</span> <span class="n">_PickleUsingNameMixin</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type variable tuple.</span>
-
-<span class="sd">    Usage:</span>
-
-<span class="sd">      Ts = TypeVarTuple(&#39;Ts&#39;)  # Can be given any name</span>
-
-<span class="sd">    Just as a TypeVar (type variable) is a placeholder for a single type,</span>
-<span class="sd">    a TypeVarTuple is a placeholder for an *arbitrary* number of types. For</span>
-<span class="sd">    example, if we define a generic class using a TypeVarTuple:</span>
-
-<span class="sd">      class C(Generic[*Ts]): ...</span>
-
-<span class="sd">    Then we can parameterize that class with an arbitrary number of type</span>
-<span class="sd">    arguments:</span>
-
-<span class="sd">      C[int]       # Fine</span>
-<span class="sd">      C[int, str]  # Also fine</span>
-<span class="sd">      C[()]        # Even this is fine</span>
-
-<span class="sd">    For more details, see PEP 646.</span>
-
-<span class="sd">    Note that only TypeVarTuples defined in global scope can be pickled.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span>
-
-        <span class="c1"># Used for pickling.</span>
-        <span class="n">def_mod</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">def_mod</span> <span class="o">!=</span> <span class="s1">&#39;typing&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="n">def_mod</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">yield</span> <span class="n">Unpack</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>
-
-    <span class="k">def</span> <span class="nf">__typing_subst__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Substitution of bare TypeVarTuple is not supported&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__typing_prepare_subst__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">__parameters__</span>
-        <span class="n">typevartuple_index</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="n">typevartuple_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">new_args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">new_arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;More than one TypeVarTuple parameter in </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">new_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_arg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_arg</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">new_args</span><span class="p">)</span>
 
-        <span class="n">alen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-        <span class="n">plen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-        <span class="n">left</span> <span class="o">=</span> <span class="n">typevartuple_index</span>
-        <span class="n">right</span> <span class="o">=</span> <span class="n">plen</span> <span class="o">-</span> <span class="n">typevartuple_index</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">var_tuple_index</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">fillarg</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
-                <span class="n">subargs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;__typing_unpacked_tuple_args__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">subargs</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">subargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">subargs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="o">...</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">var_tuple_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;More than one unpacked arbitrary-length tuple argument&quot;</span><span class="p">)</span>
-                    <span class="n">var_tuple_index</span> <span class="o">=</span> <span class="n">k</span>
-                    <span class="n">fillarg</span> <span class="o">=</span> <span class="n">subargs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">var_tuple_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">var_tuple_index</span><span class="p">)</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">alen</span> <span class="o">-</span> <span class="n">var_tuple_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">&gt;</span> <span class="n">alen</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Too few arguments for </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">;&quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot; actual </span><span class="si">{</span><span class="n">alen</span><span class="si">}</span><span class="s2">, expected at least </span><span class="si">{</span><span class="n">plen</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">[:</span><span class="n">left</span><span class="p">],</span>
-            <span class="o">*</span><span class="p">([</span><span class="n">fillarg</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">typevartuple_index</span> <span class="o">-</span> <span class="n">left</span><span class="p">)),</span>
-            <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">left</span><span class="p">:</span> <span class="n">alen</span> <span class="o">-</span> <span class="n">right</span><span class="p">]),</span>
-            <span class="o">*</span><span class="p">([</span><span class="n">fillarg</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">plen</span> <span class="o">-</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="n">typevartuple_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">alen</span> <span class="o">-</span> <span class="n">right</span><span class="p">:],</span>
-        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_GenericAlias</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">ParamSpecArgs</span><span class="p">(</span><span class="n">_Final</span><span class="p">,</span> <span class="n">_Immutable</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The args for a ParamSpec object.</span>
+<span class="k">def</span> <span class="nf">_generic_init_subclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">Generic</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">tvars</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="s1">&#39;__orig_bases__&#39;</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">Generic</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__orig_bases__</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">Generic</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span> <span class="ow">and</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;Protocol&#39;</span> <span class="ow">and</span>
+                    <span class="nb">type</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">!=</span> <span class="n">_TypedDictMeta</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Cannot inherit from plain Generic&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;__orig_bases__&#39;</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="n">tvars</span> <span class="o">=</span> <span class="n">_collect_parameters</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__orig_bases__</span><span class="p">)</span>
+        <span class="c1"># Look for Generic[T1, ..., Tn].</span>
+        <span class="c1"># If found, tvars must be a subset of it.</span>
+        <span class="c1"># If not found, tvars is it.</span>
+        <span class="c1"># Also check for and reject plain Generic,</span>
+        <span class="c1"># and reject multiple Generic[...].</span>
+        <span class="n">gvars</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__orig_bases__</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="n">base</span><span class="o">.</span><span class="n">__origin__</span> <span class="ow">is</span> <span class="n">Generic</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">gvars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                        <span class="s2">&quot;Cannot inherit from Generic[...] multiple times.&quot;</span><span class="p">)</span>
+                <span class="n">gvars</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">__parameters__</span>
+        <span class="k">if</span> <span class="n">gvars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tvarset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tvars</span><span class="p">)</span>
+            <span class="n">gvarset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">gvars</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tvarset</span> <span class="o">&lt;=</span> <span class="n">gvarset</span><span class="p">:</span>
+                <span class="n">s_vars</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tvars</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gvarset</span><span class="p">)</span>
+                <span class="n">s_args</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gvars</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Some type variables (</span><span class="si">{</span><span class="n">s_vars</span><span class="si">}</span><span class="s2">) are&quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot; not listed in Generic[</span><span class="si">{</span><span class="n">s_args</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+            <span class="n">tvars</span> <span class="o">=</span> <span class="n">gvars</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tvars</span><span class="p">)</span>
 
-<span class="sd">    Given a ParamSpec object P, P.args is an instance of ParamSpecArgs.</span>
-
-<span class="sd">    ParamSpecArgs objects have a reference back to their ParamSpec:</span>
-
-<span class="sd">       P.args.__origin__ is P</span>
-
-<span class="sd">    This type is meant for runtime introspection and has no special meaning to</span>
-<span class="sd">    static type checkers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span> <span class="o">=</span> <span class="n">origin</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.args&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ParamSpecArgs</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">NotImplemented</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__origin__</span>
-
-
-<span class="k">class</span> <span class="nc">ParamSpecKwargs</span><span class="p">(</span><span class="n">_Final</span><span class="p">,</span> <span class="n">_Immutable</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The kwargs for a ParamSpec object.</span>
-
-<span class="sd">    Given a ParamSpec object P, P.kwargs is an instance of ParamSpecKwargs.</span>
-
-<span class="sd">    ParamSpecKwargs objects have a reference back to their ParamSpec:</span>
-
-<span class="sd">       P.kwargs.__origin__ is P</span>
-
-<span class="sd">    This type is meant for runtime introspection and has no special meaning to</span>
-<span class="sd">    static type checkers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span> <span class="o">=</span> <span class="n">origin</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.kwargs&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ParamSpecKwargs</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">NotImplemented</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__origin__</span>
-
-
-<span class="k">class</span> <span class="nc">ParamSpec</span><span class="p">(</span><span class="n">_Final</span><span class="p">,</span> <span class="n">_Immutable</span><span class="p">,</span> <span class="n">_BoundVarianceMixin</span><span class="p">,</span> <span class="n">_PickleUsingNameMixin</span><span class="p">,</span>
-                <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameter specification variable.</span>
-
-<span class="sd">    Usage::</span>
-
-<span class="sd">       P = ParamSpec(&#39;P&#39;)</span>
-
-<span class="sd">    Parameter specification variables exist primarily for the benefit of static</span>
-<span class="sd">    type checkers.  They are used to forward the parameter types of one</span>
-<span class="sd">    callable to another callable, a pattern commonly found in higher order</span>
-<span class="sd">    functions and decorators.  They are only valid when used in ``Concatenate``,</span>
-<span class="sd">    or as the first argument to ``Callable``, or as parameters for user-defined</span>
-<span class="sd">    Generics.  See class Generic for more information on generic types.  An</span>
-<span class="sd">    example for annotating a decorator::</span>
-
-<span class="sd">       T = TypeVar(&#39;T&#39;)</span>
-<span class="sd">       P = ParamSpec(&#39;P&#39;)</span>
-
-<span class="sd">       def add_logging(f: Callable[P, T]) -&gt; Callable[P, T]:</span>
-<span class="sd">           &#39;&#39;&#39;A type-safe decorator to add logging to a function.&#39;&#39;&#39;</span>
-<span class="sd">           def inner(*args: P.args, **kwargs: P.kwargs) -&gt; T:</span>
-<span class="sd">               logging.info(f&#39;{f.__name__} was called&#39;)</span>
-<span class="sd">               return f(*args, **kwargs)</span>
-<span class="sd">           return inner</span>
-
-<span class="sd">       @add_logging</span>
-<span class="sd">       def add_two(x: float, y: float) -&gt; float:</span>
-<span class="sd">           &#39;&#39;&#39;Add two numbers together.&#39;&#39;&#39;</span>
-<span class="sd">           return x + y</span>
-
-<span class="sd">    Parameter specification variables can be introspected. e.g.:</span>
-
-<span class="sd">       P.__name__ == &#39;P&#39;</span>
-
-<span class="sd">    Note that only parameter specification variables defined in global scope can</span>
-<span class="sd">    be pickled.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ParamSpecArgs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ParamSpecKwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">bound</span><span class="p">,</span> <span class="n">covariant</span><span class="p">,</span> <span class="n">contravariant</span><span class="p">)</span>
-        <span class="n">def_mod</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">def_mod</span> <span class="o">!=</span> <span class="s1">&#39;typing&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="n">def_mod</span>
-
-    <span class="k">def</span> <span class="nf">__typing_subst__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="n">arg</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_type_check</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;Expected a type.&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">_is_param_expr</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a list of types, an ellipsis, &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;ParamSpec, or Concatenate. Got </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">arg</span>
-
-    <span class="k">def</span> <span class="nf">__typing_prepare_subst__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">__parameters__</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Too few arguments for </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="c1"># Special case where Z[[int, str, bool]] == Z[int, str, bool] in PEP 612.</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_param_expr</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
-            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,)</span>
-        <span class="c1"># Convert lists to tuples to help other libraries cache the results.</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">[:</span><span class="n">i</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span>
-        <span class="k">return</span> <span class="n">args</span>
 
 <span class="k">def</span> <span class="nf">_is_dunder</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">attr</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>
@@ -1381,8 +1246,7 @@
         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">_is_dunder</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="ow">or</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;_name&#39;</span><span class="p">,</span> <span class="s1">&#39;_inst&#39;</span><span class="p">,</span> <span class="s1">&#39;_nparams&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;_paramspec_tvars&#39;</span><span class="p">}:</span>
+        <span class="k">if</span> <span class="n">_is_dunder</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="ow">or</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;_name&#39;</span><span class="p">,</span> <span class="s1">&#39;_inst&#39;</span><span class="p">,</span> <span class="s1">&#39;_nparams&#39;</span><span class="p">}:</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
@@ -1420,8 +1284,7 @@
     <span class="c1">#  * Note that native container types, e.g. `tuple`, `list`, use</span>
     <span class="c1">#    `types.GenericAlias` instead.</span>
     <span class="c1"># * Parameterized classes:</span>
-    <span class="c1">#     T = TypeVar(&#39;T&#39;)</span>
-    <span class="c1">#     class C(Generic[T]): pass</span>
+    <span class="c1">#     class C[T]: pass</span>
     <span class="c1">#     # C[int] is a _GenericAlias</span>
     <span class="c1"># * `Callable` aliases, generic `Callable` aliases, and</span>
     <span class="c1">#   parameterized `Callable` aliases:</span>
@@ -1436,15 +1299,13 @@
     <span class="c1">#     ClassVar[float]</span>
     <span class="c1">#     TypeVar[bool]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">_paramspec_tvars</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="n">inst</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__args__</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="o">...</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">_TypingEllipsis</span> <span class="k">else</span>
                               <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parameters__</span> <span class="o">=</span> <span class="n">_collect_parameters</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_paramspec_tvars</span> <span class="o">=</span> <span class="n">_paramspec_tvars</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="vm">__module__</span>
 
@@ -1587,8 +1448,7 @@
         <span class="k">return</span> <span class="n">new_args</span>
 
     <span class="k">def</span> <span class="nf">copy_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_inst</span><span class="p">,</span>
-                              <span class="n">_paramspec_tvars</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_paramspec_tvars</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_inst</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
@@ -1678,6 +1538,22 @@
     <span class="k">def</span> <span class="fm">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Union</span><span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="p">]</span>
 
+
+<span class="k">class</span> <span class="nc">_DeprecatedGenericAlias</span><span class="p">(</span><span class="n">_SpecialGenericAlias</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">nparams</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">removal_version</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">nparams</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="n">inst</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_removal_version</span> <span class="o">=</span> <span class="n">removal_version</span>
+
+    <span class="k">def</span> <span class="fm">__instancecheck__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">warnings</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">_deprecated</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_removal_version</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+
+
 <span class="k">class</span> <span class="nc">_CallableGenericAlias</span><span class="p">(</span><span class="n">_NotIterable</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">==</span> <span class="s1">&#39;Callable&#39;</span>
@@ -1698,8 +1574,7 @@
 <span class="k">class</span> <span class="nc">_CallableType</span><span class="p">(</span><span class="n">_SpecialGenericAlias</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">copy_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_CallableGenericAlias</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-                                     <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_inst</span><span class="p">,</span>
-                                     <span class="n">_paramspec_tvars</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                     <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_inst</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
@@ -1827,10 +1702,26 @@
 <span class="sd">        Foo[*tuple[int, str]]</span>
 <span class="sd">        class Bar(Generic[*Ts]): ...</span>
 
+<span class="sd">    And from Python 3.12, it can be done using built-in syntax for generics::</span>
+
+<span class="sd">        Foo[*tuple[int, str]]</span>
+<span class="sd">        class Bar[*Ts]: ...</span>
+
+<span class="sd">    The operator can also be used along with a `TypedDict` to annotate</span>
+<span class="sd">    `**kwargs` in a function signature::</span>
+
+<span class="sd">        class Movie(TypedDict):</span>
+<span class="sd">            name: str</span>
+<span class="sd">            year: int</span>
+
+<span class="sd">        # This function expects two keyword arguments - *name* of type `str` and</span>
+<span class="sd">        # *year* of type `int`.</span>
+<span class="sd">        def foo(**kwargs: Unpack[Movie]): ...</span>
+
 <span class="sd">    Note that there is only some runtime checking of this operator. Not</span>
 <span class="sd">    everything the runtime allows may be accepted by static type checkers.</span>
 
-<span class="sd">    For more information, see PEP 646.</span>
+<span class="sd">    For more information, see PEPs 646 and 692.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">item</span> <span class="o">=</span> <span class="n">_type_check</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1"> accepts only single type.&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_UnpackGenericAlias</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">item</span><span class="p">,))</span>
@@ -1840,7 +1731,7 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># `Unpack` only takes one argument, so __args__ should contain only</span>
         <span class="c1"># a single item.</span>
-        <span class="k">return</span> <span class="s1">&#39;*&#39;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;typing.Unpack[</span><span class="si">{</span><span class="n">_type_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s1">]&#39;</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__typing_is_unpacked_typevartuple__</span><span class="p">:</span>
@@ -1864,127 +1755,24 @@
         <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">TypeVarTuple</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">Generic</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class for generic types.</span>
-
-<span class="sd">    A generic type is typically declared by inheriting from</span>
-<span class="sd">    this class parameterized with one or more type variables.</span>
-<span class="sd">    For example, a generic mapping type might be defined as::</span>
-
-<span class="sd">      class Mapping(Generic[KT, VT]):</span>
-<span class="sd">          def __getitem__(self, key: KT) -&gt; VT:</span>
-<span class="sd">              ...</span>
-<span class="sd">          # Etc.</span>
-
-<span class="sd">    This class can then be used as follows::</span>
-
-<span class="sd">      def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -&gt; VT:</span>
-<span class="sd">          try:</span>
-<span class="sd">              return mapping[key]</span>
-<span class="sd">          except KeyError:</span>
-<span class="sd">              return default</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">_is_protocol</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="nd">@_tp_cache</span>
-    <span class="k">def</span> <span class="nf">__class_getitem__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parameterizes a generic class.</span>
-
-<span class="sd">        At least, parameterizing a generic class is the *main* thing this method</span>
-<span class="sd">        does. For example, for some generic class `Foo`, this is called when we</span>
-<span class="sd">        do `Foo[int]` - there, with `cls=Foo` and `params=int`.</span>
-
-<span class="sd">        However, note that this method is also called when defining generic</span>
-<span class="sd">        classes in the first place with `class Foo(Generic[T]): ...`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">params</span> <span class="o">=</span> <span class="p">(</span><span class="n">params</span><span class="p">,)</span>
-
-        <span class="n">params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_type_convert</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Generic</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">):</span>
-            <span class="c1"># Generic and Protocol can only be subscripted with unique type variables.</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Parameter list to </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">[...] cannot be empty&quot;</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">_is_typevar_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Parameters to </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">[...] must all be type variables &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;or parameter specification variables.&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">params</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Parameters to </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">[...] must all be unique&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Subscripting a regular Generic subclass.</span>
-            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span><span class="p">:</span>
-                <span class="n">prepare</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s1">&#39;__typing_prepare_subst__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">prepare</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">params</span> <span class="o">=</span> <span class="n">prepare</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-            <span class="n">_check_generic</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span><span class="p">))</span>
-
-            <span class="n">new_args</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">new_arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">):</span>
-                    <span class="n">new_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_arg</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">new_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_arg</span><span class="p">)</span>
-            <span class="n">params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">new_args</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">_GenericAlias</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-                             <span class="n">_paramspec_tvars</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">tvars</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="s1">&#39;__orig_bases__&#39;</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
-            <span class="n">error</span> <span class="o">=</span> <span class="n">Generic</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__orig_bases__</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">Generic</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span> <span class="ow">and</span>
-                        <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;Protocol&#39;</span> <span class="ow">and</span>
-                        <span class="nb">type</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">!=</span> <span class="n">_TypedDictMeta</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Cannot inherit from plain Generic&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;__orig_bases__&#39;</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
-            <span class="n">tvars</span> <span class="o">=</span> <span class="n">_collect_parameters</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__orig_bases__</span><span class="p">)</span>
-            <span class="c1"># Look for Generic[T1, ..., Tn].</span>
-            <span class="c1"># If found, tvars must be a subset of it.</span>
-            <span class="c1"># If not found, tvars is it.</span>
-            <span class="c1"># Also check for and reject plain Generic,</span>
-            <span class="c1"># and reject multiple Generic[...].</span>
-            <span class="n">gvars</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__orig_bases__</span><span class="p">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">)</span> <span class="ow">and</span>
-                        <span class="n">base</span><span class="o">.</span><span class="n">__origin__</span> <span class="ow">is</span> <span class="n">Generic</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">gvars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                            <span class="s2">&quot;Cannot inherit from Generic[...] multiple times.&quot;</span><span class="p">)</span>
-                    <span class="n">gvars</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">__parameters__</span>
-            <span class="k">if</span> <span class="n">gvars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">tvarset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tvars</span><span class="p">)</span>
-                <span class="n">gvarset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">gvars</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">tvarset</span> <span class="o">&lt;=</span> <span class="n">gvarset</span><span class="p">:</span>
-                    <span class="n">s_vars</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tvars</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gvarset</span><span class="p">)</span>
-                    <span class="n">s_args</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gvars</span><span class="p">)</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Some type variables (</span><span class="si">{</span><span class="n">s_vars</span><span class="si">}</span><span class="s2">) are&quot;</span>
-                                    <span class="sa">f</span><span class="s2">&quot; not listed in Generic[</span><span class="si">{</span><span class="n">s_args</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
-                <span class="n">tvars</span> <span class="o">=</span> <span class="n">gvars</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">__parameters__</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tvars</span><span class="p">)</span>
-
-
 <span class="k">class</span> <span class="nc">_TypingEllipsis</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal placeholder for ... (ellipsis).&quot;&quot;&quot;</span>
 
 
-<span class="n">_TYPING_INTERNALS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__parameters__&#39;</span><span class="p">,</span> <span class="s1">&#39;__orig_bases__&#39;</span><span class="p">,</span>  <span class="s1">&#39;__orig_class__&#39;</span><span class="p">,</span>
-                     <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;_is_runtime_protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;__final__&#39;</span><span class="p">]</span>
+<span class="n">_TYPING_INTERNALS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span>
+    <span class="s1">&#39;__parameters__&#39;</span><span class="p">,</span> <span class="s1">&#39;__orig_bases__&#39;</span><span class="p">,</span>  <span class="s1">&#39;__orig_class__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;_is_runtime_protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;__protocol_attrs__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;__non_callable_proto_members__&#39;</span><span class="p">,</span> <span class="s1">&#39;__type_params__&#39;</span><span class="p">,</span>
+<span class="p">})</span>
 
-<span class="n">_SPECIAL_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__abstractmethods__&#39;</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="s1">&#39;__doc__&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="s1">&#39;__module__&#39;</span><span class="p">,</span> <span class="s1">&#39;__new__&#39;</span><span class="p">,</span> <span class="s1">&#39;__slots__&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;__subclasshook__&#39;</span><span class="p">,</span> <span class="s1">&#39;__weakref__&#39;</span><span class="p">,</span> <span class="s1">&#39;__class_getitem__&#39;</span><span class="p">]</span>
+<span class="n">_SPECIAL_NAMES</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span>
+    <span class="s1">&#39;__abstractmethods__&#39;</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="s1">&#39;__doc__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="s1">&#39;__module__&#39;</span><span class="p">,</span> <span class="s1">&#39;__new__&#39;</span><span class="p">,</span> <span class="s1">&#39;__slots__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;__subclasshook__&#39;</span><span class="p">,</span> <span class="s1">&#39;__weakref__&#39;</span><span class="p">,</span> <span class="s1">&#39;__class_getitem__&#39;</span>
+<span class="p">})</span>
 
 <span class="c1"># These special attributes will be not collected as protocol members.</span>
-<span class="n">EXCLUDED_ATTRIBUTES</span> <span class="o">=</span> <span class="n">_TYPING_INTERNALS</span> <span class="o">+</span> <span class="n">_SPECIAL_NAMES</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;_MutableMapping__marker&#39;</span><span class="p">]</span>
+<span class="n">EXCLUDED_ATTRIBUTES</span> <span class="o">=</span> <span class="n">_TYPING_INTERNALS</span> <span class="o">|</span> <span class="n">_SPECIAL_NAMES</span> <span class="o">|</span> <span class="p">{</span><span class="s1">&#39;_MutableMapping__marker&#39;</span><span class="p">}</span>
 
 
 <span class="k">def</span> <span class="nf">_get_protocol_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -1995,18 +1783,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">attrs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># without object</span>
-        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;Protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;Protocol&#39;</span><span class="p">,</span> <span class="s1">&#39;Generic&#39;</span><span class="p">}:</span>
             <span class="k">continue</span>
         <span class="n">annotations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="o">*</span><span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="o">*</span><span class="n">annotations</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_abc_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EXCLUDED_ATTRIBUTES</span><span class="p">:</span>
                 <span class="n">attrs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">attrs</span>
-
-
-<span class="k">def</span> <span class="nf">_is_callable_members_only</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-    <span class="c1"># PEP 544 prohibits using issubclass() with protocols that have non-method members.</span>
-    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">_get_protocol_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -2040,12 +1823,16 @@
 
 <span class="k">def</span> <span class="nf">_caller</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;__main__&#39;</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframemodulename</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">default</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># For platforms without _getframemodulename()</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">f_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__name__&#39;</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>  <span class="c1"># For platforms without _getframe()</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="kc">None</span>
 
-
-<span class="k">def</span> <span class="nf">_allow_reckless_class_checks</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_allow_reckless_class_checks</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Allow instance and class checks for special stdlib modules.</span>
 
 <span class="sd">    The abc and functools modules indiscriminately call isinstance() and</span>
@@ -2057,38 +1844,143 @@
 <span class="n">_PROTO_ALLOWLIST</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;collections.abc&#39;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s1">&#39;Callable&#39;</span><span class="p">,</span> <span class="s1">&#39;Awaitable&#39;</span><span class="p">,</span> <span class="s1">&#39;Iterable&#39;</span><span class="p">,</span> <span class="s1">&#39;Iterator&#39;</span><span class="p">,</span> <span class="s1">&#39;AsyncIterable&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Hashable&#39;</span><span class="p">,</span> <span class="s1">&#39;Sized&#39;</span><span class="p">,</span> <span class="s1">&#39;Container&#39;</span><span class="p">,</span> <span class="s1">&#39;Collection&#39;</span><span class="p">,</span> <span class="s1">&#39;Reversible&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Hashable&#39;</span><span class="p">,</span> <span class="s1">&#39;Sized&#39;</span><span class="p">,</span> <span class="s1">&#39;Container&#39;</span><span class="p">,</span> <span class="s1">&#39;Collection&#39;</span><span class="p">,</span> <span class="s1">&#39;Reversible&#39;</span><span class="p">,</span> <span class="s1">&#39;Buffer&#39;</span><span class="p">,</span>
     <span class="p">],</span>
     <span class="s1">&#39;contextlib&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AbstractContextManager&#39;</span><span class="p">,</span> <span class="s1">&#39;AbstractAsyncContextManager&#39;</span><span class="p">],</span>
 <span class="p">}</span>
 
 
+<span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
+<span class="k">def</span> <span class="nf">_lazy_load_getattr_static</span><span class="p">():</span>
+    <span class="c1"># Import getattr_static lazily so as not to slow down the import of typing.py</span>
+    <span class="c1"># Cache the result so we don&#39;t slow down _ProtocolMeta.__instancecheck__ unnecessarily</span>
+    <span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getattr_static</span>
+    <span class="k">return</span> <span class="n">getattr_static</span>
+
+
+<span class="n">_cleanups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_lazy_load_getattr_static</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_pickle_psargs</span><span class="p">(</span><span class="n">psargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ParamSpecArgs</span><span class="p">,</span> <span class="p">(</span><span class="n">psargs</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,)</span>
+
+<span class="n">copyreg</span><span class="o">.</span><span class="n">pickle</span><span class="p">(</span><span class="n">ParamSpecArgs</span><span class="p">,</span> <span class="n">_pickle_psargs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_pickle_pskwargs</span><span class="p">(</span><span class="n">pskwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ParamSpecKwargs</span><span class="p">,</span> <span class="p">(</span><span class="n">pskwargs</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,)</span>
+
+<span class="n">copyreg</span><span class="o">.</span><span class="n">pickle</span><span class="p">(</span><span class="n">ParamSpecKwargs</span><span class="p">,</span> <span class="n">_pickle_pskwargs</span><span class="p">)</span>
+
+<span class="k">del</span> <span class="n">_pickle_psargs</span><span class="p">,</span> <span class="n">_pickle_pskwargs</span>
+
+
 <span class="k">class</span> <span class="nc">_ProtocolMeta</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="c1"># This metaclass is really unfortunate and exists only because of</span>
-    <span class="c1"># the lack of __instancehook__.</span>
+    <span class="c1"># This metaclass is somewhat unfortunate,</span>
+    <span class="c1"># but is necessary for several reasons...</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="n">mcls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Protocol&quot;</span> <span class="ow">and</span> <span class="n">bases</span> <span class="o">==</span> <span class="p">(</span><span class="n">Generic</span><span class="p">,):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">Protocol</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+                    <span class="n">base</span> <span class="ow">in</span> <span class="p">{</span><span class="nb">object</span><span class="p">,</span> <span class="n">Generic</span><span class="p">}</span>
+                    <span class="ow">or</span> <span class="n">base</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">_PROTO_ALLOWLIST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="p">[])</span>
+                    <span class="ow">or</span> <span class="p">(</span>
+                        <span class="nb">issubclass</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;_is_protocol&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Protocols can only inherit from other protocols, &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">base</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;_is_protocol&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">__protocol_attrs__</span> <span class="o">=</span> <span class="n">_get_protocol_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__subclasscheck__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Protocol</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__subclasscheck__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">_allow_reckless_class_checks</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+                <span class="c1"># Same error message as for issubclass(1, int).</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;issubclass() arg 1 must be a class&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_runtime_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Instance and class checks can only be used with &quot;</span>
+                    <span class="s2">&quot;@runtime_checkable protocols&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="c1"># this attribute is set by @runtime_checkable:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">__non_callable_proto_members__</span>
+                <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__subclasshook__&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="n">_proto_hook</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Protocols with non-method members don&#39;t support issubclass()&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__subclasscheck__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__instancecheck__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
         <span class="c1"># We need this method for situations where attributes are</span>
         <span class="c1"># assigned in __init__.</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Protocol</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;_is_protocol&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="c1"># i.e., it&#39;s a concrete subclass of a protocol</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="p">(</span>
-            <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span>
             <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_runtime_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span>
-            <span class="ow">not</span> <span class="n">_allow_reckless_class_checks</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="ow">not</span> <span class="n">_allow_reckless_class_checks</span><span class="p">()</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Instance and class checks can only be used with&quot;</span>
                             <span class="s2">&quot; @runtime_checkable protocols&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">((</span><span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="n">_is_callable_members_only</span><span class="p">(</span><span class="bp">cls</span><span class="p">))</span> <span class="ow">and</span>
-                <span class="nb">issubclass</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="ow">and</span>
-                    <span class="c1"># All *methods* can be blocked by setting them to None.</span>
-                    <span class="p">(</span><span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="ow">or</span>
-                     <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">_get_protocol_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+
+        <span class="n">getattr_static</span> <span class="o">=</span> <span class="n">_lazy_load_getattr_static</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__protocol_attrs__</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">getattr_static</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># this attribute is set by @runtime_checkable:</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__non_callable_proto_members__</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">_proto_hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__protocol_attrs__</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+            <span class="c1"># Check if the members appears in the class dictionary...</span>
+            <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">NotImplemented</span>
+                <span class="k">break</span>
+
+            <span class="c1"># ...or in annotations, if it is a sub-protocol.</span>
+            <span class="n">annotations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="n">attr</span> <span class="ow">in</span> <span class="n">annotations</span> <span class="ow">and</span>
+                    <span class="nb">issubclass</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+    <span class="k">return</span> <span class="kc">True</span>
 
 
 <span class="k">class</span> <span class="nc">Protocol</span><span class="p">(</span><span class="n">Generic</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">_ProtocolMeta</span><span class="p">):</span>
@@ -2119,7 +2011,7 @@
 <span class="sd">    only the presence of given attributes, ignoring their type signatures.</span>
 <span class="sd">    Protocol classes can be generic, they are defined as::</span>
 
-<span class="sd">        class GenProto(Protocol[T]):</span>
+<span class="sd">        class GenProto[T](Protocol):</span>
 <span class="sd">            def meth(self) -&gt; T:</span>
 <span class="sd">                ...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2136,60 +2028,11 @@
             <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">b</span> <span class="ow">is</span> <span class="n">Protocol</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">)</span>
 
         <span class="c1"># Set (or override) the protocol subclass hook.</span>
-        <span class="k">def</span> <span class="nf">_proto_hook</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">NotImplemented</span>
-
-            <span class="c1"># First, perform various sanity checks.</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_runtime_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">_allow_reckless_class_checks</span><span class="p">():</span>
-                    <span class="k">return</span> <span class="bp">NotImplemented</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Instance and class checks can only be used with&quot;</span>
-                                <span class="s2">&quot; @runtime_checkable protocols&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_callable_members_only</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">_allow_reckless_class_checks</span><span class="p">():</span>
-                    <span class="k">return</span> <span class="bp">NotImplemented</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Protocols with non-method members&quot;</span>
-                                <span class="s2">&quot; don&#39;t support issubclass()&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
-                <span class="c1"># Same error message as for issubclass(1, int).</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;issubclass() arg 1 must be a class&#39;</span><span class="p">)</span>
-
-            <span class="c1"># Second, perform the actual structural compatibility check.</span>
-            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">_get_protocol_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-                    <span class="c1"># Check if the members appears in the class dictionary...</span>
-                    <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="k">return</span> <span class="bp">NotImplemented</span>
-                        <span class="k">break</span>
-
-                    <span class="c1"># ...or in annotations, if it is a sub-protocol.</span>
-                    <span class="n">annotations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="p">{})</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span>
-                            <span class="n">attr</span> <span class="ow">in</span> <span class="n">annotations</span> <span class="ow">and</span>
-                            <span class="nb">issubclass</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">):</span>
-                        <span class="k">break</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">NotImplemented</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
         <span class="k">if</span> <span class="s1">&#39;__subclasshook__&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">__subclasshook__</span> <span class="o">=</span> <span class="n">_proto_hook</span>
 
-        <span class="c1"># We have nothing more to do for non-protocols...</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-            <span class="k">return</span>
-
-        <span class="c1"># ... otherwise check consistency of bases, and prohibit instantiation.</span>
-        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span> <span class="ow">or</span>
-                    <span class="n">base</span><span class="o">.</span><span class="vm">__module__</span> <span class="ow">in</span> <span class="n">_PROTO_ALLOWLIST</span> <span class="ow">and</span>
-                    <span class="n">base</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">_PROTO_ALLOWLIST</span><span class="p">[</span><span class="n">base</span><span class="o">.</span><span class="vm">__module__</span><span class="p">]</span> <span class="ow">or</span>
-                    <span class="nb">issubclass</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols can only inherit from other&#39;</span>
-                                <span class="s1">&#39; protocols, got </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">base</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="n">Protocol</span><span class="o">.</span><span class="fm">__init__</span><span class="p">:</span>
+        <span class="c1"># Prohibit instantiation for protocol classes</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="n">Protocol</span><span class="o">.</span><span class="fm">__init__</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">_no_init_or_replace_init</span>
 
 
@@ -2208,7 +2051,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">_AnnotatedAlias</span><span class="p">):</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">__metadata__</span> <span class="o">+</span> <span class="n">metadata</span>
             <span class="n">origin</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">__origin__</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Annotated&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__metadata__</span> <span class="o">=</span> <span class="n">metadata</span>
 
     <span class="k">def</span> <span class="nf">copy_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
@@ -2241,6 +2084,9 @@
             <span class="k">return</span> <span class="s1">&#39;Annotated&#39;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">__mro_entries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,)</span>
+
 
 <span class="k">class</span> <span class="nc">Annotated</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add context-specific metadata to a type.</span>
@@ -2270,15 +2116,17 @@
 
 <span class="sd">    - Annotated can be used as a generic type alias::</span>
 
-<span class="sd">        Optimized: TypeAlias = Annotated[T, runtime.Optimize()]</span>
-<span class="sd">        assert Optimized[int] == Annotated[int, runtime.Optimize()]</span>
+<span class="sd">        type Optimized[T] = Annotated[T, runtime.Optimize()]</span>
+<span class="sd">        # type checker will treat Optimized[int]</span>
+<span class="sd">        # as equivalent to Annotated[int, runtime.Optimize()]</span>
 
-<span class="sd">        OptimizedList: TypeAlias = Annotated[list[T], runtime.Optimize()]</span>
-<span class="sd">        assert OptimizedList[int] == Annotated[list[int], runtime.Optimize()]</span>
+<span class="sd">        type OptimizedList[T] = Annotated[list[T], runtime.Optimize()]</span>
+<span class="sd">        # type checker will treat OptimizedList[int]</span>
+<span class="sd">        # as equivalent to Annotated[list[int], runtime.Optimize()]</span>
 
 <span class="sd">    - Annotated cannot be used with an unpacked TypeVarTuple::</span>
 
-<span class="sd">        Variadic: TypeAlias = Annotated[*Ts, Ann1]  # NOT valid</span>
+<span class="sd">        type Variadic[*Ts] = Annotated[*Ts, Ann1]  # NOT valid</span>
 
 <span class="sd">      This would be equivalent to::</span>
 
@@ -2337,10 +2185,26 @@
 <span class="sd">    Warning: this will check only the presence of the required methods,</span>
 <span class="sd">    not their type signatures!</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Generic</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_is_protocol&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;@runtime_checkable can be only applied to protocol classes,&#39;</span>
                         <span class="s1">&#39; got </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">cls</span><span class="p">)</span>
     <span class="bp">cls</span><span class="o">.</span><span class="n">_is_runtime_protocol</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># PEP 544 prohibits using issubclass()</span>
+    <span class="c1"># with protocols that have non-method members.</span>
+    <span class="c1"># See gh-113320 for why we compute this attribute here,</span>
+    <span class="c1"># rather than in `_ProtocolMeta.__init__`</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">__non_callable_proto_members__</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__protocol_attrs__</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">is_callable</span> <span class="o">=</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Failed to determine whether protocol member </span><span class="si">{</span><span class="n">attr</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;is a method member&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_callable</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">__non_callable_proto_members__</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">cls</span>
 
 
@@ -2760,8 +2624,9 @@
     <span class="k">return</span> <span class="n">f</span>
 
 
-<span class="c1"># Some unconstrained type variables.  These are used by the container types.</span>
-<span class="c1"># (These are not for export.)</span>
+<span class="c1"># Some unconstrained type variables.  These were initially used by the container types.</span>
+<span class="c1"># They were never meant for export and are now unused, but we keep them around to</span>
+<span class="c1"># avoid breaking compatibility with users who import them.</span>
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>  <span class="c1"># Any type.</span>
 <span class="n">KT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;KT&#39;</span><span class="p">)</span>  <span class="c1"># Key type.</span>
 <span class="n">VT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;VT&#39;</span><span class="p">)</span>  <span class="c1"># Value type.</span>
@@ -2771,6 +2636,7 @@
 <span class="n">T_contra</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T_contra&#39;</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Ditto contravariant.</span>
 <span class="c1"># Internal type variable used for Type[].</span>
 <span class="n">CT_co</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;CT_co&#39;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">type</span><span class="p">)</span>
+
 
 <span class="c1"># A useful type variable with constraints.  This represents string types.</span>
 <span class="c1"># (This one *is* for export!)</span>
@@ -2813,7 +2679,9 @@
 <span class="n">MutableMapping</span> <span class="o">=</span> <span class="n">_alias</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">Sequence</span> <span class="o">=</span> <span class="n">_alias</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">MutableSequence</span> <span class="o">=</span> <span class="n">_alias</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ByteString</span> <span class="o">=</span> <span class="n">_alias</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">ByteString</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Not generic</span>
+<span class="n">ByteString</span> <span class="o">=</span> <span class="n">_DeprecatedGenericAlias</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">ByteString</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">removal_version</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>  <span class="c1"># Not generic.</span>
+<span class="p">)</span>
 <span class="c1"># Tuple accepts variable number of parameters.</span>
 <span class="n">Tuple</span> <span class="o">=</span> <span class="n">_TupleType</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Tuple&#39;</span><span class="p">)</span>
 <span class="n">Tuple</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> \
@@ -2859,8 +2727,7 @@
 <span class="sd">    And a function that takes a class argument that&#39;s a subclass of</span>
 <span class="sd">    User and returns an instance of the corresponding class::</span>
 
-<span class="sd">        U = TypeVar(&#39;U&#39;, bound=User)</span>
-<span class="sd">        def new_user(user_class: Type[U]) -&gt; U:</span>
+<span class="sd">        def new_user[U](user_class: Type[U]) -&gt; U:</span>
 <span class="sd">            user = user_class()</span>
 <span class="sd">            # (Here we could write the user object to a database)</span>
 <span class="sd">            return user</span>
@@ -2927,24 +2794,24 @@
 
 
 <span class="nd">@runtime_checkable</span>
-<span class="k">class</span> <span class="nc">SupportsAbs</span><span class="p">(</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
+<span class="k">class</span> <span class="nc">SupportsAbs</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An ABC with one abstract method __abs__ that is covariant in its return type.&quot;&quot;&quot;</span>
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
         <span class="k">pass</span>
 
 
 <span class="nd">@runtime_checkable</span>
-<span class="k">class</span> <span class="nc">SupportsRound</span><span class="p">(</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
+<span class="k">class</span> <span class="nc">SupportsRound</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An ABC with one abstract method __round__ that is covariant in its return type.&quot;&quot;&quot;</span>
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="fm">__round__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__round__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
         <span class="k">pass</span>
 
 
@@ -2989,7 +2856,7 @@
                                <span class="n">module</span><span class="o">=</span><span class="n">ns</span><span class="p">[</span><span class="s1">&#39;__module__&#39;</span><span class="p">])</span>
         <span class="n">nm_tpl</span><span class="o">.</span><span class="vm">__bases__</span> <span class="o">=</span> <span class="n">bases</span>
         <span class="k">if</span> <span class="n">Generic</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
-            <span class="n">class_getitem</span> <span class="o">=</span> <span class="n">Generic</span><span class="o">.</span><span class="n">__class_getitem__</span><span class="o">.</span><span class="vm">__func__</span>
+            <span class="n">class_getitem</span> <span class="o">=</span> <span class="n">_generic_class_getitem</span>
             <span class="n">nm_tpl</span><span class="o">.</span><span class="n">__class_getitem__</span> <span class="o">=</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">class_getitem</span><span class="p">)</span>
         <span class="c1"># update from user namespace without overriding special namedtuple attributes</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ns</span><span class="p">:</span>
@@ -3027,7 +2894,9 @@
     <span class="k">elif</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Either list of fields or keywords&quot;</span>
                         <span class="s2">&quot; can be provided to NamedTuple, not both&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_make_nmtuple</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="n">_caller</span><span class="p">())</span>
+    <span class="n">nt</span> <span class="o">=</span> <span class="n">_make_nmtuple</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="n">_caller</span><span class="p">())</span>
+    <span class="n">nt</span><span class="o">.</span><span class="n">__orig_bases__</span> <span class="o">=</span> <span class="p">(</span><span class="n">NamedTuple</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">nt</span>
 
 <span class="n">_NamedTuple</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">NamedTupleMeta</span><span class="p">,</span> <span class="s1">&#39;NamedTuple&#39;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{})</span>
 
@@ -3058,6 +2927,9 @@
             <span class="n">generic_base</span> <span class="o">=</span> <span class="p">()</span>
 
         <span class="n">tp_dict</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">_TypedDictMeta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="o">*</span><span class="n">generic_base</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="n">ns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tp_dict</span><span class="p">,</span> <span class="s1">&#39;__orig_bases__&#39;</span><span class="p">):</span>
+            <span class="n">tp_dict</span><span class="o">.</span><span class="n">__orig_bases__</span> <span class="o">=</span> <span class="n">bases</span>
 
         <span class="n">annotations</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">own_annotations</span> <span class="o">=</span> <span class="n">ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="p">{})</span>
@@ -3190,7 +3062,9 @@
         <span class="c1"># Setting correct module is necessary to make typed dict classes pickleable.</span>
         <span class="n">ns</span><span class="p">[</span><span class="s1">&#39;__module__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">module</span>
 
-    <span class="k">return</span> <span class="n">_TypedDictMeta</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="p">(),</span> <span class="n">ns</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+    <span class="n">td</span> <span class="o">=</span> <span class="n">_TypedDictMeta</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="p">(),</span> <span class="n">ns</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+    <span class="n">td</span><span class="o">.</span><span class="n">__orig_bases__</span> <span class="o">=</span> <span class="p">(</span><span class="n">TypedDict</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">td</span>
 
 <span class="n">_TypedDict</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">_TypedDictMeta</span><span class="p">,</span> <span class="s1">&#39;TypedDict&#39;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{})</span>
 <span class="n">TypedDict</span><span class="o">.</span><span class="n">__mro_entries__</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">bases</span><span class="p">:</span> <span class="p">(</span><span class="n">_TypedDict</span><span class="p">,)</span>
@@ -3497,7 +3371,7 @@
 <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span>
 
 
-<span class="k">def</span> <span class="nf">reveal_type</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">reveal_type</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">obj</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ask a static type checker to reveal the inferred type of an expression.</span>
 
 <span class="sd">    When a static type checker encounters a call to ``reveal_type()``,</span>
@@ -3516,24 +3390,28 @@
     <span class="k">return</span> <span class="n">obj</span>
 
 
+<span class="k">class</span> <span class="nc">_IdentityCallable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="o">...</span>
+
+
 <span class="k">def</span> <span class="nf">dataclass_transform</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">eq_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">order_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">kw_only_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">frozen_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">field_specifiers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">T</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_IdentityCallable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to mark an object as providing dataclass-like behaviour.</span>
 
 <span class="sd">    The decorator can be applied to a function, class, or metaclass.</span>
 
 <span class="sd">    Example usage with a decorator function::</span>
 
-<span class="sd">        T = TypeVar(&quot;T&quot;)</span>
-
 <span class="sd">        @dataclass_transform()</span>
-<span class="sd">        def create_model(cls: type[T]) -&gt; type[T]:</span>
+<span class="sd">        def create_model[T](cls: type[T]) -&gt; type[T]:</span>
 <span class="sd">            ...</span>
 <span class="sd">            return cls</span>
 
@@ -3575,6 +3453,8 @@
 <span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
 <span class="sd">    - ``kw_only_default`` indicates whether the ``kw_only`` parameter is</span>
 <span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
+<span class="sd">    - ``frozen_default`` indicates whether the ``frozen`` parameter is</span>
+<span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
 <span class="sd">    - ``field_specifiers`` specifies a static list of supported classes</span>
 <span class="sd">        or functions that describe fields, similar to ``dataclasses.field()``.</span>
 <span class="sd">    - Arbitrary other keyword arguments are accepted in order to allow for</span>
@@ -3591,11 +3471,50 @@
             <span class="s2">&quot;eq_default&quot;</span><span class="p">:</span> <span class="n">eq_default</span><span class="p">,</span>
             <span class="s2">&quot;order_default&quot;</span><span class="p">:</span> <span class="n">order_default</span><span class="p">,</span>
             <span class="s2">&quot;kw_only_default&quot;</span><span class="p">:</span> <span class="n">kw_only_default</span><span class="p">,</span>
+            <span class="s2">&quot;frozen_default&quot;</span><span class="p">:</span> <span class="n">frozen_default</span><span class="p">,</span>
             <span class="s2">&quot;field_specifiers&quot;</span><span class="p">:</span> <span class="n">field_specifiers</span><span class="p">,</span>
             <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">cls_or_fn</span>
     <span class="k">return</span> <span class="n">decorator</span>
+
+
+<span class="nb">type</span> <span class="n">_Func</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">override</span><span class="p">[</span><span class="n">F</span><span class="p">:</span> <span class="n">_Func</span><span class="p">](</span><span class="n">method</span><span class="p">:</span> <span class="n">F</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Indicate that a method is intended to override a method in a base class.</span>
+
+<span class="sd">    Usage::</span>
+
+<span class="sd">        class Base:</span>
+<span class="sd">            def method(self) -&gt; None:</span>
+<span class="sd">                pass</span>
+
+<span class="sd">        class Child(Base):</span>
+<span class="sd">            @override</span>
+<span class="sd">            def method(self) -&gt; None:</span>
+<span class="sd">                super().method()</span>
+
+<span class="sd">    When this decorator is applied to a method, the type checker will</span>
+<span class="sd">    validate that it overrides a method or attribute with the same name on a</span>
+<span class="sd">    base class.  This helps prevent bugs that may occur when a base class is</span>
+<span class="sd">    changed without an equivalent change to a child class.</span>
+
+<span class="sd">    There is no runtime checking of this property. The decorator attempts to</span>
+<span class="sd">    set the ``__override__`` attribute to ``True`` on the decorated object to</span>
+<span class="sd">    allow runtime introspection.</span>
+
+<span class="sd">    See PEP 698 for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">method</span><span class="o">.</span><span class="n">__override__</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+        <span class="c1"># Skip the attribute silently if it is not writable.</span>
+        <span class="c1"># AttributeError happens if the object has __slots__ or a</span>
+        <span class="c1"># read-only property, TypeError if it&#39;s a builtin class.</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">method</span>
 </pre></div>
 
            </div>

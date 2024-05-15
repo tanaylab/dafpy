@@ -171,9 +171,9 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#daf.data.DafReader.scalar_names">
+<a class="reference internal" href="#daf.data.DafReader.scalars_set">
 <code class="docutils literal notranslate">
-<span class="pre">DafReader.scalar_names()
+<span class="pre">DafReader.scalars_set()
 </span>
 </code>
 </a>
@@ -189,9 +189,9 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#daf.data.DafReader.axis_names">
+<a class="reference internal" href="#daf.data.DafReader.axes_set">
 <code class="docutils literal notranslate">
-<span class="pre">DafReader.axis_names()
+<span class="pre">DafReader.axes_set()
 </span>
 </code>
 </a>
@@ -207,9 +207,18 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#daf.data.DafReader.get_axis">
+<a class="reference internal" href="#daf.data.DafReader.axis_array">
 <code class="docutils literal notranslate">
-<span class="pre">DafReader.get_axis()
+<span class="pre">DafReader.axis_array()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.axis_dict">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.axis_dict()
 </span>
 </code>
 </a>
@@ -225,9 +234,9 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#daf.data.DafReader.vector_names">
+<a class="reference internal" href="#daf.data.DafReader.vectors_set">
 <code class="docutils literal notranslate">
-<span class="pre">DafReader.vector_names()
+<span class="pre">DafReader.vectors_set()
 </span>
 </code>
 </a>
@@ -261,9 +270,9 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#daf.data.DafReader.matrix_names">
+<a class="reference internal" href="#daf.data.DafReader.matrices_set">
 <code class="docutils literal notranslate">
-<span class="pre">DafReader.matrix_names()
+<span class="pre">DafReader.matrices_set()
 </span>
 </code>
 </a>
@@ -1120,10 +1129,10 @@ stored in the
 
 <dl class="py method">
 
-<dt class="sig sig-object py" id="daf.data.DafReader.scalar_names">
+<dt class="sig sig-object py" id="daf.data.DafReader.scalars_set">
 
 <span class="sig-name descname">
-<span class="pre">scalar_names
+<span class="pre">scalars_set
 </span>
 </span>
 <span class="sig-paren">(
@@ -1148,13 +1157,13 @@ stored in the
 </span>
 </span>
 </span>
-<a class="reference internal" href="_modules/daf/data.html#DafReader.scalar_names">
+<a class="reference internal" href="_modules/daf/data.html#DafReader.scalars_set">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#daf.data.DafReader.scalar_names" title="Link to this definition">¶
+<a class="headerlink" href="#daf.data.DafReader.scalars_set" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -1165,7 +1174,7 @@ stored in the
 </span>
 </code> data set. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalar_names">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.scalars_set">documentation
 </a> for details.
 </p>
 
@@ -1240,10 +1249,10 @@ stored in the
 
 <dl class="py method">
 
-<dt class="sig sig-object py" id="daf.data.DafReader.axis_names">
+<dt class="sig sig-object py" id="daf.data.DafReader.axes_set">
 
 <span class="sig-name descname">
-<span class="pre">axis_names
+<span class="pre">axes_set
 </span>
 </span>
 <span class="sig-paren">(
@@ -1268,24 +1277,24 @@ stored in the
 </span>
 </span>
 </span>
-<a class="reference internal" href="_modules/daf/data.html#DafReader.axis_names">
+<a class="reference internal" href="_modules/daf/data.html#DafReader.axes_set">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#daf.data.DafReader.axis_names" title="Link to this definition">¶
+<a class="headerlink" href="#daf.data.DafReader.axes_set" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>The names of the axes of the 
+<p>The set of names of the axes of the 
 <code class="docutils literal notranslate">
 <span class="pre">Daf
 </span>
 </code> data set. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_names">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axes_set">documentation
 </a> for details.
 </p>
 
@@ -1360,10 +1369,10 @@ stored in the
 
 <dl class="py method">
 
-<dt class="sig sig-object py" id="daf.data.DafReader.get_axis">
+<dt class="sig sig-object py" id="daf.data.DafReader.axis_array">
 
 <span class="sig-name descname">
-<span class="pre">get_axis
+<span class="pre">axis_array
 </span>
 </span>
 <span class="sig-paren">(
@@ -1394,18 +1403,18 @@ stored in the
 </span>
 </span>
 </span>
-<a class="reference internal" href="_modules/daf/data.html#DafReader.get_axis">
+<a class="reference internal" href="_modules/daf/data.html#DafReader.axis_array">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#daf.data.DafReader.get_axis" title="Link to this definition">¶
+<a class="headerlink" href="#daf.data.DafReader.axis_array" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>The unique names of the entries of some 
+<p>The array of unique names of the entries of some 
 <code class="docutils literal notranslate">
 <span class="pre">axis
 </span>
@@ -1415,11 +1424,87 @@ stored in the
 </span>
 </code> data set. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.get_axis">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.axis_array">documentation
 </a> for details.
 </p>
 
 <p>This creates an in-memory copy of the data, which is cached for repeated calls.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.axis_dict">
+
+<span class="sig-name descname">
+<span class="pre">axis_dict
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.axis_dict">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.axis_dict" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return a dictionary converting 
+<code class="docutils literal notranslate">
+<span class="pre">axis
+</span>
+</code> entry names to their (0-based) integer index.
 </p>
 
 </dd>
@@ -1513,10 +1598,10 @@ Julia
 
 <dl class="py method">
 
-<dt class="sig sig-object py" id="daf.data.DafReader.vector_names">
+<dt class="sig sig-object py" id="daf.data.DafReader.vectors_set">
 
 <span class="sig-name descname">
-<span class="pre">vector_names
+<span class="pre">vectors_set
 </span>
 </span>
 <span class="sig-paren">(
@@ -1557,18 +1642,18 @@ Julia
 </span>
 </span>
 </span>
-<a class="reference internal" href="_modules/daf/data.html#DafReader.vector_names">
+<a class="reference internal" href="_modules/daf/data.html#DafReader.vectors_set">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#daf.data.DafReader.vector_names" title="Link to this definition">¶
+<a class="headerlink" href="#daf.data.DafReader.vectors_set" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>The names of the vector properties for the 
+<p>The set of names of the vector properties for the 
 <code class="docutils literal notranslate">
 <span class="pre">axis
 </span>
@@ -1578,14 +1663,14 @@ Julia
 </span>
 </code> data set, 
 <strong>not
-</strong> including the special 
+</strong> including the special
+
 <code class="docutils literal notranslate">
 <span class="pre">name
 </span>
-</code>
-property. See the Julia
+</code> property. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vector_names">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.vectors_set">documentation
 </a> for details.
 </p>
 
@@ -2788,10 +2873,10 @@ as the index.
 
 <dl class="py method">
 
-<dt class="sig sig-object py" id="daf.data.DafReader.matrix_names">
+<dt class="sig sig-object py" id="daf.data.DafReader.matrices_set">
 
 <span class="sig-name descname">
-<span class="pre">matrix_names
+<span class="pre">matrices_set
 </span>
 </span>
 <span class="sig-paren">(
@@ -2882,13 +2967,13 @@ as the index.
 </span>
 </span>
 </span>
-<a class="reference internal" href="_modules/daf/data.html#DafReader.matrix_names">
+<a class="reference internal" href="_modules/daf/data.html#DafReader.matrices_set">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#daf.data.DafReader.matrix_names" title="Link to this definition">¶
+<a class="headerlink" href="#daf.data.DafReader.matrices_set" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -2907,7 +2992,7 @@ as the index.
 </span>
 </code> data set. See the
 Julia 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrix_names">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/data.html#Daf.Data.matrices_set">documentation
 </a> for details.
 </p>
 
