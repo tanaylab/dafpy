@@ -60,7 +60,8 @@ def test_views() -> None:  # pylint: disable=too-many-statements
         == dedent(
             """
             name: view!
-            type: View MemoryDaf
+            type: View
+            base: MemoryDaf test!
             axes:
               obs: 2 entries
               var: 3 entries
@@ -69,6 +70,8 @@ def test_views() -> None:  # pylint: disable=too-many-statements
                 age: 2 x Float64 (PyArray{Float64, 1, true, true, Float64} - Dense)
                 batch: 2 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
             matrices:
+              obs,var:
+                X: 2 x 3 x Int64 in Columns (Dense)
               var,obs:
                 X: 3 x 2 x Int64 in Columns (PyArray{Int64, 2, true, true, Int64} - Dense)
             """

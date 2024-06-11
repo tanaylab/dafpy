@@ -304,39 +304,13 @@ pipelines in Python or any other language, if one insists on doing so.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="pre">view:
+<span class="pre">dset:
 </span> 
-<span class="pre">~daf.data.DafWriter
+<span class="pre">~daf.data.DafWriter,
 </span> 
-<span class="pre">|
+<span class="pre">*,
 </span> 
-<span class="pre">~daf.data.DafReadOnly,
-</span> 
-<span class="pre">name:
-</span> 
-<span class="pre">str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">None
-</span> 
-<span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">capture:
-</span> 
-<span class="pre">~typing.Callable[[...],
-</span> 
-<span class="pre">~daf.data.DafWriter]
-</span> 
-<span class="pre">=
-</span> 
-<span class="pre">&lt;class
-</span> 
-<span class="pre">'daf.formats.MemoryDaf'&gt;,
-</span> 
-<span class="pre">axes:
+<span class="pre">input_axes:
 </span> 
 <span class="pre">~typing.Mapping[str,
 </span> 
@@ -370,7 +344,101 @@ pipelines in Python or any other language, if one insists on doing so.
 </span> 
 <span class="pre">None,
 </span> 
-<span class="pre">data:
+<span class="pre">input_data:
+</span> 
+<span class="pre">~typing.Mapping[str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str],
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.queries.Axis
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.queries.Lookup
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.queries.Names
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.operations.QuerySequence
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">capture:
+</span> 
+<span class="pre">~typing.Callable[[...],
+</span> 
+<span class="pre">~daf.data.DafWriter]
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">&lt;class
+</span> 
+<span class="pre">'daf.formats.MemoryDaf'&gt;,
+</span> 
+<span class="pre">output_axes:
+</span> 
+<span class="pre">~typing.Mapping[str,
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.queries.Axis
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.queries.Lookup
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.queries.Names
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~daf.operations.QuerySequence
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">output_data:
 </span> 
 <span class="pre">~typing.Mapping[str
 </span> 
@@ -548,20 +616,16 @@ pipelines in Python or any other language, if one insists on doing so.
 </dt>
 
 <dd>
-<p>Invoke a computation on a 
+<p>Invoke a computation on a view of some 
 <code class="docutils literal notranslate">
-<span class="pre">view
+<span class="pre">dset
 </span>
-</code> data set; copy a 
+</code> and return the result; copy a view of the results into the
+base 
 <code class="docutils literal notranslate">
-<span class="pre">viewer
+<span class="pre">dset
 </span>
-</code> of the updated data set into the base 
-<code class="docutils literal notranslate">
-<span class="pre">Daf
-</span>
-</code> data
-set of the view. See the Julia
+</code>. See the Julia
 
 <a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.adapter">documentation
 </a> for details.

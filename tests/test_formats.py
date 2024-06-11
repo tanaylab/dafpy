@@ -21,30 +21,48 @@ from daf import *
 from .utilities import assert_raises
 
 
-def make_files() -> FilesDaf:
+def make_files() -> Tuple[FilesDaf, str]:
     tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
     files = FilesDaf(tmpdir.name, "w", name="test!")
     setattr(files, "__gc_anchor__", tmpdir)
-    return files
+    return (
+        files,
+        dedent(
+            f"""
+        path: {tmpdir.name}
+        mode: w
+    """
+        )[1:],
+    )
 
 
-def make_h5df() -> H5df:
+def make_h5df() -> Tuple[H5df, str]:
     tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
     h5df = H5df(tmpdir.name + "/test.h5df", "w", name="test!")
     setattr(h5df, "__gc_anchor__", tmpdir)
-    return h5df
+    return (
+        h5df,
+        dedent(
+            f"""
+        root: HDF5.File: (read-write) {tmpdir.name}/test.h5df
+        mode: w
+    """
+        )[1:],
+    )
 
 
-FORMATS = [("MemoryDaf", lambda: MemoryDaf(name="test!")), ("FilesDaf", make_files), ("H5df", make_h5df)]
+FORMATS = [("MemoryDaf", lambda: (MemoryDaf(name="test!"), "")), ("FilesDaf", make_files), ("H5df", make_h5df)]
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
 @pytest.mark.parametrize("scalar_data", [("1.0.1", "String"), (np.int8(1), "Int8"), (0.5, "Float64")])
-def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: Tuple[StorageScalar, str]) -> None:
+def test_scalars(
+    format_data: Tuple[str, Callable[[], Tuple[DafWriter, str]]], scalar_data: Tuple[StorageScalar, str]
+) -> None:
     format_name, create_empty = format_data
     scalar_value, julia_type = scalar_data
 
-    dset = create_empty()
+    dset, extra = create_empty()
     assert dset.name == "test!"
 
     assert len(dset.scalars_set()) == 0
@@ -65,6 +83,11 @@ def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: 
             f"""
                 name: test!
                 type: {format_name}
+            """
+        )[1:]
+        + extra
+        + dedent(
+            f"""
                 scalars:
                   foo: {scalar_value}
             """
@@ -78,11 +101,13 @@ def test_scalars(format_data: Tuple[str, Callable[[], DafWriter]], scalar_data: 
 
 @pytest.mark.parametrize("format_data", FORMATS)
 @pytest.mark.parametrize("axis_data", [("cell", ["A", "B"]), ("gene", np.array(["X", "Y", "Z"]))])
-def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple[str, Sequence[str]]) -> None:
+def test_axes(
+    format_data: Tuple[str, Callable[[], Tuple[DafWriter, str]]], axis_data: Tuple[str, Sequence[str]]
+) -> None:
     format_name, create_empty = format_data
     axis_name, axis_entries = axis_data
 
-    dset = create_empty()
+    dset, extra = create_empty()
 
     assert len(dset.axes_set()) == 0
     assert not dset.has_axis(axis_name)
@@ -102,6 +127,11 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
             f"""
                 name: test!
                 type: {format_name}
+            """
+        )[1:]
+        + extra
+        + dedent(
+            f"""
                 axes:
                   {axis_name}: {len(axis_entries)} entries
             """
@@ -115,10 +145,10 @@ def test_axes(format_data: Tuple[str, Callable[[], DafWriter]], axis_data: Tuple
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
-def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
+def test_vectors_defaults(format_data: Tuple[str, Callable[[], Tuple[DafWriter, str]]]) -> None:
     _format_name, create_empty = format_data
 
-    dset = create_empty()
+    dset, _extra = create_empty()
     dset.add_axis("cell", ["A", "B"])
 
     with assert_raises(
@@ -147,12 +177,12 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> N
     [(["X", "Y"], "String"), ([1, 2], "Int64"), ([1.0, 2.0], "Float64"), (np.array([[1, 2]], dtype="i1"), "Int8")],
 )
 def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
-    format_data: Tuple[str, Callable[[], DafWriter]], vector_data: Tuple[Any, str]
+    format_data: Tuple[str, Callable[[], Tuple[DafWriter, str]]], vector_data: Tuple[Any, str]
 ) -> None:
     format_name, create_empty = format_data
     vector_entries, julia_type = vector_data
 
-    dset = create_empty()
+    dset, extra = create_empty()
     dset.add_axis("cell", ["A", "B"])
     assert len(dset.vectors_set("cell")) == 0
     assert not dset.has_vector("cell", "foo")
@@ -187,6 +217,11 @@ def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
             f"""
                 name: test!
                 type: {format_name}
+            """
+        )[1:]
+        + extra
+        + dedent(
+            f"""
                 axes:
                   cell: 2 entries
                 vectors:
@@ -230,10 +265,10 @@ def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
-def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
+def test_matrices_defaults(format_data: Tuple[str, Callable[[], Tuple[DafWriter, str]]]) -> None:
     _format_name, create_empty = format_data
 
-    dset = create_empty()
+    dset, _extra = create_empty()
     dset.add_axis("cell", ["A", "B"])
     dset.add_axis("gene", ["X", "Y", "Z"])
 
@@ -286,10 +321,10 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], DafWriter]]) -> 
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
-def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> None:
+def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[DafWriter, str]]]) -> None:
     format_name, create_empty = format_data
 
-    dset = create_empty()
+    dset, extra = create_empty()
     dset.add_axis("cell", ["A", "B"])
     dset.add_axis("gene", ["X", "Y", "Z"])
 
@@ -323,6 +358,11 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
             f"""
                 name: test!
                 type: {format_name}
+            """
+        )[1:]
+        + extra
+        + dedent(
+            """
                 axes:
                   cell: 2 entries
                   gene: 3 entries
@@ -347,6 +387,11 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], DafWriter]]) -> Non
             f"""
                 name: test!
                 type: {format_name}
+            """
+        )[1:]
+        + extra
+        + dedent(
+            """
                 axes:
                   cell: 2 entries
                   gene: 3 entries

@@ -97,13 +97,13 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">.copies</span> <span class="kn">import</span> <span class="n">EmptyData</span>
-<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafReadOnly</span>
+<span class="kn">from</span> <span class="nn">.copies</span> <span class="kn">import</span> <span class="n">copy_all</span>
 <span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafWriter</span>
 <span class="kn">from</span> <span class="nn">.formats</span> <span class="kn">import</span> <span class="n">MemoryDaf</span>
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_jl_pairs</span>
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
+<span class="kn">from</span> <span class="nn">.formats</span> <span class="kn">import</span> <span class="n">chain_writer</span>
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">ViewAxes</span>
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">ViewData</span>
+<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">viewer</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
@@ -114,33 +114,30 @@
 <a class="viewcode-back" href="../../adapters.html#daf.adapters.adapter">[docs]</a>
 <span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">adapter</span><span class="p">(</span>
-    <span class="n">view</span><span class="p">:</span> <span class="n">DafWriter</span> <span class="o">|</span> <span class="n">DafReadOnly</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dset</span><span class="p">:</span> <span class="n">DafWriter</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">input_axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewAxes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">capture</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">DafWriter</span><span class="p">]</span> <span class="o">=</span> <span class="n">MemoryDaf</span><span class="p">,</span>
-    <span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewAxes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewAxes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">empty</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EmptyData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">relayout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">DafWriter</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Invoke a computation on a ``view`` data set; copy a ``viewer`` of the updated data set into the base ``Daf`` data</span>
-<span class="sd">    set of the view. See the Julia</span>
+<span class="sd">    Invoke a computation on a view of some ``dset`` and return the result; copy a view of the results into the</span>
+<span class="sd">    base ``dset``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.adapter&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">writer</span> <span class="o">=</span> <span class="n">capture</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Adapters</span><span class="o">.</span><span class="n">get_adapter_capture_name</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span>
-    <span class="n">adapted</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Adapters</span><span class="o">.</span><span class="n">get_adapter_input</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">writer</span><span class="p">)</span>
-    <span class="k">yield</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">adapted</span><span class="p">)</span>
-    <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Adapters</span><span class="o">.</span><span class="n">copy_adapter_output</span><span class="p">(</span>
-        <span class="n">view</span><span class="p">,</span>
-        <span class="n">adapted</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-        <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">jl</span><span class="o">.</span><span class="n">_pairify_data</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
-        <span class="n">empty</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
-        <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">,</span>
-        <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
-    <span class="p">)</span></div>
+    <span class="n">base_name</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">input_dset</span> <span class="o">=</span> <span class="n">viewer</span><span class="p">(</span><span class="n">dset</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">input_axes</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s2">.input&quot;</span><span class="p">)</span>
+    <span class="n">captured_dset</span> <span class="o">=</span> <span class="n">capture</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s2">.capture&quot;</span><span class="p">)</span>
+    <span class="n">adapted_dset</span> <span class="o">=</span> <span class="n">chain_writer</span><span class="p">([</span><span class="n">input_dset</span><span class="p">,</span> <span class="n">captured_dset</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s2">.adapted&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">adapted_dset</span>
+    <span class="n">output_dset</span> <span class="o">=</span> <span class="n">viewer</span><span class="p">(</span><span class="n">adapted_dset</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">output_axes</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">output_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s2">.output&quot;</span><span class="p">)</span>
+    <span class="n">copy_all</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">output_dset</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">dset</span><span class="p">,</span> <span class="n">empty</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 </pre></div>
 

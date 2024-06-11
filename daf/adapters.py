@@ -18,13 +18,13 @@ from typing import Iterator
 from typing import Optional
 
 from .copies import EmptyData
-from .data import DafReadOnly
+from .copies import copy_all
 from .data import DafWriter
 from .formats import MemoryDaf
-from .julia_import import _jl_pairs
-from .julia_import import jl
+from .formats import chain_writer
 from .views import ViewAxes
 from .views import ViewData
+from .views import viewer
 
 __all__ = [
     "adapter",
@@ -33,30 +33,27 @@ __all__ = [
 
 @contextmanager
 def adapter(
-    view: DafWriter | DafReadOnly,
-    name: Optional[str] = None,
+    dset: DafWriter,
+    *,
+    input_axes: Optional[ViewAxes] = None,
+    input_data: Optional[ViewData] = None,
     capture: Callable[..., DafWriter] = MemoryDaf,
-    axes: Optional[ViewAxes] = None,
-    data: Optional[ViewData] = None,
+    output_axes: Optional[ViewAxes] = None,
+    output_data: Optional[ViewData] = None,
     empty: Optional[EmptyData] = None,
     relayout: bool = True,
     overwrite: bool = False,
 ) -> Iterator[DafWriter]:
     """
-    Invoke a computation on a ``view`` data set; copy a ``viewer`` of the updated data set into the base ``Daf`` data
-    set of the view. See the Julia
+    Invoke a computation on a view of some ``dset`` and return the result; copy a view of the results into the
+    base ``dset``. See the Julia
     `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/adapters.html#Daf.Adapters.adapter>`__ for details.
     """
-    writer = capture(name=jl.Daf.Adapters.get_adapter_capture_name(view, name=name))
-    adapted = jl.Daf.Adapters.get_adapter_input(view, name=name, writer=writer)
-    yield DafWriter(adapted)
-    jl.Daf.Adapters.copy_adapter_output(
-        view,
-        adapted,
-        name=name,
-        axes=axes,
-        data=jl._pairify_data(_jl_pairs(data)),
-        empty=empty,
-        relayout=relayout,
-        overwrite=overwrite,
-    )
+    base_name = dset.name
+    input_dset = viewer(dset, axes=input_axes, data=input_data, name=f"{base_name}.input")
+    captured_dset = capture(name=f"{base_name}.capture")
+    adapted_dset = chain_writer([input_dset, captured_dset], name=f"{base_name}.adapted")
+    result = yield adapted_dset
+    output_dset = viewer(adapted_dset, axes=output_axes, data=output_data, name=f"{base_name}.output")
+    copy_all(source=output_dset, destination=dset, empty=empty, relayout=relayout, overwrite=overwrite)
+    return result
