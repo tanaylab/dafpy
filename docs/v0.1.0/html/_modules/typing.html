@@ -15,7 +15,7 @@
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -393,19 +393,33 @@
             <span class="n">newargs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">newargs</span>
 
-<span class="k">def</span> <span class="nf">_deduplicate</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_deduplicate</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">unhashable_fallback</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="c1"># Weed out strict duplicates, preserving the first of each occurrence.</span>
-    <span class="n">all_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_params</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
-        <span class="n">new_params</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">all_params</span><span class="p">:</span>
-                <span class="n">new_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-                <span class="n">all_params</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">new_params</span>
-        <span class="k">assert</span> <span class="ow">not</span> <span class="n">all_params</span><span class="p">,</span> <span class="n">all_params</span>
-    <span class="k">return</span> <span class="n">params</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">unhashable_fallback</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="c1"># Happens for cases like `Annotated[dict, {&#39;x&#39;: IntValidator()}]`</span>
+        <span class="k">return</span> <span class="n">_deduplicate_unhashable</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
+<span class="k">def</span> <span class="nf">_deduplicate_unhashable</span><span class="p">(</span><span class="n">unhashable_params</span><span class="p">):</span>
+    <span class="n">new_unhashable</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">unhashable_params</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_unhashable</span><span class="p">:</span>
+            <span class="n">new_unhashable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_unhashable</span>
+
+<span class="k">def</span> <span class="nf">_compare_args_orderless</span><span class="p">(</span><span class="n">first_args</span><span class="p">,</span> <span class="n">second_args</span><span class="p">):</span>
+    <span class="n">first_unhashable</span> <span class="o">=</span> <span class="n">_deduplicate_unhashable</span><span class="p">(</span><span class="n">first_args</span><span class="p">)</span>
+    <span class="n">second_unhashable</span> <span class="o">=</span> <span class="n">_deduplicate_unhashable</span><span class="p">(</span><span class="n">second_args</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">second_unhashable</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">first_unhashable</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">t</span>
 
 <span class="k">def</span> <span class="nf">_remove_dups_flatten</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal helper for Union creation and substitution.</span>
@@ -420,7 +434,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_deduplicate</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_deduplicate</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">unhashable_fallback</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_flatten_literal_params</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
@@ -609,7 +623,7 @@
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Any</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Any cannot be instantiated&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 
 
 <span class="nd">@_SpecialForm</span>
@@ -911,22 +925,25 @@
 <span class="sd">    2. If the return value is ``True``, the type of its argument</span>
 <span class="sd">       is the type inside ``TypeGuard``.</span>
 
-<span class="sd">       For example::</span>
+<span class="sd">    For example::</span>
 
-<span class="sd">           def is_str(val: Union[str, float]):</span>
-<span class="sd">               # &quot;isinstance&quot; type guard</span>
-<span class="sd">               if isinstance(val, str):</span>
-<span class="sd">                   # Type of ``val`` is narrowed to ``str``</span>
-<span class="sd">                   ...</span>
-<span class="sd">               else:</span>
-<span class="sd">                   # Else, type of ``val`` is narrowed to ``float``.</span>
-<span class="sd">                   ...</span>
+<span class="sd">         def is_str_list(val: list[object]) -&gt; TypeGuard[list[str]]:</span>
+<span class="sd">             &#39;&#39;&#39;Determines whether all objects in the list are strings&#39;&#39;&#39;</span>
+<span class="sd">             return all(isinstance(x, str) for x in val)</span>
+
+<span class="sd">         def func1(val: list[object]):</span>
+<span class="sd">             if is_str_list(val):</span>
+<span class="sd">                 # Type of ``val`` is narrowed to ``list[str]``.</span>
+<span class="sd">                 print(&quot; &quot;.join(val))</span>
+<span class="sd">             else:</span>
+<span class="sd">                 # Type of ``val`` remains as ``list[object]``.</span>
+<span class="sd">                 print(&quot;Not a list of strings!&quot;)</span>
 
 <span class="sd">    Strict type narrowing is not enforced -- ``TypeB`` need not be a narrower</span>
 <span class="sd">    form of ``TypeA`` (it can even be a wider form) and this may lead to</span>
 <span class="sd">    type-unsafe results.  The main reason is to allow for things like</span>
-<span class="sd">    narrowing ``List[object]`` to ``List[str]`` even though the latter is not</span>
-<span class="sd">    a subtype of the former, since ``List`` is invariant.  The responsibility of</span>
+<span class="sd">    narrowing ``list[object]`` to ``list[str]`` even though the latter is not</span>
+<span class="sd">    a subtype of the former, since ``list`` is invariant.  The responsibility of</span>
 <span class="sd">    writing type-safe type guards is left to the user.</span>
 
 <span class="sd">    ``TypeGuard`` also works with type variables.  For more information, see</span>
@@ -951,7 +968,7 @@
         <span class="c1"># If we do `def f(*args: *Ts)`, then we&#39;ll have `arg = &#39;*Ts&#39;`.</span>
         <span class="c1"># Unfortunately, this isn&#39;t a valid expression on its own, so we</span>
         <span class="c1"># do the unpacking manually.</span>
-        <span class="k">if</span> <span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
             <span class="n">arg_to_compile</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s1">,)[0]&#39;</span>  <span class="c1"># E.g. (*Ts,)[0] or (*tuple[int, int],)[0]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">arg_to_compile</span> <span class="o">=</span> <span class="n">arg</span>
@@ -1219,7 +1236,9 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__origin__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">__orig_class__</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="c1"># Some objects raise TypeError (or something even more exotic)</span>
+        <span class="c1"># if you try to set attributes on them; we guard against that here</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">result</span>
 
@@ -1625,7 +1644,10 @@
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">_UnionGenericAlias</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">UnionType</span><span class="p">)):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
-        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">__args__</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># fast path</span>
+            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">__args__</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># not hashable, slow path</span>
+            <span class="k">return</span> <span class="n">_compare_args_orderless</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">__args__</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="p">))</span>
@@ -3333,11 +3355,11 @@
 
 <span class="k">class</span> <span class="nc">_DeprecatedType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;__dict__&quot;</span><span class="p">,</span> <span class="s2">&quot;__module__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;__dict__&quot;</span><span class="p">,</span> <span class="s2">&quot;__module__&quot;</span><span class="p">,</span> <span class="s2">&quot;__doc__&quot;</span><span class="p">}</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is deprecated, import directly &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;from typing instead. </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> will be removed &quot;</span>
-                <span class="s2">&quot;in Python 3.12.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in Python 3.13.&quot;</span><span class="p">,</span>
                 <span class="ne">DeprecationWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>

@@ -37,7 +37,7 @@
 <script src="_static/documentation_options.js?v=01f34227">
 </script>
         
-<script src="_static/doctools.js?v=888ff710">
+<script src="_static/doctools.js?v=9a2dae69">
 </script>
         
 <script src="_static/sphinx_highlight.js?v=dc90522c">
@@ -803,42 +803,38 @@ and preserves the order of the entries since in Python dictionaries are ordered 
 <span class="pre">str
 </span>
 </code>, 
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Optional
-</span>
-</code>[
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Union
-</span>
-</code>[
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">str
 </span>
-</code>, 
+</code> | 
 <a class="reference internal" href="queries.html#daf.queries.Axis" title="daf.queries.Axis">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">Axis
 </span>
 </code>
-</a>, 
+</a> | 
 <a class="reference internal" href="queries.html#daf.queries.Lookup" title="daf.queries.Lookup">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">Lookup
 </span>
 </code>
-</a>, 
+</a> | 
 <a class="reference internal" href="queries.html#daf.queries.Names" title="daf.queries.Names">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">Names
 </span>
 </code>
-</a>, 
+</a> | 
 <a class="reference internal" href="operations.html#daf.operations.QuerySequence" title="daf.operations.QuerySequence">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">QuerySequence
 </span>
 </code>
-</a>]]]
+</a> | 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">None
+</span>
+</code>]
 </p>
 
 </dd>
@@ -883,8 +879,12 @@ and preserves the order of the entries since in Python dictionaries are ordered 
 <span class="pre">Mapping
 </span>
 </code>[
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Union
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code> | 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Tuple
 </span>
 </code>[
 <code class="xref py py-class docutils literal notranslate">
@@ -892,9 +892,17 @@ and preserves the order of the entries since in Python dictionaries are ordered 
 </span>
 </code>, 
 <code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>] | 
+<code class="xref py py-class docutils literal notranslate">
 <span class="pre">Tuple
 </span>
 </code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">str
 </span>
@@ -904,57 +912,37 @@ and preserves the order of the entries since in Python dictionaries are ordered 
 </span>
 </code>], 
 <code class="xref py py-class docutils literal notranslate">
-<span class="pre">Tuple
-</span>
-</code>[
-<code class="xref py py-class docutils literal notranslate">
 <span class="pre">str
 </span>
-</code>, 
-<code class="xref py py-class docutils literal notranslate">
-<span class="pre">str
-</span>
-</code>, 
-<code class="xref py py-class docutils literal notranslate">
-<span class="pre">str
-</span>
-</code>]], 
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Optional
-</span>
-</code>[
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Union
-</span>
-</code>[
-<code class="xref py py-class docutils literal notranslate">
-<span class="pre">str
-</span>
-</code>, 
+</code> | 
 <a class="reference internal" href="queries.html#daf.queries.Axis" title="daf.queries.Axis">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">Axis
 </span>
 </code>
-</a>, 
+</a> | 
 <a class="reference internal" href="queries.html#daf.queries.Lookup" title="daf.queries.Lookup">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">Lookup
 </span>
 </code>
-</a>, 
+</a> | 
 <a class="reference internal" href="queries.html#daf.queries.Names" title="daf.queries.Names">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">Names
 </span>
 </code>
-</a>, 
+</a> | 
 <a class="reference internal" href="operations.html#daf.operations.QuerySequence" title="daf.operations.QuerySequence">
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">QuerySequence
 </span>
 </code>
-</a>]]]
+</a> | 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">None
+</span>
+</code>]
 </p>
 
 </dd>
