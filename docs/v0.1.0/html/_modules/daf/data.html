@@ -15,7 +15,7 @@
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -260,13 +260,35 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">axis_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
         <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">axis_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">axis_indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">axis_indices</span> <span class="o">=</span> <span class="n">WeakRefAbleDict</span><span class="p">()</span>
+        <span class="n">axis_dictionary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">axis_dictionary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">axis_dictionary</span> <span class="o">=</span> <span class="n">WeakRefAbleDict</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">axis_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">axis_indices</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">axis_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_indices</span>
-        <span class="k">return</span> <span class="n">axis_indices</span></div>
+                <span class="n">axis_dictionary</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="p">[</span><span class="n">axis_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_dictionary</span>
+        <span class="k">return</span> <span class="n">axis_dictionary</span></div>
+
+
+<div class="viewcode-block" id="DafReader.axis_np_indices">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_np_indices">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis_np_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a ``numpy`` vector of the indices of the ``entries`` in the ``axis``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">axis_dictionary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis_dict</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">entries</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_dictionary</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="DafReader.axis_pd_indices">
+<a class="viewcode-back" href="../../data.html#daf.data.DafReader.axis_pd_indices">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis_pd_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a ``pandas`` series of the indices of the ``entries`` in the ``axis``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_np_indices</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">entries</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">entries</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_vector">

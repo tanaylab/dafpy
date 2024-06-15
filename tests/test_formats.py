@@ -120,6 +120,9 @@ def test_axes(
     assert list(sorted([(str(name), index) for (name, index) in dset.axis_dict(axis_name).items()])) == sorted(
         [(name, index) for (index, name) in enumerate(axis_entries)]
     )
+    assert np.all(dset.axis_np_indices(axis_name, axis_entries) == np.arange(len(axis_entries)))
+    assert np.all(dset.axis_pd_indices(axis_name, axis_entries).values == np.arange(len(axis_entries)))
+    assert list(dset.axis_pd_indices(axis_name, axis_entries).index) == list(axis_entries)
     assert set(dset.axes_set()) == set([axis_name])
     assert (
         dset.description()

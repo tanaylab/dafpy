@@ -37,7 +37,7 @@
 <script src="_static/documentation_options.js?v=01f34227">
 </script>
         
-<script src="_static/doctools.js?v=9a2dae69">
+<script src="_static/doctools.js?v=888ff710">
 </script>
         
 <script src="_static/sphinx_highlight.js?v=dc90522c">
@@ -219,6 +219,24 @@
 <a class="reference internal" href="#daf.data.DafReader.axis_dict">
 <code class="docutils literal notranslate">
 <span class="pre">DafReader.axis_dict()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.axis_np_indices">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.axis_np_indices()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#daf.data.DafReader.axis_pd_indices">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.axis_pd_indices()
 </span>
 </code>
 </a>
@@ -552,6 +570,16 @@
 
 <li class="toctree-l2">
 <a class="reference internal" href="anndata_format.html">anndata_format
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="generic_functions.html">generic_functions
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="generic_logging.html">generic_logging
 </a>
 </li>
 
@@ -1505,6 +1533,190 @@ stored in the
 <span class="pre">axis
 </span>
 </code> entry names to their (0-based) integer index.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.axis_np_indices">
+
+<span class="sig-name descname">
+<span class="pre">axis_np_indices
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">entries
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">ndarray
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.axis_np_indices">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.axis_np_indices" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return a 
+<code class="docutils literal notranslate">
+<span class="pre">numpy
+</span>
+</code> vector of the indices of the 
+<code class="docutils literal notranslate">
+<span class="pre">entries
+</span>
+</code> in the 
+<code class="docutils literal notranslate">
+<span class="pre">axis
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="daf.data.DafReader.axis_pd_indices">
+
+<span class="sig-name descname">
+<span class="pre">axis_pd_indices
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">entries
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">Series
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/data.html#DafReader.axis_pd_indices">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.data.DafReader.axis_pd_indices" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return a 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code> series of the indices of the 
+<code class="docutils literal notranslate">
+<span class="pre">entries
+</span>
+</code> in the 
+<code class="docutils literal notranslate">
+<span class="pre">axis
+</span>
+</code>.
 </p>
 
 </dd>
@@ -8272,17 +8484,21 @@ set. See the Julia
 
 <p>alias of 
 <code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Literal
+<span class="pre">Union
 </span>
-</code>[‘MappedData’] | 
+</code>[
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘MemoryData’] | 
+</code>[‘MappedData’], 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘QueryData’]
+</code>[‘MemoryData’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>[‘QueryData’]]
 </p>
 
 </dd>

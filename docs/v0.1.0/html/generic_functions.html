@@ -11,7 +11,7 @@
   
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-<title>storage_types &mdash; Daf 0.1.0 documentation
+<title>generic_functions &mdash; Daf 0.1.0 documentation
 </title>
       
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
@@ -50,9 +50,9 @@
     
 <link rel="search" title="Search" href="search.html" />
     
-<link rel="next" title="queries" href="queries.html" />
+<link rel="next" title="generic_logging" href="generic_logging.html" />
     
-<link rel="prev" title="data" href="data.html" /> 
+<link rel="prev" title="anndata_format" href="anndata_format.html" /> 
 
 </head>
 
@@ -125,31 +125,9 @@
 </a>
 </li>
 
-<li class="toctree-l2 current">
-<a class="current reference internal" href="#">storage_types
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html">storage_types
 </a>
-<ul>
-
-<li class="toctree-l3">
-<a class="reference internal" href="#daf.storage_types.StorageNumber">
-<code class="docutils literal notranslate">
-<span class="pre">StorageNumber
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l3">
-<a class="reference internal" href="#daf.storage_types.StorageScalar">
-<code class="docutils literal notranslate">
-<span class="pre">StorageScalar
-</span>
-</code>
-</a>
-</li>
-
-</ul>
-
 </li>
 
 <li class="toctree-l2">
@@ -192,9 +170,31 @@
 </a>
 </li>
 
-<li class="toctree-l2">
-<a class="reference internal" href="generic_functions.html">generic_functions
+<li class="toctree-l2 current">
+<a class="current reference internal" href="#">generic_functions
 </a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.generic_functions.AbnormalHandler">
+<code class="docutils literal notranslate">
+<span class="pre">AbnormalHandler
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.generic_functions.inefficient_action_handler">
+<code class="docutils literal notranslate">
+<span class="pre">inefficient_action_handler()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
 </li>
 
 <li class="toctree-l2">
@@ -246,12 +246,12 @@
 </a>
 </li>
       
-<li class="breadcrumb-item active">storage_types
+<li class="breadcrumb-item active">generic_functions
 </li>
       
 <li class="wy-breadcrumbs-aside">
             
-<a href="_sources/storage_types.rst.txt" rel="nofollow"> View page source
+<a href="_sources/generic_functions.rst.txt" rel="nofollow"> View page source
 </a>
       
 </li>
@@ -267,212 +267,240 @@
 <div itemprop="articleBody">
              
   
-<section id="module-daf.storage_types">
+<section id="module-daf.generic_functions">
 
-<span id="storage-types">
+<span id="generic-functions">
 </span>
-<h1>storage_types
-<a class="headerlink" href="#module-daf.storage_types" title="Link to this heading">¶
+<h1>generic_functions
+<a class="headerlink" href="#module-daf.generic_functions" title="Link to this heading">¶
 </a>
 </h1>
 
-<p>Type definitions for the types that can be stored in 
-<code class="docutils literal notranslate">
-<span class="pre">Daf
-</span>
-</code>.
+<p>Types that arguably should belong in a more general-purpose package. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/generic.html">documentation
+</a> for details.
 </p>
 
 <dl class="py data">
 
-<dt class="sig sig-object py" id="daf.storage_types.StorageNumber">
+<dt class="sig sig-object py" id="daf.generic_functions.AbnormalHandler">
 
 <span class="sig-prename descclassname">
-<span class="pre">daf.storage_types.
+<span class="pre">daf.generic_functions.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">StorageNumber
+<span class="pre">AbnormalHandler
 </span>
 </span>
-<em class="property">
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">bool
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">int
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">float
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float64
-</span>
-</em>
-<a class="headerlink" href="#daf.storage_types.StorageNumber" title="Link to this definition">¶
+<a class="headerlink" href="#daf.generic_functions.AbnormalHandler" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Supported Python number types.
+<p>The action to take when encountering an “abnormal” (but recoverable) operation. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/generic.html#Daf.Generic.AbnormalHandler">documentation
+</a> for details.
 </p>
 
-<p>The built-in Python 
-<code class="docutils literal notranslate">
-<span class="pre">int
+<p>alias of 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Union
 </span>
-</code> and 
-<code class="docutils literal notranslate">
-<span class="pre">float
+</code>[
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
 </span>
-</code> types are automatically converted to 
-<code class="docutils literal notranslate">
-<span class="pre">np.int64
+</code>[‘IgnoreHandler’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
 </span>
-</code> and 
-<code class="docutils literal notranslate">
-<span class="pre">np.float64
+</code>[‘WarnHandler’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
 </span>
-</code>,
-respectively. Use the 
-<code class="docutils literal notranslate">
-<span class="pre">numpy
-</span>
-</code> types if you want to force the use of a specific (smaller) Julia type.
+</code>[‘ErrorHandler’]]
 </p>
 
 </dd>
 </dl>
 
 
-<dl class="py data">
+<dl class="py function">
 
-<dt class="sig sig-object py" id="daf.storage_types.StorageScalar">
+<dt class="sig sig-object py" id="daf.generic_functions.inefficient_action_handler">
 
 <span class="sig-prename descclassname">
-<span class="pre">daf.storage_types.
+<span class="pre">daf.generic_functions.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">StorageScalar
+<span class="pre">inefficient_action_handler
 </span>
 </span>
-<em class="property">
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">handler
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'IgnoreHandler'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
 <span class="w"> 
 </span>
 <span class="p">
-<span class="pre">=
+<span class="pre">|
 </span>
 </span>
 <span class="w"> 
 </span>
-<span class="pre">bool
-</span> 
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'WarnHandler'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
 <span class="pre">|
-</span> 
-<span class="pre">int
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">float
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">str
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'ErrorHandler'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
 </span>
 </em>
-<a class="headerlink" href="#daf.storage_types.StorageScalar" title="Link to this definition">¶
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'IgnoreHandler'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'WarnHandler'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'ErrorHandler'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/daf/generic_functions.html#inefficient_action_handler">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.generic_functions.inefficient_action_handler" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Supported Python scalar types.
+<p>Specify the 
+<code class="docutils literal notranslate">
+<span class="pre">AbnormalHandler
+</span>
+</code> to use when accessing a matrix in an inefficient way (“against the grain”). Returns
+the previous handler. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/generic_functions.html#Daf.MatrixLayouts.inefficient_action_handler">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -490,12 +518,12 @@ respectively. Use the
 <footer>
 <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         
-<a href="data.html" class="btn btn-neutral float-left" title="data" accesskey="p" rel="prev">
+<a href="anndata_format.html" class="btn btn-neutral float-left" title="anndata_format" accesskey="p" rel="prev">
 <span class="fa fa-arrow-circle-left" aria-hidden="true">
 </span> Previous
 </a>
         
-<a href="queries.html" class="btn btn-neutral float-right" title="queries" accesskey="n" rel="next">Next 
+<a href="generic_logging.html" class="btn btn-neutral float-right" title="generic_logging" accesskey="n" rel="next">Next 
 <span class="fa fa-arrow-circle-right" aria-hidden="true">
 </span>
 </a>

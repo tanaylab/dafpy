@@ -153,13 +153,29 @@ class DafReader(JlObject):
         """
         axis_version_counter = jl.Daf.axis_version_counter(self.jl_obj, axis)
         axis_key = (axis_version_counter, axis, False)
-        axis_indices = self.weakrefs.get(axis_key)
-        if axis_indices is None:
-            axis_indices = WeakRefAbleDict()
+        axis_dictionary = self.weakrefs.get(axis_key)
+        if axis_dictionary is None:
+            axis_dictionary = WeakRefAbleDict()
             for name, index in jl.Daf.axis_dict(self.jl_obj, axis).items():
-                axis_indices[name] = index - 1
-            self.weakrefs[axis_key] = axis_indices
-        return axis_indices
+                axis_dictionary[str(name)] = index - 1
+            self.weakrefs[axis_key] = axis_dictionary
+        return axis_dictionary
+
+    def axis_np_indices(self, axis: str, entries: Sequence[str]) -> np.ndarray:
+        """
+        Return a ``numpy`` vector of the indices of the ``entries`` in the ``axis``.
+        """
+        axis_dictionary = self.axis_dict(axis)
+        result = np.empty(len(entries), "int32")
+        for index, entry in enumerate(entries):
+            result[index] = axis_dictionary[entry]
+        return result
+
+    def axis_pd_indices(self, axis: str, entries: Sequence[str]) -> pd.Series:
+        """
+        Return a ``pandas`` series of the indices of the ``entries`` in the ``axis``.
+        """
+        return pd.Series(self.axis_np_indices(axis, entries), index=np.array(entries))
 
     def has_vector(self, axis: str, name: str) -> bool:
         """
