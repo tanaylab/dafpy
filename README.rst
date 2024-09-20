@@ -31,6 +31,13 @@ The Python package provides the same API as the Julia package, with the followin
 See the Python API documentation (latest published: TODO, head revision:
 `here <https://tanaylab.github.io/Daf.py/v0.1.0/html>`_) for details.
 
+Status
+------
+
+Version 0.1.0 is an alpha release. We hope it is feature complete and have started using it for internal projects.
+However, everything is subject to change based on user feedback (so don't be shy). Comments, bug reports and PRs
+are welcome!
+
 License (MIT)
 -------------
 
