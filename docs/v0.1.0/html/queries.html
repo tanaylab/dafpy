@@ -298,6 +298,15 @@
 </li>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#daf.queries.MaskSlice">
+<code class="docutils literal notranslate">
+<span class="pre">MaskSlice
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#daf.queries.Names">
 <code class="docutils literal notranslate">
 <span class="pre">Names
@@ -337,6 +346,24 @@
 <a class="reference internal" href="#daf.queries.parse_query">
 <code class="docutils literal notranslate">
 <span class="pre">parse_query()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.queries.SquareMaskColumn">
+<code class="docutils literal notranslate">
+<span class="pre">SquareMaskColumn
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#daf.queries.SquareMaskRow">
+<code class="docutils literal notranslate">
+<span class="pre">SquareMaskRow
 </span>
 </code>
 </a>
@@ -714,7 +741,7 @@ of some axis:
 </span>
 </code>. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.IfNot">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.AsAxis">documentation
 </a> for details.
 </p>
 
@@ -756,28 +783,6 @@ of some axis:
 <span class="n">
 <span class="pre">str
 </span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
 </span>
 </em>
 <span class="sig-paren">)
@@ -795,7 +800,7 @@ of some axis:
 <dd>
 <p>A query operation for specifying a result axis. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.IfNot">documentation
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.Axis">documentation
 </a> for details.
 </p>
 
@@ -3075,6 +3080,66 @@ is of the values that match the given regular expression. See the Julia
 
 <dl class="py class">
 
+<dt class="sig sig-object py" id="daf.queries.MaskSlice">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">MaskSlice
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/queries.html#MaskSlice">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.queries.MaskSlice" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A query operation for using a slice of a matrix as a mask, when the other axis of the matrix is different from the
+mask axis. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.MaskSlice">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
 <dt class="sig sig-object py" id="daf.queries.Names">
 
 <em class="property">
@@ -3404,6 +3469,134 @@ is of the values that match the given regular expression. See the Julia
 <span class="pre">QuerySequence
 </span>
 </code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.queries.SquareMaskColumn">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">SquareMaskColumn
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">value
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/queries.html#SquareMaskColumn">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.queries.SquareMaskColumn" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Similar to 
+<code class="docutils literal notranslate">
+<span class="pre">MaskSlice
+</span>
+</code> but is used when the mask matrix is square and we’d like to use a column as a mask.
+See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.SquareMaskColumn">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="daf.queries.SquareMaskRow">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">daf.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">SquareMaskRow
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">value
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/daf/queries.html#SquareMaskRow">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#daf.queries.SquareMaskRow" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Similar to 
+<code class="docutils literal notranslate">
+<span class="pre">MaskSlice
+</span>
+</code> but is used when the mask matrix is square and we’d like to use a row as a mask.
+See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.SquareMaskRow">documentation
+</a> for details.
 </p>
 
 </dd>

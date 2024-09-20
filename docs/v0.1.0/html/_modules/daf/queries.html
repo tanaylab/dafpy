@@ -111,11 +111,14 @@
     <span class="s2">&quot;IsNotEqual&quot;</span><span class="p">,</span>
     <span class="s2">&quot;IsNotMatch&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Lookup&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MaskSlice&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Names&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Or&quot;</span><span class="p">,</span>
     <span class="s2">&quot;OrNot&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Query&quot;</span><span class="p">,</span>
     <span class="s2">&quot;parse_query&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SquareMaskColumn&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SquareMaskRow&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Xor&quot;</span><span class="p">,</span>
     <span class="s2">&quot;XorNot&quot;</span><span class="p">,</span>
     <span class="s2">&quot;query_result_dimensions&quot;</span><span class="p">,</span>
@@ -195,7 +198,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    There are three cases where we may want to take a vector property and consider each value to be the name of an entry</span>
 <span class="sd">    of some axis: ``Fetch``, ``CountBy`` and ``GroupBy``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.IfNot&gt;`__ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.AsAxis&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -208,11 +211,53 @@
 <span class="k">class</span> <span class="nc">Axis</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for specifying a result axis. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.IfNot&gt;`__ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.Axis&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="MaskSlice">
+<a class="viewcode-back" href="../../queries.html#daf.queries.MaskSlice">[docs]</a>
+<span class="k">class</span> <span class="nc">MaskSlice</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A query operation for using a slice of a matrix as a mask, when the other axis of the matrix is different from the</span>
+<span class="sd">    mask axis. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.MaskSlice&gt;`__ for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">MaskSlice</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="SquareMaskColumn">
+<a class="viewcode-back" href="../../queries.html#daf.queries.SquareMaskColumn">[docs]</a>
+<span class="k">class</span> <span class="nc">SquareMaskColumn</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Similar to ``MaskSlice`` but is used when the mask matrix is square and we&#39;d like to use a column as a mask.</span>
+<span class="sd">    See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.SquareMaskColumn&gt;`__ for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">SquareMaskColumn</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="SquareMaskRow">
+<a class="viewcode-back" href="../../queries.html#daf.queries.SquareMaskRow">[docs]</a>
+<span class="k">class</span> <span class="nc">SquareMaskRow</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Similar to ``MaskSlice`` but is used when the mask matrix is square and we&#39;d like to use a row as a mask.</span>
+<span class="sd">    See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.SquareMaskRow&gt;`__ for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Daf</span><span class="o">.</span><span class="n">SquareMaskRow</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 

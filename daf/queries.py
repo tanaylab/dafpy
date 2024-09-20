@@ -32,11 +32,14 @@ __all__ = [
     "IsNotEqual",
     "IsNotMatch",
     "Lookup",
+    "MaskSlice",
     "Names",
     "Or",
     "OrNot",
     "Query",
     "parse_query",
+    "SquareMaskColumn",
+    "SquareMaskRow",
     "Xor",
     "XorNot",
     "query_result_dimensions",
@@ -99,7 +102,7 @@ class AsAxis(QueryOperation):
     """
     There are three cases where we may want to take a vector property and consider each value to be the name of an entry
     of some axis: ``Fetch``, ``CountBy`` and ``GroupBy``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.IfNot>`__ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.AsAxis>`__ for details.
     """
 
     def __init__(self, axis: Optional[str] = None) -> None:
@@ -109,11 +112,44 @@ class AsAxis(QueryOperation):
 class Axis(QueryOperation):
     """
     A query operation for specifying a result axis. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.IfNot>`__ for details.
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.Axis>`__ for details.
     """
 
-    def __init__(self, axis: Optional[str] = None) -> None:
+    def __init__(self, axis: str) -> None:
         super().__init__(jl.Daf.Axis(axis))
+
+
+class MaskSlice(QueryOperation):
+    """
+    A query operation for using a slice of a matrix as a mask, when the other axis of the matrix is different from the
+    mask axis. See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.MaskSlice>`__ for details.
+    """
+
+    def __init__(self, axis: str) -> None:
+        super().__init__(jl.Daf.MaskSlice(axis))
+
+
+class SquareMaskColumn(QueryOperation):
+    """
+    Similar to ``MaskSlice`` but is used when the mask matrix is square and we'd like to use a column as a mask.
+    See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.SquareMaskColumn>`__ for details.
+    """
+
+    def __init__(self, value: str) -> None:
+        super().__init__(jl.Daf.SquareMaskColumn(value))
+
+
+class SquareMaskRow(QueryOperation):
+    """
+    Similar to ``MaskSlice`` but is used when the mask matrix is square and we'd like to use a row as a mask.
+    See the Julia
+    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/queries.html#Daf.Queries.SquareMaskRow>`__ for details.
+    """
+
+    def __init__(self, value: str) -> None:
+        super().__init__(jl.Daf.SquareMaskRow(value))
 
 
 class And(QueryOperation):
