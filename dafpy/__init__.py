@@ -1,7 +1,7 @@
 """
 Data in Axes in Files.
 
-This is a thin wrapper for the ``Daf.jl`` Julia package, with the following adaptations:
+This is a thin wrapper for the ``DataAxesFormats.jl`` Julia package, with the following adaptations:
 
 * In Julia, the API is defined as a set of functions, which take the ``Daf`` object as the 1st parameter. In Python,
   this is implemented as member functions of the ``DafReader`` and ``DafWriter`` classes that wrap the matching Julia
@@ -41,7 +41,7 @@ This is a thin wrapper for the ``Daf.jl`` Julia package, with the following adap
   memory.
 
 Otherwise, the API works "just the same" :-) The documentation therefore mostly just links to the relevant entry in the
-Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/index.html>`__.
+Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/index.html>`__.
 """
 
 __author__ = "Oren Ben-Kiki"

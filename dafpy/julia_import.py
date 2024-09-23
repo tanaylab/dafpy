@@ -2,8 +2,8 @@
 Import the Julia environment.
 
 This provides additional functionality on top of ``juliapkg`` (which automatically downloads Julia packages for us). It
-will import the ``juliacall`` module to create a Julia environment (as ``jl``), and uses it to import the ``Daf.jl``
-Julia package.
+will import the ``juliacall`` module to create a Julia environment (as ``jl``), and uses it to import the
+``DataAxesFormats.jl`` Julia package.
 
 You can control the behavior using the following environment variables:
 
@@ -82,9 +82,9 @@ jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 jl.seval("using Pkg")
 # jl.seval("Pkg.update()")
 
-jl.seval("using Daf")
+jl.seval("using DataAxesFormats")
 
-jl.seval("import Daf.GenericTypes.Maybe")
+jl.seval("import DataAxesFormats.GenericTypes.Maybe")
 jl.seval("import DataFrames")
 jl.seval("import HDF5")
 jl.seval("import LinearAlgebra")
@@ -246,7 +246,7 @@ jl.seval("_DafReadersVector = Vector{DafReader}")  # NOT F-STRING
 
 jl.seval(
     """
-    function _pairify_columns(items::Maybe{AbstractVector})::Maybe{Daf.QueryColumns}
+    function _pairify_columns(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.FrameColumns}
         if items == nothing
             return nothing
         else
@@ -258,7 +258,7 @@ jl.seval(
 
 jl.seval(
     """
-    function _pairify_axes(items::Maybe{AbstractVector})::Maybe{Daf.ViewAxes}
+    function _pairify_axes(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewAxes}
         if items == nothing
             return nothing
         else
@@ -270,7 +270,7 @@ jl.seval(
 
 jl.seval(
     """
-    function _pairify_data(items::Maybe{AbstractVector})::Maybe{Daf.ViewData}
+    function _pairify_data(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewData}
         if items == nothing
             return nothing
         else
@@ -282,7 +282,7 @@ jl.seval(
 
 jl.seval(
     """
-    function _pairify_merge(items::Maybe{AbstractVector})::Maybe{Daf.MergeData}
+    function _pairify_merge(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.MergeData}
         if items == nothing
             return nothing
         else
@@ -302,7 +302,7 @@ jl.seval(
 
 jl.seval(
     """
-    PythonCall.pyconvert_add_rule("daf.julia_import:JlObject", Any, pyconvert_rule_jl_object)
+    PythonCall.pyconvert_add_rule("dafpy.julia_import:JlObject", Any, pyconvert_rule_jl_object)
     """
 )
 
@@ -316,6 +316,6 @@ jl.seval(
 
 jl.seval(
     """
-    PythonCall.pyconvert_add_rule("daf.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
+    PythonCall.pyconvert_add_rule("dafpy.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
     """
 )

@@ -7,17 +7,17 @@ Test ``Daf`` axis reconstruction.
 
 from textwrap import dedent
 
-from daf import *
+import dafpy as dp
 
 
 def test_reconstruction() -> None:
-    memory = MemoryDaf(name="memory!")
+    memory = dp.MemoryDaf(name="memory!")
 
     memory.add_axis("cell", ["A", "B", "C", "D"])
     memory.set_vector("cell", "age", [1, 1, 2, 3])
     memory.set_vector("cell", "score", [0.0, 0.5, 1.0, 2.0])
     memory.set_vector("cell", "batch", ["X", "X", "Y", ""])
-    results = reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch")
+    results = dp.reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch")
     assert list(results.keys()) == ["age"]
     assert list(results.values()) == [3]
     assert (
@@ -34,7 +34,7 @@ def test_reconstruction() -> None:
             age: 2 x Int64 (Dense)
           cell:
             batch: 4 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
-            score: 4 x Float64 (PyArray{Float64, 1, true, true, Float64} - Dense)
+            score: 4 x Float64 (PyArray - Dense)
     """
         )[1:]
     )

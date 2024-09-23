@@ -1,6 +1,6 @@
 """
 Import/export ``Daf`` data from/to ``AnnData``. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/anndata_format.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/anndata_format.html>`__ for details.
 """
 
 __all__ = ["h5ad_as_daf", "daf_as_h5ad"]
@@ -25,13 +25,13 @@ def h5ad_as_daf(
 ) -> MemoryDaf:
     """
     View ``AnnData`` as a ``Daf`` data set, specifically using a ``MemoryDaf``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/anndata_format.html#anndata_as_daf>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/anndata_format.html#anndata_as_daf>`__ for
+    details.
 
     Note that you only pass an ``h5ad`` path, since the Julia ``AnnData`` object comes from the ``Muon.jl`` package and
-    is not compatible with the Python ``anndata`` object.
-    """
+    is not compatible with the Python ``anndata`` object."""
     return MemoryDaf(
-        jl.Daf.anndata_as_daf(
+        jl.DataAxesFormats.anndata_as_daf(
             h5ad,
             name=name,
             obs_is=obs_is,
@@ -47,7 +47,7 @@ def daf_as_h5ad(
 ) -> None:
     """
     View the ``Daf`` data set as ``AnnData``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/anndata_format.html#Daf.AnnDataFormat.daf_as_anndata>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/anndata_format.html#DataAxesFormats.AnnDataFormat.daf_as_anndata>`__
     for details.
 
     Note this just creates the ``h5ad`` file. We do not return the ``AnnData`` object, because it is a Julia

@@ -10,11 +10,11 @@ from textwrap import dedent
 
 import numpy as np
 
-from daf import *
+import dafpy as dp
 
 
 def test_h5ad() -> None:  # pylint: disable=too-many-statements
-    origin = MemoryDaf(name="memory!")
+    origin = dp.MemoryDaf(name="memory!")
     origin.set_scalar("version", 1)
     origin.add_axis("cell", ["A", "B"])
     origin.add_axis("gene", ["X", "Y", "Z"])
@@ -33,14 +33,14 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
           gene: 3 entries
         matrices:
           gene,cell:
-            UMIs: 3 x 2 x Int64 in Columns (PyArray{Int64, 2, true, true, Int64} - Dense)
+            UMIs: 3 x 2 x Int64 in Columns (PyArray - Dense)
         """
         )[1:]
     )
 
     with TemporaryDirectory() as tmpdir:
-        daf_as_h5ad(origin, obs_is="cell", var_is="gene", X_is="UMIs", h5ad=f"{tmpdir}/test.h5ad")
-        back = h5ad_as_daf(f"{tmpdir}/test.h5ad", obs_is="cell", var_is="gene", X_is="UMIs")
+        dp.daf_as_h5ad(origin, obs_is="cell", var_is="gene", X_is="UMIs", h5ad=f"{tmpdir}/test.h5ad")
+        back = dp.h5ad_as_daf(f"{tmpdir}/test.h5ad", obs_is="cell", var_is="gene", X_is="UMIs")
         assert (
             back.description()
             == dedent(

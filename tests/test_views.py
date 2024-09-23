@@ -9,22 +9,22 @@ from textwrap import dedent
 
 import numpy as np
 
-from daf import *
+import dafpy as dp
 
 
 def test_views() -> None:  # pylint: disable=too-many-statements
-    dset = MemoryDaf(name="test!")
-    dset.set_scalar("version", "1.0")
-    dset.add_axis("cell", ["A", "B"])
-    dset.add_axis("gene", ["X", "Y", "Z"])
-    dset.set_vector("cell", "batch", ["U", "V"])
-    dset.set_vector("cell", "age", [-1.0, 2.0])
-    dset.set_matrix("gene", "cell", "UMIs", np.array([[1, 2, 3], [4, 5, 6]]).transpose(), relayout=False)
-    dset.add_axis("batch", ["U", "V", "W"])
-    dset.set_vector("batch", "sex", ["Male", "Female", "Male"])
+    daf = dp.MemoryDaf(name="test!")
+    daf.set_scalar("version", "1.0")
+    daf.add_axis("cell", ["A", "B"])
+    daf.add_axis("gene", ["X", "Y", "Z"])
+    daf.set_vector("cell", "batch", ["U", "V"])
+    daf.set_vector("cell", "age", [-1.0, 2.0])
+    daf.set_matrix("gene", "cell", "UMIs", np.array([[1, 2, 3], [4, 5, 6]]).transpose(), relayout=False)
+    daf.add_axis("batch", ["U", "V", "W"])
+    daf.set_vector("batch", "sex", ["Male", "Female", "Male"])
 
     assert (
-        dset.description()
+        daf.description()
         == dedent(
             """
             name: test!
@@ -39,20 +39,20 @@ def test_views() -> None:  # pylint: disable=too-many-statements
               batch:
                 sex: 3 x PythonCall.Utils.StaticString{UInt32, 6} (Dense)
               cell:
-                age: 2 x Float64 (PyArray{Float64, 1, true, true, Float64} - Dense)
+                age: 2 x Float64 (PyArray - Dense)
                 batch: 2 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
             matrices:
               gene,cell:
-                UMIs: 3 x 2 x Int64 in Columns (PyArray{Int64, 2, true, true, Int64} - Dense)
+                UMIs: 3 x 2 x Int64 in Columns (PyArray - Dense)
             """
         )[1:]
     )
 
-    view = viewer(
-        dset,
+    view = dp.viewer(
+        daf,
         name="view!",
         axes={"obs": "/ cell", "var": "/ gene"},
-        data={ALL_SCALARS: None, ALL_VECTORS: "=", ("obs", "var", "X"): ": UMIs"},
+        data={dp.ALL_SCALARS: None, dp.ALL_VECTORS: "=", ("obs", "var", "X"): ": UMIs"},
     )
 
     assert (
@@ -67,11 +67,11 @@ def test_views() -> None:  # pylint: disable=too-many-statements
               var: 3 entries
             vectors:
               obs:
-                age: 2 x Float64 (PyArray{Float64, 1, true, true, Float64} - Dense)
+                age: 2 x Float64 (PyArray - Dense)
                 batch: 2 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
             matrices:
               var,obs:
-                X: 3 x 2 x Int64 in Columns (PyArray{Int64, 2, true, true, Int64} - Dense)
+                X: 3 x 2 x Int64 in Columns (PyArray - Dense)
             """
         )[1:]
     )

@@ -1,6 +1,6 @@
 """
 Generic macros and functions for logging, that arguably should belong in a more general-purpose package. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/generic_logging.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/generic_logging.html>`__ for details.
 """
 
 from sys import stderr
@@ -34,7 +34,7 @@ def setup_logger(
     """
     Setup a global logger that will print into ``io`` (which currently must be either ``sys.stdout`` or ``sys.stderr``),
     printing messages with a timestamp prefix. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/generic_logging.html#Daf.GenericLogging.setup_logger>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/generic_logging.html#Daf.GenericLogging.setup_logger>`__
     for details.
     """
     if id(io) == id(stdout):
@@ -49,6 +49,6 @@ def setup_logger(
     else:
         jl_level = JL_LOG_LEVEL[level]
 
-    jl.Daf.GenericLogging.setup_logger(
+    jl.DataAxesFormats.GenericLogging.setup_logger(
         jl_io, level=jl_level, show_time=show_time, show_module=show_module, show_location=show_location
     )

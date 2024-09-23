@@ -1,6 +1,6 @@
 """
 Concatenate multiple ``Daf`` data sets along some axis. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/concat.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/concat.html>`__ for details.
 """
 
 from typing import AbstractSet
@@ -14,7 +14,7 @@ import numpy as np
 from .copies import EmptyData
 from .data import DafReader
 from .data import DafWriter
-from .data import DataKey
+from .data import PropertyKey
 from .julia_import import _to_julia_array
 from .julia_import import jl
 
@@ -23,21 +23,24 @@ __all__ = [
 ]
 
 #: The action for merging the values of a property from the concatenated data sets into the result data set. See the
-#: Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/concat.html#Daf.Concats.MergeData>`__ for details.
+#: Julia
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/concat.html#DataAxesFormats.Concats.MergeData>`__
+#: for details.
 MergeAction = Literal["SkipProperty"] | Literal["LastValue"] | Literal["CollectAxis"]
 
 JL_MERGE_ACTION = {
-    "SkipProperty": jl.Daf.SkipProperty,
-    "LastValue": jl.Daf.LastValue,
-    "CollectAxis": jl.Daf.CollectAxis,
+    "SkipProperty": jl.DataAxesFormats.SkipProperty,
+    "LastValue": jl.DataAxesFormats.LastValue,
+    "CollectAxis": jl.DataAxesFormats.CollectAxis,
 }
 
-#: A mapping where the key is a ``DataKey`` and the value is ``MergeAction``. See the Julia
-#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/concat.html#Daf.Concats.MergeData>`__ for details.
+#: A mapping where the key is a ``PropertyKey`` and the value is ``MergeAction``. See the Julia
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/concat.html#DataAxesFormats.Concats.MergeData>`__
+#: for details.
 #:
 #: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,
 #: and preserves the order of the entries since in Python dictionaries are ordered by default.
-MergeData = Mapping[DataKey, MergeAction]
+MergeData = Mapping[PropertyKey, MergeAction]
 
 
 def concatenate(
@@ -57,14 +60,14 @@ def concatenate(
     """
     Concatenate data from a ``sources`` sequence of ``Daf`` data sets into a single ``destination`` data set along one
     or more concatenation ``axis``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/concatenate.html>`__ for details.
+    `documentation <DafAxesFormats://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/concatenate.html>`__ for details.
     """
     if merge is None:
         merge_data = None
     else:
         merge_data = jl._pairify_merge([(key, JL_MERGE_ACTION[value]) for key, value in merge.items()])
 
-    jl.Daf.concatenate_b(
+    jl.DataAxesFormats.concatenate_b(
         destination,
         _to_julia_array(axis),
         jl.pyconvert(jl._DafReadersVector, np.array(sources)),

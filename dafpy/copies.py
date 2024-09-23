@@ -1,6 +1,6 @@
 """
 Copy data between ``Daf`` data sets. See the Julia
-`documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html>`__ for details.
 """
 
 from typing import Mapping
@@ -36,9 +36,11 @@ def copy_scalar(
 ) -> None:
     """
     Copy a scalar with some ``name`` from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the
-    Julia `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_scalar!>`__ for details.
+    Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.copy_scalar!>`__
+    for details.
     """
-    jl.Daf.copy_scalar_b(
+    jl.DataAxesFormats.copy_scalar_b(
         destination=destination,
         source=source,
         name=name,
@@ -58,9 +60,10 @@ def copy_axis(
 ) -> None:
     """
     Copy an axis from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_axis!>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.copy_axis!>`__
+    for details.
     """
-    jl.Daf.copy_axis_b(
+    jl.DataAxesFormats.copy_axis_b(
         destination=destination, source=source, axis=axis, rename=rename, default=_to_julia_array(default)
     )
 
@@ -79,9 +82,10 @@ def copy_vector(
 ) -> None:
     """
     Copy a vector from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_vector!>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.copy_vector!>`__
+    for details.
     """
-    jl.Daf.copy_vector_b(
+    jl.DataAxesFormats.copy_vector_b(
         destination=destination,
         source=source,
         axis=axis,
@@ -111,9 +115,10 @@ def copy_matrix(
 ) -> None:
     """
     Copy a matrix from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_matrix!>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.copy_matrix!>`__
+    for details.
     """
-    jl.Daf.copy_matrix_b(
+    jl.DataAxesFormats.copy_matrix_b(
         destination=destination,
         source=source,
         rows_axis=rows_axis,
@@ -130,7 +135,8 @@ def copy_matrix(
 
 
 #: Specify the data to use for missing properties in a ``Daf`` data set. See the Julia
-#: `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.EmptyData>`__ for details.
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.EmptyData>`__
+#: for details.
 EmptyData = Mapping[DataKey, StorageScalar]
 
 
@@ -144,6 +150,9 @@ def copy_all(
 ) -> None:
     """
     Copy all the content of a ``source`` ``DafReader`` into a ``destination`` ``DafWriter``. See the Julia
-    `documentation <https://tanaylab.github.io/Daf.jl/v0.1.0/copies.html#Daf.Copies.copy_all!>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.copy_all!>`__
+    for details.
     """
-    jl.Daf.copy_all_b(destination=destination, source=source, empty=empty, overwrite=overwrite, relayout=relayout)
+    jl.DataAxesFormats.copy_all_b(
+        destination=destination, source=source, empty=empty, overwrite=overwrite, relayout=relayout
+    )

@@ -1,4 +1,4 @@
-NAME = daf
+NAME = dafpy
 
 MAX_LINE_LENGTH = 120
 
@@ -157,7 +157,7 @@ black: .make.black  ## check format with black
 flake8: .make.flake8  ## check format with flake8
 
 .make.flake8: $(PY_SOURCE_FILES)
-	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore F401,E402,F403,W503,E704,E722 $(NAME) tests
+	flake8 --max-line-length $(MAX_LINE_LENGTH) --ignore F401,E402,F403,W503,E704,E722,E501 $(NAME) tests
 	touch $@
 
 reformat: stripspaces isortify blackify  ## reformat code
@@ -179,7 +179,7 @@ smells: mypy pylint  ## check for code smells
 pylint: .make.pylint  ## check code with pylint
 
 .make.pylint: $(PY_SOURCE_FILES)
-	pylint --max-line-length $(MAX_LINE_LENGTH) --disable=fixme,protected-access,wrong-import-position,no-name-in-module,too-many-arguments,too-many-public-methods,too-few-public-methods,bare-except $(NAME) tests
+	pylint --disable=fixme,protected-access,wrong-import-position,no-name-in-module,too-many-arguments,too-many-public-methods,too-few-public-methods,bare-except,line-too-long $(NAME) tests
 	touch $@
 
 mypy: .make.mypy  ## check code with mypy
