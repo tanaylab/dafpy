@@ -6,12 +6,10 @@
 <head>
   
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-
   
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-<title>operations &mdash; Daf 0.1.0 documentation
+<title>Search &mdash; Daf 0.1.1 documentation
 </title>
       
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
@@ -19,6 +17,7 @@
 <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
+    
   
 <!--[if lt IE 9]>
     
@@ -34,7 +33,7 @@
 <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
 </script>
         
-<script src="_static/documentation_options.js?v=01f34227">
+<script src="_static/documentation_options.js?v=a58bc63e">
 </script>
         
 <script src="_static/doctools.js?v=888ff710">
@@ -46,13 +45,15 @@
 <script src="_static/js/theme.js">
 </script>
     
+<script src="_static/searchtools.js">
+</script>
+    
+<script src="_static/language_data.js">
+</script>
+    
 <link rel="index" title="Index" href="genindex.html" />
     
-<link rel="search" title="Search" href="search.html" />
-    
-<link rel="next" title="formats" href="formats.html" />
-    
-<link rel="prev" title="queries" href="queries.html" /> 
+<link rel="search" title="Search" href="#" /> 
 
 </head>
 
@@ -78,13 +79,13 @@
 </a>
               
 <div class="version">
-                0.1.0
+                0.1.1
               
 </div>
 
 <div role="search">
   
-<form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+<form id="rtd-search-form" class="wy-form" action="#" method="get">
     
 <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     
@@ -108,80 +109,11 @@
 
 </ul>
 
-<ul class="current">
+<ul>
 
-<li class="toctree-l1 current">
+<li class="toctree-l1">
 <a class="reference internal" href="API.html">API
 </a>
-<ul class="current">
-
-<li class="toctree-l2">
-<a class="reference internal" href="julia_import.html">julia_import
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="data.html">data
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="storage_types.html">storage_types
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="queries.html">queries
-</a>
-</li>
-
-<li class="toctree-l2 current">
-<a class="current reference internal" href="#">operations
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="formats.html">formats
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="views.html">views
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="copies.html">copies
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="adapters.html">adapters
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="concat.html">concat
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="anndata_format.html">anndata_format
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="generic_functions.html">generic_functions
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="generic_logging.html">generic_logging
-</a>
-</li>
-
-</ul>
-
 </li>
 
 </ul>
@@ -218,19 +150,11 @@
 <a href="index.html" class="icon icon-home" aria-label="Home">
 </a>
 </li>
-          
-<li class="breadcrumb-item">
-<a href="API.html">API
-</a>
-</li>
       
-<li class="breadcrumb-item active">operations
+<li class="breadcrumb-item active">Search
 </li>
       
 <li class="wy-breadcrumbs-aside">
-            
-<a href="_sources/operations.rst.txt" rel="nofollow"> View page source
-</a>
       
 </li>
   
@@ -245,15 +169,25 @@
 <div itemprop="articleBody">
              
   
-<section id="operations">
+<noscript>
+  
+<div id="fallback" class="admonition warning">
+    
+<p class="last">
+      Please activate JavaScript to enable the search functionality.
+    
+</p>
+  
+</div>
+  
+</noscript>
 
-<h1>operations
-<a class="headerlink" href="#operations" title="Link to this heading">¶
-</a>
-</h1>
-
-</section>
-
+  
+  
+<div id="search-results">
+  
+  
+</div>
 
            
 </div>
@@ -261,19 +195,6 @@
 </div>
           
 <footer>
-<div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        
-<a href="queries.html" class="btn btn-neutral float-left" title="queries" accesskey="p" rel="prev">
-<span class="fa fa-arrow-circle-left" aria-hidden="true">
-</span> Previous
-</a>
-        
-<a href="formats.html" class="btn btn-neutral float-right" title="formats" accesskey="n" rel="next">Next 
-<span class="fa fa-arrow-circle-right" aria-hidden="true">
-</span>
-</a>
-    
-</div>
 
   
 <hr/>
@@ -313,7 +234,18 @@
           SphinxRtdTheme.Navigation.enable(true);
       });
   
-</script> 
+</script>
+  
+<script>
+    jQuery(function() { Search.loadIndex("searchindex.js"); });
+  
+</script>
+  
+  
+<script id="searchindexloader">
+</script>
+   
+
 
 
 </body>

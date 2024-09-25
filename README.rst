@@ -1,4 +1,4 @@
-Daf.py 0.1.0 - Data in Axes in Formats
+Daf.py 0.1.1 - Data in Axes in Formats
 ======================================
 
 `DataAxesFormats.jl <DafAxesFormats://github.com/tanaylab/DataAxesFormats.jl>`_ is a Julia package which provides a uniform
@@ -28,13 +28,13 @@ The Python package provides the same API as the Julia package, with the followin
   `Muon.jl <https://github.com/scverse/Muon.jl>`_ Julia package. That is, to import/export ``AnnData`` between ``Daf``
   and Python, your best bet is to go through ``h5ad`` files.
 
-See the [Python v0.1.0 documentation](https://tanaylab.github.io/Daf.py/v0.1.0) and [Julia v0.1.0
-documentation](https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0) for details.
+See the [Python v0.1.1 documentation](https://tanaylab.github.io/Daf.py/v0.1.1) and [Julia v0.1.1
+documentation](https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1) for details.
 
 Status
 ------
 
-Version 0.1.0 is an alpha release. We hope it is feature complete and have started using it for internal projects.
+Version 0.1.1 is an alpha release. We hope it is feature complete and have started using it for internal projects.
 However, everything is subject to change based on user feedback (so don't be shy). Comments, bug reports and PRs
 are welcome!
 

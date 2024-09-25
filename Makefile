@@ -8,7 +8,7 @@ PY_SOURCE_FILES = $(filter %.py, $(ALL_SOURCE_FILES))
 
 RST_SOURCE_FILES = $(filter %.rst, $(ALL_SOURCE_FILES))
 
-DOCS_SOURCE_FILES = $(filter-out docs/v0.1.0/%, $(filter docs/%, $(ALL_SOURCE_FILES)))
+DOCS_SOURCE_FILES = $(filter-out docs/v0.1.1/%, $(filter docs/%, $(ALL_SOURCE_FILES)))
 
 .DEFAULT_GOAL := help
 
@@ -50,7 +50,7 @@ clean-test:
 	rm -fr .pytest_cache
 
 clean-docs:
-	rm -fr docs/v0.1.0
+	rm -fr docs/v0.1.1
 
 TODO = todo$()x
 
@@ -74,7 +74,7 @@ trailingspaces: .make.trailingspaces  ## check for trailing spaces
 REAL_SOURCE_FILES = \
     $(filter-out %.png, \
     $(filter-out %.svg, \
-    $(filter-out docs/v0.1.0/%, \
+    $(filter-out docs/v0.1.1/%, \
     $(ALL_SOURCE_FILES))))
 
 .make.trailingspaces: $(REAL_SOURCE_FILES)
@@ -200,8 +200,8 @@ docs: .make.docs  ## generate HTML documentation
 .make.docs: $(DOCS_SOURCE_FILES) $(PY_SOURCE_FILES) $(RST_SOURCE_FILES)
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
-	sed -i 's/</\n</g' docs/v0.1.0/html/*.html
-	@echo "Results in docs/v0.1.0/html/index.html"
+	sed -i 's/</\n</g' docs/v0.1.1/html/*.html
+	@echo "Results in docs/v0.1.1/html/index.html"
 	touch $@
 
 dist: .make.dist  ## builds the release distribution package

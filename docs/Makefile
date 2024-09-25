@@ -3,7 +3,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = python3 -m sphinx
 SPHINXPROJ    = metacells
 SOURCEDIR     = .
-BUILDDIR      = v0.1.0
+BUILDDIR      = v0.1.1
 
 # Put it first so that "make" without argument is like "make help".
 help:

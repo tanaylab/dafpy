@@ -80,7 +80,7 @@ author = "Oren Ben-Kiki"
 # the built documents.
 #
 # The short X.Y version.
-version = "0.1.0"
+version = "0.1.1"
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -94,7 +94,7 @@ language = 'en'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['v0.1.0', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['v0.1.1', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
