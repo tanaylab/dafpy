@@ -22,6 +22,7 @@ __all__ = [
     "copy_axis",
     "copy_vector",
     "copy_matrix",
+    "copy_tensor",
 ]
 
 
@@ -128,6 +129,42 @@ def copy_matrix(
         columns_reaxis=columns_reaxis,
         rename=rename,
         default=_to_julia_array(default),
+        empty=empty,
+        relayout=relayout,
+        overwrite=overwrite,
+    )
+
+
+def copy_tensor(
+    *,
+    destination: DafWriter,
+    source: DafReader,
+    main_axis: str,
+    rows_axis: str,
+    columns_axis: str,
+    name: str,
+    rows_reaxis: Optional[str] = None,
+    columns_reaxis: Optional[str] = None,
+    rename: Optional[str] = None,
+    empty: Optional[StorageScalar] = None,
+    relayout: bool = True,
+    overwrite: bool = False,
+) -> None:
+    """
+    Copy a tensor from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.0/copies.html#DataAxesFormats.Copies.copy_tensor!>`__
+    for details.
+    """
+    jl.DataAxesFormats.copy_tensor_b(
+        destination=destination,
+        source=source,
+        main_axis=main_axis,
+        rows_axis=rows_axis,
+        columns_axis=columns_axis,
+        name=name,
+        rows_reaxis=rows_reaxis,
+        columns_reaxis=columns_reaxis,
+        rename=rename,
         empty=empty,
         relayout=relayout,
         overwrite=overwrite,

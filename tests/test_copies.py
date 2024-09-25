@@ -36,6 +36,26 @@ def test_copies() -> None:  # pylint: disable=too-many-statements
     )
     assert np.all(destination.get_np_matrix("gene", "cell", "UMIs") == np.array([[0, 1, 2], [3, 4, 5]]).transpose())
 
+    destination.add_axis("batch", ["U", "V"])
+    source.set_matrix("gene", "cell", "U_is_high", np.array([[True, False, True], [False, True, False]]).transpose())
+    dp.copy_tensor(
+        source=source,
+        destination=destination,
+        main_axis="batch",
+        rows_axis="gene",
+        columns_axis="cell",
+        name="is_high",
+        empty=False,
+    )
+    assert np.all(
+        destination.get_np_matrix("gene", "cell", "U_is_high")
+        == np.array([[True, False, True], [False, True, False]]).transpose()
+    )
+    assert np.all(
+        destination.get_np_matrix("gene", "cell", "V_is_high")
+        == np.array([[False, False, False], [False, False, False]]).transpose()
+    )
+
     destination = dp.MemoryDaf(name="destination!")
     dp.copy_all(source=source, destination=destination)
     assert destination.get_scalar("version") == "1.0"

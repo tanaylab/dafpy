@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dafpy"
 version = "0.1.0"
-description = "Data in Axes in Files"
+description = "Data in Axes in Formats"
 authors = [
     { name = "Oren Ben-Kiki", email = "oren@ben-kiki.org" },
 ]
