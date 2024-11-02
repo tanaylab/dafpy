@@ -116,7 +116,7 @@ def test_axes(
 
     assert daf.has_axis(axis_name)
     assert daf.axis_length(axis_name) == len(axis_entries)
-    assert list(daf.axis_array(axis_name)) == list(axis_entries)
+    assert list(daf.axis_vector(axis_name)) == list(axis_entries)
     assert list(sorted([(str(name), index) for (name, index) in daf.axis_dict(axis_name).items()])) == sorted(
         [(name, index) for (index, name) in enumerate(axis_entries)]
     )

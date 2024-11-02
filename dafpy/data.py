@@ -147,10 +147,10 @@ class DafReader(JlObject):
         """
         return jl.DataAxesFormats.axis_length(self.jl_obj, axis)
 
-    def axis_array(self, axis: str) -> np.ndarray:
+    def axis_vector(self, axis: str) -> np.ndarray:
         """
         The array of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/data.html#DataAxesFormats.Data.axis_array>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/data.html#DataAxesFormats.Data.axis_vector>`__
         for details.
 
         This creates an in-memory copy of the data, which is cached for repeated calls.
@@ -159,7 +159,7 @@ class DafReader(JlObject):
         axis_key = (axis_version_counter, axis, True)
         axis_entries = self.weakrefs.get(axis_key)
         if axis_entries is None:
-            axis_entries = _from_julia_array(jl.DataAxesFormats.axis_array(self.jl_obj, axis))
+            axis_entries = _from_julia_array(jl.DataAxesFormats.axis_vector(self.jl_obj, axis))
             self.weakrefs[axis_key] = axis_entries
         return axis_entries
 
@@ -298,7 +298,7 @@ class DafReader(JlObject):
         vector_value = self.get_np_vector(axis, name, default=_to_julia_array(default))
         if vector_value is None:
             return None
-        return pd.Series(vector_value, index=self.axis_array(axis))
+        return pd.Series(vector_value, index=self.axis_vector(axis))
 
     def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
         """
@@ -432,7 +432,7 @@ class DafReader(JlObject):
             return None
         if sp.issparse(matrix_value):
             matrix_value = matrix_value.toarray()  # type: ignore
-        return pd.DataFrame(matrix_value, index=self.axis_array(rows_axis), columns=self.axis_array(columns_axis))
+        return pd.DataFrame(matrix_value, index=self.axis_vector(rows_axis), columns=self.axis_vector(columns_axis))
 
     def empty_cache(self, *, clear: Optional[CacheGroup] = None, keep: Optional[CacheGroup] = None) -> None:
         """

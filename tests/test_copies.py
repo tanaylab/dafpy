@@ -20,11 +20,11 @@ def test_copies() -> None:  # pylint: disable=too-many-statements
 
     source.add_axis("cell", ["A", "B"])
     dp.copy_axis(source=source, destination=destination, axis="cell")
-    assert list(destination.axis_array("cell")) == ["A", "B"]
+    assert list(destination.axis_vector("cell")) == ["A", "B"]
 
     source.add_axis("gene", ["X", "Y", "Z"])
     dp.copy_axis(source=source, destination=destination, axis="gene")
-    assert list(destination.axis_array("gene")) == ["X", "Y", "Z"]
+    assert list(destination.axis_vector("gene")) == ["X", "Y", "Z"]
 
     source.set_vector("cell", "age", [0.0, 1.0])
     dp.copy_vector(source=source, destination=destination, axis="cell", name="age")
@@ -59,7 +59,7 @@ def test_copies() -> None:  # pylint: disable=too-many-statements
     destination = dp.MemoryDaf(name="destination!")
     dp.copy_all(source=source, destination=destination)
     assert destination.get_scalar("version") == "1.0"
-    assert list(destination.axis_array("cell")) == ["A", "B"]
-    assert list(destination.axis_array("gene")) == ["X", "Y", "Z"]
+    assert list(destination.axis_vector("cell")) == ["A", "B"]
+    assert list(destination.axis_vector("gene")) == ["X", "Y", "Z"]
     assert list(destination.get_np_vector("cell", "age")) == [0.0, 1.0]
     assert np.all(destination.get_np_matrix("gene", "cell", "UMIs") == np.array([[0, 1, 2], [3, 4, 5]]).transpose())
