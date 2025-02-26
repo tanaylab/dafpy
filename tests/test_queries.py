@@ -187,4 +187,16 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
+    frame = daf.get_pd_frame("/ cell", ["age", ("sex", ": batch => sex")])
+    assert (
+        str(frame)
+        == dedent(
+            """
+           age     sex
+        0 -1.0    Male
+        1  2.0  Female
+    """
+        )[1:-1]
+    )
+
     daf.empty_cache(clear="MappedData")

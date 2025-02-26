@@ -173,7 +173,10 @@ def _to_julia_array(value: Any) -> Any:  # pylint: disable=too-many-return-state
         return julia_matrix
 
     if isinstance(value, Sequence) and not isinstance(value, np.ndarray):
-        value = np.array(value)
+        try:
+            value = np.array(value)
+        except ValueError:
+            return jl.Vector(value)
 
     if isinstance(value, np.ndarray) and value.dtype.type == np.str_:
         value = jl.Vector(value)
