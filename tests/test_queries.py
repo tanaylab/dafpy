@@ -100,6 +100,9 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
     assert set(daf["/ cell ?"]) == set(["batch", "age"])  # type: ignore
     assert set(daf["/ gene / cell ?"]) == set(["UMIs"])  # type: ignore
 
+    assert daf.has_query("/ cell : age")
+    assert not daf.has_query("/ cell : youth")
+
     series = daf.get_pd_query("/ cell : age")
     assert (
         str(series)

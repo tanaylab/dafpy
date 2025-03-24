@@ -1,11 +1,11 @@
 """
 Adapt ``Daf`` data to a ``computation``. See the Julia
-`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/adapters.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/adapters.html>`__ for details.
 
 The Julia package has support for creating self-documenting computations (see the Julia
-`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/computations.html>`__ for details) which explicitly
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/computations.html>`__ for details) which explicitly
 declare a contract describing the inputs and outputs of the computation (see the Julia
-`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/contracts.html>`__ for details). The Python package
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/contracts.html>`__ for details). The Python package
 doesn't provide these utilities, since we'd like to promote implementing such computations in Julia, so they would be
 efficient (in particular, effectively use parallelism), and be available to be called from Julia, Python (using this
 package) and R (using the equivalent R package). That said, nothing prevents the creation of ``Daf`` computational
@@ -47,7 +47,7 @@ def adapter(
     """
     Invoke a computation on a view of some ``daf`` data set and return the result; copy a view of the results into the
     base ``daf`` data set. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/adapters.html#DataAxesFormats.Adapters.adapter>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/adapters.html#DataAxesFormats.Adapters.adapter>`__
     for details.
     """
     base_name = daf.name

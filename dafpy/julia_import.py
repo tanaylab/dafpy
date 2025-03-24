@@ -80,7 +80,7 @@ jl = Main
 jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Pkg")
-# jl.seval("Pkg.update()")
+jl.seval("Pkg.update()")
 
 jl.seval("using DataAxesFormats")
 

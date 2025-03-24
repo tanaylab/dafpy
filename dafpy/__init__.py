@@ -41,7 +41,7 @@ This is a thin wrapper for the ``DataAxesFormats.jl`` Julia package, with the fo
   memory.
 
 Otherwise, the API works "just the same" :-) The documentation therefore mostly just links to the relevant entry in the
-Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.1/index.html>`__.
+Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/index.html>`__.
 """
 
 __author__ = "Oren Ben-Kiki"
