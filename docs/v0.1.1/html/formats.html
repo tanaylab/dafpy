@@ -143,6 +143,55 @@
 <li class="toctree-l2 current">
 <a class="current reference internal" href="#">formats
 </a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.MemoryDaf">
+<code class="docutils literal notranslate">
+<span class="pre">MemoryDaf
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.FilesDaf">
+<code class="docutils literal notranslate">
+<span class="pre">FilesDaf
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.H5df">
+<code class="docutils literal notranslate">
+<span class="pre">H5df
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.chain_reader">
+<code class="docutils literal notranslate">
+<span class="pre">chain_reader()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.chain_writer">
+<code class="docutils literal notranslate">
+<span class="pre">chain_writer()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
 </li>
 
 <li class="toctree-l2">
@@ -245,12 +294,624 @@
 <div itemprop="articleBody">
              
   
-<section id="formats">
+<section id="module-dafpy.formats">
 
+<span id="formats">
+</span>
 <h1>formats
-<a class="headerlink" href="#formats" title="Link to this heading">¶
+<a class="headerlink" href="#module-dafpy.formats" title="Link to this heading">¶
 </a>
 </h1>
+
+<p>Concrete formats of 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data sets.
+</p>
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.formats.MemoryDaf">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">MemoryDaf
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj:
+</span> 
+<span class="pre">Julia:
+</span> 
+<span class="pre">MemoryDaf
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">'memory'
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#MemoryDaf">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.MemoryDaf" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Simple in-memory storage. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/memory_format.html">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.formats.FilesDaf">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">FilesDaf
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">path
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">mode
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">'r'
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#FilesDaf">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.FilesDaf" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> storage format in disk files. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/files_format.html">documentation
+</a> for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.formats.H5df">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">H5df
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">root:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">Julia:
+</span> 
+<span class="pre">HDF5.File
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">Julia:
+</span> 
+<span class="pre">HDF5.Group
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">mode:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">'r'
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name:
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#H5df">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.H5df" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> storage format in an HDF5 disk file. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/h5df_format.html">documentation
+</a> for details.
+</p>
+
+<p>Note that if you want to open the 
+<code class="docutils literal notranslate">
+<span class="pre">HDF5
+</span>
+</code> file yourself (e.g., to access a specific group in it as a 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data
+set), you will need to use the Julia API to do so, in order to pass the result here. That is, the current Python
+
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> API does 
+<strong>not
+</strong> support using the Python 
+<code class="docutils literal notranslate">
+<span class="pre">HDF5
+</span>
+</code> API. This is because the 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> Python API is just a
+thin wrapper for the Julia 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> implementation, which doesn’t “speak Python”.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.formats.chain_reader">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">chain_reader
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">dsets
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="data.html#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
+<span class="pre">DafReadOnly
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#chain_reader">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.chain_reader" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Create a read-only chain wrapper of 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code>, presenting them as a single 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#Daf.Chains.chain_reader">documentation
+</a> for
+details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.formats.chain_writer">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">chain_writer
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">dsets
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#chain_writer">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.chain_writer" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Create a chain wrapper for a chain of 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code> data, presenting them as a single 
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#Daf.Chains.chain_writer">documentation
+</a> for
+details.
+</p>
+
+</dd>
+</dl>
+
 
 </section>
 

@@ -88,8 +88,10 @@ class IfMissing(QueryOperation):
     for details.
     """
 
-    def __init__(self, missing_value: StorageScalar, *, dtype: Optional[Type] = None) -> None:
-        super().__init__(jl.DataAxesFormats.IfMissing(missing_value, dtype=_to_julia_type(dtype)))
+    def __init__(
+        self, missing_value: StorageScalar, *, type: Optional[Type] = None  # pylint: disable=redefined-builtin
+    ) -> None:
+        super().__init__(jl.DataAxesFormats.IfMissing(missing_value, type=_to_julia_type(type)))
 
 
 class IfNot(QueryOperation):

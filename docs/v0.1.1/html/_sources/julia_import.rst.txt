@@ -1,5 +1,5 @@
 julia_import
 ============
 
-.. automodule:: daf.julia_import
+.. automodule:: dafpy.julia_import
     :members:

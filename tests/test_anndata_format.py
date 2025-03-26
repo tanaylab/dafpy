@@ -57,7 +57,7 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
               gene: 3 entries
             matrices:
               gene,cell:
-                UMIs: 3 x 2 x Int64 in Columns (PermutedDimsArray - Dense)
+                UMIs: 3 x 2 x Int64 in Columns (Transpose Permuted Dense)
             """
             )[1:]
         )

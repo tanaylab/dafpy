@@ -158,6 +158,19 @@
 <li class="toctree-l2 current">
 <a class="current reference internal" href="#">adapters
 </a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.adapters.adapter">
+<code class="docutils literal notranslate">
+<span class="pre">adapter()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
 </li>
 
 <li class="toctree-l2">
@@ -245,12 +258,423 @@
 <div itemprop="articleBody">
              
   
-<section id="adapters">
+<section id="module-dafpy.adapters">
 
+<span id="adapters">
+</span>
 <h1>adapters
-<a class="headerlink" href="#adapters" title="Link to this heading">¶
+<a class="headerlink" href="#module-dafpy.adapters" title="Link to this heading">¶
 </a>
 </h1>
+
+<p>Adapt 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data to a 
+<code class="docutils literal notranslate">
+<span class="pre">computation
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/adapters.html">documentation
+</a> for details.
+</p>
+
+<p>The Julia package has support for creating self-documenting computations (see the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/computations.html">documentation
+</a> for details) which explicitly
+declare a contract describing the inputs and outputs of the computation (see the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/contracts.html">documentation
+</a> for details). The Python package
+doesn’t provide these utilities, since we’d like to promote implementing such computations in Julia, so they would be
+efficient (in particular, effectively use parallelism), and be available to be called from Julia, Python (using this
+package) and R (using the equivalent R package). That said, nothing prevents the creation of 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> computational
+pipelines in Python or any other language, if one insists on doing so.
+</p>
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.adapters.adapter">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.adapters.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">adapter
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="pre">daf:
+</span> 
+<span class="pre">~dafpy.data.DafWriter,
+</span> 
+<span class="pre">*,
+</span> 
+<span class="pre">input_axes:
+</span> 
+<span class="pre">~typing.Mapping[str,
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Axis
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Lookup
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Names
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.operations.QuerySequence
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">input_data:
+</span> 
+<span class="pre">~typing.Mapping[str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str],
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Axis
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Lookup
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Names
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.operations.QuerySequence
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">capture:
+</span> 
+<span class="pre">~typing.Callable[[...],
+</span> 
+<span class="pre">~dafpy.data.DafWriter]
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">&lt;class
+</span> 
+<span class="pre">'dafpy.formats.MemoryDaf'&gt;,
+</span> 
+<span class="pre">output_axes:
+</span> 
+<span class="pre">~typing.Mapping[str,
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Axis
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Lookup
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Names
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.operations.QuerySequence
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">output_data:
+</span> 
+<span class="pre">~typing.Mapping[str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str],
+</span> 
+<span class="pre">str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Axis
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Lookup
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.queries.Names
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~dafpy.operations.QuerySequence
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">empty:
+</span> 
+<span class="pre">~typing.Mapping[str
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~typing.Tuple[str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str,
+</span> 
+<span class="pre">str],
+</span> 
+<span class="pre">bool
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">int
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">float
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.int8
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.int16
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.int32
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.int64
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.uint8
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.uint16
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.uint32
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.uint64
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.float32
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">~numpy.float64
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">str]
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">None
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">relayout:
+</span> 
+<span class="pre">bool
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">True,
+</span> 
+<span class="pre">overwrite:
+</span> 
+<span class="pre">bool
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">False
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">Iterator
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/adapters.html#adapter">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.adapters.adapter" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Invoke a computation on a view of some 
+<code class="docutils literal notranslate">
+<span class="pre">daf
+</span>
+</code> data set and return the result; copy a view of the results into the
+base 
+<code class="docutils literal notranslate">
+<span class="pre">daf
+</span>
+</code> data set. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/adapters.html#DataAxesFormats.Adapters.adapter">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
 
 </section>
 

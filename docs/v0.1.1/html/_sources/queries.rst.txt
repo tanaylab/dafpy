@@ -1,5 +1,5 @@
 queries
 =======
 
-.. automodule:: daf.queries
+.. automodule:: dafpy.queries
     :members:

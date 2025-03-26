@@ -1,5 +1,5 @@
 generic_logging
 ===============
 
-.. automodule:: daf.generic_logging
+.. automodule:: dafpy.generic_logging
     :Members:

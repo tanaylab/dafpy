@@ -1,5 +1,5 @@
 views
 =====
 
-.. automodule:: daf.views
+.. automodule:: dafpy.views
     :members:

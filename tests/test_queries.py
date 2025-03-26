@@ -134,7 +134,7 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
 
     assert np.all(daf[q("/ cell : age") | dp.Abs()] == np.array([1.0, 2.0]))
     assert np.all(daf[q("/ cell : age") | dp.Clamp(min=0.5)] == np.array([0.5, 2.0]))
-    assert np.all(daf[q("/ cell : age") | dp.Convert(dtype=np.int8)] == np.array([-1, 2]))
+    assert np.all(daf[q("/ cell : age") | dp.Convert(type=np.int8)] == np.array([-1, 2]))
     assert np.all(daf[q("/ cell : age % Abs") | dp.Fraction()] == np.array([1 / 3, 2 / 3]))
     assert np.all(daf[q("/ cell : age % Abs") | dp.Log(base=2)] == np.array([0.0, 1.0]))
     assert np.all(daf["/ cell : age % Significant high 2"] == [0, 2])

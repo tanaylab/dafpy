@@ -1,5 +1,5 @@
 generic_functions
 =================
 
-.. automodule:: daf.generic_functions
+.. automodule:: dafpy.generic_functions
     :Members:

@@ -148,6 +148,73 @@
 <li class="toctree-l2 current">
 <a class="current reference internal" href="#">views
 </a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.viewer">
+<code class="docutils literal notranslate">
+<span class="pre">viewer()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.ViewAxes">
+<code class="docutils literal notranslate">
+<span class="pre">ViewAxes
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.ViewData">
+<code class="docutils literal notranslate">
+<span class="pre">ViewData
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.ALL_SCALARS">
+<code class="docutils literal notranslate">
+<span class="pre">ALL_SCALARS
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.ALL_AXES">
+<code class="docutils literal notranslate">
+<span class="pre">ALL_AXES
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.ALL_VECTORS">
+<code class="docutils literal notranslate">
+<span class="pre">ALL_VECTORS
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.views.ALL_MATRICES">
+<code class="docutils literal notranslate">
+<span class="pre">ALL_MATRICES
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
 </li>
 
 <li class="toctree-l2">
@@ -245,12 +312,930 @@
 <div itemprop="articleBody">
              
   
-<section id="views">
+<section id="module-dafpy.views">
 
+<span id="views">
+</span>
 <h1>views
-<a class="headerlink" href="#views" title="Link to this heading">¶
+<a class="headerlink" href="#module-dafpy.views" title="Link to this heading">¶
 </a>
 </h1>
+
+<p>Create a different view of a 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data set using queries. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html">documentation
+</a>
+for details.
+</p>
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.views.viewer">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">viewer
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">dset
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">axes
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Lookup" title="dafpy.queries.Lookup">
+<span class="pre">Lookup
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">data
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Lookup" title="dafpy.queries.Lookup">
+<span class="pre">Lookup
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="data.html#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
+<span class="pre">DafReadOnly
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/views.html#viewer">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.views.viewer" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Wrap 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data set with a read-only 
+<code class="docutils literal notranslate">
+<span class="pre">DafView
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.viewer">documentation
+</a>
+for details.
+</p>
+
+<p>The order of the axes and data matters. Luckily, the default dictionary type is ordered in modern Python, write
+
+<code class="docutils literal notranslate">
+<span class="pre">axes
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">{ALL_AXES:
+</span> 
+<span class="pre">None,
+</span> 
+<span class="pre">&quot;cell&quot;:
+</span> 
+<span class="pre">&quot;obs&quot;}
+</span>
+</code> you can trust that the 
+<code class="docutils literal notranslate">
+<span class="pre">cell
+</span>
+</code> axis will be exposed as 
+<code class="docutils literal notranslate">
+<span class="pre">obs
+</span>
+</code> (and
+similarly for 
+<code class="docutils literal notranslate">
+<span class="pre">data
+</span>
+</code>).
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py data">
+
+<dt class="sig sig-object py" id="dafpy.views.ViewAxes">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ViewAxes
+</span>
+</span>
+<a class="headerlink" href="#dafpy.views.ViewAxes" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Specify axes to expose from a view. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ViewAxes">documentation
+</a>
+for details.
+</p>
+
+<p>Note that in Python this is a dictionary and not a vector. This allows using the 
+<code class="docutils literal notranslate">
+<span class="pre">key:
+</span> 
+<span class="pre">value
+</span>
+</code> notation,
+and preserves the order of the entries since in Python dictionaries are ordered by default.
+</p>
+
+<p>alias of 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Mapping
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Optional
+</span>
+</code>[
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Union
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Axis
+</span>
+</code>
+</a>, 
+<a class="reference internal" href="queries.html#dafpy.queries.Lookup" title="dafpy.queries.Lookup">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Lookup
+</span>
+</code>
+</a>, 
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Names
+</span>
+</code>
+</a>, 
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code>
+</a>]]]
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py data">
+
+<dt class="sig sig-object py" id="dafpy.views.ViewData">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ViewData
+</span>
+</span>
+<a class="headerlink" href="#dafpy.views.ViewData" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Specify data to expose from view. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ViewAxes">documentation
+</a>
+for details.
+</p>
+
+<p>Note that in Python this is a dictionary and not a vector. This allows using the 
+<code class="docutils literal notranslate">
+<span class="pre">key:
+</span> 
+<span class="pre">value
+</span>
+</code> notation,
+and preserves the order of the entries since in Python dictionaries are ordered by default.
+</p>
+
+<p>alias of 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Mapping
+</span>
+</code>[
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Union
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Tuple
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>], 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Tuple
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>], 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Tuple
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>]], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Optional
+</span>
+</code>[
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Union
+</span>
+</code>[
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">str
+</span>
+</code>, 
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Axis
+</span>
+</code>
+</a>, 
+<a class="reference internal" href="queries.html#dafpy.queries.Lookup" title="dafpy.queries.Lookup">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Lookup
+</span>
+</code>
+</a>, 
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">Names
+</span>
+</code>
+</a>, 
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code>
+</a>]]]
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py data">
+
+<dt class="sig sig-object py" id="dafpy.views.ALL_SCALARS">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ALL_SCALARS
+</span>
+</span>
+<em class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'*'
+</span>
+</em>
+<a class="headerlink" href="#dafpy.views.ALL_SCALARS" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A key to use in the 
+<code class="docutils literal notranslate">
+<span class="pre">data
+</span>
+</code> parameter of 
+<code class="docutils literal notranslate">
+<span class="pre">viewer
+</span>
+</code> to specify all the base data scalars. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_SCALARS">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py data">
+
+<dt class="sig sig-object py" id="dafpy.views.ALL_AXES">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ALL_AXES
+</span>
+</span>
+<em class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'*'
+</span>
+</em>
+<a class="headerlink" href="#dafpy.views.ALL_AXES" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A pair to use in the 
+<code class="docutils literal notranslate">
+<span class="pre">axes
+</span>
+</code> parameter of 
+<code class="docutils literal notranslate">
+<span class="pre">viewer
+</span>
+</code> to specify all the base data axes. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_AXES">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py data">
+
+<dt class="sig sig-object py" id="dafpy.views.ALL_VECTORS">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ALL_VECTORS
+</span>
+</span>
+<em class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">('*',
+</span> 
+<span class="pre">'*')
+</span>
+</em>
+<a class="headerlink" href="#dafpy.views.ALL_VECTORS" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A key to use in the 
+<code class="docutils literal notranslate">
+<span class="pre">data
+</span>
+</code> parameter of 
+<code class="docutils literal notranslate">
+<span class="pre">viewer
+</span>
+</code> to specify all the vectors of the exposed axes. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_VECTORS">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py data">
+
+<dt class="sig sig-object py" id="dafpy.views.ALL_MATRICES">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.views.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ALL_MATRICES
+</span>
+</span>
+<em class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">('*',
+</span> 
+<span class="pre">'*',
+</span> 
+<span class="pre">'*')
+</span>
+</em>
+<a class="headerlink" href="#dafpy.views.ALL_MATRICES" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A key to use in the 
+<code class="docutils literal notranslate">
+<span class="pre">data
+</span>
+</code> parameter of 
+<code class="docutils literal notranslate">
+<span class="pre">viewer
+</span>
+</code> to specify all the matrices of the exposed axes. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_MATRICES">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
 
 </section>
 

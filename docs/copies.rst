@@ -1,5 +1,5 @@
 copies
 ======
 
-.. automodule:: daf.copies
+.. automodule:: dafpy.copies
     :members:

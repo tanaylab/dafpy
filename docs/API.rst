@@ -1,7 +1,7 @@
 API
 ===
 
-.. automodule:: daf
+.. automodule:: dafpy
 
 .. toctree::
 

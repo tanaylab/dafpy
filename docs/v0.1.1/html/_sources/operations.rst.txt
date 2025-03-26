@@ -1,5 +1,5 @@
 operations
 ==========
 
-.. automodule:: daf.operations
+.. automodule:: dafpy.operations
     :members:

@@ -571,13 +571,13 @@ class DafWriter(DafReader):
         """
         jl.DataAxesFormats.delete_scalar_b(self.jl_obj, name, must_exist=must_exist)
 
-    def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray) -> None:
+    def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray, *, overwrite: bool = False) -> None:
         """
         Add a new ``axis`` to the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.add_axis!>`__
         for details.
         """
-        jl.DataAxesFormats.add_axis_b(self.jl_obj, axis, _to_julia_array(entries))
+        jl.DataAxesFormats.add_axis_b(self.jl_obj, axis, _to_julia_array(entries), overwrite=overwrite)
 
     def delete_axis(self, axis: str, *, must_exist: bool = True) -> None:
         """

@@ -1,5 +1,5 @@
 data
 ====
 
-.. automodule:: daf.data
+.. automodule:: dafpy.data
     :members:

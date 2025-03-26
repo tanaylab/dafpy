@@ -1,5 +1,5 @@
 storage_types
 =============
 
-.. automodule:: daf.storage_types
+.. automodule:: dafpy.storage_types
     :members:

@@ -1,5 +1,5 @@
 concat
 ======
 
-.. automodule:: daf.concat
+.. automodule:: dafpy.concat
     :members:

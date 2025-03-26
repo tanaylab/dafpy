@@ -1,5 +1,5 @@
 adapters
 ========
 
-.. automodule:: daf.adapters
+.. automodule:: dafpy.adapters
     :members:

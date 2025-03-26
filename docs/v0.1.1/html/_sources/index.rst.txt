@@ -1,5 +1,5 @@
-Daf.py 0.1.1
-============
+dafpy 0.1.1
+===========
 
 .. toctree::
   :titlesonly:

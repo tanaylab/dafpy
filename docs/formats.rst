@@ -1,5 +1,5 @@
 formats
 =======
 
-.. automodule:: daf.formats
+.. automodule:: dafpy.formats
     :members:

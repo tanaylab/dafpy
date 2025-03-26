@@ -1,5 +1,5 @@
 anndata_format
 ==============
 
-.. automodule:: daf.anndata_format
+.. automodule:: dafpy.anndata_format
     :Members:
