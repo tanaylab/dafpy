@@ -147,9 +147,9 @@ class DafReader(JlObject):
         """
         return jl.DataAxesFormats.axis_length(self.jl_obj, axis)
 
-    def axis_vector(self, axis: str) -> np.ndarray:
+    def axis_np_vector(self, axis: str) -> np.ndarray:
         """
-        The array of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
+        A ``numpy`` vector of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_vector>`__
         for details.
 
@@ -162,6 +162,27 @@ class DafReader(JlObject):
             axis_entries = _from_julia_array(jl.DataAxesFormats.axis_vector(self.jl_obj, axis))
             self.weakrefs[axis_key] = axis_entries
         return axis_entries
+
+    def axis_np_entries(
+        self, axis: str, indices: Optional[Sequence[int]] = None, *, allow_empty: bool = False
+    ) -> np.ndarray:
+        """
+        Return a ``numpy`` vector of the names of entries of the ``indices`` in the ``axis``. See the Julia
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_entries>`__
+        for details.
+
+        The ``indices`` passed here are 0-based to fit the Python conventions. This means that if ``allow_empty``,
+        *negative* ``indices`` are converted to the empty string.
+        """
+        entries = self.axis_np_vector(axis)
+
+        if indices is None:
+            return entries
+
+        if allow_empty:
+            return np.array(["" if index < 0 else entries[index] for index in indices], dtype="str")
+
+        return entries[indices]
 
     def axis_dict(self, axis: str) -> Mapping[str, int]:
         """
@@ -177,21 +198,31 @@ class DafReader(JlObject):
             self.weakrefs[axis_key] = axis_dictionary
         return axis_dictionary
 
-    def axis_np_indices(self, axis: str, entries: Sequence[str]) -> np.ndarray:
+    def axis_np_indices(self, axis: str, entries: Sequence[str], *, allow_empty: bool = False) -> np.ndarray:
         """
-        Return a ``numpy`` vector of the indices of the ``entries`` in the ``axis``.
+        Return a ``numpy`` vector of the indices of the ``entries`` in the ``axis``. See the Julia
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_indices>`__
+        for details.
+
+        The indices returned here are 0-based to fit the Python conventions. This means that if ``allow_empty``,
+        the empty string is converted to the index -1.
         """
         axis_dictionary = self.axis_dict(axis)
         result = np.empty(len(entries), "int32")
         for index, entry in enumerate(entries):
-            result[index] = axis_dictionary[entry]
+            if allow_empty and entry == "":
+                result[index] = -1
+            else:
+                result[index] = axis_dictionary[entry]
         return result
 
-    def axis_pd_indices(self, axis: str, entries: Sequence[str]) -> pd.Series:
+    def axis_pd_indices(self, axis: str, entries: Sequence[str], *, allow_empty: bool = False) -> pd.Series:
         """
-        Return a ``pandas`` series of the indices of the ``entries`` in the ``axis``.
+        Return a ``pandas`` series of the indices of the ``entries`` in the ``axis``. See the Julia
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_indices>`__
+        for details.
         """
-        return pd.Series(self.axis_np_indices(axis, entries), index=np.array(entries))
+        return pd.Series(self.axis_np_indices(axis, entries, allow_empty=allow_empty), index=np.array(entries))
 
     def has_vector(self, axis: str, name: str) -> bool:
         """
@@ -298,7 +329,7 @@ class DafReader(JlObject):
         vector_value = self.get_np_vector(axis, name, default=_to_julia_array(default))
         if vector_value is None:
             return None
-        return pd.Series(vector_value, index=self.axis_vector(axis))
+        return pd.Series(vector_value, index=self.axis_np_vector(axis))
 
     def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
         """
@@ -432,7 +463,9 @@ class DafReader(JlObject):
             return None
         if sp.issparse(matrix_value):
             matrix_value = matrix_value.toarray()  # type: ignore
-        return pd.DataFrame(matrix_value, index=self.axis_vector(rows_axis), columns=self.axis_vector(columns_axis))
+        return pd.DataFrame(
+            matrix_value, index=self.axis_np_vector(rows_axis), columns=self.axis_np_vector(columns_axis)
+        )
 
     def empty_cache(self, *, clear: Optional[CacheGroup] = None, keep: Optional[CacheGroup] = None) -> None:
         """

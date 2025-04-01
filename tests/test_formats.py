@@ -116,11 +116,16 @@ def test_axes(
 
     assert daf.has_axis(axis_name)
     assert daf.axis_length(axis_name) == len(axis_entries)
-    assert list(daf.axis_vector(axis_name)) == list(axis_entries)
+    assert list(daf.axis_np_vector(axis_name)) == list(axis_entries)
+    assert list(daf.axis_np_entries(axis_name)) == list(axis_entries)
+    assert list(daf.axis_np_entries(axis_name, range(1))) == [axis_entries[0]]
+    assert list(daf.axis_np_entries(axis_name, range(-1, 1), allow_empty=True)) == ["", axis_entries[0]]
     assert list(sorted([(str(name), index) for (name, index) in daf.axis_dict(axis_name).items()])) == sorted(
         [(name, index) for (index, name) in enumerate(axis_entries)]
     )
     assert np.all(daf.axis_np_indices(axis_name, axis_entries) == np.arange(len(axis_entries)))
+    assert list(daf.axis_np_indices(axis_name, [axis_entries[0]])) == [0]
+    assert list(daf.axis_np_indices(axis_name, ["", axis_entries[0]], allow_empty=True)) == [-1, 0]
     assert np.all(daf.axis_pd_indices(axis_name, axis_entries).values == np.arange(len(axis_entries)))
     assert list(daf.axis_pd_indices(axis_name, axis_entries).index) == list(axis_entries)
     assert set(daf.axes_set()) == set([axis_name])
