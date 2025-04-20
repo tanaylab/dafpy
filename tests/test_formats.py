@@ -75,7 +75,7 @@ def test_scalars(
     if julia_type == "String":
         scalar_value = '"' + str(scalar_value) + '"'
     else:
-        scalar_value = f"{scalar_value} ({julia_type})"
+        scalar_value = f"{scalar_value}"
 
     assert (
         daf.description()
@@ -209,10 +209,7 @@ def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
     assert list(stored_series.values) == list(vector_entries.reshape(-1))
     assert list(stored_series.index) == ["A", "B"]
     if isinstance(stored_vector[0], str):
-        if isinstance(daf, dp.MemoryDaf):
-            julia_type = f"PythonCall.Utils.Static{julia_type}{{UInt32, 1}}"
-        elif isinstance(daf, dp.FilesDaf):
-            julia_type = f"Sub{julia_type}{{StringViews.StringView{{Vector{{UInt8}}}}}}"
+        julia_type = "Str"
     elif isinstance(daf, dp.MemoryDaf):
         if not vector_entries.flags.writeable:  # Due to get_np_vector above.
             vector_entries.flags.writeable = True
@@ -324,7 +321,7 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], Tuple[dp.DafWrit
     assert isinstance(daf.get_np_matrix("cell", "gene", "UMIs"), sp.csc_matrix)
     assert np.all(daf.get_pd_matrix("cell", "gene", "UMIs").values == fill_matrix)
 
-    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (Transpose Sparse Int32 50%)"):
+    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (Transpose, Sparse Int32 50%)"):
         daf.set_matrix("cell", "gene", "UMIs", sp.csr_matrix(fill_matrix), overwrite=True)
 
 

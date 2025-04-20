@@ -17,4 +17,3 @@ API
   concat
   anndata_format
   generic_functions
-  generic_logging

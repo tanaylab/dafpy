@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dafpy.queries &mdash; Daf 0.1.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -34,9 +32,6 @@
             Daf
               <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.1.1
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -82,15 +77,15 @@
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html&gt;`__ for details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_to_julia_type</span>
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
-<span class="kn">from</span> <span class="nn">.operations</span> <span class="kn">import</span> <span class="n">QueryOperation</span>
-<span class="kn">from</span> <span class="nn">.operations</span> <span class="kn">import</span> <span class="n">QuerySequence</span>
-<span class="kn">from</span> <span class="nn">.storage_types</span> <span class="kn">import</span> <span class="n">StorageScalar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">QueryOperation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuerySequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.storage_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageScalar</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;And&quot;</span><span class="p">,</span>
@@ -127,21 +122,21 @@
 
 <div class="viewcode-block" id="Names">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.Names">[docs]</a>
-<span class="k">class</span> <span class="nc">Names</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Names</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for looking up a set of names. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.Names&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Names</span><span class="p">(</span><span class="n">kind</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Lookup">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.Lookup">[docs]</a>
-<span class="k">class</span> <span class="nc">Lookup</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Lookup</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for looking up the value of a property with some name.</span>
 <span class="sd">    See the Julia</span>
@@ -149,14 +144,14 @@
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Lookup</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Fetch">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.Fetch">[docs]</a>
-<span class="k">class</span> <span class="nc">Fetch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Fetch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for fetching the value of a property from another axis, based on a vector property whose values</span>
 <span class="sd">    are entry names of the axis. See the</span>
@@ -164,21 +159,21 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Fetch</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IfMissing">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IfMissing">[docs]</a>
-<span class="k">class</span> <span class="nc">IfMissing</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IfMissing</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation providing a value to use if the data is missing some property. See the</span>
 <span class="sd">    Julia `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IfMissing&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">missing_value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IfMissing</span><span class="p">(</span><span class="n">missing_value</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)))</span></div>
@@ -187,7 +182,7 @@
 
 <div class="viewcode-block" id="IfNot">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IfNot">[docs]</a>
-<span class="k">class</span> <span class="nc">IfNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IfNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation providing a value to use for &quot;false-ish&quot; values in a vector (empty strings, zero numeric values,</span>
 <span class="sd">    or false Boolean values). See the</span>
@@ -195,14 +190,14 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IfNot</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="AsAxis">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.AsAxis">[docs]</a>
-<span class="k">class</span> <span class="nc">AsAxis</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AsAxis</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    There are three cases where we may want to take a vector property and consider each value to be the name of an entry</span>
 <span class="sd">    of some axis: ``Fetch``, ``CountBy`` and ``GroupBy``. See the Julia</span>
@@ -210,27 +205,27 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">AsAxis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Axis">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.Axis">[docs]</a>
-<span class="k">class</span> <span class="nc">Axis</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Axis</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for specifying a result axis. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.Axis&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="MaskSlice">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.MaskSlice">[docs]</a>
-<span class="k">class</span> <span class="nc">MaskSlice</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MaskSlice</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for using a slice of a matrix as a mask, when the other axis of the matrix is different from the</span>
 <span class="sd">    mask axis. See the Julia</span>
@@ -238,14 +233,14 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">MaskSlice</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="SquareMaskColumn">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.SquareMaskColumn">[docs]</a>
-<span class="k">class</span> <span class="nc">SquareMaskColumn</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SquareMaskColumn</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``MaskSlice`` but is used when the mask matrix is square and we&#39;d like to use a column as a mask. See the</span>
 <span class="sd">    Julia</span>
@@ -253,14 +248,14 @@
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">SquareMaskColumn</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="SquareMaskRow">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.SquareMaskRow">[docs]</a>
-<span class="k">class</span> <span class="nc">SquareMaskRow</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SquareMaskRow</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``MaskSlice`` but is used when the mask matrix is square and we&#39;d like to use a row as a mask. See the</span>
 <span class="sd">    Julia</span>
@@ -268,120 +263,120 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">SquareMaskRow</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="And">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.And">[docs]</a>
-<span class="k">class</span> <span class="nc">And</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">And</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for restricting the set of entries of an ``Axis``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.And&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="AndNot">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.AndNot">[docs]</a>
-<span class="k">class</span> <span class="nc">AndNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AndNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Same as ``And`` but use the inverse of the mask. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.AndNot&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">AndNot</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Or">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.Or">[docs]</a>
-<span class="k">class</span> <span class="nc">Or</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Or</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for expanding the set of entries of an ``Axis``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.Or&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="OrNot">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.OrNot">[docs]</a>
-<span class="k">class</span> <span class="nc">OrNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Same as ``Or`` but use the inverse of the mask. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.OrNot&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">OrNot</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Xor">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.Xor">[docs]</a>
-<span class="k">class</span> <span class="nc">Xor</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Xor</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for flipping the set of entries of an ``Axis``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.Xor&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Xor</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="XorNot">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.XorNot">[docs]</a>
-<span class="k">class</span> <span class="nc">XorNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">XorNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Same as ``Xor`` but use the inverse of the mask. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.XorNot&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">XorNot</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsLess">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsLess">[docs]</a>
-<span class="k">class</span> <span class="nc">IsLess</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsLess</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for converting a vector value to a Boolean mask by comparing it some value. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IsLess&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsLess</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsLessEqual">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsLessEqual">[docs]</a>
-<span class="k">class</span> <span class="nc">IsLessEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsLessEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``&lt;=`` instead of ``&lt;`` for the comparison. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IsLessEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsLessEqual</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsEqual">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsEqual">[docs]</a>
-<span class="k">class</span> <span class="nc">IsEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Equality is used for two purposes: As a comparison operator, similar to ``IsLess`` except that uses ``=`` instead of</span>
 <span class="sd">    ``&lt;`` for the comparison; and To select a single entry from a vector. See the Julia</span>
@@ -389,56 +384,56 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsEqual</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsNotEqual">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsNotEqual">[docs]</a>
-<span class="k">class</span> <span class="nc">IsNotEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsNotEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``!=`` instead of ``&lt;`` for the comparison. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IsNotEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsNotEqual</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsGreater">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsGreater">[docs]</a>
-<span class="k">class</span> <span class="nc">IsGreater</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsGreater</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``&gt;`` instead of ``&lt;`` for the comparison. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IsGreater&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsGreater</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsGreaterEqual">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsGreaterEqual">[docs]</a>
-<span class="k">class</span> <span class="nc">IsGreaterEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsGreaterEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``&gt;=`` instead of ``&lt;`` for the comparison. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IsGreaterEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsGreaterEqual</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsMatch">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsMatch">[docs]</a>
-<span class="k">class</span> <span class="nc">IsMatch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsMatch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that the compared values must be strings, and the mask</span>
 <span class="sd">    is of the values that match the given regular expression. See the Julia</span>
@@ -446,28 +441,28 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsMatch</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="IsNotMatch">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.IsNotMatch">[docs]</a>
-<span class="k">class</span> <span class="nc">IsNotMatch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IsNotMatch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsMatch`` except that looks for entries that do not match the pattern. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.IsNotMatch&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">IsNotMatch</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="CountBy">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.CountBy">[docs]</a>
-<span class="k">class</span> <span class="nc">CountBy</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CountBy</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation that generates a matrix of counts of combinations of pairs of values for the same entries of an</span>
 <span class="sd">    axis. See the Julia</span>
@@ -475,14 +470,14 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">CountBy</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="GroupBy">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.GroupBy">[docs]</a>
-<span class="k">class</span> <span class="nc">GroupBy</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GroupBy</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation that uses a (following) ``ReductionOperation`` to aggregate the values of each group of</span>
 <span class="sd">    values. See the Julia</span>
@@ -490,7 +485,7 @@
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">GroupBy</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
@@ -502,7 +497,7 @@
 
 <div class="viewcode-block" id="parse_query">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.parse_query">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_query</span><span class="p">(</span><span class="n">query_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySequence</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_query</span><span class="p">(</span><span class="n">query_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySequence</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a ``query_string`` into a ``QuerySequence``.</span>
 
@@ -514,7 +509,7 @@
 
 <div class="viewcode-block" id="query_result_dimensions">
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.query_result_dimensions">[docs]</a>
-<span class="k">def</span> <span class="nf">query_result_dimensions</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">query_result_dimensions</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the number of dimensions (-1 - names, 0 - scalar, 1 - vector, 2 - matrix) of the results of a query. See the</span>
 <span class="sd">    Julia</span>

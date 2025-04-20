@@ -37,13 +37,13 @@ def test_views() -> None:  # pylint: disable=too-many-statements
               gene: 3 entries
             vectors:
               batch:
-                sex: 3 x PythonCall.Utils.StaticString{UInt32, 6} (Dense)
+                sex: 3 x Str (Dense)
               cell:
-                age: 2 x Float64 (PyArray - Dense)
-                batch: 2 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
+                age: 2 x Float64 (PyArray; Dense)
+                batch: 2 x Str (Dense)
             matrices:
               gene,cell:
-                UMIs: 3 x 2 x Int64 in Columns (PyArray - Dense)
+                UMIs: 3 x 2 x Int64 in Columns (PyArray; Dense)
             """
         )[1:]
     )
@@ -67,11 +67,11 @@ def test_views() -> None:  # pylint: disable=too-many-statements
               var: 3 entries
             vectors:
               obs:
-                age: 2 x Float64 (PyArray - Dense)
-                batch: 2 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
+                age: 2 x Float64 (PyArray; Dense)
+                batch: 2 x Str (Dense)
             matrices:
               var,obs:
-                X: 3 x 2 x Int64 in Columns (PyArray - Dense)
+                X: 3 x 2 x Int64 in Columns (PyArray; Dense)
             """
         )[1:]
     )

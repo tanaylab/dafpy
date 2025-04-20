@@ -83,8 +83,8 @@ jl.seval("using Pkg")
 jl.seval("Pkg.update()")
 
 jl.seval("using DataAxesFormats")
+jl.seval("using TanayLabUtilities")
 
-jl.seval("import DataAxesFormats.GenericTypes.Maybe")
 jl.seval("import DataFrames")
 jl.seval("import HDF5")
 jl.seval("import LinearAlgebra")
@@ -229,6 +229,16 @@ def _from_julia_frame(
         data[str(name)] = _from_julia_array(value, writeable=writeable)
     return pd.DataFrame(data)
 
+
+jl.seval(
+    """
+    function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler
+        old_handler = TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER
+        TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER = new_handler
+        return old_handler
+    end
+    """
+)
 
 jl.seval(
     """

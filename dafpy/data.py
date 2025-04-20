@@ -697,7 +697,7 @@ class DafWriter(DafReader):
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
     @contextmanager
-    def empty_sparse_vector(
+    def empty_sparse_vector(  # pylint: disable=too-many-positional-arguments
         self, axis: str, name: str, eltype: Type, nnz: int, indtype: Type, *, overwrite: bool = False
     ) -> Iterator[Tuple[np.ndarray, np.ndarray]]:
         """
@@ -775,7 +775,7 @@ class DafWriter(DafReader):
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
     @contextmanager
-    def empty_sparse_matrix(
+    def empty_sparse_matrix(  # pylint: disable=too-many-positional-arguments
         self,
         rows_axis: str,
         columns_axis: str,

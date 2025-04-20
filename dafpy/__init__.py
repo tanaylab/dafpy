@@ -52,7 +52,6 @@ __version__ = "0.1.1"
 
 from .julia_import import *  # isort: skip
 from .generic_functions import *  # isort: skip
-from .generic_logging import *  # isort: skip
 from .storage_types import *  # isort: skip
 from .operations import *  # isort: skip
 from .queries import *  # isort: skip

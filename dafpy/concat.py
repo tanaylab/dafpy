@@ -43,7 +43,7 @@ JL_MERGE_ACTION = {
 MergeData = Mapping[PropertyKey, MergeAction]
 
 
-def concatenate(
+def concatenate(  # pylint: disable=too-many-positional-arguments
     destination: DafWriter,
     axis: str | Sequence[str],
     sources: Sequence[DafReader],

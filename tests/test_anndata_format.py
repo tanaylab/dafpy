@@ -27,13 +27,13 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
         name: memory!
         type: MemoryDaf
         scalars:
-          version: 1 (Int64)
+          version: 1
         axes:
           cell: 2 entries
           gene: 3 entries
         matrices:
           gene,cell:
-            UMIs: 3 x 2 x Int64 in Columns (PyArray - Dense)
+            UMIs: 3 x 2 x Int64 in Columns (PyArray; Dense)
         """
         )[1:]
     )
@@ -51,13 +51,13 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
               X_is: "UMIs"
               obs_is: "cell"
               var_is: "gene"
-              version: 1 (Int64)
+              version: 1
             axes:
               cell: 2 entries
               gene: 3 entries
             matrices:
               gene,cell:
-                UMIs: 3 x 2 x Int64 in Columns (Transpose Permuted Dense)
+                UMIs: 3 x 2 x Int64 in Columns (Transpose, Permute, Dense)
             """
             )[1:]
         )

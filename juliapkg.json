@@ -1,7 +1,8 @@
 {
     "julia": "1.10",
     "packages": {
-        "DataAxesFormats": { "uuid": "1375bf9c-a47d-45a1-aad5-626dd8629d98", "path": "/Users/obk/projects/DataAxesFormats.jl" },
+        "DataAxesFormats": { "uuid": "1375bf9c-a47d-45a1-aad5-626dd8629d98", "url": "https://github.com:/tanaylab/DataAxesFormats.jl.git" },
+        "TanayLabUtilities": { "uuid": "2fad9582-3092-42c8-a7a2-4a8f52ca25c8", "url": "https://github.com:/tanaylab/TanayLabUtilities.jl.git" },
         "DataFrames": { "uuid": "a93c6f00-e57d-5684-b7b6-d8193f3e46c0" },
         "HDF5": { "uuid": "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f" },
         "LinearAlgebra": { "uuid": "37e2e46d-f89d-539d-b4ee-838fcccc9c8e" },

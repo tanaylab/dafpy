@@ -30,7 +30,7 @@ def test_concatenate() -> None:  # pylint: disable=too-many-statements
               dataset: 2 entries
             vectors:
               cell:
-                dataset: 5 x AbstractString (Dense)
+                dataset: 5 x Str (Dense)
               dataset:
                 version: 2 x Int64 (Dense)
             """
@@ -50,7 +50,7 @@ def test_concatenate() -> None:  # pylint: disable=too-many-statements
               dataset: 2 entries
             vectors:
               cell:
-                dataset: 5 x AbstractString (Dense)
+                dataset: 5 x Str (Dense)
             """
         )[1:]
     )

@@ -33,8 +33,8 @@ def test_reconstruction() -> None:
           batch:
             age: 2 x Int64 (Dense)
           cell:
-            batch: 4 x PythonCall.Utils.StaticString{UInt32, 1} (Dense)
-            score: 4 x Float64 (PyArray - Dense)
+            batch: 4 x Str (Dense)
+            score: 4 x Float64 (PyArray; Dense)
     """
         )[1:]
     )
