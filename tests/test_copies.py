@@ -11,8 +11,8 @@ import dafpy as dp
 
 
 def test_copies() -> None:  # pylint: disable=too-many-statements
-    source = dp.MemoryDaf(name="source!")
-    destination = dp.MemoryDaf(name="destination!")
+    source = dp.memory_daf(name="source!")
+    destination = dp.memory_daf(name="destination!")
 
     source.set_scalar("version", "1.0")
     dp.copy_scalar(source=source, destination=destination, name="version")
@@ -56,7 +56,7 @@ def test_copies() -> None:  # pylint: disable=too-many-statements
         == np.array([[False, False, False], [False, False, False]]).transpose()
     )
 
-    destination = dp.MemoryDaf(name="destination!")
+    destination = dp.memory_daf(name="destination!")
     dp.copy_all(source=source, destination=destination)
     assert destination.get_scalar("version") == "1.0"
     assert list(destination.axis_np_vector("cell")) == ["A", "B"]

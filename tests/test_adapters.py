@@ -9,7 +9,7 @@ import dafpy as dp
 
 
 def test_adapters() -> None:  # pylint: disable=too-many-statements
-    daf = dp.MemoryDaf(name="memory!")
+    daf = dp.memory_daf(name="memory!")
     daf.set_scalar("INPUT", 1)
     with dp.adapter(daf, input_data={"input": ": INPUT"}, output_data={"OUTPUT": ": output"}) as adapted:
         adapted.set_scalar("output", adapted.get_scalar("input"))

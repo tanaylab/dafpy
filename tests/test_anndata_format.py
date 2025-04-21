@@ -14,7 +14,7 @@ import dafpy as dp
 
 
 def test_h5ad() -> None:  # pylint: disable=too-many-statements
-    origin = dp.MemoryDaf(name="memory!")
+    origin = dp.memory_daf(name="memory!")
     origin.set_scalar("version", 1)
     origin.add_axis("cell", ["A", "B"])
     origin.add_axis("gene", ["X", "Y", "Z"])

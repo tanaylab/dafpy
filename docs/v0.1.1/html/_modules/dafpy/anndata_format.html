@@ -87,7 +87,8 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafReader</span>
-<span class="kn">from</span> <span class="nn">.formats</span> <span class="kn">import</span> <span class="n">MemoryDaf</span>
+<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafWriter</span>
+<span class="kn">from</span> <span class="nn">.formats</span> <span class="kn">import</span> <span class="n">memory_daf</span>
 <span class="kn">from</span> <span class="nn">.generic_functions</span> <span class="kn">import</span> <span class="n">JL_ABNORMAL_HANDLER</span>
 <span class="kn">from</span> <span class="nn">.generic_functions</span> <span class="kn">import</span> <span class="n">AbnormalHandler</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
@@ -103,7 +104,7 @@
     <span class="n">var_is</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">X_is</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">unsupported_handler</span><span class="p">:</span> <span class="n">AbnormalHandler</span> <span class="o">=</span> <span class="s2">&quot;WarnHandler&quot;</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MemoryDaf</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    View ``AnnData`` as a ``Daf`` data set, specifically using a ``MemoryDaf``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/anndata_format.html#anndata_as_daf&gt;`__ for</span>
@@ -111,7 +112,7 @@
 
 <span class="sd">    Note that you only pass an ``h5ad`` path, since the Julia ``AnnData`` object comes from the ``Muon.jl`` package and</span>
 <span class="sd">    is not compatible with the Python ``anndata`` object.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MemoryDaf</span><span class="p">(</span>
+    <span class="k">return</span> <span class="n">memory_daf</span><span class="p">(</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">anndata_as_daf</span><span class="p">(</span>
             <span class="n">h5ad</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>

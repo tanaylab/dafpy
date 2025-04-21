@@ -11,7 +11,7 @@ import dafpy as dp
 
 
 def test_reconstruction() -> None:
-    memory = dp.MemoryDaf(name="memory!")
+    memory = dp.memory_daf(name="memory!")
 
     memory.add_axis("cell", ["A", "B", "C", "D"])
     memory.set_vector("cell", "age", [1, 1, 2, 3])

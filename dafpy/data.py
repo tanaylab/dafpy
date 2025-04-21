@@ -525,9 +525,9 @@ class DafReader(JlObject):
 
     def __getitem__(self, query: str | Query) -> StorageScalar | np.ndarray | AbstractSet[str]:
         """
-        The shorthand ``data[query]`` is equivalent to ``data.get_np_query(query)``.
+        The shorthand ``data[query]`` is equivalent to ``data.get_np_query(query, cache = False)``.
         """
-        return self.get_np_query(query)
+        return self.get_np_query(query, cache=False)
 
     def get_pd_frame(
         self,

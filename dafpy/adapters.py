@@ -20,8 +20,8 @@ from typing import Optional
 from .copies import EmptyData
 from .copies import copy_all
 from .data import DafWriter
-from .formats import MemoryDaf
 from .formats import chain_writer
+from .formats import memory_daf
 from .views import ViewAxes
 from .views import ViewData
 from .views import viewer
@@ -37,7 +37,7 @@ def adapter(
     *,
     input_axes: Optional[ViewAxes] = None,
     input_data: Optional[ViewData] = None,
-    capture: Callable[..., DafWriter] = MemoryDaf,
+    capture: Callable[..., DafWriter] = memory_daf,
     output_axes: Optional[ViewAxes] = None,
     output_data: Optional[ViewData] = None,
     empty: Optional[EmptyData] = None,

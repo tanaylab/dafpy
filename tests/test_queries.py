@@ -81,7 +81,7 @@ def test_query_formatting(query_data: Tuple[dp.Query, str]) -> None:
 
 
 def test_query_result() -> None:  # pylint: disable=too-many-statements
-    daf = dp.MemoryDaf(name="test!")
+    daf = dp.memory_daf(name="test!")
     daf.set_scalar("version", "1.0")
     daf.add_axis("cell", ["A", "B"])
     daf.add_axis("gene", ["X", "Y", "Z"])

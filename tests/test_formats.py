@@ -21,10 +21,11 @@ import dafpy as dp
 from .utilities import assert_raises
 
 
-def make_files() -> Tuple[dp.FilesDaf, str]:
+def make_files() -> Tuple[dp.DafWriter, str]:
     tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
-    files = dp.FilesDaf(tmpdir.name, "w", name="test!")
+    files = dp.files_daf(tmpdir.name, "w", name="test!")
     setattr(files, "__gc_anchor__", tmpdir)
+    assert isinstance(files, dp.DafWriter)
     return (
         files,
         dedent(
@@ -36,9 +37,10 @@ def make_files() -> Tuple[dp.FilesDaf, str]:
     )
 
 
-def make_h5df() -> Tuple[dp.H5df, str]:
+def make_h5df() -> Tuple[dp.DafWriter, str]:
     tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
-    h5df = dp.H5df(tmpdir.name + "/test.h5df", "w", name="test!")
+    h5df = dp.h5df(tmpdir.name + "/test.h5df", "w", name="test!")
+    assert isinstance(h5df, dp.DafWriter)
     setattr(h5df, "__gc_anchor__", tmpdir)
     return (
         h5df,
@@ -51,7 +53,7 @@ def make_h5df() -> Tuple[dp.H5df, str]:
     )
 
 
-FORMATS = [("MemoryDaf", lambda: (dp.MemoryDaf(name="test!"), "")), ("FilesDaf", make_files), ("H5df", make_h5df)]
+FORMATS = [("MemoryDaf", lambda: (dp.memory_daf(name="test!"), "")), ("FilesDaf", make_files), ("H5df", make_h5df)]
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
@@ -210,7 +212,7 @@ def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
     assert list(stored_series.index) == ["A", "B"]
     if isinstance(stored_vector[0], str):
         julia_type = "Str"
-    elif isinstance(daf, dp.MemoryDaf):
+    elif format_name == "MemoryDaf":
         if not vector_entries.flags.writeable:  # Due to get_np_vector above.
             vector_entries.flags.writeable = True
         vector_entries.reshape(-1)[0] = vector_entries.reshape(-1)[1]
@@ -351,7 +353,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
     assert id(repeated_matrix) == id(stored_matrix)
 
     assert np.all(stored_matrix == column_major_umis)
-    if isinstance(daf, dp.MemoryDaf):
+    if format_name == "MemoryDaf":
         if not column_major_umis.flags.writeable:  # Due to get_np_matrix above.
             column_major_umis.flags.writeable = True
         column_major_umis[1, 2] += 1
@@ -414,7 +416,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
 
 
 def test_chains() -> None:
-    first_writer = dp.MemoryDaf(name="first!")
+    first_writer = dp.memory_daf(name="first!")
     first_writer.set_scalar("version", 1.0)
 
     first = first_writer.read_only()
@@ -422,7 +424,7 @@ def test_chains() -> None:
     assert id(first) == id(first.read_only())
     assert id(first) != id(first.read_only(name="renamed"))
 
-    second = dp.MemoryDaf(name="second!")
+    second = dp.memory_daf(name="second!")
     second.set_scalar("version", 2.0)
 
     read_chain = dp.chain_reader([first, second], name="chain!")
