@@ -790,7 +790,7 @@ class DafWriter(DafReader):
         Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and
         ``columns_axis`` in the ``Daf`` data set, and pass its parts (``colptr``, ``rowval`` and ``nzval``) to the block
         to be filles. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#Daf.Data.empty_sparse_matrix!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.empty_sparse_matrix!>`__
         for details.
 
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
@@ -826,7 +826,7 @@ class DafWriter(DafReader):
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
         ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
         flipped axes). See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#Daf.Data.relayout_matrix!>`__ for
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.relayout_matrix!>`__ for
         details.
         """
         jl.DataAxesFormats.relayout_matrix_b(self.jl_obj, rows_axis, columns_axis, name, overwrite=overwrite)
@@ -835,7 +835,7 @@ class DafWriter(DafReader):
         """
         Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data
         set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#Daf.Data.delete_matrix!>`__ for
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.delete_matrix!>`__ for
         details.
         """
         jl.DataAxesFormats.delete_matrix_b(self.jl_obj, rows_axis, columns_axis, name, must_exist=must_exist)

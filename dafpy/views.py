@@ -25,27 +25,27 @@ __all__ = [
 ]
 
 #: A key to use in the ``data`` parameter of ``viewer`` to specify all the base data scalars. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_SCALARS>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.ALL_SCALARS>`__
 #: for details.
 ALL_SCALARS = "*"
 
 #: A pair to use in the ``axes`` parameter of ``viewer`` to specify all the base data axes. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_AXES>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.ALL_AXES>`__
 #: for details.
 ALL_AXES = "*"
 
 #: A key to use in the ``data`` parameter of ``viewer`` to specify all the vectors of the exposed axes. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_VECTORS>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.ALL_VECTORS>`__
 #: for details.
 ALL_VECTORS = ("*", "*")
 
 #: A key to use in the ``data`` parameter of ``viewer`` to specify all the matrices of the exposed axes. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ALL_MATRICES>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.ALL_MATRICES>`__
 #: for details.
 ALL_MATRICES = ("*", "*", "*")
 
 #: Specify axes to expose from a view. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ViewAxes>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.ViewAxes>`__
 #: for details.
 #:
 #: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,
@@ -53,7 +53,7 @@ ALL_MATRICES = ("*", "*", "*")
 ViewAxes = Mapping[str, str | Query | None]
 
 #: Specify data to expose from view. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.ViewAxes>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.ViewAxes>`__
 #: for details.
 #:
 #: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,
@@ -66,7 +66,7 @@ def viewer(
 ) -> DafReadOnly:
     """
     Wrap ``Daf`` data set with a read-only ``DafView``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#Daf.Views.viewer>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/views.html#DataAccessFormats.Views.viewer>`__
     for details.
 
     The order of the axes and data matters. Luckily, the default dictionary type is ordered in modern Python, write

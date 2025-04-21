@@ -28,7 +28,7 @@ The Python package provides the same API as the Julia package, with the followin
   `Muon.jl <https://github.com/scverse/Muon.jl>`_ Julia package. That is, to import/export ``AnnData`` between ``Daf``
   and Python, your best bet is to go through ``h5ad`` files.
 
-See the [Python v0.1.1 documentation](https://tanaylab.github.io/Daf.py/v0.1.1) and [Julia v0.1.2
+See the [Python v0.1.1 documentation](https://tanaylab.github.io/dafpy/v0.1.1) and [Julia v0.1.2
 documentation](https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2) for details.
 
 Status

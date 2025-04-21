@@ -56,7 +56,7 @@ class H5df(DafWriter):
 def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafReadOnly:
     """
     Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#Daf.Chains.chain_reader>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#DataAxesFormats.Chains.chain_reader>`__ for
     details.
     """
     return DafReadOnly(jl.chain_reader(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))
@@ -65,7 +65,7 @@ def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> D
 def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
     """
     Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#Daf.Chains.chain_writer>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#DataAxesFormats.Chains.chain_writer>`__ for
     details.
     """
     return DafWriter(jl.chain_writer(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))

@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 
 <html class="writer-html5" lang="en" data-content_root="./">
@@ -16,24 +14,32 @@
 <title>generic_functions &mdash; Daf 0.1.1 documentation
 </title>
       
-<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       
-<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
-      
+  
+<!--[if lt IE 9]>
+    
+<script src="_static/js/html5shiv.min.js">
+</script>
+  
+<![endif]-->
+  
+        
 <script src="_static/jquery.js?v=5d32c60e">
 </script>
-      
+        
 <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
 </script>
-      
+        
 <script src="_static/documentation_options.js?v=a58bc63e">
 </script>
-      
-<script src="_static/doctools.js?v=9bcbadda">
+        
+<script src="_static/doctools.js?v=888ff710">
 </script>
-      
+        
 <script src="_static/sphinx_highlight.js?v=dc90522c">
 </script>
     
@@ -68,6 +74,11 @@
 <img src="_static/logo.svg" class="logo" alt="Logo"/>
           
 </a>
+              
+<div class="version">
+                0.1.1
+              
+</div>
 
 <div role="search">
   
@@ -313,17 +324,21 @@ for details.
 
 <p>alias of 
 <code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Literal
+<span class="pre">Union
 </span>
-</code>[‘IgnoreHandler’] | 
+</code>[
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘WarnHandler’] | 
+</code>[‘IgnoreHandler’], 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘ErrorHandler’]
+</code>[‘WarnHandler’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>[‘ErrorHandler’]]
 </p>
 
 </dd>
@@ -367,20 +382,44 @@ for details.
 </span>
 </span>
 <span class="p">
-<span class="pre">,
+<span class="pre">]
 </span>
 </span>
 <span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
 </span>
 <span class="s">
 <span class="pre">'WarnHandler'
 </span>
 </span>
 <span class="p">
-<span class="pre">,
+<span class="pre">]
 </span>
 </span>
 <span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
 </span>
 <span class="s">
 <span class="pre">'ErrorHandler'
@@ -409,20 +448,44 @@ for details.
 </span>
 </span>
 <span class="p">
-<span class="pre">,
+<span class="pre">]
 </span>
 </span>
 <span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
 </span>
 <span class="s">
 <span class="pre">'WarnHandler'
 </span>
 </span>
 <span class="p">
-<span class="pre">,
+<span class="pre">]
 </span>
 </span>
 <span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
 </span>
 <span class="s">
 <span class="pre">'ErrorHandler'
@@ -483,25 +546,29 @@ for details.
 
 <p>alias of 
 <code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Literal
+<span class="pre">Union
 </span>
-</code>[‘Debug’] | 
+</code>[
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘Info’] | 
+</code>[‘Debug’], 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘Warn’] | 
+</code>[‘Info’], 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘Error’] | 
+</code>[‘Warn’], 
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>[‘Error’], 
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">int
 </span>
-</code>
+</code>]
 </p>
 
 </dd>

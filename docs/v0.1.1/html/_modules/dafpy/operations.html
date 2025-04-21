@@ -1,20 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dafpy.operations &mdash; Daf 0.1.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -32,6 +34,9 @@
             Daf
               <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                0.1.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -78,14 +83,14 @@
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/operations.html&gt;`__ for details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">e</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">inf</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">e</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">inf</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">JlObject</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_type</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">JlObject</span>
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">_to_julia_type</span>
+<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;QueryOperation&quot;</span><span class="p">,</span>
@@ -114,27 +119,27 @@
 
 <div class="viewcode-block" id="QueryOperation">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.QueryOperation">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">QueryOperation</span><span class="p">(</span><span class="n">JlObject</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">QueryOperation</span><span class="p">(</span><span class="n">JlObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for all query operations. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Registry.QueryOperation&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Registry.QueryOperation&gt;`__</span>
 <span class="sd">    for details.</span>
 
 <span class="sd">    Query operations can be chained into a ``QuerySequence`` using the ``|`` operator in Python (instead of the ``|&gt;``</span>
 <span class="sd">    operator in Julia).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;QueryOperation&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QuerySequence&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;QueryOperation&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QuerySequence&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">QuerySequence</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">QuerySequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="QuerySequence">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.QuerySequence">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">QuerySequence</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">QuerySequence</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A sequence of ``QueryOperation``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.QuerySequence&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.QuerySequence&gt;`__ for</span>
 <span class="sd">    details.</span>
 
 <span class="sd">    Query operations can be chained into a ``QuerySequence`` using the ``|`` operator in Python (instead of the ``|&gt;``</span>
@@ -145,10 +150,10 @@
 
 <div class="viewcode-block" id="EltwiseOperation">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.EltwiseOperation">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">EltwiseOperation</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EltwiseOperation</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for all element-wise operations. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#Daf.Registry.EltwiseOperation&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#DataAxesFormats.Registry.EltwiseOperation&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
@@ -156,10 +161,10 @@
 
 <div class="viewcode-block" id="ReductionOperation">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.ReductionOperation">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ReductionOperation</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ReductionOperation</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract type for all reduction operations. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#Daf.Registry.ReductionOperation&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#DataAxesFormats.Registry.ReductionOperation&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
@@ -167,84 +172,84 @@
 
 <div class="viewcode-block" id="Abs">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Abs">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Abs</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Abs</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that converts every element to its absolute value. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Abs&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Abs&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="Round">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Round">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Round</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Round</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that converts every element to the nearest integer value. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Round&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Round&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Round</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="Clamp">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Clamp">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Clamp</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Clamp</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that converts every element to a value inside a range. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Clamp&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Clamp&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">,</span> <span class="nb">max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">inf</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">,</span> <span class="nb">max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">inf</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="nb">max</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Convert">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Convert">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Convert</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Convert</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that converts every element to a given data type. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Convert&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Convert&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Convert</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="Fraction">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Fraction">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Fraction</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Fraction</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that converts every element to its fraction out of the total. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Fraction&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Fraction&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Fraction</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="Log">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Log">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Log</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Log</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that converts every element to its logarithm. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Log&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Log&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">e</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Log</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">),</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">))</span></div>
@@ -253,155 +258,155 @@
 
 <div class="viewcode-block" id="Significant">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Significant">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Significant</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Significant</span><span class="p">(</span><span class="n">EltwiseOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Element-wise operation that zeros all &quot;insignificant&quot; values. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Significant&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Significant&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">low</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">low</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Significant</span><span class="p">(</span><span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Sum">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Sum">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Sum</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Sum</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that sums elements. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Sum&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Sum&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Sum</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="Min">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Min">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Min</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Min</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the minimal element. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Min&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Min&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Min</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="Median">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Median">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Median</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Median</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the median value. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Median&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Median&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Median</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="Quantile">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Quantile">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Quantile</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Quantile</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the quantile value, that is, a value such that a certain fraction of the values is</span>
 <span class="sd">    lower. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Quantile&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Quantile&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Quantile</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="nb">type</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="Mean">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Mean">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Mean</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Mean</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the mean value. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Mean&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Mean&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Mean</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="Max">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Max">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Max</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Max</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the maximal element. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Max&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Max&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Max</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="Var">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Var">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Var</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Var</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the variance of the values. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Var&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Var&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Var</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="VarN">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.VarN">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">VarN</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">VarN</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the variance of the values, normalized (divided) by the mean of the values. See</span>
-<span class="sd">    the Julia `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Var&gt;`__</span>
+<span class="sd">    the Julia `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Var&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">VarN</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="Std">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.Std">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Std</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Std</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the standard deviation of the values. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Std&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Std&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Std</span><span class="p">())</span></div>
 
 
 
 <div class="viewcode-block" id="StdN">
 <a class="viewcode-back" href="../../operations.html#dafpy.operations.StdN">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">StdN</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">StdN</span><span class="p">(</span><span class="n">ReductionOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduction operation that returns the standard deviation of the values, normalized (divided) by the mean of the</span>
 <span class="sd">    values. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Std&gt;`_ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Std&gt;`_ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">StdN</span><span class="p">())</span></div>
 
 </pre></div>

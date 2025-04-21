@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 
 <html class="writer-html5" lang="en" data-content_root="./">
@@ -16,24 +14,32 @@
 <title>operations &mdash; Daf 0.1.1 documentation
 </title>
       
-<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       
-<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
-      
+  
+<!--[if lt IE 9]>
+    
+<script src="_static/js/html5shiv.min.js">
+</script>
+  
+<![endif]-->
+  
+        
 <script src="_static/jquery.js?v=5d32c60e">
 </script>
-      
+        
 <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
 </script>
-      
+        
 <script src="_static/documentation_options.js?v=a58bc63e">
 </script>
-      
-<script src="_static/doctools.js?v=9bcbadda">
+        
+<script src="_static/doctools.js?v=888ff710">
 </script>
-      
+        
 <script src="_static/sphinx_highlight.js?v=dc90522c">
 </script>
     
@@ -70,6 +76,11 @@
 <img src="_static/logo.svg" class="logo" alt="Logo"/>
           
 </a>
+              
+<div class="version">
+                0.1.1
+              
+</div>
 
 <div role="search">
   
@@ -455,9 +466,7 @@
 <dt class="sig sig-object py" id="dafpy.operations.QueryOperation">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -493,7 +502,7 @@
 <dd>
 <p>Base class for all query operations. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Registry.QueryOperation">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Registry.QueryOperation">documentation
 </a>
 for details.
 </p>
@@ -523,9 +532,7 @@ operator in Julia).
 <dt class="sig sig-object py" id="dafpy.operations.QuerySequence">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -565,7 +572,7 @@ operator in Julia).
 </span>
 </code>. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Queries.QuerySequence">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.QuerySequence">documentation
 </a> for
 details.
 </p>
@@ -595,9 +602,7 @@ operator in Julia).
 <dt class="sig sig-object py" id="dafpy.operations.EltwiseOperation">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -633,7 +638,7 @@ operator in Julia).
 <dd>
 <p>Base class for all element-wise operations. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#Daf.Registry.EltwiseOperation">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#DataAxesFormats.Registry.EltwiseOperation">documentation
 </a>
 for details.
 </p>
@@ -647,9 +652,7 @@ for details.
 <dt class="sig sig-object py" id="dafpy.operations.ReductionOperation">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -685,7 +688,7 @@ for details.
 <dd>
 <p>Abstract type for all reduction operations. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#Daf.Registry.ReductionOperation">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/registry.html#DataAxesFormats.Registry.ReductionOperation">documentation
 </a>
 for details.
 </p>
@@ -699,9 +702,7 @@ for details.
 <dt class="sig sig-object py" id="dafpy.operations.Abs">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -717,11 +718,9 @@ for details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -777,7 +776,7 @@ for details.
 <dd>
 <p>Element-wise operation that converts every element to its absolute value. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Abs">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Abs">documentation
 </a> for
 details.
 </p>
@@ -791,9 +790,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Clamp">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -809,11 +806,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -887,7 +882,7 @@ details.
 <dd>
 <p>Element-wise operation that converts every element to a value inside a range. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Clamp">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Clamp">documentation
 </a> for
 details.
 </p>
@@ -901,9 +896,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Convert">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -919,11 +912,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -957,7 +948,7 @@ details.
 <dd>
 <p>Element-wise operation that converts every element to a given data type. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Convert">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Convert">documentation
 </a> for
 details.
 </p>
@@ -971,9 +962,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Fraction">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -989,11 +978,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -1049,7 +1036,7 @@ details.
 <dd>
 <p>Element-wise operation that converts every element to its fraction out of the total. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Fraction">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Fraction">documentation
 </a> for
 details.
 </p>
@@ -1063,9 +1050,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Log">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1081,11 +1066,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -1197,7 +1180,7 @@ details.
 <dd>
 <p>Element-wise operation that converts every element to its logarithm. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Log">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Log">documentation
 </a> for
 details.
 </p>
@@ -1211,9 +1194,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Max">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1239,7 +1220,7 @@ details.
 <dd>
 <p>Reduction operation that returns the maximal element. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Max">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Max">documentation
 </a> for
 details.
 </p>
@@ -1253,9 +1234,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Median">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1281,7 +1260,7 @@ details.
 <dd>
 <p>Reduction operation that returns the median value. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Median">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Median">documentation
 </a> for
 details.
 </p>
@@ -1295,9 +1274,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Mean">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1323,7 +1300,7 @@ details.
 <dd>
 <p>Reduction operation that returns the mean value. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Mean">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Mean">documentation
 </a> for
 details.
 </p>
@@ -1337,9 +1314,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Min">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1365,7 +1340,7 @@ details.
 <dd>
 <p>Reduction operation that returns the minimal element. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Min">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Min">documentation
 </a> for
 details.
 </p>
@@ -1379,9 +1354,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Quantile">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1397,11 +1370,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -1474,7 +1445,7 @@ details.
 <p>Reduction operation that returns the quantile value, that is, a value such that a certain fraction of the values is
 lower. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Quantile">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Quantile">documentation
 </a> for
 details.
 </p>
@@ -1488,9 +1459,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Round">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1506,11 +1475,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -1566,7 +1533,7 @@ details.
 <dd>
 <p>Element-wise operation that converts every element to the nearest integer value. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Round">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Round">documentation
 </a> for
 details.
 </p>
@@ -1580,9 +1547,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Significant">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1598,11 +1563,9 @@ details.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -1674,7 +1637,7 @@ details.
 <dd>
 <p>Element-wise operation that zeros all “insignificant” values. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Significant">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Significant">documentation
 </a>
 for details.
 </p>
@@ -1688,9 +1651,7 @@ for details.
 <dt class="sig sig-object py" id="dafpy.operations.Std">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1716,7 +1677,7 @@ for details.
 <dd>
 <p>Reduction operation that returns the standard deviation of the values. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Std">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Std">documentation
 </a> for
 details.
 </p>
@@ -1730,9 +1691,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.StdN">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1759,7 +1718,7 @@ details.
 <p>Reduction operation that returns the standard deviation of the values, normalized (divided) by the mean of the
 values. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Std">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Std">documentation
 </a> for details.
 </p>
 
@@ -1772,9 +1731,7 @@ values. See the Julia
 <dt class="sig sig-object py" id="dafpy.operations.Sum">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1790,11 +1747,9 @@ values. See the Julia
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="keyword-only-separator o">
-<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="o">
 <span class="pre">*
 </span>
-</abbr>
 </span>
 </em>, 
 <em class="sig-param">
@@ -1850,7 +1805,7 @@ values. See the Julia
 <dd>
 <p>Reduction operation that sums elements. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Sum">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Sum">documentation
 </a> for
 details.
 </p>
@@ -1864,9 +1819,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.Var">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1892,7 +1845,7 @@ details.
 <dd>
 <p>Reduction operation that returns the variance of the values. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Var">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Var">documentation
 </a> for
 details.
 </p>
@@ -1906,9 +1859,7 @@ details.
 <dt class="sig sig-object py" id="dafpy.operations.VarN">
 
 <em class="property">
-<span class="k">
 <span class="pre">class
-</span>
 </span>
 <span class="w"> 
 </span>
@@ -1934,7 +1885,7 @@ details.
 <dd>
 <p>Reduction operation that returns the variance of the values, normalized (divided) by the mean of the values. See
 the Julia 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#Daf.Operations.Var">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.Var">documentation
 </a>
 for details.
 </p>
