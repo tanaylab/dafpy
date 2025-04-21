@@ -10,6 +10,7 @@ from typing import Iterator
 from typing import Literal
 from typing import Mapping
 from typing import Optional
+from typing import Self
 from typing import Sequence
 from typing import Tuple
 from typing import Type
@@ -585,40 +586,52 @@ class DafWriter(DafReader):
     for details.
     """
 
-    def set_scalar(self, name: str, value: StorageScalar, *, overwrite: bool = False) -> None:
+    def set_scalar(self, name: str, value: StorageScalar, *, overwrite: bool = False) -> Self:
         """
         Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.set_scalar!>`__
         for details.
 
+        Returns ``self`` for chaining.
+
         You can force the data type numeric scalars are stored in by using the appropriate ``numpy`` type (e.g., a
         ``np.uint8`` will be stored as a ``UInt8``).
         """
         jl.DataAxesFormats.set_scalar_b(self.jl_obj, name, value, overwrite=overwrite)
+        return self
 
-    def delete_scalar(self, name: str, *, must_exist: bool = True) -> None:
+    def delete_scalar(self, name: str, *, must_exist: bool = True) -> Self:
         """
         Delete a scalar property with some ``name`` from the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.delete_scalar!>`__
         for details.
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.delete_scalar_b(self.jl_obj, name, must_exist=must_exist)
+        return self
 
-    def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray, *, overwrite: bool = False) -> None:
+    def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray, *, overwrite: bool = False) -> Self:
         """
         Add a new ``axis`` to the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.add_axis!>`__
         for details.
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.add_axis_b(self.jl_obj, axis, _to_julia_array(entries), overwrite=overwrite)
+        return self
 
-    def delete_axis(self, axis: str, *, must_exist: bool = True) -> None:
+    def delete_axis(self, axis: str, *, must_exist: bool = True) -> Self:
         """
         Delete an ``axis`` from the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.delete_axis!>`__
         for details.
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.delete_axis_b(self.jl_obj, axis, must_exist=must_exist)
+        return self
 
     def set_vector(
         self,
@@ -627,7 +640,7 @@ class DafWriter(DafReader):
         value: Sequence[StorageScalar] | np.ndarray | sp.csc_matrix | sp.csr_matrix,
         *,
         overwrite: bool = False,
-    ) -> None:
+    ) -> Self:
         """
         Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.set_vector!>`__
@@ -638,6 +651,8 @@ class DafWriter(DafReader):
 
         As a convenience, you can pass a 1xN or Nx1 matrix here and it will be mercifully interpreted as a vector. This
         allows creating sparse vectors in ``Daf`` by passing a 1xN slice of a sparse (column-major) Python matrix.
+
+        Returns ``self`` for chaining.
         """
         if (isinstance(value, sp.csc_matrix) and value.shape[1] == 1) or (
             isinstance(value, sp.csr_matrix) and value.shape[0] == 1
@@ -653,7 +668,7 @@ class DafWriter(DafReader):
                 nzind[:] = value.indices[:]
                 nzind += 1
                 nzval[:] = value.data[:]
-            return
+            return self
 
         if (isinstance(value, sp.csc_matrix) and value.shape[0] == 1) or (
             isinstance(value, sp.csr_matrix) and value.shape[1] == 1
@@ -669,11 +684,12 @@ class DafWriter(DafReader):
                 nzind[:] = np.where(np.ediff1d(value.indptr) == 1)[0]
                 nzind += 1
                 nzval[:] = value.data[:]
-            return
+            return self
 
         jl.DataAxesFormats.set_vector_b(
             self.jl_obj, axis, name, _as_vector(_to_julia_array(value)), overwrite=overwrite
         )
+        return self
 
     @contextmanager
     def empty_dense_vector(
@@ -721,13 +737,16 @@ class DafWriter(DafReader):
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
-    def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> None:
+    def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> Self:
         """
         Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.delete_vector!>`__
         for details.
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.delete_vector_b(self.jl_obj, axis, name, must_exist=must_exist)
+        return self
 
     def set_matrix(
         self,
@@ -738,7 +757,7 @@ class DafWriter(DafReader):
         *,
         overwrite: bool = False,
         relayout: bool = True,
-    ) -> None:
+    ) -> Self:
         """
         Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
         See the Julia
@@ -748,10 +767,13 @@ class DafWriter(DafReader):
         Since ``Daf`` is implemented Julia, this should be a column-major ``matrix``, so if you have a standard
         ``numpy`` or ``scipy`` row-major matrix, flip the order of the axes and pass the ``transpose`` (which is an
         efficient zero-copy operation).
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.set_matrix_b(
             self.jl_obj, rows_axis, columns_axis, name, _to_julia_array(value), overwrite=overwrite, relayout=relayout
         )
+        return self
 
     @contextmanager
     def empty_dense_matrix(
@@ -821,21 +843,27 @@ class DafWriter(DafReader):
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
-    def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> None:
+    def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> Self:
         """
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
         ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
         flipped axes). See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.relayout_matrix!>`__ for
         details.
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.relayout_matrix_b(self.jl_obj, rows_axis, columns_axis, name, overwrite=overwrite)
+        return self
 
-    def delete_matrix(self, rows_axis: str, columns_axis: str, name: str, *, must_exist: bool = True) -> None:
+    def delete_matrix(self, rows_axis: str, columns_axis: str, name: str, *, must_exist: bool = True) -> Self:
         """
         Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data
         set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.delete_matrix!>`__ for
         details.
+
+        Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.delete_matrix_b(self.jl_obj, rows_axis, columns_axis, name, must_exist=must_exist)
+        return self
