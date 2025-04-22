@@ -6,12 +6,20 @@ A ``Daf`` query can use operations to process the data: ``EltwiseOperation`` tha
 
 from math import e
 from math import inf
+from typing import AbstractSet
+from typing import Callable
 from typing import Optional
 from typing import Type
+from typing import Union
+from typing import overload
+
+import numpy as np
+import pandas as pd  # type: ignore
 
 from .julia_import import JlObject
 from .julia_import import _to_julia_type
 from .julia_import import jl
+from .storage_types import StorageScalar
 
 __all__ = [
     "QueryOperation",
@@ -38,6 +46,24 @@ __all__ = [
 ]
 
 
+class PendingNumpyQuery:
+    """
+    Used to implement ``query | daf.get_np_query()``.
+    """
+
+    def __init__(self, run: Callable) -> None:
+        self.run = run
+
+
+class PendingPandasQuery:
+    """
+    Used to implement ``query | daf.get_pd_query()``.
+    """
+
+    def __init__(self, run: Callable) -> None:
+        self.run = run
+
+
 class QueryOperation(JlObject):
     """
     Base class for all query operations. See the Julia
@@ -48,7 +74,20 @@ class QueryOperation(JlObject):
     operator in Julia).
     """
 
-    def __or__(self, other: "QueryOperation") -> "QuerySequence":
+    @overload
+    def __or__(self, other: PendingNumpyQuery) -> StorageScalar | np.ndarray | AbstractSet[str]: ...
+
+    @overload
+    def __or__(self, other: PendingPandasQuery) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str]: ...
+
+    @overload
+    def __or__(self, other: "QueryOperation") -> "QuerySequence": ...
+
+    def __or__(
+        self, other: Union["QueryOperation", PendingNumpyQuery, PendingPandasQuery]
+    ) -> Union["QuerySequence", StorageScalar, np.ndarray, pd.Series, pd.DataFrame, AbstractSet[str]]:
+        if isinstance(other, (PendingNumpyQuery, PendingPandasQuery)):
+            return other.run(self)
         return QuerySequence(jl.DataAxesFormats.QuerySequence(self, other))
 
 

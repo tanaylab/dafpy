@@ -115,7 +115,7 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         )[1:-1]
     )
 
-    frame = daf.get_pd_query(q("/ cell / gene : UMIs"))
+    frame = q("/ cell / gene : UMIs") | daf.get_pd_query()
     assert (
         str(frame)
         == dedent(

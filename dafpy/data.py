@@ -31,6 +31,8 @@ from .julia_import import _jl_pairs
 from .julia_import import _to_julia_array
 from .julia_import import _to_julia_type
 from .julia_import import jl
+from .operations import PendingNumpyQuery
+from .operations import PendingPandasQuery
 from .queries import Query
 from .storage_types import StorageScalar
 
@@ -484,7 +486,17 @@ class DafReader(JlObject):
         """
         return jl.DataAxesFormats.Queries.has_query(self.jl_obj, query)
 
-    def get_np_query(self, query: str | Query, *, cache: bool = True) -> StorageScalar | np.ndarray | AbstractSet[str]:
+    @overload
+    def get_np_query(
+        self, query: str | Query, *, cache: bool = True
+    ) -> StorageScalar | np.ndarray | AbstractSet[str]: ...
+
+    @overload
+    def get_np_query(self, query: None = None, *, cache: bool = True) -> PendingNumpyQuery: ...
+
+    def get_np_query(
+        self, query: str | Query | None = None, *, cache: bool = True
+    ) -> StorageScalar | np.ndarray | AbstractSet[str] | PendingNumpyQuery:
         """
         Apply the full ``query`` to the ``Daf`` data set and return the result. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.get_query>`__
@@ -492,22 +504,42 @@ class DafReader(JlObject):
 
         If the result isn't a scalar, and isn't an array of names, then we return a ``numpy`` array or a ``scipy``
         ``csc_matrix``.
+
+        If the ``query`` is not specified, this is intended to be used as ``query | daf.get_np_query()``. This is
+        useful when constructing the query in parts (e.g. ``Axis("cell") |> Lookup("metacell") |> daf.get_np_query()``).
         """
+        if query is None:
+            return PendingNumpyQuery(lambda query: self.get_np_query(query, cache=cache))
+
         result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, cache=cache)
         if not isinstance(result, (str, int, float, AbstractSet)):
             result = result.array
             result = _from_julia_array(result)
         return result
 
+    @overload
     def get_pd_query(
         self, query: str | Query, *, cache: bool = True
-    ) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str]:
+    ) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str]: ...
+
+    @overload
+    def get_pd_query(self, query: None = None, *, cache: bool = True) -> PendingPandasQuery: ...
+
+    def get_pd_query(
+        self, query: str | Query | None = None, *, cache: bool = True
+    ) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str] | PendingPandasQuery:
         """
         Similar to ``get_np_query``, but return a ``pandas`` series or data frame for vector and matrix data.
 
         Note that since ``pandas`` data frames can't contain a sparse matrix, the data will always be in a dense
         ``numpy`` matrix, so take care not to invoke this for a too-large sparse data matrix.
+
+        If the ``query`` is not specified, this is intended to be used as ``query | daf.get_np_query()``. This is
+        useful when constructing the query in parts (e.g. ``Axis("cell") |> Lookup("metacell") |> daf.get_np_query()``).
         """
+        if query is None:
+            return PendingPandasQuery(lambda query: self.get_pd_query(query, cache=cache))
+
         result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, cache=cache)
         if not isinstance(result, (str, int, float, AbstractSet)):
             values = _from_julia_array(result.array)
@@ -524,11 +556,11 @@ class DafReader(JlObject):
                 )
         return result
 
-    def __getitem__(self, query: str | Query) -> StorageScalar | np.ndarray | AbstractSet[str]:
+    def __getitem__(self, query: str | Query) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str]:
         """
-        The shorthand ``data[query]`` is equivalent to ``data.get_np_query(query, cache = False)``.
+        The shorthand ``data[query]`` is equivalent to ``data.get_pd_query(query, cache = False)``.
         """
-        return self.get_np_query(query, cache=False)
+        return self.get_pd_query(query, cache=False)
 
     def get_pd_frame(
         self,
