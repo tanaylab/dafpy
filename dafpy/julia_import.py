@@ -33,7 +33,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp  # type: ignore
 
-__all__ = ["jl", "jl_version", "UndefInitializer", "Undef"]
+__all__ = ["jl", "jl_version", "UndefInitializer", "Undef", "use_default_julia_environment"]
 
 IGNORE_REIMPORT = False
 
@@ -76,11 +76,31 @@ from juliacall import Main  # type: ignore
 #: The interface to the Julia run-time.
 jl = Main
 
+
+def use_default_julia_environment() -> None:
+    """
+    Force JuliaCall to use your default environment (whatever that is). By default JuliaCall creates its own separate
+    independent environment, which means that it re-downloads and re-installs all the dependency packages there.
+    This is nice if you don't otherwise use Julia and/or don't care about the wasted disk space and initial installation
+    time and manual control over package versions. It sucks if you do otherwise use Julia, and/or you want manual
+    control over the version of some of the packages (e.g., if you are actively developing them). You would think
+    there would a built-in method for doing this in JuliaCall, right?
+
+    To make this easier (and trigger it before actually importing packages), you can set the
+    ``PYTHON_JULIACALL_USE_DEFAULT_ENVIRONMENT`` environment variable to ``yes``, and then ``import dafpy`` will
+    call ``use_default_julia_environment`` for you. Sigh.
+    """
+    default_env = jl.seval('joinpath(DEPOT_PATH[1], "environments", "v$(VERSION.major).$(VERSION.minor)")')
+    jl.seval('using Pkg; Pkg.activate("' + default_env + '")')
+
+
+if os.environ.get("PYTHON_JULIACALL_USE_DEFAULT_ENVIRONMENT", "yes") == "yes":
+    use_default_julia_environment()
+
 #: The version of Julia being used.
 jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Pkg")
-jl.seval("Pkg.update()")
 
 jl.seval("using DataAxesFormats")
 jl.seval("using TanayLabUtilities")
