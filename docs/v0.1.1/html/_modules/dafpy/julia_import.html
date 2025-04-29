@@ -184,17 +184,21 @@
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Pkg&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using DataAxesFormats&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using TanayLabUtilities&quot;</span><span class="p">)</span>
-
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import DataFrames&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import HDF5&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import LinearAlgebra&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import Logging&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import Muon&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import NamedArrays&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import PythonCall&quot;</span><span class="p">)</span>
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import SparseArrays&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">verb</span><span class="p">,</span> <span class="n">package</span> <span class="ow">in</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;DataAxesFormats&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;TanayLabUtilities&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;DataFrames&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;HDF5&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;LinearAlgebra&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;Logging&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;Muon&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;NamedArrays&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;PythonCall&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;SparseArrays&quot;</span><span class="p">),</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s1">&#39;Base.find_package(&quot;&#39;</span> <span class="o">+</span> <span class="n">package</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s1">&#39;Pkg.add(&quot;&#39;</span> <span class="o">+</span> <span class="n">package</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span><span class="p">)</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="n">verb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">package</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="UndefInitializer">

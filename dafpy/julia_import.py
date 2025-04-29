@@ -102,17 +102,21 @@ jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Pkg")
 
-jl.seval("using DataAxesFormats")
-jl.seval("using TanayLabUtilities")
-
-jl.seval("import DataFrames")
-jl.seval("import HDF5")
-jl.seval("import LinearAlgebra")
-jl.seval("import Logging")
-jl.seval("import Muon")
-jl.seval("import NamedArrays")
-jl.seval("import PythonCall")
-jl.seval("import SparseArrays")
+for verb, package in (
+    ("using", "DataAxesFormats"),
+    ("using", "TanayLabUtilities"),
+    ("import", "DataFrames"),
+    ("import", "HDF5"),
+    ("import", "LinearAlgebra"),
+    ("import", "Logging"),
+    ("import", "Muon"),
+    ("import", "NamedArrays"),
+    ("import", "PythonCall"),
+    ("import", "SparseArrays"),
+):
+    if jl.seval('Base.find_package("' + package + '")') is None:
+        jl.seval('Pkg.add("' + package + '")')
+    jl.seval(verb + " " + package)
 
 
 class UndefInitializer:
