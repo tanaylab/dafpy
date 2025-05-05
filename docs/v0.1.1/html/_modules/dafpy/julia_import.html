@@ -185,8 +185,8 @@
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Pkg&quot;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">verb</span><span class="p">,</span> <span class="n">package</span> <span class="ow">in</span> <span class="p">(</span>
-    <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;DataAxesFormats&quot;</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;TanayLabUtilities&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;DataAxesFormats&quot;</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;DataFrames&quot;</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;HDF5&quot;</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;LinearAlgebra&quot;</span><span class="p">),</span>
@@ -294,6 +294,11 @@
 
 
 <span class="k">def</span> <span class="nf">_from_julia_array</span><span class="p">(</span><span class="n">julia_array</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">writeable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">julia_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">julia_array</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">_strip_wrappers</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">indptr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">julia_array</span><span class="o">.</span><span class="n">colptr</span><span class="p">)</span>
         <span class="n">indptr</span> <span class="o">-=</span> <span class="mi">1</span>
@@ -365,6 +370,29 @@
 
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;_DafReadersVector = Vector</span><span class="si">{DafReader}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># NOT F-STRING</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector</span>
+<span class="sd">        return names(vector, 1)</span>
+<span class="sd">    end</span>
+<span class="sd">    function _optional_julia_vector_names(array::AbstractVector)::Nothing</span>
+<span class="sd">        return nothing</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function _strip_wrappers(array::Union{ReadOnlyArray, NamedArrays.NamedArray})::AbstractArray</span>
+<span class="sd">        array = parent(array)</span>
+<span class="sd">        return _strip_wrappers(array)</span>
+<span class="sd">    end</span>
+<span class="sd">    function _strip_wrappers(array::AbstractArray)::AbstractArray</span>
+<span class="sd">        return array</span>
+<span class="sd">    end</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

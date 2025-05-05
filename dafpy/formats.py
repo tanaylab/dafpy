@@ -11,7 +11,19 @@ from .data import DafReadOnly
 from .data import DafWriter
 from .julia_import import jl
 
-__all__ = ["memory_daf", "files_daf", "h5df", "chain_reader", "chain_writer"]
+__all__ = ["memory_daf", "files_daf", "h5df", "chain_reader", "chain_writer", "complete_daf"]
+
+
+def complete_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
+    """
+    Open a complete chain of ``Daf`` repositories by ttracing back through the ``base_daf_repository``. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/complete.html#DataAxesFormats.Complete.complete_daf>`__
+    for details.
+    """
+    jl_obj = jl.DataAxesFormats.complete_daf(path, mode, name=name)
+    if mode == "r":
+        return DafReadOnly(jl_obj)
+    return DafWriter(jl_obj)
 
 
 def memory_daf(jl_obj: Optional[jl.MemoryDaf] = None, *, name: str = "memory") -> DafWriter:

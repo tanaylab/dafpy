@@ -103,8 +103,8 @@ jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 jl.seval("using Pkg")
 
 for verb, package in (
-    ("using", "DataAxesFormats"),
     ("using", "TanayLabUtilities"),
+    ("using", "DataAxesFormats"),
     ("import", "DataFrames"),
     ("import", "HDF5"),
     ("import", "LinearAlgebra"),
@@ -209,6 +209,11 @@ def _to_julia_array(value: Any) -> Any:  # pylint: disable=too-many-return-state
 
 
 def _from_julia_array(julia_array: Any, *, writeable: bool = False) -> np.ndarray | sp.csc_matrix:
+    if julia_array is None:
+        return None
+
+    julia_array = jl._strip_wrappers(julia_array)
+
     try:
         indptr = np.array(julia_array.colptr)
         indptr -= 1
@@ -280,6 +285,29 @@ def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
 
 
 jl.seval("_DafReadersVector = Vector{DafReader}")  # NOT F-STRING
+
+jl.seval(
+    """
+    function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector
+        return names(vector, 1)
+    end
+    function _optional_julia_vector_names(array::AbstractVector)::Nothing
+        return nothing
+    end
+    """
+)
+
+jl.seval(
+    """
+    function _strip_wrappers(array::Union{ReadOnlyArray, NamedArrays.NamedArray})::AbstractArray
+        array = parent(array)
+        return _strip_wrappers(array)
+    end
+    function _strip_wrappers(array::AbstractArray)::AbstractArray
+        return array
+    end
+    """
+)
 
 jl.seval(
     """

@@ -91,13 +91,13 @@ class DafReader(JlObject):
         """
         return self.jl_obj.name
 
-    def description(self, *, cache: bool = False, deep: bool = False) -> str:
+    def description(self, *, cache: bool = False, deep: bool = False, tensors: bool = True) -> str:
         """
         Return a (multi-line) description of the contents of ``Daf`` data. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.description>`__
         for details.
         """
-        return jl.DataAxesFormats.description(self.jl_obj, cache=cache, deep=deep)
+        return jl.DataAxesFormats.description(self.jl_obj, cache=cache, deep=deep, tensors=tensors)
 
     def has_scalar(self, name: str) -> bool:
         """
@@ -285,14 +285,14 @@ class DafReader(JlObject):
             if default is None:
                 return None
             return _from_julia_array(
-                jl.DataAxesFormats.get_vector(self.jl_obj, axis, name, default=_to_julia_array(default)).array
+                jl.DataAxesFormats.get_vector(self.jl_obj, axis, name, default=_to_julia_array(default))
             )
 
         vector_version_counter = jl.DataAxesFormats.vector_version_counter(self.jl_obj, axis, name)
         vector_key = (vector_version_counter, axis, name)
         vector_value = self.weakrefs.get(vector_key)
         if vector_value is None:
-            vector_value = _from_julia_array(jl.DataAxesFormats.get_vector(self.jl_obj, axis, name).array)
+            vector_value = _from_julia_array(jl.DataAxesFormats.get_vector(self.jl_obj, axis, name))
             self.weakrefs[vector_key] = vector_value
         return vector_value
 
@@ -400,7 +400,7 @@ class DafReader(JlObject):
             return _from_julia_array(
                 jl.DataAxesFormats.get_matrix(
                     self.jl_obj, rows_axis, columns_axis, name, default=_to_julia_array(default), relayout=relayout
-                ).array
+                )
             )
 
         matrix_version_counter = jl.DataAxesFormats.matrix_version_counter(self.jl_obj, rows_axis, columns_axis, name)
@@ -408,7 +408,7 @@ class DafReader(JlObject):
         matrix_value = self.weakrefs.get(matrix_key)
         if matrix_value is None:
             matrix_value = _from_julia_array(
-                jl.DataAxesFormats.get_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout).array
+                jl.DataAxesFormats.get_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout)
             )
             self.weakrefs[matrix_key] = matrix_value
         return matrix_value
@@ -513,7 +513,6 @@ class DafReader(JlObject):
 
         result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, cache=cache)
         if not isinstance(result, (str, int, float, AbstractSet)):
-            result = result.array
             result = _from_julia_array(result)
         return result
 
@@ -542,12 +541,12 @@ class DafReader(JlObject):
 
         result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, cache=cache)
         if not isinstance(result, (str, int, float, AbstractSet)):
-            values = _from_julia_array(result.array)
+            values = _from_julia_array(result)
             if sp.issparse(values):
                 values = values.toarray()  # type: ignore
             assert 1 <= values.ndim <= 2
             if values.ndim == 1:
-                result = pd.Series(values, index=_from_julia_array(jl.NamedArrays.names(result, 1)))
+                result = pd.Series(values, index=_from_julia_array(jl._optional_julia_vector_names(result)))
             else:
                 result = pd.DataFrame(
                     values,
