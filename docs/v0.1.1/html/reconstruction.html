@@ -11,7 +11,7 @@
   
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-<title>concat &mdash; Daf 0.1.1 documentation
+<title>reconstruction &mdash; Daf 0.1.1 documentation
 </title>
       
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
@@ -50,9 +50,9 @@
     
 <link rel="search" title="Search" href="search.html" />
     
-<link rel="next" title="anndata_format" href="anndata_format.html" />
+<link rel="next" title="storage_types" href="storage_types.html" />
     
-<link rel="prev" title="adapters" href="adapters.html" /> 
+<link rel="prev" title="data" href="data.html" /> 
 
 </head>
 
@@ -125,9 +125,22 @@
 </a>
 </li>
 
-<li class="toctree-l2">
-<a class="reference internal" href="reconstruction.html">reconstruction
+<li class="toctree-l2 current">
+<a class="current reference internal" href="#">reconstruction
 </a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.reconstruction.reconstruct_axis">
+<code class="docutils literal notranslate">
+<span class="pre">reconstruct_axis()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
 </li>
 
 <li class="toctree-l2">
@@ -165,22 +178,9 @@
 </a>
 </li>
 
-<li class="toctree-l2 current">
-<a class="current reference internal" href="#">concat
+<li class="toctree-l2">
+<a class="reference internal" href="concat.html">concat
 </a>
-<ul>
-
-<li class="toctree-l3">
-<a class="reference internal" href="#dafpy.concat.concatenate">
-<code class="docutils literal notranslate">
-<span class="pre">concatenate()
-</span>
-</code>
-</a>
-</li>
-
-</ul>
-
 </li>
 
 <li class="toctree-l2">
@@ -242,12 +242,12 @@
 </a>
 </li>
       
-<li class="breadcrumb-item active">concat
+<li class="breadcrumb-item active">reconstruction
 </li>
       
 <li class="wy-breadcrumbs-aside">
             
-<a href="_sources/concat.rst.txt" rel="nofollow"> View page source
+<a href="_sources/reconstruction.rst.txt" rel="nofollow"> View page source
 </a>
       
 </li>
@@ -263,42 +263,39 @@
 <div itemprop="articleBody">
              
   
-<section id="module-dafpy.concat">
+<section id="module-dafpy.reconstruction">
 
-<span id="concat">
+<span id="reconstruction">
 </span>
-<h1>concat
-<a class="headerlink" href="#module-dafpy.concat" title="Link to this heading">¶
+<h1>reconstruction
+<a class="headerlink" href="#module-dafpy.reconstruction" title="Link to this heading">¶
 </a>
 </h1>
 
-<p>Concatenate multiple 
-<code class="docutils literal notranslate">
-<span class="pre">Daf
-</span>
-</code> data sets along some axis. See the Julia
+<p>Reconstruct implicit axes. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/concat.html">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/reconstruction.html">documentation
+</a>
+for details.
 </p>
 
 <dl class="py function">
 
-<dt class="sig sig-object py" id="dafpy.concat.concatenate">
+<dt class="sig sig-object py" id="dafpy.reconstruction.reconstruct_axis">
 
 <span class="sig-prename descclassname">
-<span class="pre">dafpy.concat.
+<span class="pre">dafpy.reconstruction.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">concatenate
+<span class="pre">reconstruct_axis
 </span>
 </span>
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">destination
+<span class="pre">dset
 </span>
 </span>
 <span class="p">
@@ -315,120 +312,46 @@
 </span>
 </em>, 
 <em class="sig-param">
-<span class="n">
-<span class="pre">axis
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">sources
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
-<span class="pre">DafReader
-</span>
-</a>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">names
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
+<span class="pre">*
 </span>
 </span>
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">dataset_axis
+<span class="pre">existing_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">implicit_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">rename_axis
 </span>
 </span>
 <span class="p">
@@ -460,41 +383,13 @@
 <span class="w"> 
 </span>
 <span class="default_value">
-<span class="pre">'dataset'
+<span class="pre">None
 </span>
 </span>
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">dataset_property
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">True
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">prefix
+<span class="pre">empty_implicit
 </span>
 </span>
 <span class="p">
@@ -514,17 +409,137 @@
 </span>
 <span class="w"> 
 </span>
-<span class="pre">Sequence
+<span class="pre">int
+</span>
+<span class="w"> 
 </span>
 <span class="p">
-<span class="pre">[
+<span class="pre">|
 </span>
 </span>
-<span class="pre">bool
+<span class="w"> 
+</span>
+<span class="pre">float
+</span>
+<span class="w"> 
 </span>
 <span class="p">
-<span class="pre">]
+<span class="pre">|
 </span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int8
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int16
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint8
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint16
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">uint64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float32
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">float64
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
 </span>
 </span>
 <span class="w"> 
@@ -536,13 +551,13 @@
 <span class="w"> 
 </span>
 <span class="default_value">
-<span class="pre">False
+<span class="pre">None
 </span>
 </span>
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">prefixed
+<span class="pre">implicit_properties
 </span>
 </span>
 <span class="p">
@@ -572,12 +587,34 @@
 </span>
 <span class="w"> 
 </span>
-<span class="pre">Sequence
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">skipped_properties
+</span>
 </span>
 <span class="p">
-<span class="pre">[
+<span class="pre">:
 </span>
 </span>
+<span class="w"> 
+</span>
+<span class="n">
 <span class="pre">AbstractSet
 </span>
 <span class="p">
@@ -585,10 +622,6 @@
 </span>
 </span>
 <span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
 </span>
 <span class="p">
 <span class="pre">]
@@ -617,19 +650,13 @@
 <span class="pre">None
 </span>
 </span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">empty
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
 <span class="pre">Mapping
 </span>
 <span class="p">
@@ -637,114 +664,6 @@
 </span>
 </span>
 <span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
 </span>
 <span class="p">
 <span class="pre">,
@@ -884,10 +803,6 @@
 </span>
 <span class="pre">str
 </span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
 <span class="w"> 
 </span>
 <span class="p">
@@ -898,294 +813,45 @@
 </span>
 <span class="pre">None
 </span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">sparse_if_saves_storage_fraction
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">0.1
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">merge
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Mapping
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
 <span class="p">
 <span class="pre">]
 </span>
 </span>
-<span class="w"> 
 </span>
-<span class="p">
-<span class="pre">|
 </span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="s">
-<span class="pre">'SkipProperty'
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="s">
-<span class="pre">'LastValue'
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="s">
-<span class="pre">'CollectAxis'
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">overwrite
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">False
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">None
-</span>
-</span>
-</span>
-<a class="reference internal" href="_modules/dafpy/concat.html#concatenate">
+<a class="reference internal" href="_modules/dafpy/reconstruction.html#reconstruct_axis">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.concat.concatenate" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.reconstruction.reconstruct_axis" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Concatenate data from a 
+<p>Given an 
 <code class="docutils literal notranslate">
-<span class="pre">sources
+<span class="pre">existing_axis
 </span>
-</code> sequence of 
+</code> in a 
 <code class="docutils literal notranslate">
 <span class="pre">Daf
 </span>
-</code> data sets into a single 
+</code> data set, which has a property 
 <code class="docutils literal notranslate">
-<span class="pre">destination
+<span class="pre">implicit_axis
 </span>
-</code> data set along one
-or more concatenation 
+</code>, create a new axis with the
+same name (or, if specified, call it 
 <code class="docutils literal notranslate">
-<span class="pre">axis
+<span class="pre">rename_axis
 </span>
-</code>. See the Julia
+</code>). See the Julia
 
-<a class="reference external" href="DafAxesFormats://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/concatenate.html">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/reconstruction.html#DataAccessFormats.Reconstruction.reconstruct_axis!">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -1203,12 +869,12 @@ or more concatenation
 <footer>
 <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         
-<a href="adapters.html" class="btn btn-neutral float-left" title="adapters" accesskey="p" rel="prev">
+<a href="data.html" class="btn btn-neutral float-left" title="data" accesskey="p" rel="prev">
 <span class="fa fa-arrow-circle-left" aria-hidden="true">
 </span> Previous
 </a>
         
-<a href="anndata_format.html" class="btn btn-neutral float-right" title="anndata_format" accesskey="n" rel="next">Next 
+<a href="storage_types.html" class="btn btn-neutral float-right" title="storage_types" accesskey="n" rel="next">Next 
 <span class="fa fa-arrow-circle-right" aria-hidden="true">
 </span>
 </a>

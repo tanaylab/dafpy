@@ -7,6 +7,7 @@ API
 
   julia_import
   data
+  reconstruction
   storage_types
   queries
   operations
@@ -17,3 +18,5 @@ API
   concat
   anndata_format
   generic_functions
+  example_data
+
