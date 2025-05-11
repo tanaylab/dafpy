@@ -17,7 +17,8 @@ You can control the behavior using the following environment variables:
 
 * ``PYTHON_JULIACALL_OPTLEVEL`` (by default, ``3``).
 
-This code is based on the code from the ``pysr`` Python package, adapted to our needs.
+This code is based on the code from the ``pysr`` Python package, adapted to our needs. TODO: Much of this is replicated
+in all our Python packages that invoke Julia.
 """
 
 import os
@@ -37,39 +38,32 @@ __all__ = ["jl", "jl_version", "UndefInitializer", "Undef", "use_default_julia_e
 
 IGNORE_REIMPORT = False
 
-# Check if JuliaCall is already loaded, and if so, warn the user
-# about the relevant environment variables. If not loaded,
-# set up sensible defaults.
-if "juliacall" in sys.modules:
-    warnings.warn(
-        "juliacall module already imported. "
-        "Make sure that you have set the environment variable "
-        "PYTHON_JULIACALL_HANDLE_SIGNALS=yes to avoid segfaults. "
-        "Also note that Daf will not be able to configure "
-        "PYTHON_JULIACALL_THREADS or PYTHON_JULIACALL_OPTLEVEL for you."
-    )
-else:
-    # Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)
-    if os.environ.get("PYTHON_JULIACALL_HANDLE_SIGNALS", "yes") != "yes":
-        warnings.warn(
-            "PYTHON_JULIACALL_HANDLE_SIGNALS environment variable is set to something other than 'yes' or ''. "
-            + "You will experience segfaults if running with multithreading."
-        )
-
-    if os.environ.get("PYTHON_JULIACALL_THREADS", "auto") != "auto":
-        warnings.warn(
-            "PYTHON_JULIACALL_THREADS environment variable is set to something other than 'auto', "
-            "so Daf was not able to set it. You may wish to set it to 'auto' for full use "
-            "of your CPU."
-        )
-
-    # TODO: Remove these when juliapkg lets you specify this
+# Check if JuliaCall is already loaded. If not, setup sensible defaults. If it was loaded manually, warn the user about
+# the relevant environment variables.
+if "juliacall" not in sys.modules:
+    # TODO: Remove these when juliapkg lets you specify this.
     for k, default in (
         ("PYTHON_JULIACALL_HANDLE_SIGNALS", "yes"),
         ("PYTHON_JULIACALL_THREADS", "auto"),
         ("PYTHON_JULIACALL_OPTLEVEL", "3"),
     ):
         os.environ[k] = os.environ.get(k, default)
+
+if os.environ.get("PYTHON_JULIACALL_PROPER_IMPORT", "") == "":
+    # Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)
+    if os.environ.get("PYTHON_JULIACALL_HANDLE_SIGNALS", "yes") != "yes":
+        warnings.warn(
+            "PYTHON_JULIACALL_HANDLE_SIGNALS environment variable is set to something other than 'yes'. "
+            "You will experience segfaults if running with multithreading."
+        )
+
+    if os.environ.get("PYTHON_JULIACALL_THREADS", "auto") != "auto":
+        warnings.warn(
+            "PYTHON_JULIACALL_THREADS environment variable is set to something other than 'auto', "
+            "You may wish to set it to 'auto' for full use of your CPU."
+        )
+
+os.environ["PYTHON_JULIACALL_PROPER_IMPORT"] = "dafpy"
 
 from juliacall import Main  # type: ignore
 

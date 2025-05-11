@@ -96,7 +96,8 @@
 
 <span class="sd">* ``PYTHON_JULIACALL_OPTLEVEL`` (by default, ``3``).</span>
 
-<span class="sd">This code is based on the code from the ``pysr`` Python package, adapted to our needs.</span>
+<span class="sd">This code is based on the code from the ``pysr`` Python package, adapted to our needs. TODO: Much of this is replicated</span>
+<span class="sd">in all our Python packages that invoke Julia.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -116,39 +117,32 @@
 
 <span class="n">IGNORE_REIMPORT</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="c1"># Check if JuliaCall is already loaded, and if so, warn the user</span>
-<span class="c1"># about the relevant environment variables. If not loaded,</span>
-<span class="c1"># set up sensible defaults.</span>
-<span class="k">if</span> <span class="s2">&quot;juliacall&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;juliacall module already imported. &quot;</span>
-        <span class="s2">&quot;Make sure that you have set the environment variable &quot;</span>
-        <span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS=yes to avoid segfaults. &quot;</span>
-        <span class="s2">&quot;Also note that Daf will not be able to configure &quot;</span>
-        <span class="s2">&quot;PYTHON_JULIACALL_THREADS or PYTHON_JULIACALL_OPTLEVEL for you.&quot;</span>
-    <span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="c1"># Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS environment variable is set to something other than &#39;yes&#39; or &#39;&#39;. &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;You will experience segfaults if running with multithreading.&quot;</span>
-        <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_THREADS&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;PYTHON_JULIACALL_THREADS environment variable is set to something other than &#39;auto&#39;, &quot;</span>
-            <span class="s2">&quot;so Daf was not able to set it. You may wish to set it to &#39;auto&#39; for full use &quot;</span>
-            <span class="s2">&quot;of your CPU.&quot;</span>
-        <span class="p">)</span>
-
-    <span class="c1"># TODO: Remove these when juliapkg lets you specify this</span>
+<span class="c1"># Check if JuliaCall is already loaded. If not, setup sensible defaults. If it was loaded manually, warn the user about</span>
+<span class="c1"># the relevant environment variables.</span>
+<span class="k">if</span> <span class="s2">&quot;juliacall&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="c1"># TODO: Remove these when juliapkg lets you specify this.</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">default</span> <span class="ow">in</span> <span class="p">(</span>
         <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_THREADS&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_OPTLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">),</span>
     <span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_PROPER_IMPORT&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="c1"># Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;PYTHON_JULIACALL_HANDLE_SIGNALS environment variable is set to something other than &#39;yes&#39;. &quot;</span>
+            <span class="s2">&quot;You will experience segfaults if running with multithreading.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_THREADS&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;PYTHON_JULIACALL_THREADS environment variable is set to something other than &#39;auto&#39;, &quot;</span>
+            <span class="s2">&quot;You may wish to set it to &#39;auto&#39; for full use of your CPU.&quot;</span>
+        <span class="p">)</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIACALL_PROPER_IMPORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dafpy&quot;</span>
 
 <span class="kn">from</span> <span class="nn">juliacall</span> <span class="kn">import</span> <span class="n">Main</span>  <span class="c1"># type: ignore</span>
 
