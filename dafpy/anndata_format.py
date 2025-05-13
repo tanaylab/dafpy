@@ -26,7 +26,7 @@ def h5ad_as_daf(
 ) -> DafWriter:
     """
     View ``AnnData`` as a ``Daf`` data set, specifically using a ``MemoryDaf``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/anndata_format.html#anndata_as_daf>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/anndata_format.html#DataAxesFormats.AnnDataFormat.anndata_as_daf>`__ for
     details.
 
     Note that you only pass an ``h5ad`` path, since the Julia ``AnnData`` object comes from the ``Muon.jl`` package and

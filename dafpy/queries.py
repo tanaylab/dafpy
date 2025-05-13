@@ -218,7 +218,7 @@ class Xor(QueryOperation):
 class XorNot(QueryOperation):
     """
     Same as ``Xor`` but use the inverse of the mask. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.XorNot>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.XorNot>`__ for details.
     """
 
     def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
@@ -228,7 +228,7 @@ class XorNot(QueryOperation):
 class IsLess(QueryOperation):
     """
     A query operation for converting a vector value to a Boolean mask by comparing it some value. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsLess>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsLess>`__ for details.
     """
 
     def __init__(self, value: StorageScalar) -> None:
@@ -238,7 +238,7 @@ class IsLess(QueryOperation):
 class IsLessEqual(QueryOperation):
     """
     Similar to ``IsLess`` except that uses ``<=`` instead of ``<`` for the comparison. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsLessEqual>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsLessEqual>`__ for
     details.
     """
 
@@ -250,7 +250,7 @@ class IsEqual(QueryOperation):
     """
     Equality is used for two purposes: As a comparison operator, similar to ``IsLess`` except that uses ``=`` instead of
     ``<`` for the comparison; and To select a single entry from a vector. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsEqual>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsEqual>`__ for
     details.
     """
 
@@ -261,7 +261,7 @@ class IsEqual(QueryOperation):
 class IsNotEqual(QueryOperation):
     """
     Similar to ``IsLess`` except that uses ``!=`` instead of ``<`` for the comparison. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsNotEqual>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsNotEqual>`__ for
     details.
     """
 
@@ -272,7 +272,7 @@ class IsNotEqual(QueryOperation):
 class IsGreater(QueryOperation):
     """
     Similar to ``IsLess`` except that uses ``>`` instead of ``<`` for the comparison. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsGreater>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsGreater>`__ for
     details.
     """
 
@@ -283,7 +283,7 @@ class IsGreater(QueryOperation):
 class IsGreaterEqual(QueryOperation):
     """
     Similar to ``IsLess`` except that uses ``>=`` instead of ``<`` for the comparison. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsGreaterEqual>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsGreaterEqual>`__ for
     details.
     """
 
@@ -295,7 +295,7 @@ class IsMatch(QueryOperation):
     """
     Similar to ``IsLess`` except that the compared values must be strings, and the mask
     is of the values that match the given regular expression. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsMatch>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsMatch>`__ for
     details.
     """
 
@@ -306,7 +306,7 @@ class IsMatch(QueryOperation):
 class IsNotMatch(QueryOperation):
     """
     Similar to ``IsMatch`` except that looks for entries that do not match the pattern. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsNotMatch>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsNotMatch>`__ for
     details.
     """
 
@@ -318,7 +318,7 @@ class CountBy(QueryOperation):
     """
     A query operation that generates a matrix of counts of combinations of pairs of values for the same entries of an
     axis. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.CountBy>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.CountBy>`__ for
     details.
     """
 
@@ -330,7 +330,7 @@ class GroupBy(QueryOperation):
     """
     A query operation that uses a (following) ``ReductionOperation`` to aggregate the values of each group of
     values. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.GroupBY>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.GroupBy>`__ for
     details.
     """
 
@@ -339,7 +339,7 @@ class GroupBy(QueryOperation):
 
 
 #: A Python class to use instead of Julia's ``Daf.Query``. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.Query>`__ for details.
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Query>`__ for details.
 Query = Union[Axis, Lookup, Names, QuerySequence]
 
 
@@ -356,7 +356,7 @@ def query_result_dimensions(query: str | Query) -> int:
     """
     Return the number of dimensions (-1 - names, 0 - scalar, 1 - vector, 2 - matrix) of the results of a query. See the
     Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.query_result_dimensions>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.query_result_dimensions>`__
     for details.
     """
     return jl.DataAxesFormats.Queries.query_result_dimensions(query)

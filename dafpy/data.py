@@ -1,6 +1,9 @@
 """
 Interface of ``DafReader`` and ``DafWriter``. See the Julia
-`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/formats.html>`__,
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html>`__ and
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html>`__
+for details.
 """
 
 from contextlib import contextmanager
@@ -40,7 +43,7 @@ __all__ = ["DafReader", "DafReadOnly", "DafWriter", "CacheGroup"]
 
 
 #: Types of cached data inside ``Daf``. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.CacheGroup>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/formats.html#DataAxesFormats.Formats.CacheGroup>`__
 #: for details.
 CacheGroup = Literal["MappedData"] | Literal["MemoryData"] | Literal["QueryData"]
 
@@ -51,12 +54,12 @@ JL_CACHE_TYPE = {
 }
 
 #: A key specifying an atomic data property in ``Daf``. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Formats.PropertyKey>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/keys.html#DataAxesFormats.Keys.PropertyKey>`__
 #: for details.
 PropertyKey = str | Tuple[str, str] | Tuple[str, str, str]
 
 #: A key specifying some data property in ``Daf`` (including tensors). See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Formats.DataKey>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/keys.html#DataAxesFormats.Keys.DataKey>`__
 #: for details.
 DataKey = PropertyKey | Tuple[str, str, str, str]
 
@@ -76,7 +79,7 @@ class WeakRefAbleDict(dict):
 class DafReader(JlObject):
     """
     Read-only access to ``Daf`` data. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.DafReader>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/formats.html#DataAxesFormats.Formats.DafReader>`__
     for details.
     """
 
@@ -94,7 +97,7 @@ class DafReader(JlObject):
     def description(self, *, cache: bool = False, deep: bool = False, tensors: bool = True) -> str:
         """
         Return a (multi-line) description of the contents of ``Daf`` data. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.description>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.description>`__
         for details.
         """
         return jl.DataAxesFormats.description(self.jl_obj, cache=cache, deep=deep, tensors=tensors)
@@ -102,7 +105,7 @@ class DafReader(JlObject):
     def has_scalar(self, name: str) -> bool:
         """
         Check whether a scalar property with some ``name`` exists in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.has_scalar>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.has_scalar>`__
         for details.
         """
         return jl.DataAxesFormats.has_scalar(self.jl_obj, name)
@@ -110,7 +113,7 @@ class DafReader(JlObject):
     def get_scalar(self, name: str) -> StorageScalar:
         """
         Get the value of a scalar property with some ``name`` in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.get_scalar>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.get_scalar>`__
         for details.
 
         Numeric scalars are always returned as ``int`` or ``float``, regardless of the specific data type they are
@@ -121,7 +124,7 @@ class DafReader(JlObject):
     def scalars_set(self) -> AbstractSet[str]:
         """
         The names of the scalar properties in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.scalars_set>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.scalars_set>`__
         for details.
         """
         return jl.DataAxesFormats.scalars_set(self.jl_obj)
@@ -129,7 +132,7 @@ class DafReader(JlObject):
     def has_axis(self, axis: str) -> bool:
         """
         Check whether some ``axis`` exists in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.has_axis>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.has_axis>`__
         for details.
         """
         return jl.DataAxesFormats.has_axis(self.jl_obj, axis)
@@ -137,7 +140,7 @@ class DafReader(JlObject):
     def axes_set(self) -> AbstractSet[str]:
         """
         The set of names of the axes of the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axes_set>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.axes_set>`__
         for details.
         """
         return jl.DataAxesFormats.axes_set(self.jl_obj)
@@ -145,7 +148,7 @@ class DafReader(JlObject):
     def axis_length(self, axis: str) -> int:
         """
         The number of entries along the ``axis`` in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_length>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.axis_length>`__
         for details.
         """
         return jl.DataAxesFormats.axis_length(self.jl_obj, axis)
@@ -153,7 +156,7 @@ class DafReader(JlObject):
     def axis_np_vector(self, axis: str) -> np.ndarray:
         """
         A ``numpy`` vector of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_vector>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.axis_vector>`__
         for details.
 
         This creates an in-memory copy of the data, which is cached for repeated calls.
@@ -171,7 +174,7 @@ class DafReader(JlObject):
     ) -> np.ndarray:
         """
         Return a ``numpy`` vector of the names of entries of the ``indices`` in the ``axis``. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_entries>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.axis_entries>`__
         for details.
 
         The ``indices`` passed here are 0-based to fit the Python conventions. This means that if ``allow_empty``,
@@ -204,7 +207,7 @@ class DafReader(JlObject):
     def axis_np_indices(self, axis: str, entries: Sequence[str], *, allow_empty: bool = False) -> np.ndarray:
         """
         Return a ``numpy`` vector of the indices of the ``entries`` in the ``axis``. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_indices>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.axis_indices>`__
         for details.
 
         The indices returned here are 0-based to fit the Python conventions. This means that if ``allow_empty``,
@@ -222,7 +225,7 @@ class DafReader(JlObject):
     def axis_pd_indices(self, axis: str, entries: Sequence[str], *, allow_empty: bool = False) -> pd.Series:
         """
         Return a ``pandas`` series of the indices of the ``entries`` in the ``axis``. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.axis_indices>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.axis_indices>`__
         for details.
         """
         return pd.Series(self.axis_np_indices(axis, entries, allow_empty=allow_empty), index=np.array(entries))
@@ -231,7 +234,7 @@ class DafReader(JlObject):
         """
         Check whether a vector property with some ``name`` exists for the ``axis`` in the ``Daf`` data set. See the
         Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.has_vector>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.has_vector>`__
         for details.
         """
         return jl.DataAxesFormats.has_vector(self.jl_obj, axis, name)
@@ -240,7 +243,7 @@ class DafReader(JlObject):
         """
         The set of names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special
         ``name`` property. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.vectors_set>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.vectors_set>`__
         for details.
         """
         return jl.DataAxesFormats.vectors_set(self.jl_obj, axis)
@@ -272,7 +275,7 @@ class DafReader(JlObject):
     ) -> Optional[np.ndarray]:
         """
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.get_vector>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.get_vector>`__
         for details.
 
         This always returns a ``numpy`` vector (unless ``default`` is ``None`` and the vector does not exist). If the
@@ -323,7 +326,7 @@ class DafReader(JlObject):
     ) -> Optional[pd.Series]:
         """
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.get_vector>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.get_vector>`__
         for details.
 
         This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis
@@ -338,7 +341,7 @@ class DafReader(JlObject):
         """
         Check whether a matrix property with some ``name`` exists for the ``rows_axis`` and the ``columns_axis`` in the
         ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.has_matrix>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.has_matrix>`__
         for details.
         """
         return jl.DataAxesFormats.has_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout)
@@ -347,7 +350,7 @@ class DafReader(JlObject):
         """
         The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set. See the
         Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.matrices_set>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.matrices_set>`__
         for details.
         """
         return jl.DataAxesFormats.matrices_set(self.jl_obj, rows_axis, columns_axis, relayout=relayout)
@@ -380,7 +383,7 @@ class DafReader(JlObject):
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
         ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.get_matrix>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.get_matrix>`__
         for details.
 
         This always returns a column-major ``numpy`` matrix or a ``scipy`` sparse ``csc_matrix``, (unless ``default`` is
@@ -447,7 +450,7 @@ class DafReader(JlObject):
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
         ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.get_matrix>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/readers.html#DataAxesFormats.Readers.get_matrix>`__
         for details.
 
         This is a wrapper around ``get_np_matrix`` which returns a ``pandas`` data frame using the entry names of the
@@ -473,7 +476,7 @@ class DafReader(JlObject):
     def empty_cache(self, *, clear: Optional[CacheGroup] = None, keep: Optional[CacheGroup] = None) -> None:
         """
         Clear some cached data. By default, completely empties the caches. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Data.empty_cache!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/formats.html#DataAxesFormats.Formats.empty_cache!>`__
         for details.
         """
         jl.DataAxesFormats.empty_cache_b(self.jl_obj, clear=_to_jl_cache_group(clear), keep=_to_jl_cache_group(keep))
@@ -481,7 +484,7 @@ class DafReader(JlObject):
     def has_query(self, query: str | Query) -> bool:
         """
         Return whether the ``query`` can be applied to the ``Daf`` data. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.has_query>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.has_query>`__
         for details.
         """
         return jl.DataAxesFormats.Queries.has_query(self.jl_obj, query)
@@ -499,7 +502,7 @@ class DafReader(JlObject):
     ) -> StorageScalar | np.ndarray | AbstractSet[str] | PendingNumpyQuery:
         """
         Apply the full ``query`` to the ``Daf`` data set and return the result. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Operations.get_query>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.get_query>`__
         for details.
 
         If the result isn't a scalar, and isn't an array of names, then we return a ``numpy`` array or a ``scipy``
@@ -591,7 +594,7 @@ class DafReader(JlObject):
         """
         Wrap the ``Daf`` data sett with a ``DafReadOnlyWrapper`` to protect it against accidental modification. See the
         Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.ReadOnly.read_only>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/read_only.html#DataAxesFormats.ReadOnly.read_only>`__
         for details.
         """
         return DafReadOnly(jl.DataAxesFormats.read_only(self.jl_obj, name=name))
@@ -600,7 +603,7 @@ class DafReader(JlObject):
 class DafReadOnly(DafReader):
     """
     A read-only ``DafReader``, which doesn't allow any modification of the data. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.ReadOnly.DafReadOnly>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/read_only.html#DataAxesFormats.ReadOnly.DafReadOnly>`__
     for details.
     """
 
@@ -613,14 +616,14 @@ class DafReadOnly(DafReader):
 class DafWriter(DafReader):
     """
     Read-write access to ``Daf`` data. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.DafWriter>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/formats.html#DataAxesFormats.Formats.DafWriter>`__
     for details.
     """
 
     def set_scalar(self, name: str, value: StorageScalar, *, overwrite: bool = False) -> Self:
         """
         Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.set_scalar!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.set_scalar!>`__
         for details.
 
         Returns ``self`` for chaining.
@@ -634,7 +637,7 @@ class DafWriter(DafReader):
     def delete_scalar(self, name: str, *, must_exist: bool = True) -> Self:
         """
         Delete a scalar property with some ``name`` from the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.delete_scalar!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.delete_scalar!>`__
         for details.
 
         Returns ``self`` for chaining.
@@ -645,7 +648,7 @@ class DafWriter(DafReader):
     def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray, *, overwrite: bool = False) -> Self:
         """
         Add a new ``axis`` to the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.add_axis!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.add_axis!>`__
         for details.
 
         Returns ``self`` for chaining.
@@ -656,7 +659,7 @@ class DafWriter(DafReader):
     def delete_axis(self, axis: str, *, must_exist: bool = True) -> Self:
         """
         Delete an ``axis`` from the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.delete_axis!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.delete_axis!>`__
         for details.
 
         Returns ``self`` for chaining.
@@ -674,7 +677,7 @@ class DafWriter(DafReader):
     ) -> Self:
         """
         Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.set_vector!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.set_vector!>`__
         for details.
 
         If the provided ``value`` is numeric and dense, this passes a zero-copy view of the data to the ``Daf`` data
@@ -729,7 +732,7 @@ class DafWriter(DafReader):
         """
         Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it
         to the block to be filled. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.empty_dense_vector!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.empty_dense_vector!>`__
         for details.
 
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
@@ -750,7 +753,7 @@ class DafWriter(DafReader):
         """
         Create an empty sparse vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, pass its
         parts (``nzind`` and ``nzval``) to the block to be filled. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.empty_sparse_vector!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.empty_sparse_vector!>`__
         for details.
 
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
@@ -771,7 +774,7 @@ class DafWriter(DafReader):
     def delete_vector(self, axis: str, name: str, *, must_exist: bool = True) -> Self:
         """
         Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.delete_vector!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.delete_vector!>`__
         for details.
 
         Returns ``self`` for chaining.
@@ -792,7 +795,7 @@ class DafWriter(DafReader):
         """
         Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
         See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.set_matrix!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.set_matrix!>`__
         for details.
 
         Since ``Daf`` is implemented Julia, this should be a column-major ``matrix``, so if you have a standard
@@ -813,7 +816,7 @@ class DafWriter(DafReader):
         """
         Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and
         ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Data.empty_dense_matrix!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.empty_dense_matrix!>`__
         for details.
 
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
@@ -843,7 +846,7 @@ class DafWriter(DafReader):
         Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and
         ``columns_axis`` in the ``Daf`` data set, and pass its parts (``colptr``, ``rowval`` and ``nzval``) to the block
         to be filles. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.empty_sparse_matrix!>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.empty_sparse_matrix!>`__
         for details.
 
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
@@ -879,7 +882,7 @@ class DafWriter(DafReader):
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
         ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
         flipped axes). See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.relayout_matrix!>`__ for
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.relayout_matrix!>`__ for
         details.
 
         Returns ``self`` for chaining.
@@ -891,7 +894,7 @@ class DafWriter(DafReader):
         """
         Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data
         set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/data.html#DataAxesFormats.Writers.delete_matrix!>`__ for
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/writers.html#DataAxesFormats.Writers.delete_matrix!>`__ for
         details.
 
         Returns ``self`` for chaining.

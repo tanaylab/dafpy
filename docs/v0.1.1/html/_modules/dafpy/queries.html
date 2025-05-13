@@ -344,7 +344,7 @@
 <span class="k">class</span> <span class="nc">XorNot</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Same as ``Xor`` but use the inverse of the mask. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.XorNot&gt;`__ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.XorNot&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
@@ -357,7 +357,7 @@
 <span class="k">class</span> <span class="nc">IsLess</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation for converting a vector value to a Boolean mask by comparing it some value. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsLess&gt;`__ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsLess&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -370,7 +370,7 @@
 <span class="k">class</span> <span class="nc">IsLessEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``&lt;=`` instead of ``&lt;`` for the comparison. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsLessEqual&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsLessEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -385,7 +385,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Equality is used for two purposes: As a comparison operator, similar to ``IsLess`` except that uses ``=`` instead of</span>
 <span class="sd">    ``&lt;`` for the comparison; and To select a single entry from a vector. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsEqual&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -399,7 +399,7 @@
 <span class="k">class</span> <span class="nc">IsNotEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``!=`` instead of ``&lt;`` for the comparison. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsNotEqual&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsNotEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -413,7 +413,7 @@
 <span class="k">class</span> <span class="nc">IsGreater</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``&gt;`` instead of ``&lt;`` for the comparison. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsGreater&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsGreater&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -427,7 +427,7 @@
 <span class="k">class</span> <span class="nc">IsGreaterEqual</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that uses ``&gt;=`` instead of ``&lt;`` for the comparison. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsGreaterEqual&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsGreaterEqual&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -442,7 +442,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsLess`` except that the compared values must be strings, and the mask</span>
 <span class="sd">    is of the values that match the given regular expression. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsMatch&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsMatch&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -456,7 +456,7 @@
 <span class="k">class</span> <span class="nc">IsNotMatch</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to ``IsMatch`` except that looks for entries that do not match the pattern. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.IsNotMatch&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsNotMatch&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -471,7 +471,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation that generates a matrix of counts of combinations of pairs of values for the same entries of an</span>
 <span class="sd">    axis. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.CountBy&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.CountBy&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -486,7 +486,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A query operation that uses a (following) ``ReductionOperation`` to aggregate the values of each group of</span>
 <span class="sd">    values. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.GroupBY&gt;`__ for</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.GroupBy&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -496,7 +496,7 @@
 
 
 <span class="c1">#: A Python class to use instead of Julia&#39;s ``Daf.Query``. See the Julia</span>
-<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.Query&gt;`__ for details.</span>
+<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Query&gt;`__ for details.</span>
 <span class="n">Query</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Axis</span><span class="p">,</span> <span class="n">Lookup</span><span class="p">,</span> <span class="n">Names</span><span class="p">,</span> <span class="n">QuerySequence</span><span class="p">]</span>
 
 
@@ -518,7 +518,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the number of dimensions (-1 - names, 0 - scalar, 1 - vector, 2 - matrix) of the results of a query. See the</span>
 <span class="sd">    Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAccessFormats.Queries.query_result_dimensions&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.query_result_dimensions&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">query_result_dimensions</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>

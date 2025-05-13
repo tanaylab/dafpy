@@ -14,7 +14,7 @@ from .julia_import import jl
 __all__ = ["AbnormalHandler", "inefficient_action_handler", "LogLevel", "setup_logger"]
 
 #: The action to take when encountering an "abnormal" (but recoverable) operation. See the Julia
-#: `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.1/handlers.html#TanayLabUtilities.Handlers.AbnormalHandler>`__
+#: `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.0/handlers.html#TanayLabUtilities.Handlers.AbnormalHandler>`__
 #: for details.
 AbnormalHandler = Literal["IgnoreHandler"] | Literal["WarnHandler"] | Literal["ErrorHandler"]
 
@@ -35,7 +35,7 @@ def inefficient_action_handler(handler: AbnormalHandler) -> AbnormalHandler:
     """
     Specify the ``AbnormalHandler`` to use when accessing a matrix in an inefficient way ("against the grain"). Returns
     the previous handler. See the Julia
-    `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.1/matrix_layouts.html#TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER>`__
+    `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.0/matrix_layouts.html#TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER>`__
     for details.
     """
     return PY_ABNORMAL_HANDLER[jl._inefficient_action_handler(JL_ABNORMAL_HANDLER[handler])]  # type: ignore
@@ -63,7 +63,7 @@ def setup_logger(
     """
     Setup a global logger that will print into ``io`` (which currently must be either ``sys.stdout`` or ``sys.stderr``),
     printing messages with a timestamp prefix. See the Julia
-    `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.1/logger.html#TanayLabUtilities.Logger.setup_logger>`__
+    `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.0/logger.html#TanayLabUtilities.Logger.setup_logger>`__
     for details.
     """
     if id(io) == id(stdout):
