@@ -387,6 +387,15 @@
 </li>
 
 <li class="toctree-l4">
+<a class="reference internal" href="#dafpy.data.DafReader.as_anndata">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.as_anndata()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
 <a class="reference internal" href="#dafpy.data.DafReader.complete_path">
 <code class="docutils literal notranslate">
 <span class="pre">DafReader.complete_path()
@@ -611,6 +620,11 @@
 
 <li class="toctree-l2">
 <a class="reference internal" href="anndata_format.html">anndata_format
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="anndata_facade.html">anndata_facade
 </a>
 </li>
 
@@ -6658,6 +6672,167 @@ Julia
 </a>
 for details.
 </p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="dafpy.data.DafReader.as_anndata">
+
+<span class="sig-name descname">
+<span class="pre">as_anndata
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">obs_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">var_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">x_matrix
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="anndata_facade.html#dafpy.anndata_facade.DafAnnData" title="dafpy.anndata_facade.DafAnnData">
+<span class="pre">DafAnnData
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/data.html#DafReader.as_anndata">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.data.DafReader.as_anndata" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Wrap this 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data set as an 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code>-like facade. See 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafAnnData
+</span>
+</code> for details.
+</p>
+
+<section id="parameters">
+
+<h2>Parameters
+<a class="headerlink" href="#parameters" title="Link to this heading">¶
+</a>
+</h2>
+
+<dl class="simple">
+
+<dt>obs_axis:
+</dt>
+<dd>
+<p>Name of the Daf axis that corresponds to AnnData’s observations (rows of 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>).
+</p>
+
+</dd>
+
+<dt>var_axis:
+</dt>
+<dd>
+<p>Name of the Daf axis that corresponds to AnnData’s variables (columns of 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>).
+</p>
+
+</dd>
+
+<dt>x_matrix:
+</dt>
+<dd>
+<p>Name of the 
+<code class="docutils literal notranslate">
+<span class="pre">(obs_axis,
+</span> 
+<span class="pre">var_axis)
+</span>
+</code> matrix exposed as 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>.
+</p>
+
+</dd>
+
+</dl>
+
+</section>
 
 </dd>
 </dl>

@@ -99,6 +99,38 @@ from dafpy import parse_query as q
             dp.Axis("gene") | dp.BeginMask("name") | dp.IsNotMatch(r"RP[SL]") | dp.EndMask(),
             r"@ gene [ name !~ RP\[SL\] ]",
         ),
+        (
+            dp.Axis("gene") | dp.BeginMask("is_marker") | dp.AndMask("is_lateral") | dp.EndMask(),
+            "@ gene [ is_marker & is_lateral ]",
+        ),
+        (
+            dp.Axis("gene") | dp.BeginMask("is_marker") | dp.AndNegatedMask("is_lateral") | dp.EndMask(),
+            "@ gene [ is_marker & ! is_lateral ]",
+        ),
+        (
+            dp.Axis("metacell") | dp.LookupMatrix("edge_weight") | dp.SquareColumnIs("mc1"),
+            "@ metacell :: edge_weight @| mc1",
+        ),
+        (
+            dp.Axis("metacell") | dp.LookupMatrix("edge_weight") | dp.SquareRowIs("mc1"),
+            "@ metacell :: edge_weight @| mc1",
+        ),
+        (
+            dp.Axis("cell")
+            | dp.Axis("gene")
+            | dp.LookupMatrix("UMIs")
+            | dp.GroupColumnsBy("metacell")
+            | dp.ReduceToColumn(dp.Sum()),
+            "@ cell @ gene :: UMIs |/ metacell >| Sum",
+        ),
+        (
+            dp.Axis("cell")
+            | dp.Axis("gene")
+            | dp.LookupMatrix("UMIs")
+            | dp.GroupRowsBy("type")
+            | dp.ReduceToRow(dp.Mean()),
+            "@ cell @ gene :: UMIs -/ type >- Mean",
+        ),
     ],
 )
 def test_query_formatting(query_data: Tuple[dp.Query, str]) -> None:
@@ -176,6 +208,10 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
     assert daf[q("@ cell : age") | dp.Var()] == 2.25
     assert daf[q("@ cell : age") | dp.VarN()] == 4.5
 
+    assert daf[q("@ cell @ gene :: UMIs") | dp.Sum()] == 21
+    assert np.all(daf[q("@ cell @ gene :: UMIs") | dp.ReduceToColumn(dp.Sum())] == np.array([6, 15]))
+    assert np.all(daf[q("@ cell @ gene :: UMIs") | dp.ReduceToRow(dp.Sum())] == np.array([5, 7, 9]))
+
     daf.set_matrix("cell", "gene", "UMIs", sp.csc_matrix([[0, 1, 2], [3, 4, 0]]), overwrite=True)
     frame = daf.get_pd_query(q("@ cell @ gene :: UMIs"))  # type: ignore
     assert np.all(frame.values == np.array([[0, 1, 2], [3, 4, 0]]))  # type: ignore
@@ -229,3 +265,31 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
     )
 
     daf.empty_cache(clear="MappedData")
+
+    assert np.all(daf[q("@ cell : batch") | dp.CountBy("age")] == np.array([[1, 0], [0, 1]]))
+
+    daf.add_axis("type", ["T", "B"])
+    daf.set_vector("cell", "type", ["T", "B"])
+    daf.set_matrix("type", "type", "overlap", np.array([[1, 0], [0, 1]]).T.astype(np.float32))
+    assert np.all(daf[q("@ type :: overlap") | dp.SquareColumnIs("T")] == np.array([1.0, 0.0]))
+    assert np.all(daf[q("@ type :: overlap") | dp.SquareRowIs("T")] == np.array([1.0, 0.0]))
+
+    assert dp.is_axis_query("@ cell") is True
+    assert dp.is_axis_query("@ cell : age") is False
+    assert dp.is_axis_query(". version") is False
+    assert dp.is_axis_query(dp.Axis("cell")) is True
+
+    assert dp.query_axis_name("@ cell") == "cell"
+    assert dp.query_axis_name(dp.Axis("gene")) == "gene"
+
+    axis_query = dp.parse_query("@ cell")
+    assert isinstance(axis_query, dp.Axis)
+
+    scalar_query = dp.parse_query(". version")
+    assert isinstance(scalar_query, dp.LookupScalar)
+
+    sequence_query = dp.parse_query("@ cell : age")
+    assert isinstance(sequence_query, dp.QuerySequence)
+
+    np_result = q("@ cell : age") | daf.get_np_query()
+    assert np.all(np_result == np.array([-1, 2]))

@@ -153,6 +153,15 @@ class JlObject:
     def __str__(self) -> str:
         return jl.string(self)
 
+    @classmethod
+    def wrap_jl_object(cls, jl_obj):
+        """
+        Wrap a Julia object (for internal use).
+        """
+        instance = cls.__new__(cls)
+        JlObject.__init__(instance, jl_obj)
+        return instance
+
 
 def _to_julia_type(value: Any) -> Any:  # pylint: disable=too-many-return-statements
     if isinstance(value, np.dtype):

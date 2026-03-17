@@ -1,0 +1,2017 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" lang="en" data-content_root="./">
+
+<head>
+  
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<title>anndata_facade &mdash; Daf 0.1.1 documentation
+</title>
+      
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      
+<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  
+<!--[if lt IE 9]>
+    
+<script src="_static/js/html5shiv.min.js">
+</script>
+  
+<![endif]-->
+  
+        
+<script src="_static/jquery.js?v=5d32c60e">
+</script>
+        
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
+</script>
+        
+<script src="_static/documentation_options.js?v=a58bc63e">
+</script>
+        
+<script src="_static/doctools.js?v=888ff710">
+</script>
+        
+<script src="_static/sphinx_highlight.js?v=dc90522c">
+</script>
+    
+<script src="_static/js/theme.js">
+</script>
+    
+<link rel="index" title="Index" href="genindex.html" />
+    
+<link rel="search" title="Search" href="search.html" />
+    
+<link rel="next" title="generic_functions" href="generic_functions.html" />
+    
+<link rel="prev" title="anndata_format" href="anndata_format.html" /> 
+
+</head>
+
+
+<body class="wy-body-for-nav"> 
+  
+<div class="wy-grid-for-nav">
+    
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      
+<div class="wy-side-scroll">
+        
+<div class="wy-side-nav-search" >
+
+          
+          
+          
+<a href="index.html" class="icon icon-home">
+            Daf
+              
+<img src="_static/logo.svg" class="logo" alt="Logo"/>
+          
+</a>
+              
+<div class="version">
+                0.1.1
+              
+</div>
+
+<div role="search">
+  
+<form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    
+<input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    
+<input type="hidden" name="check_keywords" value="yes" />
+    
+<input type="hidden" name="area" value="default" />
+  
+</form>
+
+</div>
+        
+</div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              
+<ul>
+
+<li class="toctree-l1">
+<a class="reference internal" href="readme.html">README
+</a>
+</li>
+
+</ul>
+
+<ul class="current">
+
+<li class="toctree-l1 current">
+<a class="reference internal" href="API.html">API
+</a>
+<ul class="current">
+
+<li class="toctree-l2">
+<a class="reference internal" href="julia_import.html">julia_import
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="data.html">data
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="reconstruction.html">reconstruction
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html">storage_types
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html">queries
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="operations.html">operations
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="formats.html">formats
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="views.html">views
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="copies.html">copies
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="adapters.html">adapters
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="concat.html">concat
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="anndata_format.html">anndata_format
+</a>
+</li>
+
+<li class="toctree-l2 current">
+<a class="current reference internal" href="#">anndata_facade
+</a>
+<ul>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#key-mappings">Key mappings
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#slicing">Slicing
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#limitations">Limitations
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData
+</span>
+</code>
+</a>
+<ul>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.daf">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.daf
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.obs_names">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.obs_names
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.var_names">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.var_names
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.n_obs">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.n_obs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.n_vars">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.n_vars
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.shape">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.shape
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.X">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.X
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.obs">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.obs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.var">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.var
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.layers">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.layers
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.uns">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.uns
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.obsp">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.obsp
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.varp">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.varp
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.obsm">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.obsm
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.varm">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.varm
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.to_df">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.to_df()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.query_obs">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.query_obs()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.query_var">
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData.query_var()
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="generic_functions.html">generic_functions
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="example_data.html">example_data
+</a>
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+        
+</div>
+      
+</div>
+    
+</nav>
+
+    
+<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+<nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          
+<i data-toggle="wy-nav-top" class="fa fa-bars">
+</i>
+          
+<a href="index.html">Daf
+</a>
+      
+</nav>
+
+      
+<div class="wy-nav-content">
+        
+<div class="rst-content">
+          
+<div role="navigation" aria-label="Page navigation">
+  
+<ul class="wy-breadcrumbs">
+      
+<li>
+<a href="index.html" class="icon icon-home" aria-label="Home">
+</a>
+</li>
+          
+<li class="breadcrumb-item">
+<a href="API.html">API
+</a>
+</li>
+      
+<li class="breadcrumb-item active">anndata_facade
+</li>
+      
+<li class="wy-breadcrumbs-aside">
+            
+<a href="_sources/anndata_facade.rst.txt" rel="nofollow"> View page source
+</a>
+      
+</li>
+  
+</ul>
+  
+<hr/>
+
+</div>
+          
+<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           
+<div itemprop="articleBody">
+             
+  
+<section id="module-dafpy.anndata_facade">
+
+<span id="anndata-facade">
+</span>
+<h1>anndata_facade
+<a class="headerlink" href="#module-dafpy.anndata_facade" title="Link to this heading">¶
+</a>
+</h1>
+
+<p>Facade that presents a 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code> or 
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code> as an 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code>-like object.
+</p>
+
+<p>Given two axis names and a primary matrix name, 
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData" title="dafpy.anndata_facade.DafAnnData">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafAnnData
+</span>
+</code>
+</a> exposes the
+
+<code class="docutils literal notranslate">
+<span class="pre">DataAxesFormats
+</span>
+</code> data through the standard 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code> API so that existing code
+written against 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code> can consume a 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data set with minimal changes.
+</p>
+
+<section id="key-mappings">
+
+<h2>Key mappings
+<a class="headerlink" href="#key-mappings" title="Link to this heading">¶
+</a>
+</h2>
+
+<ul class="simple">
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code> — the named matrix over 
+<code class="docutils literal notranslate">
+<span class="pre">(obs_axis,
+</span> 
+<span class="pre">var_axis)
+</span>
+</code>.
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">obs
+</span>
+</code> / 
+<code class="docutils literal notranslate">
+<span class="pre">var
+</span>
+</code> — dict-like proxies over vector properties of each axis,
+behave like 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code> 
+<code class="docutils literal notranslate">
+<span class="pre">DataFrame
+</span>
+</code> for the common 
+<code class="docutils literal notranslate">
+<span class="pre">[]
+</span>
+</code> get/set/delete,
+
+<code class="docutils literal notranslate">
+<span class="pre">.columns
+</span>
+</code>, 
+<code class="docutils literal notranslate">
+<span class="pre">.index
+</span>
+</code>, and 
+<code class="docutils literal notranslate">
+<span class="pre">.to_df()
+</span>
+</code> operations.
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">layers
+</span>
+</code> — dict-like proxy over additional 
+<code class="docutils literal notranslate">
+<span class="pre">(obs_axis,
+</span> 
+<span class="pre">var_axis)
+</span>
+</code> matrices
+(all except 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>).
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">uns
+</span>
+</code> — flat dict-like proxy over Daf scalars (strings and numbers only,
+nested dicts are not supported).
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">obsp
+</span>
+</code> / 
+<code class="docutils literal notranslate">
+<span class="pre">varp
+</span>
+</code> — dict-like proxies over square 
+<code class="docutils literal notranslate">
+<span class="pre">(axis,
+</span> 
+<span class="pre">axis)
+</span>
+</code> matrices.
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">obsm
+</span>
+</code> / 
+<code class="docutils literal notranslate">
+<span class="pre">varm
+</span>
+</code> — dict-like proxies over 
+<code class="docutils literal notranslate">
+<span class="pre">(main_axis,
+</span> 
+<span class="pre">other_axis)
+</span>
+</code> matrices
+addressed by the key 
+<code class="docutils literal notranslate">
+<span class="pre">&quot;other_axis:matrix_name&quot;
+</span>
+</code>.  Setting requires
+
+<code class="docutils literal notranslate">
+<span class="pre">other_axis
+</span>
+</code> to already exist in the Daf data set.
+</p>
+</li>
+
+</ul>
+
+</section>
+
+<section id="slicing">
+
+<h2>Slicing
+<a class="headerlink" href="#slicing" title="Link to this heading">¶
+</a>
+</h2>
+
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">adata[obs_index,
+</span> 
+<span class="pre">var_index]
+</span>
+</code> returns a read-only 
+<code class="docutils literal notranslate">
+<span class="pre">DafAnnData
+</span>
+</code> backed by a
+
+<code class="docutils literal notranslate">
+<span class="pre">DafView
+</span>
+</code>.  Each index may be a Boolean 
+<code class="docutils literal notranslate">
+<span class="pre">numpy
+</span>
+</code> array, a list of entry names
+or integer positions, a single name or integer, or a 
+<code class="docutils literal notranslate">
+<span class="pre">slice
+</span>
+</code>.
+</p>
+
+<p>The extension methods 
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.query_obs" title="dafpy.anndata_facade.DafAnnData.query_obs">
+<code class="xref py py-meth docutils literal notranslate">
+<span class="pre">DafAnnData.query_obs()
+</span>
+</code>
+</a> and 
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData.query_var" title="dafpy.anndata_facade.DafAnnData.query_var">
+<code class="xref py py-meth docutils literal notranslate">
+<span class="pre">DafAnnData.query_var()
+</span>
+</code>
+</a>
+accept any Daf query fragment that would fit between the 
+<code class="docutils literal notranslate">
+<span class="pre">[
+</span>
+</code> and 
+<code class="docutils literal notranslate">
+<span class="pre">]
+</span>
+</code> in
+
+<code class="docutils literal notranslate">
+<span class="pre">&#64;
+</span> 
+<span class="pre">axis
+</span> 
+<span class="pre">[
+</span> 
+<span class="pre">...
+</span> 
+<span class="pre">]
+</span>
+</code>.
+</p>
+
+</section>
+
+<section id="limitations">
+
+<h2>Limitations
+<a class="headerlink" href="#limitations" title="Link to this heading">¶
+</a>
+</h2>
+
+<ul class="simple">
+
+<li>
+<p>Categorical values assigned to 
+<code class="docutils literal notranslate">
+<span class="pre">obs
+</span>
+</code> or 
+<code class="docutils literal notranslate">
+<span class="pre">var
+</span>
+</code> columns are automatically
+converted to strings.
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">uns
+</span>
+</code> only supports flat scalar values (strings and numbers).  Assigning a
+non-scalar raises 
+<code class="docutils literal notranslate">
+<span class="pre">TypeError
+</span>
+</code>.
+</p>
+</li>
+
+<li>
+<p>
+<code class="docutils literal notranslate">
+<span class="pre">obs_names
+</span>
+</code> and 
+<code class="docutils literal notranslate">
+<span class="pre">var_names
+</span>
+</code> are read-only; axis entries cannot be renamed
+through this facade.
+</p>
+</li>
+
+<li>
+<p>Concatenation and other operations that create new 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code> objects are not
+supported.
+</p>
+</li>
+
+</ul>
+
+</section>
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.anndata_facade.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">DafAnnData
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">daf
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="o">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">obs_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">var_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">x_matrix
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/anndata_facade.html#DafAnnData">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Facade that presents a 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code> or 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code> as an 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code>-like object.
+</p>
+
+<section id="parameters">
+
+<h2>Parameters
+<a class="headerlink" href="#parameters" title="Link to this heading">¶
+</a>
+</h2>
+
+<dl class="simple">
+
+<dt>daf:
+</dt>
+<dd>
+<p>The underlying Daf data set (reader or writer).
+</p>
+
+</dd>
+
+<dt>obs_axis:
+</dt>
+<dd>
+<p>Name of the Daf axis that corresponds to AnnData’s observations (rows of 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>).
+</p>
+
+</dd>
+
+<dt>var_axis:
+</dt>
+<dd>
+<p>Name of the Daf axis that corresponds to AnnData’s variables (columns of 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>).
+</p>
+
+</dd>
+
+<dt>x_matrix:
+</dt>
+<dd>
+<p>Name of the 
+<code class="docutils literal notranslate">
+<span class="pre">(obs_axis,
+</span> 
+<span class="pre">var_axis)
+</span>
+</code> matrix that is exposed as 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>.
+</p>
+
+</dd>
+
+</dl>
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.daf">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">daf
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.daf" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Access the wrapped 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> repository.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.obs_names">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">obs_names
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Index
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.obs_names" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Names of the observations as a 
+<code class="docutils literal notranslate">
+<span class="pre">pd.Index
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.var_names">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">var_names
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Index
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.var_names" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Names of the variables as a 
+<code class="docutils literal notranslate">
+<span class="pre">pd.Index
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.n_obs">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">n_obs
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.n_obs" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Number of observations.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.n_vars">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">n_vars
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.n_vars" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Number of variables.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.shape">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">shape
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">int
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">int
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.shape" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Shape of the data matrix 
+<code class="docutils literal notranslate">
+<span class="pre">(n_obs,
+</span> 
+<span class="pre">n_vars)
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.X">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">X
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">ndarray
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">csc_matrix
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.X" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Primary data matrix of shape 
+<code class="docutils literal notranslate">
+<span class="pre">(n_obs,
+</span> 
+<span class="pre">n_vars)
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.obs">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">obs
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafAxisFrame
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.obs" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Observation annotations — dict-like proxy over obs-axis vectors.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.var">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">var
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafAxisFrame
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.var" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Variable annotations — dict-like proxy over var-axis vectors.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.layers">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">layers
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafLayersMapping
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.layers" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Additional 
+<code class="docutils literal notranslate">
+<span class="pre">(obs,
+</span> 
+<span class="pre">var)
+</span>
+</code> matrices, excluding 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.uns">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">uns
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafUns
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.uns" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Unstructured annotations as a flat dict of Daf scalars.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.obsp">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">obsp
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafPairwiseMapping
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.obsp" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Square 
+<code class="docutils literal notranslate">
+<span class="pre">(obs
+</span> 
+<span class="pre">×
+</span> 
+<span class="pre">obs)
+</span>
+</code> pairwise matrices.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.varp">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">varp
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafPairwiseMapping
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.varp" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Square 
+<code class="docutils literal notranslate">
+<span class="pre">(var
+</span> 
+<span class="pre">×
+</span> 
+<span class="pre">var)
+</span>
+</code> pairwise matrices.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.obsm">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">obsm
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafEmbeddingMapping
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.obsm" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Observation embeddings, keyed as 
+<code class="docutils literal notranslate">
+<span class="pre">&quot;other_axis:matrix_name&quot;
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py property">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.varm">
+
+<em class="property">
+<span class="pre">property
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-name descname">
+<span class="pre">varm
+</span>
+</span>
+<em class="property">
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">_DafEmbeddingMapping
+</span>
+</em>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.varm" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Variable embeddings, keyed as 
+<code class="docutils literal notranslate">
+<span class="pre">&quot;other_axis:matrix_name&quot;
+</span>
+</code>.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.to_df">
+
+<span class="sig-name descname">
+<span class="pre">to_df
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">layer
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">DataFrame
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/anndata_facade.html#DafAnnData.to_df">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.to_df" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return 
+<code class="docutils literal notranslate">
+<span class="pre">X
+</span>
+</code> (or a named 
+<code class="docutils literal notranslate">
+<span class="pre">layer
+</span>
+</code>) as a 
+<code class="docutils literal notranslate">
+<span class="pre">pandas
+</span>
+</code> 
+<code class="docutils literal notranslate">
+<span class="pre">DataFrame
+</span>
+</code>.
+</p>
+
+<p>The result has 
+<code class="docutils literal notranslate">
+<span class="pre">obs_names
+</span>
+</code> as the row index and 
+<code class="docutils literal notranslate">
+<span class="pre">var_names
+</span>
+</code> as columns.  Sparse matrices are densified.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.query_obs">
+
+<span class="sig-name descname">
+<span class="pre">query_obs
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">query_fragment
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData" title="dafpy.anndata_facade.DafAnnData">
+<span class="pre">DafAnnData
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/anndata_facade.html#DafAnnData.query_obs">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.query_obs" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return a read-only view with observations filtered by a Daf query.
+</p>
+
+<section id="id1">
+
+<h3>Parameters
+<a class="headerlink" href="#id1" title="Link to this heading">¶
+</a>
+</h3>
+
+<dl class="simple">
+
+<dt>query_fragment:
+</dt>
+<dd>
+<p>Anything that would fit between the 
+<code class="docutils literal notranslate">
+<span class="pre">[
+</span>
+</code> and 
+<code class="docutils literal notranslate">
+<span class="pre">]
+</span>
+</code> of a Daf axis query, e.g. 
+<code class="docutils literal notranslate">
+<span class="pre">donor
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">D1
+</span> 
+<span class="pre">&amp;
+</span> 
+<span class="pre">age
+</span> 
+<span class="pre">&gt;
+</span> 
+<span class="pre">30
+</span>
+</code>.
+</p>
+
+</dd>
+
+</dl>
+
+</section>
+
+<section id="returns">
+
+<h3>Returns
+<a class="headerlink" href="#returns" title="Link to this heading">¶
+</a>
+</h3>
+
+<dl class="simple">
+
+<dt>DafAnnData
+</dt>
+<dd>
+<p>A read-only facade wrapping a 
+<code class="docutils literal notranslate">
+<span class="pre">DafView
+</span>
+</code> filtered on the obs axis.
+</p>
+
+</dd>
+
+</dl>
+
+</section>
+
+</dd>
+</dl>
+
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="dafpy.anndata_facade.DafAnnData.query_var">
+
+<span class="sig-name descname">
+<span class="pre">query_var
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">query_fragment
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="#dafpy.anndata_facade.DafAnnData" title="dafpy.anndata_facade.DafAnnData">
+<span class="pre">DafAnnData
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/anndata_facade.html#DafAnnData.query_var">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.anndata_facade.DafAnnData.query_var" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Return a read-only view with variables filtered by a Daf query.
+</p>
+
+<section id="id2">
+
+<h3>Parameters
+<a class="headerlink" href="#id2" title="Link to this heading">¶
+</a>
+</h3>
+
+<dl class="simple">
+
+<dt>query_fragment:
+</dt>
+<dd>
+<p>Anything that would fit between the 
+<code class="docutils literal notranslate">
+<span class="pre">[
+</span>
+</code> and 
+<code class="docutils literal notranslate">
+<span class="pre">]
+</span>
+</code> of a Daf axis query, e.g.
+
+<code class="docutils literal notranslate">
+<span class="pre">highly_variable
+</span> 
+<span class="pre">&amp;
+</span> 
+<span class="pre">!
+</span> 
+<span class="pre">is_lateral
+</span>
+</code>.
+</p>
+
+</dd>
+
+</dl>
+
+</section>
+
+<section id="id3">
+
+<h3>Returns
+<a class="headerlink" href="#id3" title="Link to this heading">¶
+</a>
+</h3>
+
+<dl class="simple">
+
+<dt>DafAnnData
+</dt>
+<dd>
+<p>A read-only facade wrapping a 
+<code class="docutils literal notranslate">
+<span class="pre">DafView
+</span>
+</code> filtered on the var axis.
+</p>
+
+</dd>
+
+</dl>
+
+</section>
+
+</dd>
+</dl>
+
+
+</section>
+
+</dd>
+</dl>
+
+
+</section>
+
+
+           
+</div>
+          
+</div>
+          
+<footer>
+<div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        
+<a href="anndata_format.html" class="btn btn-neutral float-left" title="anndata_format" accesskey="p" rel="prev">
+<span class="fa fa-arrow-circle-left" aria-hidden="true">
+</span> Previous
+</a>
+        
+<a href="generic_functions.html" class="btn btn-neutral float-right" title="generic_functions" accesskey="n" rel="next">Next 
+<span class="fa fa-arrow-circle-right" aria-hidden="true">
+</span>
+</a>
+    
+</div>
+
+  
+<hr/>
+
+  
+<div role="contentinfo">
+    
+<p>&#169; Copyright 2023-2024 Weizmann Institute of Science.
+</p>
+  
+</div>
+
+  Built with 
+<a href="https://www.sphinx-doc.org/">Sphinx
+</a> using a
+    
+<a href="https://github.com/readthedocs/sphinx_rtd_theme">theme
+</a>
+    provided by 
+<a href="https://readthedocs.org">Read the Docs
+</a>.
+   
+
+
+</footer>
+        
+</div>
+      
+</div>
+    
+</section>
+  
+</div>
+  
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  
+</script> 
+
+
+</body>
+
+</html>

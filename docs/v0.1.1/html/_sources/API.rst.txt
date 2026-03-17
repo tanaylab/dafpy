@@ -17,6 +17,7 @@ API
   adapters
   concat
   anndata_format
+  anndata_facade
   generic_functions
   example_data
 

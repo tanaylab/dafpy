@@ -88,6 +88,7 @@
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
 <span class="kn">from</span> <span class="nn">.operations</span> <span class="kn">import</span> <span class="n">QueryOperation</span>
 <span class="kn">from</span> <span class="nn">.operations</span> <span class="kn">import</span> <span class="n">QuerySequence</span>
+<span class="kn">from</span> <span class="nn">.operations</span> <span class="kn">import</span> <span class="n">ReductionOperation</span>
 <span class="kn">from</span> <span class="nn">.storage_types</span> <span class="kn">import</span> <span class="n">StorageScalar</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -303,7 +304,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">AndMask</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
@@ -317,7 +318,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">AndNot</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">AndNegatedMask</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
@@ -538,7 +539,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">GroupBy</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">GroupColumnsBy</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
@@ -553,7 +554,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">GroupBy</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">GroupRowsBy</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
 
 
 
@@ -561,14 +562,14 @@
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.ReduceToColumn">[docs]</a>
 <span class="k">class</span> <span class="nc">ReduceToColumn</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Specify a ``ReductionOperation`` to convert each row of a matrix to a single value, reducing the matrix to a single</span>
-<span class="sd">    column. See the Julia</span>
+<span class="sd">    Specify a :class:`ReductionOperation` to convert each row of a grouped matrix to a single value, reducing the matrix</span>
+<span class="sd">    to a single column per group. Must be preceded by :class:`GroupColumnsBy`. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToColumn&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ReduceToColumn</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="n">ReductionOperation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ReduceToColumn</span><span class="p">(</span><span class="n">reduction</span><span class="p">))</span></div>
 
 
 
@@ -576,14 +577,14 @@
 <a class="viewcode-back" href="../../queries.html#dafpy.queries.ReduceToRow">[docs]</a>
 <span class="k">class</span> <span class="nc">ReduceToRow</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Specify a ``ReductionOperation`` to convert each column of a matrix to a single value, reducing the matrix to a</span>
-<span class="sd">    single row. See the Julia</span>
+<span class="sd">    Specify a :class:`ReductionOperation` to convert each column of a grouped matrix to a single value, reducing the</span>
+<span class="sd">    matrix to a single row per group. Must be preceded by :class:`GroupRowsBy`. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToRow&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ReduceToRow</span><span class="p">(</span><span class="nb">property</span><span class="p">))</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="n">ReductionOperation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ReduceToRow</span><span class="p">(</span><span class="n">reduction</span><span class="p">))</span></div>
 
 
 
@@ -640,7 +641,7 @@
         <span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">QueryOperation</span><span class="p">,</span> <span class="n">QueryOperation</span><span class="p">),</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">jl</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">julia_type</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">wrapper_type</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">wrapper_type</span><span class="o">.</span><span class="n">wrap_jl_object</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
     <span class="k">assert</span> <span class="kc">False</span></div>
 
 

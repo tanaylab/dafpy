@@ -86,6 +86,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AbstractSet</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
@@ -97,6 +98,10 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.anndata_facade</span> <span class="kn">import</span> <span class="n">DafAnnData</span>
+
 <span class="kn">from</span> <span class="nn">weakref</span> <span class="kn">import</span> <span class="n">WeakValueDictionary</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -767,6 +772,26 @@
 <span class="sd">        for details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">read_only</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="DafReader.as_anndata">
+<a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.as_anndata">[docs]</a>
+    <span class="k">def</span> <span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnData&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrap this ``Daf`` data set as an ``AnnData``-like facade. See :class:`~dafpy.DafAnnData` for details.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obs_axis:</span>
+<span class="sd">            Name of the Daf axis that corresponds to AnnData&#39;s observations (rows of ``X``).</span>
+<span class="sd">        var_axis:</span>
+<span class="sd">            Name of the Daf axis that corresponds to AnnData&#39;s variables (columns of ``X``).</span>
+<span class="sd">        x_matrix:</span>
+<span class="sd">            Name of the ``(obs_axis, var_axis)`` matrix exposed as ``X``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.anndata_facade</span> <span class="kn">import</span> <span class="n">DafAnnData</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
+        <span class="k">return</span> <span class="n">DafAnnData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="n">x_matrix</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.complete_path">

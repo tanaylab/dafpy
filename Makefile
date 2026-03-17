@@ -105,7 +105,7 @@ backticks: .make.backticks  ## check usage of backticks in documentation
 	@OK=true; \
 	for FILE in $(PY_SOURCE_FILES) $(RST_SOURCE_FILES); \
 	do \
-	    if ( sed 's/`genindex`/genindex/;s/``\([^`]*\)``/\1/g;s/`\([^`]*\)`_/\1_/g' "$$FILE" \
+	    if ( sed 's/`genindex`/genindex/;s/``\([^`]*\)``/\1/g;s/:[^ :]*:`[^`]*`/_/g;s/`\([^`]*\)`_/\1_/g' "$$FILE" \
                | grep --label "$$FILE" -n -H '`' \
                ) \
 	    then OK=false; \
@@ -179,7 +179,7 @@ smells: mypy pylint  ## check for code smells
 pylint: .make.pylint  ## check code with pylint
 
 .make.pylint: $(PY_SOURCE_FILES)
-	pylint --disable=fixme,protected-access,wrong-import-position,no-name-in-module,too-many-arguments,too-many-public-methods,too-few-public-methods,bare-except,line-too-long $(NAME) tests
+	pylint --good-names=X --disable=fixme,protected-access,wrong-import-position,no-name-in-module,too-many-arguments,too-many-public-methods,too-few-public-methods,bare-except,line-too-long $(NAME) tests
 	touch $@
 
 mypy: .make.mypy  ## check code with mypy

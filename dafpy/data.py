@@ -7,6 +7,7 @@ for details.
 """
 
 from contextlib import contextmanager
+from typing import TYPE_CHECKING
 from typing import AbstractSet
 from typing import Any
 from typing import Iterator
@@ -18,6 +19,10 @@ from typing import Sequence
 from typing import Tuple
 from typing import Type
 from typing import overload
+
+if TYPE_CHECKING:
+    from .anndata_facade import DafAnnData
+
 from weakref import WeakValueDictionary
 
 import numpy as np
@@ -606,6 +611,23 @@ class DafReader(JlObject):
         for details.
         """
         return DafReadOnly(jl.DataAxesFormats.read_only(self.jl_obj, name=name))
+
+    def as_anndata(self, *, obs_axis: str, var_axis: str, x_matrix: str) -> "DafAnnData":
+        """
+        Wrap this ``Daf`` data set as an ``AnnData``-like facade. See :class:`~dafpy.DafAnnData` for details.
+
+        Parameters
+        ----------
+        obs_axis:
+            Name of the Daf axis that corresponds to AnnData's observations (rows of ``X``).
+        var_axis:
+            Name of the Daf axis that corresponds to AnnData's variables (columns of ``X``).
+        x_matrix:
+            Name of the ``(obs_axis, var_axis)`` matrix exposed as ``X``.
+        """
+        from .anndata_facade import DafAnnData  # pylint: disable=import-outside-toplevel
+
+        return DafAnnData(self, obs_axis=obs_axis, var_axis=var_axis, x_matrix=x_matrix)
 
     def complete_path(self) -> Optional[str]:
         """

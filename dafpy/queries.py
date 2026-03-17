@@ -9,6 +9,7 @@ from typing import Union
 from .julia_import import jl
 from .operations import QueryOperation
 from .operations import QuerySequence
+from .operations import ReductionOperation
 from .storage_types import StorageScalar
 
 __all__ = [
@@ -189,7 +190,7 @@ class AndMask(QueryOperation):
     """
 
     def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.And(property))
+        super().__init__(jl.DataAxesFormats.AndMask(property))
 
 
 class AndNegatedMask(QueryOperation):
@@ -200,7 +201,7 @@ class AndNegatedMask(QueryOperation):
     """
 
     def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.AndNot(property))
+        super().__init__(jl.DataAxesFormats.AndNegatedMask(property))
 
 
 class OrMask(QueryOperation):
@@ -376,7 +377,7 @@ class GroupColumnsBy(QueryOperation):
     """
 
     def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.GroupBy(property))
+        super().__init__(jl.DataAxesFormats.GroupColumnsBy(property))
 
 
 class GroupRowsBy(QueryOperation):
@@ -388,31 +389,31 @@ class GroupRowsBy(QueryOperation):
     """
 
     def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.GroupBy(property))
+        super().__init__(jl.DataAxesFormats.GroupRowsBy(property))
 
 
 class ReduceToColumn(QueryOperation):
     """
-    Specify a ``ReductionOperation`` to convert each row of a matrix to a single value, reducing the matrix to a single
-    column. See the Julia
+    Specify a :class:`ReductionOperation` to convert each row of a grouped matrix to a single value, reducing the matrix
+    to a single column per group. Must be preceded by :class:`GroupColumnsBy`. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToColumn>`__
     for details.
     """
 
-    def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.ReduceToColumn(property))
+    def __init__(self, reduction: ReductionOperation) -> None:
+        super().__init__(jl.DataAxesFormats.ReduceToColumn(reduction))
 
 
 class ReduceToRow(QueryOperation):
     """
-    Specify a ``ReductionOperation`` to convert each column of a matrix to a single value, reducing the matrix to a
-    single row. See the Julia
+    Specify a :class:`ReductionOperation` to convert each column of a grouped matrix to a single value, reducing the
+    matrix to a single row per group. Must be preceded by :class:`GroupRowsBy`. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToRow>`__
     for details.
     """
 
-    def __init__(self, property: str) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.ReduceToRow(property))
+    def __init__(self, reduction: ReductionOperation) -> None:
+        super().__init__(jl.DataAxesFormats.ReduceToRow(reduction))
 
 
 class SquareColumnIs(QueryOperation):
@@ -460,7 +461,7 @@ def parse_query(query_string: str) -> QueryOperation:
         (jl.DataAxesFormats.QueryOperation, QueryOperation),
     ):
         if jl.isa(query, julia_type):
-            return wrapper_type(query)
+            return wrapper_type.wrap_jl_object(query)  # type: ignore
     assert False
 
 

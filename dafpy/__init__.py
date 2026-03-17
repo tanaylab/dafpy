@@ -62,5 +62,6 @@ from .copies import *  # isort: skip
 from .adapters import *  # isort: skip
 from .concat import *  # isort: skip
 from .anndata_format import *  # isort: skip
+from .anndata_facade import *  # isort: skip
 from .reconstruction import *  # isort: skip
 from .example_data import *  # isort: skip

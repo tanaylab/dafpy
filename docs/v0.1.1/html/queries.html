@@ -531,6 +531,11 @@
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="anndata_facade.html">anndata_facade
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="generic_functions.html">generic_functions
 </a>
 </li>
@@ -3792,7 +3797,7 @@ operator in Julia).
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">property
+<span class="pre">reduction
 </span>
 </span>
 <span class="p">
@@ -3802,8 +3807,10 @@ operator in Julia).
 <span class="w"> 
 </span>
 <span class="n">
-<span class="pre">str
+<a class="reference internal" href="operations.html#dafpy.operations.ReductionOperation" title="dafpy.operations.ReductionOperation">
+<span class="pre">ReductionOperation
 </span>
+</a>
 </span>
 </em>
 <span class="sig-paren">)
@@ -3820,11 +3827,17 @@ operator in Julia).
 
 <dd>
 <p>Specify a 
-<code class="docutils literal notranslate">
+<code class="xref py py-class docutils literal notranslate">
 <span class="pre">ReductionOperation
 </span>
-</code> to convert each row of a matrix to a single value, reducing the matrix to a single
-column. See the Julia
+</code> to convert each row of a grouped matrix to a single value, reducing the matrix
+to a single column per group. Must be preceded by 
+<a class="reference internal" href="#dafpy.queries.GroupColumnsBy" title="dafpy.queries.GroupColumnsBy">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">GroupColumnsBy
+</span>
+</code>
+</a>. See the Julia
 
 <a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToColumn">documentation
 </a>
@@ -3857,7 +3870,7 @@ for details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">property
+<span class="pre">reduction
 </span>
 </span>
 <span class="p">
@@ -3867,8 +3880,10 @@ for details.
 <span class="w"> 
 </span>
 <span class="n">
-<span class="pre">str
+<a class="reference internal" href="operations.html#dafpy.operations.ReductionOperation" title="dafpy.operations.ReductionOperation">
+<span class="pre">ReductionOperation
 </span>
+</a>
 </span>
 </em>
 <span class="sig-paren">)
@@ -3885,11 +3900,17 @@ for details.
 
 <dd>
 <p>Specify a 
-<code class="docutils literal notranslate">
+<code class="xref py py-class docutils literal notranslate">
 <span class="pre">ReductionOperation
 </span>
-</code> to convert each column of a matrix to a single value, reducing the matrix to a
-single row. See the Julia
+</code> to convert each column of a grouped matrix to a single value, reducing the
+matrix to a single row per group. Must be preceded by 
+<a class="reference internal" href="#dafpy.queries.GroupRowsBy" title="dafpy.queries.GroupRowsBy">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">GroupRowsBy
+</span>
+</code>
+</a>. See the Julia
 
 <a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToRow">documentation
 </a>

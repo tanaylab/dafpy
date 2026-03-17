@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dafpy.anndata_facade &mdash; Daf 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Daf
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">README</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Daf</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">dafpy.anndata_facade</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dafpy.anndata_facade</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Facade that presents a ``DafReader`` or ``DafWriter`` as an ``AnnData``-like object.</span>
+
+<span class="sd">Given two axis names and a primary matrix name, :class:`DafAnnData` exposes the</span>
+<span class="sd">``DataAxesFormats`` data through the standard ``AnnData`` API so that existing code</span>
+<span class="sd">written against ``AnnData`` can consume a ``Daf`` data set with minimal changes.</span>
+
+<span class="sd">Key mappings</span>
+<span class="sd">------------</span>
+<span class="sd">* ``X`` — the named matrix over ``(obs_axis, var_axis)``.</span>
+<span class="sd">* ``obs`` / ``var`` — dict-like proxies over vector properties of each axis,</span>
+<span class="sd">  behave like ``pandas`` ``DataFrame`` for the common ``[]`` get/set/delete,</span>
+<span class="sd">  ``.columns``, ``.index``, and ``.to_df()`` operations.</span>
+<span class="sd">* ``layers`` — dict-like proxy over additional ``(obs_axis, var_axis)`` matrices</span>
+<span class="sd">  (all except ``X``).</span>
+<span class="sd">* ``uns`` — flat dict-like proxy over Daf scalars (strings and numbers only,</span>
+<span class="sd">  nested dicts are not supported).</span>
+<span class="sd">* ``obsp`` / ``varp`` — dict-like proxies over square ``(axis, axis)`` matrices.</span>
+<span class="sd">* ``obsm`` / ``varm`` — dict-like proxies over ``(main_axis, other_axis)`` matrices</span>
+<span class="sd">  addressed by the key ``&quot;other_axis:matrix_name&quot;``.  Setting requires</span>
+<span class="sd">  ``other_axis`` to already exist in the Daf data set.</span>
+
+<span class="sd">Slicing</span>
+<span class="sd">-------</span>
+<span class="sd">``adata[obs_index, var_index]`` returns a read-only ``DafAnnData`` backed by a</span>
+<span class="sd">``DafView``.  Each index may be a Boolean ``numpy`` array, a list of entry names</span>
+<span class="sd">or integer positions, a single name or integer, or a ``slice``.</span>
+
+<span class="sd">The extension methods :meth:`DafAnnData.query_obs` and :meth:`DafAnnData.query_var`</span>
+<span class="sd">accept any Daf query fragment that would fit between the ``[`` and ``]`` in</span>
+<span class="sd">``@ axis [ ... ]``.</span>
+
+<span class="sd">Limitations</span>
+<span class="sd">-----------</span>
+<span class="sd">* Categorical values assigned to ``obs`` or ``var`` columns are automatically</span>
+<span class="sd">  converted to strings.</span>
+<span class="sd">* ``uns`` only supports flat scalar values (strings and numbers).  Assigning a</span>
+<span class="sd">  non-scalar raises ``TypeError``.</span>
+<span class="sd">* ``obs_names`` and ``var_names`` are read-only; axis entries cannot be renamed</span>
+<span class="sd">  through this facade.</span>
+<span class="sd">* Concatenation and other operations that create new ``AnnData`` objects are not</span>
+<span class="sd">  supported.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AbstractSet</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">FrozenSet</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>  <span class="c1"># type: ignore</span>
+
+<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafReader</span>
+<span class="kn">from</span> <span class="nn">.formats</span> <span class="kn">import</span> <span class="n">chain_writer</span>
+<span class="kn">from</span> <span class="nn">.formats</span> <span class="kn">import</span> <span class="n">memory_daf</span>
+<span class="kn">from</span> <span class="nn">.storage_types</span> <span class="kn">import</span> <span class="n">StorageScalar</span>
+<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">viewer</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DafAnnData&quot;</span><span class="p">]</span>
+
+<span class="n">_MASK_NAME</span> <span class="o">=</span> <span class="s2">&quot;__mask__&quot;</span>
+
+<span class="n">_AXIS_MATRIX_KEY_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([^:]+):(.+)$&quot;</span><span class="p">)</span>
+
+<span class="c1"># pylint: disable=missing-function-docstring</span>
+
+
+<span class="k">def</span> <span class="nf">_is_storage_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return True if ``value`` is a string or number acceptable by Daf.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_prepare_vector</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalise a vector value before writing it to Daf.</span>
+
+<span class="sd">    * ``pd.Series`` is converted to the underlying numpy array (categoricals are converted to a string array).</span>
+<span class="sd">    * ``pd.Categorical`` is concerted to a string numpy array.</span>
+<span class="sd">    * Object-dtype numpy arrays are converted to strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">CategoricalDtype</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;O&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">_to_bool_mask</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-return-statements</span>
+    <span class="n">index</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert ``index`` to a Boolean mask aligned with *entries*.</span>
+
+<span class="sd">    Returns ``None`` when all entries are selected (no filtering needed). Accepts Boolean arrays, lists of names or</span>
+<span class="sd">    integer positions, single name or integer, and slices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">index</span> <span class="ow">is</span> <span class="o">...</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">else</span> <span class="n">mask</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">index</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">else</span> <span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># Integer array</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">else</span> <span class="n">mask</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)):</span>
+            <span class="n">entry_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span> <span class="ow">in</span> <span class="n">entry_set</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">else</span> <span class="n">mask</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">entries</span> <span class="o">==</span> <span class="n">index</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)):</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">mask</span>
+
+    <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unsupported index type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_DafAxisFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dict-like proxy over the vector properties of one Daf axis.</span>
+
+<span class="sd">    Mimics a ``pandas`` ``DataFrame`` for the operations most commonly used on</span>
+<span class="sd">    ``adata.obs`` and ``adata.var``:</span>
+
+<span class="sd">    * ``frame[&quot;col&quot;]`` — returns the vector as a ``pd.Series``.</span>
+<span class="sd">    * ``frame[[&quot;col1&quot;, &quot;col2&quot;]]`` — returns a ``pd.DataFrame``.</span>
+<span class="sd">    * ``frame[&quot;col&quot;] = values`` — writes the vector back to Daf.</span>
+<span class="sd">    * ``del frame[&quot;col&quot;]`` — deletes the vector from Daf.</span>
+<span class="sd">    * ``frame.columns`` — ``pd.Index`` of column names.</span>
+<span class="sd">    * ``frame.index`` — ``pd.Index`` of axis entry names.</span>
+<span class="sd">    * ``len(frame)`` — number of rows (axis length), matching ``pandas`` semantics.</span>
+<span class="sd">    * ``&quot;col&quot; in frame`` — membership test.</span>
+<span class="sd">    * ``for col in frame:`` — iterates column names.</span>
+<span class="sd">    * ``frame.to_df()`` — returns a real ``pd.DataFrame``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span> <span class="o">=</span> <span class="n">daf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hidden</span> <span class="o">=</span> <span class="n">hidden</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Entry names of the axis as a ``pd.Index``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axis_np_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Names of the vector properties (columns) as a ``pd.Index``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_visible</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="nf">_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">vectors_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_visible</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># Match pandas DataFrame: len(df) is the number of *rows*.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_pd_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">_prepare_vector</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">delete_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the set of visible column names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visible</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all columns as a real ``pandas`` ``DataFrame``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_visible</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">},</span>
+            <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">_DafLayersMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dict-like proxy over ``(obs_axis, var_axis)`` matrices, excluding ``X``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span> <span class="o">=</span> <span class="n">daf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span> <span class="o">=</span> <span class="n">obs_axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span> <span class="o">=</span> <span class="n">var_axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span> <span class="o">=</span> <span class="n">x_name</span>
+
+    <span class="k">def</span> <span class="nf">_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">matrices_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">delete_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;layers: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">_DafUns</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dict-like proxy over Daf scalars; values must be strings or numbers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span> <span class="o">=</span> <span class="n">daf</span>
+
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">scalars_set</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_scalar</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">scalars_set</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">scalars_set</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StorageScalar</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_scalar</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_storage_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;uns values must be strings or numbers, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">; &quot;</span>
+                <span class="s2">&quot;nested dicts and other structured values are not supported&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_scalar</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">delete_scalar</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the value for ``key`` if it exists, otherwise ``default``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="n">default</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set multiple scalars at once.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">!r}</span><span class="s1">: </span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">_DafPairwiseMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dict-like proxy over square ``(axis, axis)`` matrices (``obsp`` / ``varp``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span> <span class="o">=</span> <span class="n">daf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">=</span> <span class="n">axis</span>
+
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">matrices_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">delete_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;pairwise(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="si">!r}</span><span class="s2">): </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">_DafEmbeddingMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dict-like proxy over ``(main_axis, other_axis)`` matrices (``obsm`` / ``varm``).</span>
+
+<span class="sd">    Keys use the naming convention ``&quot;other_axis:matrix_name&quot;``.  The ``other_axis`` must not be either of the two</span>
+<span class="sd">    primary axes (those belong to ``layers``, ``obsp``, or ``varp``).  Setting a matrix whose ``other_axis`` does not</span>
+<span class="sd">    already exist in the Daf data set raises ``KeyError``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="n">main_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exclude_axes</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span> <span class="o">=</span> <span class="n">daf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span> <span class="o">=</span> <span class="n">main_axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_axes</span> <span class="o">=</span> <span class="n">exclude_axes</span>
+
+    <span class="k">def</span> <span class="nf">_other_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">ax</span> <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axes_set</span><span class="p">()</span> <span class="k">if</span> <span class="n">ax</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_axes</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_all_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">other_axis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_other_axes</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">mat_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">matrices_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span><span class="p">,</span> <span class="n">other_axis</span><span class="p">):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">other_axis</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">mat_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_key</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">_AXIS_MATRIX_KEY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;obsm/varm key must be &#39;other_axis:matrix_name&#39;, got </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_keys</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">other_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_axes</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_axis</span><span class="p">(</span><span class="n">other_axis</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span><span class="p">,</span> <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_keys</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_keys</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">other_axis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_axes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span><span class="p">,</span> <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">other_axis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_axes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;axis </span><span class="si">{</span><span class="n">other_axis</span><span class="si">!r}</span><span class="s2"> is a primary axis; &quot;</span> <span class="s2">&quot;use &#39;layers&#39;, &#39;obsp&#39;, or &#39;varp&#39; instead&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">has_axis</span><span class="p">(</span><span class="n">other_axis</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;axis </span><span class="si">{</span><span class="n">other_axis</span><span class="si">!r}</span><span class="s2"> does not exist in the Daf data set; &quot;</span> <span class="s2">&quot;create it before assigning an embedding&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_matrix</span><span class="p">(</span><span class="n">other_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span><span class="p">,</span> <span class="n">mat_name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">other_axis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_axes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">delete_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span><span class="p">,</span> <span class="n">other_axis</span><span class="p">,</span> <span class="n">mat_name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;embeddings(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_axis</span><span class="si">!r}</span><span class="s2">): </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="c1"># pylint: enable=missing-function-docstring</span>
+
+
+<div class="viewcode-block" id="DafAnnData">
+<a class="viewcode-back" href="../../anndata_facade.html#dafpy.anndata_facade.DafAnnData">[docs]</a>
+<span class="k">class</span> <span class="nc">DafAnnData</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Facade that presents a :class:`~dafpy.DafReader` or :class:`~dafpy.DafWriter` as an ``AnnData``-like object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    daf:</span>
+<span class="sd">        The underlying Daf data set (reader or writer).</span>
+<span class="sd">    obs_axis:</span>
+<span class="sd">        Name of the Daf axis that corresponds to AnnData&#39;s observations (rows of ``X``).</span>
+<span class="sd">    var_axis:</span>
+<span class="sd">        Name of the Daf axis that corresponds to AnnData&#39;s variables (columns of ``X``).</span>
+<span class="sd">    x_matrix:</span>
+<span class="sd">        Name of the ``(obs_axis, var_axis)`` matrix that is exposed as ``X``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span> <span class="o">=</span> <span class="n">daf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span> <span class="o">=</span> <span class="n">obs_axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span> <span class="o">=</span> <span class="n">var_axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span> <span class="o">=</span> <span class="n">x_matrix</span>
+
+        <span class="n">_hidden</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="n">_MASK_NAME</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obs_proxy</span> <span class="o">=</span> <span class="n">_DafAxisFrame</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">,</span> <span class="n">_hidden</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var_proxy</span> <span class="o">=</span> <span class="n">_DafAxisFrame</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">,</span> <span class="n">_hidden</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers_proxy</span> <span class="o">=</span> <span class="n">_DafLayersMapping</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uns_proxy</span> <span class="o">=</span> <span class="n">_DafUns</span><span class="p">(</span><span class="n">daf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obsp_proxy</span> <span class="o">=</span> <span class="n">_DafPairwiseMapping</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_varp_proxy</span> <span class="o">=</span> <span class="n">_DafPairwiseMapping</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obsm_proxy</span> <span class="o">=</span> <span class="n">_DafEmbeddingMapping</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_varm_proxy</span> <span class="o">=</span> <span class="n">_DafEmbeddingMapping</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">}))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">daf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReader</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Access the wrapped ``Daf`` repository.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">obs_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Names of the observations as a ``pd.Index``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_proxy</span><span class="o">.</span><span class="n">index</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">var_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Names of the variables as a ``pd.Index``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_proxy</span><span class="o">.</span><span class="n">index</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_obs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of observations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shape of the data matrix ``(n_obs, n_vars)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vars</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Primary data matrix of shape ``(n_obs, n_vars)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">)</span>
+
+    <span class="nd">@X</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">obs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafAxisFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Observation annotations — dict-like proxy over obs-axis vectors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_proxy</span>
+
+    <span class="nd">@obs</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">obs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">_prepare_vector</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]),</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">var</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafAxisFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Variable annotations — dict-like proxy over var-axis vectors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_proxy</span>
+
+    <span class="nd">@var</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">set_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">_prepare_vector</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]),</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafLayersMapping</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Additional ``(obs, var)`` matrices, excluding ``X``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers_proxy</span>
+
+    <span class="nd">@layers</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layers_proxy</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafUns</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Unstructured annotations as a flat dict of Daf scalars.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uns_proxy</span>
+
+    <span class="nd">@uns</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">uns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uns_proxy</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">obsp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafPairwiseMapping</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Square ``(obs × obs)`` pairwise matrices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obsp_proxy</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">varp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafPairwiseMapping</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Square ``(var × var)`` pairwise matrices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_varp_proxy</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">obsm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafEmbeddingMapping</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Observation embeddings, keyed as ``&quot;other_axis:matrix_name&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obsm_proxy</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">varm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DafEmbeddingMapping</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Variable embeddings, keyed as ``&quot;other_axis:matrix_name&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_varm_proxy</span>
+
+<div class="viewcode-block" id="DafAnnData.to_df">
+<a class="viewcode-back" href="../../anndata_facade.html#dafpy.anndata_facade.DafAnnData.to_df">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return ``X`` (or a named ``layer``) as a ``pandas`` ``DataFrame``.</span>
+
+<span class="sd">        The result has ``obs_names`` as the row index and ``var_names`` as columns.  Sparse matrices are densified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span> <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">layer</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">var_names</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnData&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Subset observations and/or variables: ``adata[obs_index, var_index]``.</span>
+
+<span class="sd">        Each index may be a Boolean ``numpy`` array, a list of entry names or integer positions, a single name or</span>
+<span class="sd">        integer, or a ``slice``.</span>
+
+<span class="sd">        Returns a new *read-only* :class:`DafAnnData` backed by a ``DafView``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;DafAnnData slicing requires two indices: adata[obs_index, var_index]&quot;</span><span class="p">)</span>
+        <span class="n">obs_index</span><span class="p">,</span> <span class="n">var_index</span> <span class="o">=</span> <span class="n">index</span>
+
+        <span class="n">obs_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axis_np_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">)</span>
+        <span class="n">var_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">axis_np_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">)</span>
+
+        <span class="n">obs_bool</span> <span class="o">=</span> <span class="n">_to_bool_mask</span><span class="p">(</span><span class="n">obs_index</span><span class="p">,</span> <span class="n">obs_entries</span><span class="p">)</span>
+        <span class="n">var_bool</span> <span class="o">=</span> <span class="n">_to_bool_mask</span><span class="p">(</span><span class="n">var_index</span><span class="p">,</span> <span class="n">var_entries</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">obs_bool</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">var_bool</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No filtering — wrap self without creating any new objects.</span>
+            <span class="k">return</span> <span class="n">DafAnnData</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">read_only</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.sliced&quot;</span><span class="p">),</span>
+                <span class="n">obs_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span>
+                <span class="n">var_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span>
+                <span class="n">x_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">memory_daf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.mask&quot;</span><span class="p">)</span>
+        <span class="n">chained</span> <span class="o">=</span> <span class="n">chain_writer</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">])</span>
+        <span class="n">axes_view</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="s2">&quot;=&quot;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">obs_bool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">chained</span><span class="o">.</span><span class="n">set_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="n">_MASK_NAME</span><span class="p">,</span> <span class="n">obs_bool</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">axes_view</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;@ </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">_MASK_NAME</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+        <span class="k">if</span> <span class="n">var_bool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">chained</span><span class="o">.</span><span class="n">set_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">_MASK_NAME</span><span class="p">,</span> <span class="n">var_bool</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">axes_view</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;@ </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">_MASK_NAME</span><span class="si">}</span><span class="s2">]&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">viewer</span><span class="p">(</span><span class="n">chained</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes_view</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DafAnnData</span><span class="p">(</span>
+            <span class="n">view</span><span class="p">,</span>
+            <span class="n">obs_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span>
+            <span class="n">var_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span>
+            <span class="n">x_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="DafAnnData.query_obs">
+<a class="viewcode-back" href="../../anndata_facade.html#dafpy.anndata_facade.DafAnnData.query_obs">[docs]</a>
+    <span class="k">def</span> <span class="nf">query_obs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_fragment</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnData&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a read-only view with observations filtered by a Daf query.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query_fragment:</span>
+<span class="sd">            Anything that would fit between the ``[`` and ``]`` of a Daf axis query, e.g. ``donor = D1 &amp; age &gt; 30``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DafAnnData</span>
+<span class="sd">            A read-only facade wrapping a ``DafView`` filtered on the obs axis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">viewer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;@ </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">query_fragment</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">DafAnnData</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DafAnnData.query_var">
+<a class="viewcode-back" href="../../anndata_facade.html#dafpy.anndata_facade.DafAnnData.query_var">[docs]</a>
+    <span class="k">def</span> <span class="nf">query_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_fragment</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnData&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a read-only view with variables filtered by a Daf query.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query_fragment:</span>
+<span class="sd">            Anything that would fit between the ``[`` and ``]`` of a Daf axis query, e.g.</span>
+<span class="sd">            ``highly_variable &amp; ! is_lateral``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DafAnnData</span>
+<span class="sd">            A read-only facade wrapping a ``DafView`` filtered on the var axis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">viewer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;@ </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">query_fragment</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">DafAnnData</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">obs_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">var_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">layer_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">uns_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_uns_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">obsm_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obsm_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">varm_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_varm_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">obsp_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obsp_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">varp_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_varp_proxy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;DafAnnData: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_daf</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="si">}</span><span class="s2"> obs (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_axis</span><span class="si">!r}</span><span class="s2">) × </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vars</span><span class="si">}</span><span class="s2"> vars (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_axis</span><span class="si">!r}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;  X: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">obs_cols</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  obs:    </span><span class="si">{</span><span class="n">obs_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">var_cols</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  var:    </span><span class="si">{</span><span class="n">var_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layer_names</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  layers: </span><span class="si">{</span><span class="n">layer_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">uns_keys</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  uns:    </span><span class="si">{</span><span class="n">uns_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obsm_keys</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  obsm:   </span><span class="si">{</span><span class="n">obsm_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">varm_keys</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  varm:   </span><span class="si">{</span><span class="n">varm_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obsp_keys</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  obsp:   </span><span class="si">{</span><span class="n">obsp_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">varp_keys</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  varp:   </span><span class="si">{</span><span class="n">varp_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2024 Weizmann Institute of Science.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
