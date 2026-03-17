@@ -1,6 +1,6 @@
 """
 Concatenate multiple ``Daf`` data sets along some axis. See the Julia
-`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/concat.html>`__ for details.
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html>`__ for details.
 """
 
 from typing import AbstractSet
@@ -24,7 +24,7 @@ __all__ = [
 
 #: The action for merging the values of a property from the concatenated data sets into the result data set. See the
 #: Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/concat.html#DataAxesFormats.Concat.MergeData>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.MergeData>`__
 #: for details.
 MergeAction = Literal["SkipProperty"] | Literal["LastValue"] | Literal["CollectAxis"]
 
@@ -35,7 +35,7 @@ JL_MERGE_ACTION = {
 }
 
 #: A mapping where the key is a ``PropertyKey`` and the value is ``MergeAction``. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/concat.html#DataAxesFormats.Concat.MergeData>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.MergeData>`__
 #: for details.
 #:
 #: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,
@@ -60,7 +60,7 @@ def concatenate(  # pylint: disable=too-many-positional-arguments
     """
     Concatenate data from a ``sources`` sequence of ``Daf`` data sets into a single ``destination`` data set along one
     or more concatenation ``axis``. See the Julia
-    `documentation <DafAxesFormats://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/concatenate.html>`__ for details.
+    `documentation <DafAxesFormats://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concatenate.html>`__ for details.
     """
     if merge is None:
         merge_data = None

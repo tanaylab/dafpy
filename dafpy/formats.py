@@ -17,7 +17,7 @@ __all__ = ["memory_daf", "files_daf", "h5df", "chain_reader", "chain_writer", "c
 def complete_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
     """
     Open a complete chain of ``Daf`` repositories by ttracing back through the ``base_daf_repository``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/complete.html#DataAxesFormats.CompleteDaf.complete_daf>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf>`__
     for details.
     """
     jl_obj = jl.DataAxesFormats.complete_daf(path, mode, name=name)
@@ -29,7 +29,7 @@ def complete_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> D
 def memory_daf(jl_obj: Optional[jl.MemoryDaf] = None, *, name: str = "memory") -> DafWriter:
     """
     Simple in-memory storage. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/memory_format.html>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/memory_format.html>`__ for details.
     """
     if jl_obj is None:
         jl_obj = jl.DataAxesFormats.MemoryDaf(name=name)
@@ -39,7 +39,7 @@ def memory_daf(jl_obj: Optional[jl.MemoryDaf] = None, *, name: str = "memory") -
 def files_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in disk files. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/files_format.html>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/files_format.html>`__ for details.
     """
     jl_obj = jl.DataAxesFormats.FilesDaf(path, mode, name=name)
     if mode == "r":
@@ -52,7 +52,7 @@ def h5df(
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in an HDF5 disk file. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/h5df_format.html>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/h5df_format.html>`__ for details.
 
     Note that if you want to open the ``HDF5`` file yourself (e.g., to access a specific group in it as a ``Daf`` data
     set), you will need to use the Julia API to do so, in order to pass the result here. That is, the current Python
@@ -68,7 +68,7 @@ def h5df(
 def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafReadOnly:
     """
     Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#DataAxesFormats.Chains.chain_reader>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/chains.html#DataAxesFormats.Chains.chain_reader>`__ for
     details.
     """
     return DafReadOnly(jl.chain_reader(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))
@@ -77,7 +77,7 @@ def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> D
 def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
     """
     Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/chains.html#DataAxesFormats.Chains.chain_writer>`__ for
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/chains.html#DataAxesFormats.Chains.chain_writer>`__ for
     details.
     """
     return DafWriter(jl.chain_writer(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))

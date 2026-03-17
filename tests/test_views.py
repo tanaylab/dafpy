@@ -51,8 +51,8 @@ def test_views() -> None:  # pylint: disable=too-many-statements
     view = dp.viewer(
         daf,
         name="view!",
-        axes={"obs": "/ cell", "var": "/ gene"},
-        data={dp.ALL_SCALARS: None, dp.ALL_VECTORS: "=", ("obs", "var", "X"): ": UMIs"},
+        axes={"obs": "@ cell", "var": "@ gene"},
+        data={dp.ALL_SCALARS: None, dp.ALL_VECTORS: "=", ("obs", "var", "X"): ":: UMIs"},
     )
 
     assert (

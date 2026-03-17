@@ -83,15 +83,15 @@ def test_scalars(
         daf.description()
         == dedent(
             f"""
-                name: test!
-                type: {format_name}
+            name: test!
+            type: {format_name}
             """
         )[1:]
         + extra
         + dedent(
             f"""
-                scalars:
-                  foo: {scalar_value}
+            scalars:
+              foo: {scalar_value}
             """
         )[1:]
     )
@@ -135,15 +135,15 @@ def test_axes(
         daf.description()
         == dedent(
             f"""
-                name: test!
-                type: {format_name}
+            name: test!
+            type: {format_name}
             """
         )[1:]
         + extra
         + dedent(
             f"""
-                axes:
-                  {axis_name}: {len(axis_entries)} entries
+            axes:
+              {axis_name}: {len(axis_entries)} entries
             """
         )[1:]
     )
@@ -164,9 +164,9 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], Tuple[dp.DafWrite
     with assert_raises(
         dedent(
             """
-                missing vector: foo
-                for the axis: cell
-                in the daf data: test!
+            missing vector: foo
+            for the axis: cell
+            in the daf data: test!
             """[
                 1:
             ]
@@ -222,18 +222,18 @@ def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
     assert description.startswith(
         dedent(
             f"""
-                name: test!
-                type: {format_name}
+            name: test!
+            type: {format_name}
             """
         )[1:]
         + extra
         + dedent(
             f"""
-                axes:
-                  cell: 2 entries
-                vectors:
-                  cell:
-                    foo: 2 x {julia_type}
+            axes:
+              cell: 2 entries
+            vectors:
+              cell:
+                foo: 2 x {julia_type}
             """
         )[1:-1]
     )
@@ -282,10 +282,10 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], Tuple[dp.DafWrit
     with assert_raises(
         dedent(
             """
-                missing matrix: UMIs
-                for the rows axis: cell
-                and the columns axis: gene
-                in the daf data: test!
+            missing matrix: UMIs
+            for the rows axis: cell
+            and the columns axis: gene
+            in the daf data: test!
             """[
                 1:
             ]
@@ -323,7 +323,7 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], Tuple[dp.DafWrit
     assert isinstance(daf.get_np_matrix("cell", "gene", "UMIs"), sp.csc_matrix)
     assert np.all(daf.get_pd_matrix("cell", "gene", "UMIs").values == fill_matrix)
 
-    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (Transpose, Sparse Int32 50%)"):
+    with assert_raises("type not in column-major layout: 2 x 3 x Float64 in Rows (Transpose, Sparse 3 (50%) [Int32])"):
         daf.set_matrix("cell", "gene", "UMIs", sp.csr_matrix(fill_matrix), overwrite=True)
 
 
@@ -363,19 +363,19 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
     assert description.startswith(
         dedent(
             f"""
-                name: test!
-                type: {format_name}
+            name: test!
+            type: {format_name}
             """
         )[1:]
         + extra
         + dedent(
             """
-                axes:
-                  cell: 2 entries
-                  gene: 3 entries
-                matrices:
-                  cell,gene:
-                    UMIs: 2 x 3 x Int8 in Columns
+            axes:
+              cell: 2 entries
+              gene: 3 entries
+            matrices:
+              cell,gene:
+                UMIs: 2 x 3 x Int8 in Columns
             """
         )[1:-1]
     )
@@ -392,19 +392,19 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
     assert description.startswith(
         dedent(
             f"""
-                name: test!
-                type: {format_name}
+            name: test!
+            type: {format_name}
             """
         )[1:]
         + extra
         + dedent(
             """
-                axes:
-                  cell: 2 entries
-                  gene: 3 entries
-                matrices:
-                  cell,gene:
-                    UMIs: 2 x 3 x Int8 in Columns
+            axes:
+              cell: 2 entries
+              gene: 3 entries
+            matrices:
+              cell,gene:
+                UMIs: 2 x 3 x Int8 in Columns
             """
         )[1:-1]
     )

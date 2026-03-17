@@ -484,7 +484,7 @@ memory.
 
 <p>Otherwise, the API works “just the same” :-) The documentation therefore mostly just links to the relevant entry in the
 Julia 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/index.html">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/index.html">documentation
 </a>.
 </p>
 
@@ -768,6 +768,15 @@ Julia
 </li>
 
 <li class="toctree-l3">
+<a class="reference internal" href="data.html#dafpy.data.DafReader.query_requires_relayout">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.query_requires_relayout()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="data.html#dafpy.data.DafReader.get_np_query">
 <code class="docutils literal notranslate">
 <span class="pre">DafReader.get_np_query()
@@ -798,6 +807,15 @@ Julia
 <a class="reference internal" href="data.html#dafpy.data.DafReader.read_only">
 <code class="docutils literal notranslate">
 <span class="pre">DafReader.read_only()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="data.html#dafpy.data.DafReader.complete_path">
+<code class="docutils literal notranslate">
+<span class="pre">DafReader.complete_path()
 </span>
 </code>
 </a>
@@ -1023,18 +1041,18 @@ Julia
 <ul>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.And">
+<a class="reference internal" href="queries.html#dafpy.queries.AndMask">
 <code class="docutils literal notranslate">
-<span class="pre">And
+<span class="pre">AndMask
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.AndNot">
+<a class="reference internal" href="queries.html#dafpy.queries.AndNegatedMask">
 <code class="docutils literal notranslate">
-<span class="pre">AndNot
+<span class="pre">AndNegatedMask
 </span>
 </code>
 </a>
@@ -1059,6 +1077,24 @@ Julia
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.BeginMask">
+<code class="docutils literal notranslate">
+<span class="pre">BeginMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.BeginNegatedMask">
+<code class="docutils literal notranslate">
+<span class="pre">BeginNegatedMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="queries.html#dafpy.queries.CountBy">
 <code class="docutils literal notranslate">
 <span class="pre">CountBy
@@ -1068,9 +1104,9 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.Fetch">
+<a class="reference internal" href="queries.html#dafpy.queries.EndMask">
 <code class="docutils literal notranslate">
-<span class="pre">Fetch
+<span class="pre">EndMask
 </span>
 </code>
 </a>
@@ -1080,6 +1116,24 @@ Julia
 <a class="reference internal" href="queries.html#dafpy.queries.GroupBy">
 <code class="docutils literal notranslate">
 <span class="pre">GroupBy
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.GroupColumnsBy">
+<code class="docutils literal notranslate">
+<span class="pre">GroupColumnsBy
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.GroupRowsBy">
+<code class="docutils literal notranslate">
+<span class="pre">GroupRowsBy
 </span>
 </code>
 </a>
@@ -1176,18 +1230,27 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.Lookup">
+<a class="reference internal" href="queries.html#dafpy.queries.LookupMatrix">
 <code class="docutils literal notranslate">
-<span class="pre">Lookup
+<span class="pre">LookupMatrix
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.MaskSlice">
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar">
 <code class="docutils literal notranslate">
-<span class="pre">MaskSlice
+<span class="pre">LookupScalar
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.LookupVector">
+<code class="docutils literal notranslate">
+<span class="pre">LookupVector
 </span>
 </code>
 </a>
@@ -1203,18 +1266,18 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.Or">
+<a class="reference internal" href="queries.html#dafpy.queries.OrMask">
 <code class="docutils literal notranslate">
-<span class="pre">Or
+<span class="pre">OrMask
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.OrNot">
+<a class="reference internal" href="queries.html#dafpy.queries.OrNegatedMask">
 <code class="docutils literal notranslate">
-<span class="pre">OrNot
+<span class="pre">OrNegatedMask
 </span>
 </code>
 </a>
@@ -1230,6 +1293,69 @@ Julia
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.QuerySequence">
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.ReduceToColumn">
+<code class="docutils literal notranslate">
+<span class="pre">ReduceToColumn
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.ReduceToRow">
+<code class="docutils literal notranslate">
+<span class="pre">ReduceToRow
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.SquareColumnIs">
+<code class="docutils literal notranslate">
+<span class="pre">SquareColumnIs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.SquareRowIs">
+<code class="docutils literal notranslate">
+<span class="pre">SquareRowIs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.XorMask">
+<code class="docutils literal notranslate">
+<span class="pre">XorMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="queries.html#dafpy.queries.XorNegatedMask">
+<code class="docutils literal notranslate">
+<span class="pre">XorNegatedMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="queries.html#dafpy.queries.parse_query">
 <code class="docutils literal notranslate">
 <span class="pre">parse_query()
@@ -1239,36 +1365,18 @@ Julia
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.SquareMaskColumn">
+<a class="reference internal" href="queries.html#dafpy.queries.is_axis_query">
 <code class="docutils literal notranslate">
-<span class="pre">SquareMaskColumn
+<span class="pre">is_axis_query()
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.SquareMaskRow">
+<a class="reference internal" href="queries.html#dafpy.queries.query_axis_name">
 <code class="docutils literal notranslate">
-<span class="pre">SquareMaskRow
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.Xor">
-<code class="docutils literal notranslate">
-<span class="pre">Xor
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l2">
-<a class="reference internal" href="queries.html#dafpy.queries.XorNot">
-<code class="docutils literal notranslate">
-<span class="pre">XorNot
+<span class="pre">query_axis_name()
 </span>
 </code>
 </a>

@@ -21,6 +21,7 @@ def test_example_cells() -> None:  # pylint: disable=too-many-statements
             type: MemoryDaf
             scalars:
               organism: "human"
+              reference: "test"
             axes:
               cell: 856 entries
               donor: 95 entries
@@ -34,7 +35,7 @@ def test_example_cells() -> None:  # pylint: disable=too-many-statements
                 age: 95 x UInt32 (Dense)
                 sex: 95 x Str (Dense)
               gene:
-                is_lateral: 683 x Bool (Dense; 64% true)
+                is_lateral: 683 x Bool (Dense; 438 (64%) true)
             matrices:
               cell,gene:
                 UMIs: 856 x 683 x UInt8 in Columns (Dense)
@@ -63,7 +64,7 @@ def test_example_metacells() -> None:  # pylint: disable=too-many-statements
               cell:
                 metacell: 856 x Str (Dense)
               gene:
-                is_marker: 683 x Bool (Dense; 95% true)
+                is_marker: 683 x Bool (Dense; 650 (95%) true)
               metacell:
                 type: 7 x Str (Dense)
               type:
@@ -92,6 +93,7 @@ def test_example_chain() -> None:  # pylint: disable=too-many-statements
             - MemoryDaf metacells!
             scalars:
               organism: "human"
+              reference: "test"
             axes:
               cell: 856 entries
               donor: 95 entries
@@ -108,8 +110,8 @@ def test_example_chain() -> None:  # pylint: disable=too-many-statements
                 age: 95 x UInt32 (Dense)
                 sex: 95 x Str (Dense)
               gene:
-                is_lateral: 683 x Bool (Dense; 64% true)
-                is_marker: 683 x Bool (Dense; 95% true)
+                is_lateral: 683 x Bool (Dense; 438 (64%) true)
+                is_marker: 683 x Bool (Dense; 650 (95%) true)
               metacell:
                 type: 7 x Str (Dense)
               type:

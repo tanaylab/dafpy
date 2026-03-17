@@ -79,7 +79,7 @@
   <h1>Source code for dafpy.copies</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Copy data between ``Daf`` data sets. See the Julia</span>
-<span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html&gt;`__ for details.</span>
+<span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html&gt;`__ for details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span>
@@ -119,7 +119,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a scalar with some ``name`` from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the</span>
 <span class="sd">    Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.copy_scalar!&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.copy_scalar!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_scalar_b</span><span class="p">(</span>
@@ -147,7 +147,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy an axis from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.copy_axis!&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.copy_axis!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_axis_b</span><span class="p">(</span>
@@ -178,7 +178,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a vector from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.copy_vector!&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.copy_vector!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_vector_b</span><span class="p">(</span>
@@ -214,7 +214,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a matrix from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.copy_matrix!&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.copy_matrix!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_matrix_b</span><span class="p">(</span>
@@ -253,7 +253,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a tensor from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.copy_tensor!&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.copy_tensor!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_tensor_b</span><span class="p">(</span>
@@ -274,7 +274,7 @@
 
 
 <span class="c1">#: Specify the data to use for missing properties in a ``Daf`` data set. See the Julia</span>
-<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.EmptyData&gt;`__</span>
+<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.EmptyData&gt;`__</span>
 <span class="c1">#: for details.</span>
 <span class="n">EmptyData</span> <span class="o">=</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">DataKey</span><span class="p">,</span> <span class="n">StorageScalar</span><span class="p">]</span>
 
@@ -291,7 +291,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy all the content of a ``source`` ``DafReader`` into a ``destination`` ``DafWriter``. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/copies.html#DataAxesFormats.Copies.copy_all!&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/copies.html#DataAxesFormats.Copies.copy_all!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_all_b</span><span class="p">(</span>

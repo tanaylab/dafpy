@@ -141,18 +141,18 @@
 <ul>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.And">
+<a class="reference internal" href="#dafpy.queries.AndMask">
 <code class="docutils literal notranslate">
-<span class="pre">And
+<span class="pre">AndMask
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.AndNot">
+<a class="reference internal" href="#dafpy.queries.AndNegatedMask">
 <code class="docutils literal notranslate">
-<span class="pre">AndNot
+<span class="pre">AndNegatedMask
 </span>
 </code>
 </a>
@@ -177,6 +177,24 @@
 </li>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.BeginMask">
+<code class="docutils literal notranslate">
+<span class="pre">BeginMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.BeginNegatedMask">
+<code class="docutils literal notranslate">
+<span class="pre">BeginNegatedMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.queries.CountBy">
 <code class="docutils literal notranslate">
 <span class="pre">CountBy
@@ -186,9 +204,9 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.Fetch">
+<a class="reference internal" href="#dafpy.queries.EndMask">
 <code class="docutils literal notranslate">
-<span class="pre">Fetch
+<span class="pre">EndMask
 </span>
 </code>
 </a>
@@ -198,6 +216,24 @@
 <a class="reference internal" href="#dafpy.queries.GroupBy">
 <code class="docutils literal notranslate">
 <span class="pre">GroupBy
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.GroupColumnsBy">
+<code class="docutils literal notranslate">
+<span class="pre">GroupColumnsBy
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.GroupRowsBy">
+<code class="docutils literal notranslate">
+<span class="pre">GroupRowsBy
 </span>
 </code>
 </a>
@@ -294,18 +330,27 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.Lookup">
+<a class="reference internal" href="#dafpy.queries.LookupMatrix">
 <code class="docutils literal notranslate">
-<span class="pre">Lookup
+<span class="pre">LookupMatrix
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.MaskSlice">
+<a class="reference internal" href="#dafpy.queries.LookupScalar">
 <code class="docutils literal notranslate">
-<span class="pre">MaskSlice
+<span class="pre">LookupScalar
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.LookupVector">
+<code class="docutils literal notranslate">
+<span class="pre">LookupVector
 </span>
 </code>
 </a>
@@ -321,18 +366,18 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.Or">
+<a class="reference internal" href="#dafpy.queries.OrMask">
 <code class="docutils literal notranslate">
-<span class="pre">Or
+<span class="pre">OrMask
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.OrNot">
+<a class="reference internal" href="#dafpy.queries.OrNegatedMask">
 <code class="docutils literal notranslate">
-<span class="pre">OrNot
+<span class="pre">OrNegatedMask
 </span>
 </code>
 </a>
@@ -348,6 +393,69 @@
 </li>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.QuerySequence">
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.ReduceToColumn">
+<code class="docutils literal notranslate">
+<span class="pre">ReduceToColumn
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.ReduceToRow">
+<code class="docutils literal notranslate">
+<span class="pre">ReduceToRow
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.SquareColumnIs">
+<code class="docutils literal notranslate">
+<span class="pre">SquareColumnIs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.SquareRowIs">
+<code class="docutils literal notranslate">
+<span class="pre">SquareRowIs
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.XorMask">
+<code class="docutils literal notranslate">
+<span class="pre">XorMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.queries.XorNegatedMask">
+<code class="docutils literal notranslate">
+<span class="pre">XorNegatedMask
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.queries.parse_query">
 <code class="docutils literal notranslate">
 <span class="pre">parse_query()
@@ -357,36 +465,18 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.SquareMaskColumn">
+<a class="reference internal" href="#dafpy.queries.is_axis_query">
 <code class="docutils literal notranslate">
-<span class="pre">SquareMaskColumn
+<span class="pre">is_axis_query()
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.SquareMaskRow">
+<a class="reference internal" href="#dafpy.queries.query_axis_name">
 <code class="docutils literal notranslate">
-<span class="pre">SquareMaskRow
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.Xor">
-<code class="docutils literal notranslate">
-<span class="pre">Xor
-</span>
-</code>
-</a>
-</li>
-
-<li class="toctree-l3">
-<a class="reference internal" href="#dafpy.queries.XorNot">
-<code class="docutils literal notranslate">
-<span class="pre">XorNot
+<span class="pre">query_axis_name()
 </span>
 </code>
 </a>
@@ -530,13 +620,13 @@
 </span>
 </code>. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html">documentation
 </a> for details.
 </p>
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.And">
+<dt class="sig sig-object py" id="dafpy.queries.AndMask">
 
 <em class="property">
 <span class="pre">class
@@ -549,7 +639,7 @@
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">And
+<span class="pre">AndMask
 </span>
 </span>
 <span class="sig-paren">(
@@ -572,25 +662,22 @@
 </em>
 <span class="sig-paren">)
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#And">
+<a class="reference internal" href="_modules/dafpy/queries.html#AndMask">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.And" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.AndMask" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>A query operation for restricting the set of entries of an 
-<code class="docutils literal notranslate">
-<span class="pre">Axis
-</span>
-</code>. See the Julia
+<p>Combine a mask with another, using the bitwise AND operator. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.And">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AndMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -599,7 +686,7 @@
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.AndNot">
+<dt class="sig sig-object py" id="dafpy.queries.AndNegatedMask">
 
 <em class="property">
 <span class="pre">class
@@ -612,7 +699,7 @@
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">AndNot
+<span class="pre">AndNegatedMask
 </span>
 </span>
 <span class="sig-paren">(
@@ -635,26 +722,22 @@
 </em>
 <span class="sig-paren">)
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#AndNot">
+<a class="reference internal" href="_modules/dafpy/queries.html#AndNegatedMask">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.AndNot" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.AndNegatedMask" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Same as 
-<code class="docutils literal notranslate">
-<span class="pre">And
-</span>
-</code> but use the inverse of the mask. See the Julia
+<p>Combine a mask with another, using the bitwise AND-NOT operator. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.AndNot">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AndMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -732,24 +815,12 @@ details.
 </dt>
 
 <dd>
-<p>There are three cases where we may want to take a vector property and consider each value to be the name of an entry
-of some axis: 
-<code class="docutils literal notranslate">
-<span class="pre">Fetch
-</span>
-</code>, 
-<code class="docutils literal notranslate">
-<span class="pre">CountBy
-</span>
-</code> and 
-<code class="docutils literal notranslate">
-<span class="pre">GroupBy
-</span>
-</code>. See the Julia
+<p>A query operator for specifying that the values of a property we looked up are the names of entries in some axis.
+See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.AsAxis">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AsAxis">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -790,6 +861,28 @@ details.
 <span class="n">
 <span class="pre">str
 </span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
 </span>
 </em>
 <span class="sig-paren">)
@@ -805,10 +898,131 @@ details.
 </dt>
 
 <dd>
-<p>A query operation for specifying a result axis. See the Julia
+<p>A query operator for specifying an axis. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Axis">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Axis">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.BeginMask">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">BeginMask
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#BeginMask">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.BeginMask" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Start specifying a mask to apply to an axis of the result. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.BeginMask">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.BeginNegatedMask">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">BeginNegatedMask
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#BeginNegatedMask">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.BeginNegatedMask" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Start specifying a mask to apply to an axis of the result, negating the first mask. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.BeginNegatedMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -864,12 +1078,12 @@ details.
 </dt>
 
 <dd>
-<p>A query operation that generates a matrix of counts of combinations of pairs of values for the same entries of an
-axis. See the Julia
+<p>Specify a second property for each vector entry, to compute a matrix of counts of the entries with each combination
+of values. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.CountBy">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.CountBy">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -878,7 +1092,7 @@ details.
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.Fetch">
+<dt class="sig sig-object py" id="dafpy.queries.EndMask">
 
 <em class="property">
 <span class="pre">class
@@ -891,46 +1105,34 @@ details.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">Fetch
+<span class="pre">EndMask
 </span>
 </span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">property
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span>
-<a class="reference internal" href="_modules/dafpy/queries.html#Fetch">
+<a class="reference internal" href="_modules/dafpy/queries.html#EndMask">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.Fetch" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.EndMask" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>A query operation for fetching the value of a property from another axis, based on a vector property whose values
-are entry names of the axis. See the
-Julia 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Fetch">documentation
-</a> for
-details.
+<p>Finish specifying a mask to apply to an axis of the result, following 
+<code class="docutils literal notranslate">
+<span class="pre">BeginMask
+</span>
+</code> or 
+<code class="docutils literal notranslate">
+<span class="pre">BeginNegatedMask
+</span>
+</code>. See the
+Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.EndMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -986,16 +1188,146 @@ details.
 </dt>
 
 <dd>
-<p>A query operation that uses a (following) 
+<p>Specify value per vector entry to group vector values by, must be followed by a 
 <code class="docutils literal notranslate">
 <span class="pre">ReductionOperation
 </span>
-</code> to aggregate the values of each group of
-values. See the Julia
+</code> to reduce
+each group of values to a single value. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.GroupBy">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.GroupBy">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.GroupColumnsBy">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">GroupColumnsBy
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#GroupColumnsBy">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.GroupColumnsBy" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Specify value per matrix column to group the columns by, must be followed by a 
+<code class="docutils literal notranslate">
+<span class="pre">ReduceToColumn
+</span>
+</code> to reduce each
+group of columns to a single column. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.GroupColumnsBy">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.GroupRowsBy">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">GroupRowsBy
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#GroupRowsBy">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.GroupRowsBy" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Specify value per matrix row to group the rows by, must be followed by a 
+<code class="docutils literal notranslate">
+<span class="pre">ReduceToRow
+</span>
+</code> to reduce each group of
+rows to a single row. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.GroupRowsBy">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -1024,7 +1356,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">missing_value
+<span class="pre">default_value
 </span>
 </span>
 <span class="p">
@@ -1167,50 +1499,6 @@ details.
 <span class="pre">str
 </span>
 </span>
-</em>, 
-<em class="sig-param">
-<span class="o">
-<span class="pre">*
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">type
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
 </em>
 <span class="sig-paren">)
 </span>
@@ -1225,9 +1513,9 @@ details.
 </dt>
 
 <dd>
-<p>A query operation providing a value to use if the data is missing some property. See the
-Julia 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IfMissing">documentation
+<p>A query operator for specifying a value to use for a property that is missing from the data. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IfMissing">documentation
 </a>
 for details.
 </p>
@@ -1258,7 +1546,7 @@ for details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">final_value
 </span>
 </span>
 <span class="p">
@@ -1437,12 +1725,12 @@ for details.
 </dt>
 
 <dd>
-<p>A query operation providing a value to use for “false-ish” values in a vector (empty strings, zero numeric values,
-or false Boolean values). See the
-Julia 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IfNot">documentation
-</a> for
-details.
+<p>Specify a final value to use when, having looked up some base property values, we use them as axis entry names to
+lookup another property of that axis. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IfNot">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -1471,7 +1759,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -1628,24 +1916,16 @@ details.
 </dt>
 
 <dd>
-<p>Equality is used for two purposes: As a comparison operator, similar to 
+<p>Convert a vector of values to a vector of Booleans, is true for entries that are equal to the 
 <code class="docutils literal notranslate">
-<span class="pre">IsLess
+<span class="pre">comparison_value
 </span>
-</code> except that uses 
-<code class="docutils literal notranslate">
-<span class="pre">=
-</span>
-</code> instead of
+</code>.
+See the Julia
 
-<code class="docutils literal notranslate">
-<span class="pre">&lt;
-</span>
-</code> for the comparison; and To select a single entry from a vector. See the Julia
-
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsEqual">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsEqual">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -1674,7 +1954,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -1831,23 +2111,16 @@ details.
 </dt>
 
 <dd>
-<p>Similar to 
-<code class="docutils literal notranslate">
-<span class="pre">IsLess
-</span>
-</code> except that uses 
-<code class="docutils literal notranslate">
-<span class="pre">&gt;
-</span>
-</code> instead of 
-<code class="docutils literal notranslate">
-<span class="pre">&lt;
-</span>
-</code> for the comparison. See the Julia
+<p>Convert a vector of values to a vector of Booleans, is true for entries that are greater than the
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsGreater">documentation
-</a> for
-details.
+<code class="docutils literal notranslate">
+<span class="pre">comparison_value
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsGreater">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -1876,7 +2149,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -2033,23 +2306,16 @@ details.
 </dt>
 
 <dd>
-<p>Similar to 
-<code class="docutils literal notranslate">
-<span class="pre">IsLess
-</span>
-</code> except that uses 
-<code class="docutils literal notranslate">
-<span class="pre">&gt;=
-</span>
-</code> instead of 
-<code class="docutils literal notranslate">
-<span class="pre">&lt;
-</span>
-</code> for the comparison. See the Julia
+<p>Convert a vector of values to a vector of Booleans, is true for entries that are greater than or equal to the
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsGreaterEqual">documentation
-</a> for
-details.
+<code class="docutils literal notranslate">
+<span class="pre">comparison_value
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsGreaterEqual">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -2078,7 +2344,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -2235,10 +2501,16 @@ details.
 </dt>
 
 <dd>
-<p>A query operation for converting a vector value to a Boolean mask by comparing it some value. See the Julia
+<p>Convert a vector of values to a vector of Booleans, is true for entries that are less than the 
+<code class="docutils literal notranslate">
+<span class="pre">comparison_value
+</span>
+</code>.
+See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsLess">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsLess">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -2267,7 +2539,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -2424,23 +2696,16 @@ details.
 </dt>
 
 <dd>
-<p>Similar to 
-<code class="docutils literal notranslate">
-<span class="pre">IsLess
-</span>
-</code> except that uses 
-<code class="docutils literal notranslate">
-<span class="pre">&lt;=
-</span>
-</code> instead of 
-<code class="docutils literal notranslate">
-<span class="pre">&lt;
-</span>
-</code> for the comparison. See the Julia
+<p>Convert a vector of values to a vector of Booleans, is true for entries that are less than or equal to the
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsLessEqual">documentation
-</a> for
-details.
+<code class="docutils literal notranslate">
+<span class="pre">comparison_value
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsLessEqual">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -2469,7 +2734,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -2626,16 +2891,16 @@ details.
 </dt>
 
 <dd>
-<p>Similar to 
+<p>Convert a vector of values to a vector of Booleans, is true for (string!) entries that are a (complete!) match to
+the 
 <code class="docutils literal notranslate">
-<span class="pre">IsLess
+<span class="pre">comparison_value
 </span>
-</code> except that the compared values must be strings, and the mask
-is of the values that match the given regular expression. See the Julia
+</code> regular expression. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsMatch">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsMatch">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -2664,7 +2929,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -2821,23 +3086,16 @@ details.
 </dt>
 
 <dd>
-<p>Similar to 
-<code class="docutils literal notranslate">
-<span class="pre">IsLess
-</span>
-</code> except that uses 
-<code class="docutils literal notranslate">
-<span class="pre">!=
-</span>
-</code> instead of 
-<code class="docutils literal notranslate">
-<span class="pre">&lt;
-</span>
-</code> for the comparison. See the Julia
+<p>Convert a vector of values to a vector of Booleans, is true for entries that are not equal to the
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsNotEqual">documentation
-</a> for
-details.
+<code class="docutils literal notranslate">
+<span class="pre">comparison_value
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsNotEqual">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -2866,7 +3124,7 @@ details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">comparison_value
 </span>
 </span>
 <span class="p">
@@ -3023,15 +3281,16 @@ details.
 </dt>
 
 <dd>
-<p>Similar to 
+<p>Convert a vector of values to a vector of Booleans, is true for (string!) entries that are not a (complete!) match
+to the 
 <code class="docutils literal notranslate">
-<span class="pre">IsMatch
+<span class="pre">comparison_value
 </span>
-</code> except that looks for entries that do not match the pattern. See the Julia
+</code> regular expression. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.IsNotMatch">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.IsNotMatch">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -3040,7 +3299,7 @@ details.
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.Lookup">
+<dt class="sig sig-object py" id="dafpy.queries.LookupMatrix">
 
 <em class="property">
 <span class="pre">class
@@ -3053,7 +3312,7 @@ details.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">Lookup
+<span class="pre">LookupMatrix
 </span>
 </span>
 <span class="sig-paren">(
@@ -3076,21 +3335,20 @@ details.
 </em>
 <span class="sig-paren">)
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#Lookup">
+<a class="reference internal" href="_modules/dafpy/queries.html#LookupMatrix">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.Lookup" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.LookupMatrix" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>A query operation for looking up the value of a property with some name.
-See the Julia
+<p>Lookup the value of a matrix property. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Lookup">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.LookupMatrix">documentation
 </a>
 for details.
 </p>
@@ -3101,7 +3359,7 @@ for details.
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.MaskSlice">
+<dt class="sig sig-object py" id="dafpy.queries.LookupScalar">
 
 <em class="property">
 <span class="pre">class
@@ -3114,14 +3372,14 @@ for details.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">MaskSlice
+<span class="pre">LookupScalar
 </span>
 </span>
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">axis
+<span class="pre">property
 </span>
 </span>
 <span class="p">
@@ -3137,23 +3395,82 @@ for details.
 </em>
 <span class="sig-paren">)
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#MaskSlice">
+<a class="reference internal" href="_modules/dafpy/queries.html#LookupScalar">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.MaskSlice" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.LookupScalar" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>A query operation for using a slice of a matrix as a mask, when the other axis of the matrix is different from the
-mask axis. See the Julia
+<p>Lookup the value of a scalar property. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.MaskSlice">documentation
-</a> for
-details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.LookupScalar">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.LookupVector">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">LookupVector
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#LookupVector">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.LookupVector" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Lookup the value of a vector property. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.LookupVector">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -3178,48 +3495,6 @@ details.
 <span class="pre">Names
 </span>
 </span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">kind
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span>
 <a class="reference internal" href="_modules/dafpy/queries.html#Names">
 <span class="viewcode-link">
 <span class="pre">[source]
@@ -3233,7 +3508,7 @@ details.
 <dd>
 <p>A query operation for looking up a set of names. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Names">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Names">documentation
 </a>
 for details.
 </p>
@@ -3244,7 +3519,7 @@ for details.
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.Or">
+<dt class="sig sig-object py" id="dafpy.queries.OrMask">
 
 <em class="property">
 <span class="pre">class
@@ -3257,7 +3532,7 @@ for details.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">Or
+<span class="pre">OrMask
 </span>
 </span>
 <span class="sig-paren">(
@@ -3280,25 +3555,22 @@ for details.
 </em>
 <span class="sig-paren">)
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#Or">
+<a class="reference internal" href="_modules/dafpy/queries.html#OrMask">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.Or" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.OrMask" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>A query operation for expanding the set of entries of an 
-<code class="docutils literal notranslate">
-<span class="pre">Axis
-</span>
-</code>. See the Julia
+<p>Combine a mask with another, using the bitwise OR operator. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Or">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.OrMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -3307,7 +3579,7 @@ for details.
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.queries.OrNot">
+<dt class="sig sig-object py" id="dafpy.queries.OrNegatedMask">
 
 <em class="property">
 <span class="pre">class
@@ -3320,7 +3592,7 @@ for details.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">OrNot
+<span class="pre">OrNegatedMask
 </span>
 </span>
 <span class="sig-paren">(
@@ -3343,25 +3615,22 @@ for details.
 </em>
 <span class="sig-paren">)
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#OrNot">
+<a class="reference internal" href="_modules/dafpy/queries.html#OrNegatedMask">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.OrNot" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.OrNegatedMask" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Same as 
-<code class="docutils literal notranslate">
-<span class="pre">Or
-</span>
-</code> but use the inverse of the mask. See the Julia
+<p>Combine a mask with another, using the bitwise OR-NOT operator. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.OrNot">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.OrNegatedMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -3391,7 +3660,7 @@ for details.
 </span>
 </code>. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Query">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Query">documentation
 </a> for details.
 </p>
 
@@ -3406,9 +3675,9 @@ for details.
 </span>
 </code>
 </a>, 
-<a class="reference internal" href="#dafpy.queries.Lookup" title="dafpy.queries.Lookup">
+<a class="reference internal" href="#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
 <code class="xref py py-class docutils literal notranslate">
-<span class="pre">Lookup
+<span class="pre">LookupScalar
 </span>
 </code>
 </a>, 
@@ -3424,6 +3693,448 @@ for details.
 </span>
 </code>
 </a>]
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.QuerySequence">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">QuerySequence
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/operations.html#QuerySequence">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.QuerySequence" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A sequence of 
+<code class="docutils literal notranslate">
+<span class="pre">QueryOperation
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.QuerySequence">documentation
+</a> for
+details.
+</p>
+
+<p>Query operations can be chained into a 
+<code class="docutils literal notranslate">
+<span class="pre">QuerySequence
+</span>
+</code> using the 
+<code class="docutils literal notranslate">
+<span class="pre">|
+</span>
+</code> operator in Python (instead of the 
+<code class="docutils literal notranslate">
+<span class="pre">|&gt;
+</span>
+</code>
+operator in Julia).
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.ReduceToColumn">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ReduceToColumn
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#ReduceToColumn">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.ReduceToColumn" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Specify a 
+<code class="docutils literal notranslate">
+<span class="pre">ReductionOperation
+</span>
+</code> to convert each row of a matrix to a single value, reducing the matrix to a single
+column. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToColumn">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.ReduceToRow">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">ReduceToRow
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#ReduceToRow">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.ReduceToRow" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Specify a 
+<code class="docutils literal notranslate">
+<span class="pre">ReductionOperation
+</span>
+</code> to convert each column of a matrix to a single value, reducing the matrix to a
+single row. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.ReduceToRow">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.SquareColumnIs">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">SquareColumnIs
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#SquareColumnIs">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.SquareColumnIs" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Whenever extracting a vector from a square matrix, specify the axis entry that identifies the column to extract. See
+the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.SquareColumnIs">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.SquareRowIs">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">SquareRowIs
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#SquareRowIs">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.SquareRowIs" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Whenever extracting a vector from a square matrix, specify the axis entry that identifies the row to extract. See
+the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.SquareRowIs">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.XorMask">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">XorMask
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#XorMask">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.XorMask" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Combine a mask with another, using the bitwise XOR operator. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.XorMask">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.queries.XorNegatedMask">
+
+<em class="property">
+<span class="pre">class
+</span>
+<span class="w"> 
+</span>
+</em>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.queries.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">XorNegatedMask
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#XorNegatedMask">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.XorNegatedMask" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Combine a mask with another, using the bitwise XOR operator. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.XorNegatedMask">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -3466,8 +4177,8 @@ for details.
 <span class="sig-return-icon">&#x2192;
 </span> 
 <span class="sig-return-typehint">
-<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
-<span class="pre">QuerySequence
+<a class="reference internal" href="operations.html#dafpy.operations.QueryOperation" title="dafpy.operations.QueryOperation">
+<span class="pre">QueryOperation
 </span>
 </a>
 </span>
@@ -3483,99 +4194,9 @@ for details.
 </dt>
 
 <dd>
-<p>Parse a 
-<code class="docutils literal notranslate">
-<span class="pre">query_string
-</span>
-</code> into a 
-<code class="docutils literal notranslate">
-<span class="pre">QuerySequence
-</span>
-</code>.
-</p>
+<p>Parse a query (or a fragment of a query). See the Julia
 
-<p>If you want something like the 
-<code class="docutils literal notranslate">
-<span class="pre">q
-</span>
-</code> prefix used in Julia, write 
-<code class="docutils literal notranslate">
-<span class="pre">from
-</span> 
-<span class="pre">dafpy
-</span> 
-<span class="pre">import
-</span> 
-<span class="pre">parse_query
-</span> 
-<span class="pre">as
-</span> 
-<span class="pre">q
-</span>
-</code>.
-</p>
-
-</dd>
-</dl>
-
-
-<dl class="py class">
-
-<dt class="sig sig-object py" id="dafpy.queries.SquareMaskColumn">
-
-<em class="property">
-<span class="pre">class
-</span>
-<span class="w"> 
-</span>
-</em>
-<span class="sig-prename descclassname">
-<span class="pre">dafpy.queries.
-</span>
-</span>
-<span class="sig-name descname">
-<span class="pre">SquareMaskColumn
-</span>
-</span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">value
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span>
-<a class="reference internal" href="_modules/dafpy/queries.html#SquareMaskColumn">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
-<a class="headerlink" href="#dafpy.queries.SquareMaskColumn" title="Link to this definition">¶
-</a>
-</dt>
-
-<dd>
-<p>Similar to 
-<code class="docutils literal notranslate">
-<span class="pre">MaskSlice
-</span>
-</code> but is used when the mask matrix is square and we’d like to use a column as a mask. See the
-Julia
-
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.SquareMaskColumn">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.parse_query">documentation
 </a>
 for details.
 </p>
@@ -3584,29 +4205,23 @@ for details.
 </dl>
 
 
-<dl class="py class">
+<dl class="py function">
 
-<dt class="sig sig-object py" id="dafpy.queries.SquareMaskRow">
+<dt class="sig sig-object py" id="dafpy.queries.is_axis_query">
 
-<em class="property">
-<span class="pre">class
-</span>
-<span class="w"> 
-</span>
-</em>
 <span class="sig-prename descclassname">
 <span class="pre">dafpy.queries.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">SquareMaskRow
+<span class="pre">is_axis_query
 </span>
 </span>
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">value
+<span class="pre">query
 </span>
 </span>
 <span class="p">
@@ -3618,123 +4233,109 @@ for details.
 <span class="n">
 <span class="pre">str
 </span>
-</span>
-</em>
-<span class="sig-paren">)
-</span>
-<a class="reference internal" href="_modules/dafpy/queries.html#SquareMaskRow">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
-<a class="headerlink" href="#dafpy.queries.SquareMaskRow" title="Link to this definition">¶
-</a>
-</dt>
-
-<dd>
-<p>Similar to 
-<code class="docutils literal notranslate">
-<span class="pre">MaskSlice
-</span>
-</code> but is used when the mask matrix is square and we’d like to use a row as a mask. See the
-Julia
-
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.SquareMaskRow">documentation
-</a> for
-details.
-</p>
-
-</dd>
-</dl>
-
-
-<dl class="py class">
-
-<dt class="sig sig-object py" id="dafpy.queries.Xor">
-
-<em class="property">
-<span class="pre">class
-</span>
 <span class="w"> 
-</span>
-</em>
-<span class="sig-prename descclassname">
-<span class="pre">dafpy.queries.
-</span>
-</span>
-<span class="sig-name descname">
-<span class="pre">Xor
-</span>
-</span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">property
-</span>
 </span>
 <span class="p">
-<span class="pre">:
+<span class="pre">|
 </span>
 </span>
 <span class="w"> 
 </span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
-</em>
-<span class="sig-paren">)
-</span>
-<a class="reference internal" href="_modules/dafpy/queries.html#Xor">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
-<a class="headerlink" href="#dafpy.queries.Xor" title="Link to this definition">¶
-</a>
-</dt>
-
-<dd>
-<p>A query operation for flipping the set of entries of an 
-<code class="docutils literal notranslate">
+<a class="reference internal" href="#dafpy.queries.Axis" title="dafpy.queries.Axis">
 <span class="pre">Axis
 </span>
-</code>. See the Julia
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<span class="pre">LookupScalar
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.queries.Names" title="dafpy.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">bool
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#is_axis_query">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.queries.is_axis_query" title="Link to this definition">¶
+</a>
+</dt>
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.Xor">documentation
-</a> for details.
+<dd>
+<p>Returns whether the 
+<code class="docutils literal notranslate">
+<span class="pre">query
+</span>
+</code> specifies a (possibly masked) axis. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.is_axis_query">documentation
+</a>
+for details.
 </p>
 
 </dd>
 </dl>
 
 
-<dl class="py class">
+<dl class="py function">
 
-<dt class="sig sig-object py" id="dafpy.queries.XorNot">
+<dt class="sig sig-object py" id="dafpy.queries.query_axis_name">
 
-<em class="property">
-<span class="pre">class
-</span>
-<span class="w"> 
-</span>
-</em>
 <span class="sig-prename descclassname">
 <span class="pre">dafpy.queries.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">XorNot
+<span class="pre">query_axis_name
 </span>
 </span>
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">property
+<span class="pre">query
 </span>
 </span>
 <span class="p">
@@ -3746,29 +4347,82 @@ details.
 <span class="n">
 <span class="pre">str
 </span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<span class="pre">LookupScalar
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.queries.Names" title="dafpy.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
 </span>
 </em>
 <span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">bool
 </span>
-<a class="reference internal" href="_modules/dafpy/queries.html#XorNot">
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/queries.html#query_axis_name">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.queries.XorNot" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.queries.query_axis_name" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Same as 
-<code class="docutils literal notranslate">
-<span class="pre">Xor
-</span>
-</code> but use the inverse of the mask. See the Julia
+<p>Return the axis name of a query. See the Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.XorNot">documentation
-</a> for details.
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.query_axis_name">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -3823,8 +4477,8 @@ details.
 </span>
 <span class="w"> 
 </span>
-<a class="reference internal" href="#dafpy.queries.Lookup" title="dafpy.queries.Lookup">
-<span class="pre">Lookup
+<a class="reference internal" href="#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<span class="pre">LookupScalar
 </span>
 </a>
 <span class="w"> 
@@ -3877,7 +4531,7 @@ details.
 <p>Return the number of dimensions (-1 - names, 0 - scalar, 1 - vector, 2 - matrix) of the results of a query. See the
 Julia
 
-<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/queries.html#DataAxesFormats.Queries.query_result_dimensions">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.query_result_dimensions">documentation
 </a>
 for details.
 </p>

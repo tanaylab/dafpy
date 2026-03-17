@@ -1,6 +1,6 @@
 """
 Reconstruct implicit axes. See the Julia
-`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/reconstruction.html>`__
+`documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/reconstruction.html>`__
 for details.
 """
 
@@ -28,7 +28,7 @@ def reconstruct_axis(
     """
     Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the
     same name (or, if specified, call it ``rename_axis``). See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.1.2/reconstruction.html#DataAxesFormats.Reconstruction.reconstruct_axis!>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/reconstruction.html#DataAxesFormats.Reconstruction.reconstruct_axis!>`__
     for details.
     """
     return jl.reconstruct_axis_b(
