@@ -312,7 +312,7 @@
 <span class="k">class</span> <span class="nc">AndNegatedMask</span><span class="p">(</span><span class="n">QueryOperation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combine a mask with another, using the bitwise AND-NOT operator. See the Julia</span>
-<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AndMask&gt;`__</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AndNegatedMask&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -618,7 +618,8 @@
 
 
 <span class="c1">#: A Python class to use instead of Julia&#39;s ``Daf.Query``. See the Julia</span>
-<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Query&gt;`__ for details.</span>
+<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Query&gt;`__</span>
+<span class="c1">#: for details.</span>
 <span class="n">Query</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Axis</span><span class="p">,</span> <span class="n">LookupScalar</span><span class="p">,</span> <span class="n">Names</span><span class="p">,</span> <span class="n">QuerySequence</span><span class="p">]</span>
 
 

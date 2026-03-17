@@ -611,7 +611,7 @@ class DafReader(JlObject):
         """
         If the ``Daf`` repository is persistent (resides on disk), the absolute path leading to it. This path can be
         given to See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/read_only.html#DataAxesFormats.ReadOnly.complete_daf>`__
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/readers.html#DataAxesFormats.Readers.complete_path>`__
         for details.
         """
         return jl.DataAxesFormats.complete_path(self.jl_obj)
@@ -899,8 +899,8 @@ class DafWriter(DafReader):
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
         ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
         flipped axes). See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/writers.html#DataAxesFormats.Writers.relayout_matrix!>`__ for
-        details.
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/writers.html#DataAxesFormats.Writers.relayout_matrix!>`__
+        for details.
 
         Returns ``self`` for chaining.
         """
@@ -911,8 +911,8 @@ class DafWriter(DafReader):
         """
         Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data
         set. See the Julia
-        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/writers.html#DataAxesFormats.Writers.delete_matrix!>`__ for
-        details.
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/writers.html#DataAxesFormats.Writers.delete_matrix!>`__
+        for details.
 
         Returns ``self`` for chaining.
         """

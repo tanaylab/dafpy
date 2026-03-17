@@ -103,7 +103,7 @@
 
 <span class="c1">#: The action for merging the values of a property from the concatenated data sets into the result data set. See the</span>
 <span class="c1">#: Julia</span>
-<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.MergeData&gt;`__</span>
+<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.MergeAction&gt;`__</span>
 <span class="c1">#: for details.</span>
 <span class="n">MergeAction</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;SkipProperty&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;LastValue&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;CollectAxis&quot;</span><span class="p">]</span>
 
@@ -141,7 +141,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Concatenate data from a ``sources`` sequence of ``Daf`` data sets into a single ``destination`` data set along one</span>
 <span class="sd">    or more concatenation ``axis``. See the Julia</span>
-<span class="sd">    `documentation &lt;DafAxesFormats://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concatenate.html&gt;`__ for details.</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.concatenate!&gt;`__</span>
+<span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">merge</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">merge_data</span> <span class="o">=</span> <span class="kc">None</span>

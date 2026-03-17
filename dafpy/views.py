@@ -53,7 +53,7 @@ ALL_MATRICES = ("*", "*", "*")
 ViewAxes = Mapping[str, str | Query | None]
 
 #: Specify data to expose from view. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/views.html#DataAxesFormats.Views.ViewAxes>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/views.html#DataAxesFormats.Views.ViewData>`__
 #: for details.
 #:
 #: Note that in Python this is a dictionary and not a vector. This allows using the ``key: value`` notation,

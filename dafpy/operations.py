@@ -94,8 +94,8 @@ class QueryOperation(JlObject):
 class QuerySequence(QueryOperation):
     """
     A sequence of ``QueryOperation``. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.QuerySequence>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.QuerySequence>`__
+    for details.
 
     Query operations can be chained into a ``QuerySequence`` using the ``|`` operator in Python (instead of the ``|>``
     operator in Julia).
@@ -121,8 +121,8 @@ class ReductionOperation(QueryOperation):
 class Abs(EltwiseOperation):
     """
     Element-wise operation that converts every element to its absolute value. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Abs>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Abs>`__
+    for details.
     """
 
     def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
@@ -132,8 +132,8 @@ class Abs(EltwiseOperation):
 class Round(EltwiseOperation):
     """
     Element-wise operation that converts every element to the nearest integer value. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Round>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Round>`__
+    for details.
     """
 
     def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
@@ -143,8 +143,8 @@ class Round(EltwiseOperation):
 class Clamp(EltwiseOperation):
     """
     Element-wise operation that converts every element to a value inside a range. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Clamp>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Clamp>`__
+    for details.
     """
 
     def __init__(self, *, min: float = -inf, max: float = inf) -> None:  # pylint: disable=redefined-builtin
@@ -154,8 +154,8 @@ class Clamp(EltwiseOperation):
 class Convert(EltwiseOperation):
     """
     Element-wise operation that converts every element to a given data type. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Convert>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Convert>`__
+    for details.
     """
 
     def __init__(self, *, type: Type) -> None:  # pylint: disable=redefined-builtin
@@ -165,8 +165,8 @@ class Convert(EltwiseOperation):
 class Fraction(EltwiseOperation):
     """
     Element-wise operation that converts every element to its fraction out of the total. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Fraction>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Fraction>`__
+    for details.
     """
 
     def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
@@ -176,8 +176,8 @@ class Fraction(EltwiseOperation):
 class Log(EltwiseOperation):
     """
     Element-wise operation that converts every element to its logarithm. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Log>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Log>`__
+    for details.
     """
 
     def __init__(
@@ -200,8 +200,8 @@ class Significant(EltwiseOperation):
 class Sum(ReductionOperation):
     """
     Reduction operation that sums elements. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Sum>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Sum>`__
+    for details.
     """
 
     def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
@@ -211,8 +211,8 @@ class Sum(ReductionOperation):
 class Min(ReductionOperation):
     """
     Reduction operation that returns the minimal element. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Min>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Min>`__
+    for details.
     """
 
     def __init__(self) -> None:
@@ -222,8 +222,8 @@ class Min(ReductionOperation):
 class Median(ReductionOperation):
     """
     Reduction operation that returns the median value. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Median>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Median>`__
+    for details.
     """
 
     def __init__(self) -> None:
@@ -234,8 +234,8 @@ class Quantile(ReductionOperation):
     """
     Reduction operation that returns the quantile value, that is, a value such that a certain fraction of the values is
     lower. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Quantile>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Quantile>`__
+    for details.
     """
 
     def __init__(self, *, type: Optional[Type] = None, p: float) -> None:  # pylint: disable=redefined-builtin
@@ -245,8 +245,8 @@ class Quantile(ReductionOperation):
 class Mean(ReductionOperation):
     """
     Reduction operation that returns the mean value. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Mean>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Mean>`__
+    for details.
     """
 
     def __init__(self) -> None:
@@ -256,8 +256,8 @@ class Mean(ReductionOperation):
 class Max(ReductionOperation):
     """
     Reduction operation that returns the maximal element. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Max>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Max>`__
+    for details.
     """
 
     def __init__(self) -> None:
@@ -267,8 +267,8 @@ class Max(ReductionOperation):
 class Var(ReductionOperation):
     """
     Reduction operation that returns the variance of the values. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Var>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Var>`__
+    for details.
     """
 
     def __init__(self) -> None:
@@ -278,7 +278,7 @@ class Var(ReductionOperation):
 class VarN(ReductionOperation):
     """
     Reduction operation that returns the variance of the values, normalized (divided) by the mean of the values. See
-    the Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Var>`__
+    the Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.VarN>`__
     for details.
     """
 
@@ -289,8 +289,8 @@ class VarN(ReductionOperation):
 class Std(ReductionOperation):
     """
     Reduction operation that returns the standard deviation of the values. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Std>`__ for
-    details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Std>`__
+    for details.
     """
 
     def __init__(self) -> None:
@@ -301,7 +301,8 @@ class StdN(ReductionOperation):
     """
     Reduction operation that returns the standard deviation of the values, normalized (divided) by the mean of the
     values. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.Std>`_ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/operations.html#DataAxesFormats.Operations.StdN>`__
+    for details.
     """
 
     def __init__(self) -> None:

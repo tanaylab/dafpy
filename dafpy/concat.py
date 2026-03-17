@@ -24,7 +24,7 @@ __all__ = [
 
 #: The action for merging the values of a property from the concatenated data sets into the result data set. See the
 #: Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.MergeData>`__
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.MergeAction>`__
 #: for details.
 MergeAction = Literal["SkipProperty"] | Literal["LastValue"] | Literal["CollectAxis"]
 
@@ -60,7 +60,8 @@ def concatenate(  # pylint: disable=too-many-positional-arguments
     """
     Concatenate data from a ``sources`` sequence of ``Daf`` data sets into a single ``destination`` data set along one
     or more concatenation ``axis``. See the Julia
-    `documentation <DafAxesFormats://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concatenate.html>`__ for details.
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/concat.html#DataAxesFormats.Concat.concatenate!>`__
+    for details.
     """
     if merge is None:
         merge_data = None

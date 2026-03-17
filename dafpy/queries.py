@@ -195,7 +195,7 @@ class AndMask(QueryOperation):
 class AndNegatedMask(QueryOperation):
     """
     Combine a mask with another, using the bitwise AND-NOT operator. See the Julia
-    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AndMask>`__
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.AndNegatedMask>`__
     for details.
     """
 
@@ -440,7 +440,8 @@ class SquareRowIs(QueryOperation):
 
 
 #: A Python class to use instead of Julia's ``Daf.Query``. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Query>`__ for details.
+#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/queries.html#DataAxesFormats.Queries.Query>`__
+#: for details.
 Query = Union[Axis, LookupScalar, Names, QuerySequence]
 
 
