@@ -22,6 +22,7 @@ in all our Python packages that invoke Julia.
 """
 
 import os
+import shutil
 import sys
 import warnings
 from typing import Any
@@ -48,6 +49,47 @@ if "juliacall" not in sys.modules:
         ("PYTHON_JULIACALL_OPTLEVEL", "3"),
     ):
         os.environ[k] = os.environ.get(k, default)
+
+    # When using the default Julia environment (the default), skip juliapkg's resolve step; the activated environment
+    # is responsible for providing the required packages (e.g., DataAxesFormats and its dependencies). Without this,
+    # juliapkg tries to populate its own isolated project at ~/.julia/environments/pyjuliapkg and fails for any
+    # dependency that isn't in the General registry (such as locally-developed packages).
+    if os.environ.get("PYTHON_JULIACALL_USE_DEFAULT_ENVIRONMENT", "yes") == "yes":
+        os.environ["PYTHON_JULIAPKG_OFFLINE"] = os.environ.get("PYTHON_JULIAPKG_OFFLINE", "yes")
+
+        # In offline mode, juliapkg still has to locate a Julia executable. Its macOS juliaup probe is buggy (expects
+        # julia-<ver>/bin/julia but juliaup stores it inside Julia-<ver>.app/Contents/Resources/julia/bin/julia), so
+        # point juliapkg directly at whatever ``julia`` resolves to on the PATH (typically the juliaup shim).
+        if "PYTHON_JULIAPKG_EXE" not in os.environ:
+            julia_exe = shutil.which("julia")
+            if julia_exe is not None:
+                os.environ["PYTHON_JULIAPKG_EXE"] = julia_exe
+
+        # Point juliapkg's project at the user's default environment too, so juliacall's startup ``using PythonCall``
+        # (which runs before ``use_default_julia_environment`` gets a chance to switch projects) finds PythonCall
+        # there. The default environment path is ``~/.julia/environments/v<MAJOR>.<MINOR>``, so we query the Julia
+        # binary for its version to construct the path.
+        if "PYTHON_JULIAPKG_PROJECT" not in os.environ and os.environ.get("PYTHON_JULIAPKG_EXE"):
+            import subprocess  # pylint: disable=import-outside-toplevel
+
+            try:
+                julia_version_output = subprocess.run(
+                    [os.environ["PYTHON_JULIAPKG_EXE"], "--version"],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                ).stdout
+                # Output looks like: "julia version 1.12.5"
+                julia_ver_tokens = julia_version_output.strip().split()
+                julia_semver = julia_ver_tokens[-1].split(".")
+                julia_minor_env = f"v{julia_semver[0]}.{julia_semver[1]}"  # pylint: disable=invalid-name
+                julia_depot = os.environ.get("JULIA_DEPOT_PATH", os.path.join(os.path.expanduser("~"), ".julia")).split(
+                    os.pathsep
+                )[0]
+                os.environ["PYTHON_JULIAPKG_PROJECT"] = os.path.join(julia_depot, "environments", julia_minor_env)
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError, IndexError):
+                pass
 
 if os.environ.get("PYTHON_JULIACALL_PROPER_IMPORT", "") == "":
     # Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)

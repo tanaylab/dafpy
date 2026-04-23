@@ -53,7 +53,29 @@ def make_h5df() -> Tuple[dp.DafWriter, str]:
     )
 
 
-FORMATS = [("MemoryDaf", lambda: (dp.memory_daf(name="test!"), "")), ("FilesDaf", make_files), ("H5df", make_h5df)]
+def make_zarr() -> Tuple[dp.DafWriter, str]:
+    tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
+    zarr_path = tmpdir.name + "/test.daf.zarr"
+    zarr = dp.zarr_daf(zarr_path, "w", name="test!")
+    assert isinstance(zarr, dp.DafWriter)
+    setattr(zarr, "__gc_anchor__", tmpdir)
+    return (
+        zarr,
+        dedent(
+            f"""
+            path: {zarr_path}
+            mode: w
+            """
+        )[1:],
+    )
+
+
+FORMATS = [
+    ("MemoryDaf", lambda: (dp.memory_daf(name="test!"), "")),
+    ("FilesDaf", make_files),
+    ("H5df", make_h5df),
+    ("ZarrDaf", make_zarr),
+]
 
 
 @pytest.mark.parametrize("format_data", FORMATS)
@@ -413,6 +435,70 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
 
     assert len(daf.matrices_set("cell", "gene")) == 0
     assert not daf.has_matrix("cell", "gene", "UMIs", relayout=False)
+
+
+def test_files_zarr_round_trip() -> None:
+    tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
+    files_src = f"{tmpdir.name}/src"
+    zarr_mid = f"{tmpdir.name}/mid.daf.zarr"
+    files_dst = f"{tmpdir.name}/dst"
+
+    row_major_umis = np.array(
+        [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]],
+        dtype=np.int32,
+    )
+    expected_umis = row_major_umis.transpose()
+
+    source = dp.files_daf(files_src, "w", name="src!")
+    assert isinstance(source, dp.DafWriter)
+    source.set_scalar("version", "v1")
+    source.add_axis("cell", ["A", "B", "C"])
+    source.add_axis("gene", ["X", "Y", "Z", "W"])
+    source.set_vector("cell", "age", np.array([10, 20, 30], dtype=np.int32))
+    source.set_matrix("cell", "gene", "UMIs", expected_umis)
+
+    dp.files_to_zarr(files_path=files_src, zarr_path=zarr_mid)
+
+    zarr = dp.zarr_daf(zarr_mid, "r", name="zarr!")
+    assert isinstance(zarr, dp.DafReadOnly)
+    assert zarr.get_scalar("version") == "v1"
+    assert list(zarr.axis_np_vector("cell")) == ["A", "B", "C"]
+    assert np.array_equal(zarr.get_np_vector("cell", "age"), np.array([10, 20, 30]))
+    assert np.array_equal(zarr.get_np_matrix("cell", "gene", "UMIs"), expected_umis)
+
+    dp.zarr_to_files(zarr_path=zarr_mid, files_path=files_dst)
+
+    roundtripped = dp.files_daf(files_dst, "r", name="dst!")
+    assert isinstance(roundtripped, dp.DafReadOnly)
+    assert roundtripped.get_scalar("version") == "v1"
+    assert list(roundtripped.axis_np_vector("cell")) == ["A", "B", "C"]
+    assert np.array_equal(roundtripped.get_np_vector("cell", "age"), np.array([10, 20, 30]))
+    assert np.array_equal(roundtripped.get_np_matrix("cell", "gene", "UMIs"), expected_umis)
+
+
+def test_open_daf_dispatch() -> None:
+    tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
+
+    files_writer = dp.open_daf(f"{tmpdir.name}/plain", "w", name="files!")
+    assert isinstance(files_writer, dp.DafWriter)
+    files_writer.set_scalar("version", 1.0)
+    files_reader = dp.open_daf(f"{tmpdir.name}/plain", "r")
+    assert isinstance(files_reader, dp.DafReadOnly)
+    assert files_reader.get_scalar("version") == 1.0
+
+    h5df_writer = dp.open_daf(f"{tmpdir.name}/test.h5df", "w", name="h5df!")
+    assert isinstance(h5df_writer, dp.DafWriter)
+    h5df_writer.set_scalar("version", 2.0)
+    h5df_reader = dp.open_daf(f"{tmpdir.name}/test.h5df", "r")
+    assert isinstance(h5df_reader, dp.DafReadOnly)
+    assert h5df_reader.get_scalar("version") == 2.0
+
+    zarr_writer = dp.open_daf(f"{tmpdir.name}/test.daf.zarr", "w", name="zarr!")
+    assert isinstance(zarr_writer, dp.DafWriter)
+    zarr_writer.set_scalar("version", 3.0)
+    zarr_reader = dp.open_daf(f"{tmpdir.name}/test.daf.zarr", "r")
+    assert isinstance(zarr_reader, dp.DafReadOnly)
+    assert zarr_reader.get_scalar("version") == 3.0
 
 
 def test_chains() -> None:

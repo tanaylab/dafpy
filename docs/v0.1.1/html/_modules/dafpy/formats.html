@@ -90,21 +90,53 @@
 <span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafWriter</span>
 <span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;memory_daf&quot;</span><span class="p">,</span> <span class="s2">&quot;files_daf&quot;</span><span class="p">,</span> <span class="s2">&quot;h5df&quot;</span><span class="p">,</span> <span class="s2">&quot;chain_reader&quot;</span><span class="p">,</span> <span class="s2">&quot;chain_writer&quot;</span><span class="p">,</span> <span class="s2">&quot;complete_daf&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;chain_reader&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;chain_writer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;complete_daf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;files_daf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;files_to_zarr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;h5df&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;http_daf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;memory_daf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;open_daf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zarr_daf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zarr_to_files&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1"># Wrap a Julia Daf object in the matching Python class: DafWriter for a Julia DafWriter subtype; DafReadOnly for</span>
+<span class="c1"># anything else (a DafReadOnly subtype, or a bare DafReader such as HttpDaf).</span>
+<span class="k">def</span> <span class="nf">_wrap_daf</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">jl</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">DafWriter</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="complete_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.complete_daf">[docs]</a>
 <span class="k">def</span> <span class="nf">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Open a complete chain of ``Daf`` repositories by ttracing back through the ``base_daf_repository``. See the Julia</span>
+<span class="sd">    Open a complete chain of ``Daf`` repositories by tracing back through the ``base_daf_repository``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="open_daf">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.open_daf">[docs]</a>
+<span class="k">def</span> <span class="nf">open_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Open a ``Daf`` data set, dispatching to the appropriate backend based on ``path``. Zarr suffixes (``.daf.zarr``,</span>
+<span class="sd">    ``.daf.zarr.zip``, ``.dafs.zarr.zip#/...``) open a :py:func:`zarr_daf`; ``http://`` or ``https://`` URLs open a</span>
+<span class="sd">    :py:func:`http_daf` (read-only); ``.h5df`` and ``.h5dfs#`` paths open an :py:func:`h5df`; anything else opens a</span>
+<span class="sd">    :py:func:`files_daf`. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/complete.html#DataAxesFormats.CompleteDaf.open_daf&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">open_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
 
 
 
@@ -128,10 +160,7 @@
 <span class="sd">    A ``Daf`` storage format in disk files. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/files_format.html&gt;`__ for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">FilesDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">FilesDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
 
 
 
@@ -149,10 +178,61 @@
 <span class="sd">    ``Daf`` API does **not** support using the Python ``HDF5`` API. This is because the ``Daf`` Python API is just a</span>
 <span class="sd">    thin wrapper for the Julia ``Daf`` implementation, which doesn&#39;t &quot;speak Python&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">H5df</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">H5df</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="zarr_daf">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.zarr_daf">[docs]</a>
+<span class="k">def</span> <span class="nf">zarr_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A ``Daf`` storage format in a Zarr directory tree, Zarr ZIP archive, or remote HTTP(S) Zarr group. The ``path``</span>
+<span class="sd">    follows one of these conventions: ``something.daf.zarr`` (directory), ``something.daf.zarr.zip`` (single-daf ZIP),</span>
+<span class="sd">    ``something.dafs.zarr.zip#/group`` (sub-daf inside a multi-daf ZIP), or ``http(s)://...`` (remote zarr served over</span>
+<span class="sd">    HTTP; read-only). See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/zarr_format.html&gt;`__ for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ZarrDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="http_daf">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.http_daf">[docs]</a>
+<span class="k">def</span> <span class="nf">http_daf</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read-only access to a :py:func:`files_daf` served over ``http://`` or ``https://``. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/http_format.html&gt;`__ for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">HttpDaf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="files_to_zarr">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.files_to_zarr">[docs]</a>
+<span class="k">def</span> <span class="nf">files_to_zarr</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hard-link convert a :py:func:`files_daf` directory at ``files_path`` into an equivalent :py:func:`zarr_daf`</span>
+<span class="sd">    directory at ``zarr_path``. The ``zarr_path`` must not already exist, its name must end with ``.daf.zarr``, and the</span>
+<span class="sd">    two paths must live on the same filesystem. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/zarr_convert.html#DataAxesFormats.ZarrConvert.files_to_zarr&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">files_to_zarr</span><span class="p">(</span><span class="n">files_path</span><span class="o">=</span><span class="n">files_path</span><span class="p">,</span> <span class="n">zarr_path</span><span class="o">=</span><span class="n">zarr_path</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="zarr_to_files">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.zarr_to_files">[docs]</a>
+<span class="k">def</span> <span class="nf">zarr_to_files</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hard-link convert a :py:func:`zarr_daf` directory at ``zarr_path`` into an equivalent :py:func:`files_daf`</span>
+<span class="sd">    directory at ``files_path``. The ``zarr_path`` must be a ``.daf.zarr`` directory (ZIP and HTTP Zarr backends are</span>
+<span class="sd">    rejected); the ``files_path`` must not already exist, and the two paths must live on the same filesystem. See the</span>
+<span class="sd">    Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/zarr_convert.html#DataAxesFormats.ZarrConvert.zarr_to_files&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">zarr_to_files</span><span class="p">(</span><span class="n">zarr_path</span><span class="o">=</span><span class="n">zarr_path</span><span class="p">,</span> <span class="n">files_path</span><span class="o">=</span><span class="n">files_path</span><span class="p">)</span></div>
 
 
 

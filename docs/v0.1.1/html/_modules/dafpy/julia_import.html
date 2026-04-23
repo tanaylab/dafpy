@@ -101,6 +101,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
@@ -127,6 +128,47 @@
         <span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_OPTLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">),</span>
     <span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+    <span class="c1"># When using the default Julia environment (the default), skip juliapkg&#39;s resolve step; the activated environment</span>
+    <span class="c1"># is responsible for providing the required packages (e.g., DataAxesFormats and its dependencies). Without this,</span>
+    <span class="c1"># juliapkg tries to populate its own isolated project at ~/.julia/environments/pyjuliapkg and fails for any</span>
+    <span class="c1"># dependency that isn&#39;t in the General registry (such as locally-developed packages).</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_USE_DEFAULT_ENVIRONMENT&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIAPKG_OFFLINE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIAPKG_OFFLINE&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+
+        <span class="c1"># In offline mode, juliapkg still has to locate a Julia executable. Its macOS juliaup probe is buggy (expects</span>
+        <span class="c1"># julia-&lt;ver&gt;/bin/julia but juliaup stores it inside Julia-&lt;ver&gt;.app/Contents/Resources/julia/bin/julia), so</span>
+        <span class="c1"># point juliapkg directly at whatever ``julia`` resolves to on the PATH (typically the juliaup shim).</span>
+        <span class="k">if</span> <span class="s2">&quot;PYTHON_JULIAPKG_EXE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">julia_exe</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;julia&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">julia_exe</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIAPKG_EXE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">julia_exe</span>
+
+        <span class="c1"># Point juliapkg&#39;s project at the user&#39;s default environment too, so juliacall&#39;s startup ``using PythonCall``</span>
+        <span class="c1"># (which runs before ``use_default_julia_environment`` gets a chance to switch projects) finds PythonCall</span>
+        <span class="c1"># there. The default environment path is ``~/.julia/environments/v&lt;MAJOR&gt;.&lt;MINOR&gt;``, so we query the Julia</span>
+        <span class="c1"># binary for its version to construct the path.</span>
+        <span class="k">if</span> <span class="s2">&quot;PYTHON_JULIAPKG_PROJECT&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIAPKG_EXE&quot;</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">subprocess</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">julia_version_output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIAPKG_EXE&quot;</span><span class="p">],</span> <span class="s2">&quot;--version&quot;</span><span class="p">],</span>
+                    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">stdout</span>
+                <span class="c1"># Output looks like: &quot;julia version 1.12.5&quot;</span>
+                <span class="n">julia_ver_tokens</span> <span class="o">=</span> <span class="n">julia_version_output</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">julia_semver</span> <span class="o">=</span> <span class="n">julia_ver_tokens</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                <span class="n">julia_minor_env</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;v</span><span class="si">{</span><span class="n">julia_semver</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">julia_semver</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># pylint: disable=invalid-name</span>
+                <span class="n">julia_depot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JULIA_DEPOT_PATH&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.julia&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIAPKG_PROJECT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">julia_depot</span><span class="p">,</span> <span class="s2">&quot;environments&quot;</span><span class="p">,</span> <span class="n">julia_minor_env</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">TimeoutExpired</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+                <span class="k">pass</span>
 
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_PROPER_IMPORT&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
     <span class="c1"># Required to avoid segfaults (https://juliapy.github.io/PythonCall.jl/dev/faq/)</span>

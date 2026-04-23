@@ -113,7 +113,7 @@ from dafpy import parse_query as q
         ),
         (
             dp.Axis("metacell") | dp.LookupMatrix("edge_weight") | dp.SquareRowIs("mc1"),
-            "@ metacell :: edge_weight @| mc1",
+            "@ metacell :: edge_weight @- mc1",
         ),
         (
             dp.Axis("cell")

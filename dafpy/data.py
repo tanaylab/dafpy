@@ -777,11 +777,12 @@ class DafWriter(DafReader):
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
         ``with empty_dense_vector(dset, ...) as empty_vector: ...``.
         """
-        vector = jl.DataAxesFormats.get_empty_dense_vector_b(
+        vector, cache_group = jl.DataAxesFormats.get_empty_dense_vector_b(
             self.jl_obj, axis, name, _to_julia_type(eltype), overwrite=overwrite
         )
         try:
             yield _from_julia_array(vector, writeable=True)
+            jl.DataAxesFormats.filled_empty_dense_vector_b(self.jl_obj, axis, name, vector, cache_group)
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
@@ -801,12 +802,12 @@ class DafWriter(DafReader):
         opposed to 0-based indices typically used by ``scipy.sparse``). Due to this difference in the indexing, we can't
         zero-copy share sparse data between Python and Julia. Sigh.
         """
-        nzind, nzval = jl.DataAxesFormats.get_empty_sparse_vector_b(
+        nzind, nzval, cache_group = jl.DataAxesFormats.get_empty_sparse_vector_b(
             self.jl_obj, axis, name, _to_julia_type(eltype), nnz, _to_julia_type(indtype), overwrite=overwrite
         )
         try:
             yield (_from_julia_array(nzind, writeable=True), _from_julia_array(nzval, writeable=True))
-            jl.DataAxesFormats.filled_empty_sparse_vector_b(self.jl_obj, axis, name, nzind, nzval)
+            jl.DataAxesFormats.filled_empty_sparse_vector_b(self.jl_obj, axis, name, nzind, nzval, cache_group)
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
@@ -861,11 +862,14 @@ class DafWriter(DafReader):
         Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:
         ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.
         """
-        matrix = jl.DataAxesFormats.get_empty_dense_matrix_b(
+        matrix, cache_group = jl.DataAxesFormats.get_empty_dense_matrix_b(
             self.jl_obj, rows_axis, columns_axis, name, _to_julia_type(eltype), overwrite=overwrite
         )
         try:
             yield _from_julia_array(matrix, writeable=True)
+            jl.DataAxesFormats.filled_empty_dense_matrix_b(
+                self.jl_obj, rows_axis, columns_axis, name, matrix, cache_group
+            )
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
@@ -894,7 +898,7 @@ class DafWriter(DafReader):
         with **1**-based indices (as opposed to 0-based indices used by ``scipy.sparse.cs[cr]_matrix``). Due to this
         difference in the indexing, we can't zero-copy share sparse data between Python and Julia. Sigh.
         """
-        colptr, rowval, nzval = jl.DataAxesFormats.get_empty_sparse_matrix_b(
+        colptr, rowval, nzval, cache_group = jl.DataAxesFormats.get_empty_sparse_matrix_b(
             self.jl_obj,
             rows_axis,
             columns_axis,
@@ -911,7 +915,7 @@ class DafWriter(DafReader):
                 _from_julia_array(nzval, writeable=True),
             )
             jl.DataAxesFormats.filled_empty_sparse_matrix_b(
-                self.jl_obj, rows_axis, columns_axis, name, colptr, rowval, nzval
+                self.jl_obj, rows_axis, columns_axis, name, colptr, rowval, nzval, cache_group
             )
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
