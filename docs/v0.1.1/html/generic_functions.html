@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 
 <html class="writer-html5" lang="en" data-content_root="./">
@@ -14,33 +16,25 @@
 <title>generic_functions &mdash; Daf 0.1.1 documentation
 </title>
       
-<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       
-<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+<link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-  
-<!--[if lt IE 9]>
-    
-<script src="_static/js/html5shiv.min.js">
-</script>
-  
-<![endif]-->
-  
-        
+      
 <script src="_static/jquery.js?v=5d32c60e">
 </script>
-        
+      
 <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c">
 </script>
-        
+      
 <script src="_static/documentation_options.js?v=a58bc63e">
 </script>
-        
-<script src="_static/doctools.js?v=888ff710">
+      
+<script src="_static/doctools.js?v=fd6eb6e6">
 </script>
-        
-<script src="_static/sphinx_highlight.js?v=dc90522c">
+      
+<script src="_static/sphinx_highlight.js?v=6ffebe34">
 </script>
     
 <script src="_static/js/theme.js">
@@ -76,11 +70,6 @@
 <img src="_static/logo.svg" class="logo" alt="Logo"/>
           
 </a>
-              
-<div class="version">
-                0.1.1
-              
-</div>
 
 <div role="search">
   
@@ -341,21 +330,17 @@ for details.
 
 <p>alias of 
 <code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Union
+<span class="pre">Literal
 </span>
-</code>[
+</code>[‘IgnoreHandler’] | 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘IgnoreHandler’], 
+</code>[‘WarnHandler’] | 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘WarnHandler’], 
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Literal
-</span>
-</code>[‘ErrorHandler’]]
+</code>[‘ErrorHandler’]
 </p>
 
 </dd>
@@ -399,44 +384,20 @@ for details.
 </span>
 </span>
 <span class="p">
-<span class="pre">]
+<span class="pre">,
 </span>
 </span>
 <span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
 </span>
 <span class="s">
 <span class="pre">'WarnHandler'
 </span>
 </span>
 <span class="p">
-<span class="pre">]
+<span class="pre">,
 </span>
 </span>
 <span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
 </span>
 <span class="s">
 <span class="pre">'ErrorHandler'
@@ -465,44 +426,20 @@ for details.
 </span>
 </span>
 <span class="p">
-<span class="pre">]
+<span class="pre">,
 </span>
 </span>
 <span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
 </span>
 <span class="s">
 <span class="pre">'WarnHandler'
 </span>
 </span>
 <span class="p">
-<span class="pre">]
+<span class="pre">,
 </span>
 </span>
 <span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Literal
-</span>
-<span class="p">
-<span class="pre">[
-</span>
 </span>
 <span class="s">
 <span class="pre">'ErrorHandler'
@@ -563,29 +500,25 @@ for details.
 
 <p>alias of 
 <code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Union
+<span class="pre">Literal
 </span>
-</code>[
+</code>[‘Debug’] | 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘Debug’], 
+</code>[‘Info’] | 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘Info’], 
+</code>[‘Warn’] | 
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">Literal
 </span>
-</code>[‘Warn’], 
-<code class="xref py py-obj docutils literal notranslate">
-<span class="pre">Literal
-</span>
-</code>[‘Error’], 
+</code>[‘Error’] | 
 <code class="xref py py-class docutils literal notranslate">
 <span class="pre">int
 </span>
-</code>]
+</code>
 </p>
 
 </dd>
@@ -608,12 +541,28 @@ for details.
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">io:
-</span> 
-<span class="pre">~typing.TextIO
-</span> 
+<span class="pre">io
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">TextIO
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
 <span class="pre">&lt;_io.TextIOWrapper
 </span> 
 <span class="pre">name='&lt;stderr&gt;'
@@ -632,64 +581,200 @@ for details.
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">level:
-</span> 
-<span class="pre">~typing.Literal['Debug']
-</span> 
+<span class="pre">level
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'Debug'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
 <span class="pre">|
-</span> 
-<span class="pre">~typing.Literal['Info']
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'Info'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
 <span class="pre">|
-</span> 
-<span class="pre">~typing.Literal['Warn']
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'Warn'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
 <span class="pre">|
-</span> 
-<span class="pre">~typing.Literal['Error']
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Literal
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="s">
+<span class="pre">'Error'
+</span>
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
 <span class="pre">|
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
 <span class="pre">int
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
 <span class="pre">'Warn'
 </span>
 </span>
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">show_time:
-</span> 
+<span class="pre">show_time
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
 <span class="pre">bool
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
 <span class="pre">True
 </span>
 </span>
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">show_module:
-</span> 
+<span class="pre">show_module
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
 <span class="pre">bool
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
 <span class="pre">True
 </span>
 </span>
 </em>, 
 <em class="sig-param">
 <span class="n">
-<span class="pre">show_location:
-</span> 
+<span class="pre">show_location
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
 <span class="pre">bool
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
 <span class="pre">False
 </span>
 </span>

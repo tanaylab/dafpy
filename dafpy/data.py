@@ -233,7 +233,9 @@ class DafReader(JlObject):
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/readers.html#DataAxesFormats.Readers.axis_indices>`__
         for details.
         """
-        return pd.Series(self.axis_np_indices(axis, entries, allow_empty=allow_empty), index=np.array(entries))
+        return pd.Series(
+            self.axis_np_indices(axis, entries, allow_empty=allow_empty), index=np.array(entries), copy=False
+        )
 
     def has_vector(self, axis: str, name: str) -> bool:
         """
@@ -340,7 +342,7 @@ class DafReader(JlObject):
         vector_value = self.get_np_vector(axis, name, default=_to_julia_array(default))
         if vector_value is None:
             return None
-        return pd.Series(vector_value, index=self.axis_np_vector(axis))
+        return pd.Series(vector_value, index=self.axis_np_vector(axis), copy=False)
 
     def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
         """
@@ -562,7 +564,7 @@ class DafReader(JlObject):
                 values = values.toarray()  # type: ignore
             assert 1 <= values.ndim <= 2
             if values.ndim == 1:
-                result = pd.Series(values, index=_from_julia_array(jl._optional_julia_vector_names(result)))
+                result = pd.Series(values, index=_from_julia_array(jl._optional_julia_vector_names(result)), copy=False)
             else:
                 result = pd.DataFrame(
                     values,

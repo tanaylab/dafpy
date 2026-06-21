@@ -20,10 +20,7 @@ def test_reconstruction() -> None:
     results = dp.reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch")
     assert list(results.keys()) == ["age"]
     assert list(results.values()) == [3]
-    assert (
-        memory.description()
-        == dedent(
-            """
+    assert memory.description() == dedent("""
         name: memory!
         type: MemoryDaf
         axes:
@@ -35,6 +32,4 @@ def test_reconstruction() -> None:
           cell:
             batch: 4 x Str (Dense)
             score: 4 x Float64 (PyArray; Dense)
-    """
-        )[1:]
-    )
+    """)[1:]

@@ -28,12 +28,10 @@ def make_files() -> Tuple[dp.DafWriter, str]:
     assert isinstance(files, dp.DafWriter)
     return (
         files,
-        dedent(
-            f"""
+        dedent(f"""
             path: {tmpdir.name}
             mode: w
-            """
-        )[1:],
+            """)[1:],
     )
 
 
@@ -44,12 +42,10 @@ def make_h5df() -> Tuple[dp.DafWriter, str]:
     setattr(h5df, "__gc_anchor__", tmpdir)
     return (
         h5df,
-        dedent(
-            f"""
+        dedent(f"""
             root: HDF5.File: (read-write) {tmpdir.name}/test.h5df
             mode: w
-            """
-        )[1:],
+            """)[1:],
     )
 
 
@@ -61,12 +57,10 @@ def make_zarr() -> Tuple[dp.DafWriter, str]:
     setattr(zarr, "__gc_anchor__", tmpdir)
     return (
         zarr,
-        dedent(
-            f"""
+        dedent(f"""
             path: {zarr_path}
             mode: w
-            """
-        )[1:],
+            """)[1:],
     )
 
 
@@ -103,19 +97,15 @@ def test_scalars(
 
     assert (
         daf.description()
-        == dedent(
-            f"""
+        == dedent(f"""
             name: test!
             type: {format_name}
-            """
-        )[1:]
+            """)[1:]
         + extra
-        + dedent(
-            f"""
+        + dedent(f"""
             scalars:
               foo: {scalar_value}
-            """
-        )[1:]
+            """)[1:]
     )
 
     daf.delete_scalar("foo")
@@ -155,19 +145,15 @@ def test_axes(
     assert set(daf.axes_set()) == set([axis_name])
     assert (
         daf.description()
-        == dedent(
-            f"""
+        == dedent(f"""
             name: test!
             type: {format_name}
-            """
-        )[1:]
+            """)[1:]
         + extra
-        + dedent(
-            f"""
+        + dedent(f"""
             axes:
               {axis_name}: {len(axis_entries)} entries
-            """
-        )[1:]
+            """)[1:]
     )
 
     daf.delete_axis(axis_name)
@@ -183,17 +169,11 @@ def test_vectors_defaults(format_data: Tuple[str, Callable[[], Tuple[dp.DafWrite
     daf, _extra = create_empty()
     daf.add_axis("cell", ["A", "B"])
 
-    with assert_raises(
-        dedent(
-            """
+    with assert_raises(dedent("""
             missing vector: foo
             for the axis: cell
             in the daf data: test!
-            """[
-                1:
-            ]
-        )
-    ):
+            """[1:])):
         daf.get_np_vector("cell", "foo")
 
     assert daf.get_np_vector("cell", "foo", default=None) is None
@@ -242,22 +222,18 @@ def test_dense_vectors(  # pylint: disable=too-many-locals,too-many-statements
         assert list(stored_series.values) == list(vector_entries.reshape(-1))
     description = daf.description()
     assert description.startswith(
-        dedent(
-            f"""
+        dedent(f"""
             name: test!
             type: {format_name}
-            """
-        )[1:]
+            """)[1:]
         + extra
-        + dedent(
-            f"""
+        + dedent(f"""
             axes:
               cell: 2 entries
             vectors:
               cell:
                 foo: 2 x {julia_type}
-            """
-        )[1:-1]
+            """)[1:-1]
     )
 
     daf.delete_vector("cell", "foo")
@@ -301,18 +277,12 @@ def test_matrices_defaults(format_data: Tuple[str, Callable[[], Tuple[dp.DafWrit
     daf.add_axis("cell", ["A", "B"])
     daf.add_axis("gene", ["X", "Y", "Z"])
 
-    with assert_raises(
-        dedent(
-            """
+    with assert_raises(dedent("""
             missing matrix: UMIs
             for the rows axis: cell
             and the columns axis: gene
             in the daf data: test!
-            """[
-                1:
-            ]
-        )
-    ):
+            """[1:])):
         daf.get_np_matrix("cell", "gene", "UMIs", relayout=False)
 
     assert daf.get_np_matrix("cell", "gene", "UMIs", default=None) is None
@@ -383,23 +353,19 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
 
     description = daf.description()
     assert description.startswith(
-        dedent(
-            f"""
+        dedent(f"""
             name: test!
             type: {format_name}
-            """
-        )[1:]
+            """)[1:]
         + extra
-        + dedent(
-            """
+        + dedent("""
             axes:
               cell: 2 entries
               gene: 3 entries
             matrices:
               cell,gene:
                 UMIs: 2 x 3 x Int8 in Columns
-            """
-        )[1:-1]
+            """)[1:-1]
     )
 
     assert not daf.has_matrix("gene", "cell", "UMIs", relayout=False)
@@ -412,23 +378,19 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
 
     description = daf.description()
     assert description.startswith(
-        dedent(
-            f"""
+        dedent(f"""
             name: test!
             type: {format_name}
-            """
-        )[1:]
+            """)[1:]
         + extra
-        + dedent(
-            """
+        + dedent("""
             axes:
               cell: 2 entries
               gene: 3 entries
             matrices:
               cell,gene:
                 UMIs: 2 x 3 x Int8 in Columns
-            """
-        )[1:-1]
+            """)[1:-1]
     )
 
     daf.delete_matrix("cell", "gene", "UMIs")

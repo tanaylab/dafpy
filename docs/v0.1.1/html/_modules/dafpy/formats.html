@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dafpy.formats &mdash; Daf 0.1.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -34,9 +32,6 @@
             Daf
               <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.1.1
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -81,14 +76,14 @@
 <span class="sd">Concrete formats of ``Daf`` data sets.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafReader</span>
-<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafReadOnly</span>
-<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DafWriter</span>
-<span class="kn">from</span> <span class="nn">.julia_import</span> <span class="kn">import</span> <span class="n">jl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafReader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafReadOnly</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafWriter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;chain_reader&quot;</span><span class="p">,</span>
@@ -107,7 +102,7 @@
 
 <span class="c1"># Wrap a Julia Daf object in the matching Python class: DafWriter for a Julia DafWriter subtype; DafReadOnly for</span>
 <span class="c1"># anything else (a DafReadOnly subtype, or a bare DafReader such as HttpDaf).</span>
-<span class="k">def</span> <span class="nf">_wrap_daf</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_wrap_daf</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">jl</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">DafWriter</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
@@ -115,7 +110,7 @@
 
 <div class="viewcode-block" id="complete_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.complete_daf">[docs]</a>
-<span class="k">def</span> <span class="nf">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Open a complete chain of ``Daf`` repositories by tracing back through the ``base_daf_repository``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf&gt;`__</span>
@@ -127,7 +122,7 @@
 
 <div class="viewcode-block" id="open_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.open_daf">[docs]</a>
-<span class="k">def</span> <span class="nf">open_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">open_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Open a ``Daf`` data set, dispatching to the appropriate backend based on ``path``. Zarr suffixes (``.daf.zarr``,</span>
 <span class="sd">    ``.daf.zarr.zip``, ``.dafs.zarr.zip#/...``) open a :py:func:`zarr_daf`; ``http://`` or ``https://`` URLs open a</span>
@@ -142,7 +137,7 @@
 
 <div class="viewcode-block" id="memory_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.memory_daf">[docs]</a>
-<span class="k">def</span> <span class="nf">memory_daf</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">MemoryDaf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">memory_daf</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">MemoryDaf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simple in-memory storage. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/memory_format.html&gt;`__ for details.</span>
@@ -155,7 +150,7 @@
 
 <div class="viewcode-block" id="files_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.files_daf">[docs]</a>
-<span class="k">def</span> <span class="nf">files_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">files_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A ``Daf`` storage format in disk files. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/files_format.html&gt;`__ for details.</span>
@@ -166,7 +161,7 @@
 
 <div class="viewcode-block" id="h5df">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.h5df">[docs]</a>
-<span class="k">def</span> <span class="nf">h5df</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">h5df</span><span class="p">(</span>
     <span class="n">root</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">HDF5</span><span class="o">.</span><span class="n">File</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">HDF5</span><span class="o">.</span><span class="n">Group</span><span class="p">],</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -184,7 +179,7 @@
 
 <div class="viewcode-block" id="zarr_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.zarr_daf">[docs]</a>
-<span class="k">def</span> <span class="nf">zarr_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">zarr_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A ``Daf`` storage format in a Zarr directory tree, Zarr ZIP archive, or remote HTTP(S) Zarr group. The ``path``</span>
 <span class="sd">    follows one of these conventions: ``something.daf.zarr`` (directory), ``something.daf.zarr.zip`` (single-daf ZIP),</span>
@@ -198,7 +193,7 @@
 
 <div class="viewcode-block" id="http_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.http_daf">[docs]</a>
-<span class="k">def</span> <span class="nf">http_daf</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">http_daf</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read-only access to a :py:func:`files_daf` served over ``http://`` or ``https://``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/http_format.html&gt;`__ for details.</span>
@@ -209,7 +204,7 @@
 
 <div class="viewcode-block" id="files_to_zarr">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.files_to_zarr">[docs]</a>
-<span class="k">def</span> <span class="nf">files_to_zarr</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">files_to_zarr</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Hard-link convert a :py:func:`files_daf` directory at ``files_path`` into an equivalent :py:func:`zarr_daf`</span>
 <span class="sd">    directory at ``zarr_path``. The ``zarr_path`` must not already exist, its name must end with ``.daf.zarr``, and the</span>
@@ -223,7 +218,7 @@
 
 <div class="viewcode-block" id="zarr_to_files">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.zarr_to_files">[docs]</a>
-<span class="k">def</span> <span class="nf">zarr_to_files</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">zarr_to_files</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Hard-link convert a :py:func:`zarr_daf` directory at ``zarr_path`` into an equivalent :py:func:`files_daf`</span>
 <span class="sd">    directory at ``files_path``. The ``zarr_path`` must be a ``.daf.zarr`` directory (ZIP and HTTP Zarr backends are</span>
@@ -238,7 +233,7 @@
 
 <div class="viewcode-block" id="chain_reader">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.chain_reader">[docs]</a>
-<span class="k">def</span> <span class="nf">chain_reader</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chain_reader</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/chains.html#DataAxesFormats.Chains.chain_reader&gt;`__ for</span>
@@ -250,7 +245,7 @@
 
 <div class="viewcode-block" id="chain_writer">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.chain_writer">[docs]</a>
-<span class="k">def</span> <span class="nf">chain_writer</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chain_writer</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.2.0/chains.html#DataAxesFormats.Chains.chain_writer&gt;`__ for</span>

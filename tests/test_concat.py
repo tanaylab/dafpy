@@ -19,10 +19,7 @@ def test_concatenate() -> None:  # pylint: disable=too-many-statements
 
     destination = dp.memory_daf(name="destination!")
     dp.concatenate(destination, "cell", sources, merge={"version": "CollectAxis"})
-    assert (
-        destination.description()
-        == dedent(
-            """
+    assert destination.description() == dedent("""
             name: destination!
             type: MemoryDaf
             axes:
@@ -33,16 +30,11 @@ def test_concatenate() -> None:  # pylint: disable=too-many-statements
                 dataset: 5 x Str (Dense)
               dataset:
                 version: 2 x Int64 (Dense)
-            """
-        )[1:]
-    )
+            """)[1:]
 
     destination = dp.memory_daf(name="destination!")
     dp.concatenate(destination, "cell", sources)
-    assert (
-        destination.description()
-        == dedent(
-            """
+    assert destination.description() == dedent("""
             name: destination!
             type: MemoryDaf
             axes:
@@ -51,6 +43,4 @@ def test_concatenate() -> None:  # pylint: disable=too-many-statements
             vectors:
               cell:
                 dataset: 5 x Str (Dense)
-            """
-        )[1:]
-    )
+            """)[1:]

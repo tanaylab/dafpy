@@ -20,10 +20,7 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
     origin.add_axis("gene", ["X", "Y", "Z"])
     origin.set_matrix("gene", "cell", "UMIs", np.array([[0, 1, 2], [3, 4, 5]]).transpose(), relayout=False)
 
-    assert (
-        origin.description()
-        == dedent(
-            """
+    assert origin.description() == dedent("""
             name: memory!
             type: MemoryDaf
             scalars:
@@ -34,17 +31,12 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
             matrices:
               gene,cell:
                 UMIs: 3 x 2 x Int64 in Columns (PyArray; Dense)
-            """
-        )[1:]
-    )
+            """)[1:]
 
     with TemporaryDirectory() as tmpdir:
         dp.daf_as_h5ad(origin, obs_is="cell", var_is="gene", X_is="UMIs", h5ad=f"{tmpdir}/test.h5ad")
         back = dp.h5ad_as_daf(f"{tmpdir}/test.h5ad", obs_is="cell", var_is="gene", X_is="UMIs")
-        assert (
-            back.description()
-            == dedent(
-                """
+        assert back.description() == dedent("""
                 name: anndata
                 type: MemoryDaf
                 scalars:
@@ -58,6 +50,4 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
                 matrices:
                   gene,cell:
                     UMIs: 3 x 2 x Int64 in Columns (Dense)
-                """
-            )[1:]
-        )
+                """)[1:]

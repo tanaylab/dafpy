@@ -13,10 +13,7 @@ import dafpy as dp
 def test_example_cells() -> None:  # pylint: disable=too-many-statements
     cells = dp.example_cells_daf()
 
-    assert (
-        cells.description()
-        == dedent(
-            """
+    assert cells.description() == dedent("""
             name: cells!
             type: MemoryDaf
             scalars:
@@ -41,18 +38,13 @@ def test_example_cells() -> None:  # pylint: disable=too-many-statements
                 UMIs: 856 x 683 x UInt8 in Columns (Dense)
               gene,cell:
                 UMIs: 683 x 856 x UInt8 in Columns (Dense)
-            """
-        )[1:]
-    )
+            """)[1:]
 
 
 def test_example_metacells() -> None:  # pylint: disable=too-many-statements
     cells = dp.example_metacells_daf()
 
-    assert (
-        cells.description()
-        == dedent(
-            """
+    assert cells.description() == dedent("""
             name: metacells!
             type: MemoryDaf
             axes:
@@ -74,18 +66,13 @@ def test_example_metacells() -> None:  # pylint: disable=too-many-statements
                 fraction: 683 x 7 x Float32 in Columns (Dense)
               metacell,metacell:
                 edge_weight: 7 x 7 x Float32 in Columns (Dense)
-            """
-        )[1:]
-    )
+            """)[1:]
 
 
 def test_example_chain() -> None:  # pylint: disable=too-many-statements
     cells = dp.example_chain_daf()
 
-    assert (
-        cells.description()
-        == dedent(
-            """
+    assert cells.description() == dedent("""
             name: chain!
             type: Write Chain
             chain:
@@ -125,6 +112,4 @@ def test_example_chain() -> None:  # pylint: disable=too-many-statements
                 fraction: 683 x 7 x Float32 in Columns (Dense)
               metacell,metacell:
                 edge_weight: 7 x 7 x Float32 in Columns (Dense)
-            """
-        )[1:]
-    )
+            """)[1:]

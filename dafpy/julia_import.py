@@ -50,31 +50,27 @@ if "juliacall" not in sys.modules:
     ):
         os.environ[k] = os.environ.get(k, default)
 
-    # When using the default Julia environment (the default), skip juliapkg's resolve step; the activated environment
-    # is responsible for providing the required packages (e.g., DataAxesFormats and its dependencies). Without this,
-    # juliapkg tries to populate its own isolated project at ~/.julia/environments/pyjuliapkg and fails for any
-    # dependency that isn't in the General registry (such as locally-developed packages).
-    if os.environ.get("PYTHON_JULIACALL_USE_DEFAULT_ENVIRONMENT", "yes") == "yes":
-        os.environ["PYTHON_JULIAPKG_OFFLINE"] = os.environ.get("PYTHON_JULIAPKG_OFFLINE", "yes")
+    # When using the default Julia environment (the default), point juliacall directly at the default Julia binary and
+    # its global package environment, bypassing juliapkg. Otherwise juliapkg populates its own isolated project and
+    # re-installs everything, which fails for locally-developed packages (e.g., DataAxesFormats) that aren't in the
+    # General registry. juliacall honors ``PYTHON_JULIACALL_EXE`` and ``PYTHON_JULIACALL_PROJECT`` only when both are
+    # set, so we compute both and set them together.
+    if os.environ.get("PYTHON_JULIACALL_USE_DEFAULT_ENVIRONMENT", "yes") == "yes" and (
+        "PYTHON_JULIACALL_EXE" not in os.environ and "PYTHON_JULIACALL_PROJECT" not in os.environ
+    ):
+        import subprocess  # pylint: disable=import-outside-toplevel
 
-        # In offline mode, juliapkg still has to locate a Julia executable. Its macOS juliaup probe is buggy (expects
-        # julia-<ver>/bin/julia but juliaup stores it inside Julia-<ver>.app/Contents/Resources/julia/bin/julia), so
-        # point juliapkg directly at whatever ``julia`` resolves to on the PATH (typically the juliaup shim).
-        if "PYTHON_JULIAPKG_EXE" not in os.environ:
-            julia_exe = shutil.which("julia")
-            if julia_exe is not None:
-                os.environ["PYTHON_JULIAPKG_EXE"] = julia_exe
+        # Resolve the juliaup shim to the real binary; juliacall derives the system image location from the executable
+        # path, and the shim directory has no ``lib/julia``.
+        julia_exe = shutil.which("julia")
+        if julia_exe is not None:
+            julia_exe = os.path.realpath(julia_exe)
 
-        # Point juliapkg's project at the user's default environment too, so juliacall's startup ``using PythonCall``
-        # (which runs before ``use_default_julia_environment`` gets a chance to switch projects) finds PythonCall
-        # there. The default environment path is ``~/.julia/environments/v<MAJOR>.<MINOR>``, so we query the Julia
-        # binary for its version to construct the path.
-        if "PYTHON_JULIAPKG_PROJECT" not in os.environ and os.environ.get("PYTHON_JULIAPKG_EXE"):
-            import subprocess  # pylint: disable=import-outside-toplevel
-
+            # The default environment path is ``~/.julia/environments/v<MAJOR>.<MINOR>``, so we query the Julia binary
+            # for its version to construct the path.
             try:
                 julia_version_output = subprocess.run(
-                    [os.environ["PYTHON_JULIAPKG_EXE"], "--version"],
+                    [julia_exe, "--version"],
                     check=True,
                     capture_output=True,
                     text=True,
@@ -87,7 +83,8 @@ if "juliacall" not in sys.modules:
                 julia_depot = os.environ.get("JULIA_DEPOT_PATH", os.path.join(os.path.expanduser("~"), ".julia")).split(
                     os.pathsep
                 )[0]
-                os.environ["PYTHON_JULIAPKG_PROJECT"] = os.path.join(julia_depot, "environments", julia_minor_env)
+                os.environ["PYTHON_JULIACALL_EXE"] = julia_exe
+                os.environ["PYTHON_JULIACALL_PROJECT"] = os.path.join(julia_depot, "environments", julia_minor_env)
             except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError, IndexError):
                 pass
 
@@ -164,7 +161,7 @@ class UndefInitializer:
 
 #: A Python value to use instead of Julia's ``undef``. We need this to allow ``@overload`` to work in the presence of
 #: ``undef``.
-Undef = UndefInitializer()
+Undef = UndefInitializer()  # pylint: disable=invalid-name
 
 
 JULIA_TYPE_OF_PY_TYPE = {
@@ -304,23 +301,19 @@ def _from_julia_frame(
     return pd.DataFrame(data)
 
 
-jl.seval(
-    """
+jl.seval("""
     function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler
         old_handler = TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER
         TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER = new_handler
         return old_handler
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}
         return Vector{DafReader}(readers)
     end
-    """
-)
+    """)
 
 
 def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
@@ -331,19 +324,16 @@ def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
 
 jl.seval("_DafReadersVector = Vector{DafReader}")  # NOT F-STRING
 
-jl.seval(
-    """
+jl.seval("""
     function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector
         return names(vector, 1)
     end
     function _optional_julia_vector_names(array::AbstractVector)::Nothing
         return nothing
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function _strip_wrappers(array::Union{ReadOnlyArray, NamedArrays.NamedArray})::AbstractArray
         array = parent(array)
         return _strip_wrappers(array)
@@ -351,11 +341,9 @@ jl.seval(
     function _strip_wrappers(array::AbstractArray)::AbstractArray
         return array
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function _pairify_columns(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.FrameColumns}
         if items == nothing
             return nothing
@@ -363,11 +351,9 @@ jl.seval(
             return [name => query for (name, query) in items]
         end
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function _pairify_axes(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewAxes}
         if items == nothing
             return nothing
@@ -375,11 +361,9 @@ jl.seval(
             return [key => query for (key, query) in items]
         end
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function _pairify_data(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewData}
         if items == nothing
             return nothing
@@ -387,11 +371,9 @@ jl.seval(
             return [key => query for (key, query) in items]
         end
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function _pairify_merge(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.MergeData}
         if items == nothing
             return nothing
@@ -399,33 +381,24 @@ jl.seval(
             return [key => query for (key, query) in items]
         end
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function pyconvert_rule_jl_object(::Type{T}, x::Py) where {T}
         return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     PythonCall.pyconvert_add_rule("dafpy.julia_import:JlObject", Any, pyconvert_rule_jl_object)
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     function pyconvert_rule_undef(::Type{T}, x::Py) where {T}
         return PythonCall.pyconvert_return(undef)
     end
-    """
-)
+    """)
 
-jl.seval(
-    """
+jl.seval("""
     PythonCall.pyconvert_add_rule("dafpy.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
-    """
-)
+    """)

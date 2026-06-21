@@ -23,10 +23,7 @@ def test_views() -> None:  # pylint: disable=too-many-statements
     daf.add_axis("batch", ["U", "V", "W"])
     daf.set_vector("batch", "sex", ["Male", "Female", "Male"])
 
-    assert (
-        daf.description()
-        == dedent(
-            """
+    assert daf.description() == dedent("""
             name: test!
             type: MemoryDaf
             scalars:
@@ -44,9 +41,7 @@ def test_views() -> None:  # pylint: disable=too-many-statements
             matrices:
               gene,cell:
                 UMIs: 3 x 2 x Int64 in Columns (PyArray; Dense)
-            """
-        )[1:]
-    )
+            """)[1:]
 
     view = dp.viewer(
         daf,
@@ -55,10 +50,7 @@ def test_views() -> None:  # pylint: disable=too-many-statements
         data={dp.ALL_SCALARS: None, dp.ALL_VECTORS: "=", ("obs", "var", "X"): ":: UMIs"},
     )
 
-    assert (
-        view.description()
-        == dedent(
-            """
+    assert view.description() == dedent("""
             name: view!
             type: View
             base: MemoryDaf test!
@@ -72,6 +64,4 @@ def test_views() -> None:  # pylint: disable=too-many-statements
             matrices:
               var,obs:
                 X: 3 x 2 x Int64 in Columns (PyArray; Dense)
-            """
-        )[1:]
-    )
+            """)[1:]

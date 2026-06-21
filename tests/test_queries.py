@@ -162,28 +162,18 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
     assert not daf.has_query("@ cell : youth")
 
     series = daf.get_pd_query("@ cell : age")
-    assert (
-        str(series)
-        == dedent(
-            """
+    assert str(series) == dedent("""
         A   -1.0
         B    2.0
         dtype: float64
-    """
-        )[1:-1]
-    )
+    """)[1:-1]
 
     frame = q("@ cell @ gene :: UMIs") | daf.get_pd_query()
-    assert (
-        str(frame)
-        == dedent(
-            """
+    assert str(frame) == dedent("""
            X  Y  Z
         A  1  2  3
         B  4  5  6
-    """
-        )[1:-1]
-    )
+    """)[1:-1]
 
     assert np.all(daf["@ cell : age"] == np.array([-1, 2]))
     assert np.all(daf["@ cell : batch"] == np.array(["U", "V"]))
@@ -217,52 +207,32 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
     assert np.all(frame.values == np.array([[0, 1, 2], [3, 4, 0]]))  # type: ignore
 
     frame = daf.get_pd_frame("cell")
-    assert (
-        str(frame)
-        == dedent(
-            """
+    assert str(frame) == dedent("""
           name  age batch
         0    A -1.0     U
         1    B  2.0     V
-    """
-        )[1:-1]
-    )
+    """)[1:-1]
 
     frame = daf.get_pd_frame("cell", ["age"])
-    assert (
-        str(frame)
-        == dedent(
-            """
+    assert str(frame) == dedent("""
            age
         0 -1.0
         1  2.0
-    """
-        )[1:-1]
-    )
+    """)[1:-1]
 
     frame = daf.get_pd_frame("@ cell", {"age": ": age", "sex": ": batch : sex"})
-    assert (
-        str(frame)
-        == dedent(
-            """
+    assert str(frame) == dedent("""
            age     sex
         0 -1.0    Male
         1  2.0  Female
-    """
-        )[1:-1]
-    )
+    """)[1:-1]
 
     frame = daf.get_pd_frame("@ cell", ["age", ("sex", ": batch : sex")])
-    assert (
-        str(frame)
-        == dedent(
-            """
+    assert str(frame) == dedent("""
            age     sex
         0 -1.0    Male
         1  2.0  Female
-    """
-        )[1:-1]
-    )
+    """)[1:-1]
 
     daf.empty_cache(clear="MappedData")
 
