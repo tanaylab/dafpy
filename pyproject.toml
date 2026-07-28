@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0"]
+requires = ["setuptools>=77.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,11 +10,11 @@ authors = [
     { name = "Oren Ben-Kiki", email = "oren@ben-kiki.org" },
 ]
 readme = "README.rst"
-license = { file = "LICENSE.rst" }
+license = "MIT"
+license-files = ["LICENSE.rst"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 requires-python = ">= 3.10"
