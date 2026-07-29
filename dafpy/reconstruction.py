@@ -31,7 +31,7 @@ def reconstruct_axis(
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.reconstruct_axis!>`__
     for details.
     """
-    return jl.reconstruct_axis_b(
+    return jl.DataAxesFormats.reconstruct_axis_b(
         dset,
         existing_axis=existing_axis,
         implicit_axis=implicit_axis,

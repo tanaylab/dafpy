@@ -55,7 +55,7 @@ def open_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafRe
     return _wrap_daf(jl.DataAxesFormats.open_daf(path, mode, name=name))
 
 
-def memory_daf(jl_obj: Optional[jl.MemoryDaf] = None, *, name: str = "memory") -> DafWriter:
+def memory_daf(jl_obj: Optional[jl.DataAxesFormats.MemoryDaf] = None, *, name: str = "memory") -> DafWriter:
     """
     Simple in-memory storage. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/memory_format.html>`__ for details.
@@ -136,7 +136,9 @@ def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> D
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_reader>`__ for
     details.
     """
-    return DafReadOnly(jl.chain_reader(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))
+    return DafReadOnly(
+        jl.DataAxesFormats.chain_reader(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), name=name)
+    )
 
 
 def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
@@ -145,4 +147,6 @@ def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> D
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_writer>`__ for
     details.
     """
-    return DafWriter(jl.chain_writer(jl._to_daf_readers([dset.jl_obj for dset in dsets]), name=name))
+    return DafWriter(
+        jl.DataAxesFormats.chain_writer(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), name=name)
+    )

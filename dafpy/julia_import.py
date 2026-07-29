@@ -102,7 +102,10 @@ if os.environ.get("PYTHON_JULIACALL_PROPER_IMPORT", "") == "":
             "You may wish to set it to 'auto' for full use of your CPU."
         )
 
-os.environ["PYTHON_JULIACALL_PROPER_IMPORT"] = "dafpy"
+# Only the first Python package to import Julia records itself here, so importing several of them (in any order) does
+# not lose the marker that the environment variables above were already dealt with.
+if os.environ.get("PYTHON_JULIACALL_PROPER_IMPORT", "") == "":
+    os.environ["PYTHON_JULIACALL_PROPER_IMPORT"] = "dafpy"
 
 from juliacall import Main  # type: ignore
 
@@ -135,21 +138,23 @@ jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
 
 jl.seval("using Pkg")
 
-for verb, package in (
-    ("using", "TanayLabUtilities"),
-    ("using", "DataAxesFormats"),
-    ("import", "DataFrames"),
-    ("import", "HDF5"),
-    ("import", "LinearAlgebra"),
-    ("import", "Logging"),
-    ("import", "Muon"),
-    ("import", "NamedArrays"),
-    ("import", "PythonCall"),
-    ("import", "SparseArrays"),
+# Everything is imported rather than ``using``, so no package's exports leak into Julia's ``Main``. This keeps
+# ``Main`` clear for other Python packages that wrap Julia packages and are used in the same session.
+for package in (
+    "DataAxesFormats",
+    "DataFrames",
+    "HDF5",
+    "LinearAlgebra",
+    "Logging",
+    "Muon",
+    "NamedArrays",
+    "PythonCall",
+    "SparseArrays",
+    "TanayLabUtilities",
 ):
     if jl.seval('Base.find_package("' + package + '")') is None:
         jl.seval('Pkg.add("' + package + '")')
-    jl.seval(verb + " " + package)
+    jl.seval("import " + package)
 
 
 class UndefInitializer:
@@ -254,7 +259,7 @@ def _from_julia_array(julia_array: Any, *, writeable: bool = False) -> np.ndarra
     if julia_array is None:
         return None
 
-    julia_array = jl._strip_wrappers(julia_array)
+    julia_array = jl.DafPy._strip_wrappers(julia_array)
 
     try:
         indptr = np.array(julia_array.colptr)
@@ -302,38 +307,33 @@ def _from_julia_frame(
 
 
 jl.seval("""
+    module DafPy
+
+    using DataAxesFormats
+    using PythonCall
+    using TanayLabUtilities
+
+    import NamedArrays
+
     function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler
         old_handler = TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER
         TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER = new_handler
         return old_handler
     end
-    """)
 
-jl.seval("""
     function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}
         return Vector{DafReader}(readers)
     end
-    """)
 
+    const _DafReadersVector = Vector{DafReader}
 
-def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
-    if mapping is None:
-        return None
-    return list(mapping.items())
-
-
-jl.seval("_DafReadersVector = Vector{DafReader}")  # NOT F-STRING
-
-jl.seval("""
     function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector
         return names(vector, 1)
     end
     function _optional_julia_vector_names(array::AbstractVector)::Nothing
         return nothing
     end
-    """)
 
-jl.seval("""
     function _strip_wrappers(array::Union{ReadOnlyArray, NamedArrays.NamedArray})::AbstractArray
         array = parent(array)
         return _strip_wrappers(array)
@@ -341,9 +341,7 @@ jl.seval("""
     function _strip_wrappers(array::AbstractArray)::AbstractArray
         return array
     end
-    """)
 
-jl.seval("""
     function _pairify_columns(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.FrameColumns}
         if items == nothing
             return nothing
@@ -351,9 +349,7 @@ jl.seval("""
             return [name => query for (name, query) in items]
         end
     end
-    """)
 
-jl.seval("""
     function _pairify_axes(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewAxes}
         if items == nothing
             return nothing
@@ -361,9 +357,7 @@ jl.seval("""
             return [key => query for (key, query) in items]
         end
     end
-    """)
 
-jl.seval("""
     function _pairify_data(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewData}
         if items == nothing
             return nothing
@@ -371,9 +365,7 @@ jl.seval("""
             return [key => query for (key, query) in items]
         end
     end
-    """)
 
-jl.seval("""
     function _pairify_merge(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.MergeData}
         if items == nothing
             return nothing
@@ -381,24 +373,23 @@ jl.seval("""
             return [key => query for (key, query) in items]
         end
     end
-    """)
 
-jl.seval("""
     function pyconvert_rule_jl_object(::Type{T}, x::Py) where {T}
         return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))
     end
-    """)
 
-jl.seval("""
-    PythonCall.pyconvert_add_rule("dafpy.julia_import:JlObject", Any, pyconvert_rule_jl_object)
-    """)
-
-jl.seval("""
     function pyconvert_rule_undef(::Type{T}, x::Py) where {T}
         return PythonCall.pyconvert_return(undef)
     end
+
+    PythonCall.pyconvert_add_rule("dafpy.julia_import:JlObject", Any, pyconvert_rule_jl_object)
+    PythonCall.pyconvert_add_rule("dafpy.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
+
+    end  # module DafPy
     """)
 
-jl.seval("""
-    PythonCall.pyconvert_add_rule("dafpy.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
-    """)
+
+def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:
+    if mapping is None:
+        return None
+    return list(mapping.items())

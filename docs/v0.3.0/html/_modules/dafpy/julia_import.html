@@ -176,7 +176,10 @@
             <span class="s2">&quot;You may wish to set it to &#39;auto&#39; for full use of your CPU.&quot;</span>
         <span class="p">)</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIACALL_PROPER_IMPORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dafpy&quot;</span>
+<span class="c1"># Only the first Python package to import Julia records itself here, so importing several of them (in any order) does</span>
+<span class="c1"># not lose the marker that the environment variables above were already dealt with.</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_PROPER_IMPORT&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIACALL_PROPER_IMPORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dafpy&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">juliacall</span><span class="w"> </span><span class="kn">import</span> <span class="n">Main</span>  <span class="c1"># type: ignore</span>
 
@@ -212,21 +215,23 @@
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;using Pkg&quot;</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">verb</span><span class="p">,</span> <span class="n">package</span> <span class="ow">in</span> <span class="p">(</span>
-    <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;TanayLabUtilities&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;using&quot;</span><span class="p">,</span> <span class="s2">&quot;DataAxesFormats&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;DataFrames&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;HDF5&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;LinearAlgebra&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;Logging&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;Muon&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;NamedArrays&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;PythonCall&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="s2">&quot;SparseArrays&quot;</span><span class="p">),</span>
+<span class="c1"># Everything is imported rather than ``using``, so no package&#39;s exports leak into Julia&#39;s ``Main``. This keeps</span>
+<span class="c1"># ``Main`` clear for other Python packages that wrap Julia packages and are used in the same session.</span>
+<span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="p">(</span>
+    <span class="s2">&quot;DataAxesFormats&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DataFrames&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HDF5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LinearAlgebra&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Logging&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Muon&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NamedArrays&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PythonCall&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SparseArrays&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TanayLabUtilities&quot;</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s1">&#39;Base.find_package(&quot;&#39;</span> <span class="o">+</span> <span class="n">package</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s1">&#39;Pkg.add(&quot;&#39;</span> <span class="o">+</span> <span class="n">package</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span><span class="p">)</span>
-    <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="n">verb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">package</span><span class="p">)</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import &quot;</span> <span class="o">+</span> <span class="n">package</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="UndefInitializer">
@@ -334,7 +339,7 @@
     <span class="k">if</span> <span class="n">julia_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="n">julia_array</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">_strip_wrappers</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span>
+    <span class="n">julia_array</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_strip_wrappers</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">indptr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">julia_array</span><span class="o">.</span><span class="n">colptr</span><span class="p">)</span>
@@ -382,38 +387,33 @@
 
 
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    module DafPy</span>
+
+<span class="s2">    using DataAxesFormats</span>
+<span class="s2">    using PythonCall</span>
+<span class="s2">    using TanayLabUtilities</span>
+
+<span class="s2">    import NamedArrays</span>
+
 <span class="s2">    function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler</span>
 <span class="s2">        old_handler = TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER</span>
 <span class="s2">        TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER = new_handler</span>
 <span class="s2">        return old_handler</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _to_daf_readers(readers::AbstractVector)::Vector</span><span class="si">{DafReader}</span>
 <span class="s2">        return Vector</span><span class="si">{DafReader}</span><span class="s2">(readers)</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
+<span class="s2">    const _DafReadersVector = Vector</span><span class="si">{DafReader}</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_jl_pairs</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-
-
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;_DafReadersVector = Vector</span><span class="si">{DafReader}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># NOT F-STRING</span>
-
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector</span>
 <span class="s2">        return names(vector, 1)</span>
 <span class="s2">    end</span>
 <span class="s2">    function _optional_julia_vector_names(array::AbstractVector)::Nothing</span>
 <span class="s2">        return nothing</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _strip_wrappers(array::Union{ReadOnlyArray, NamedArrays.NamedArray})::AbstractArray</span>
 <span class="s2">        array = parent(array)</span>
 <span class="s2">        return _strip_wrappers(array)</span>
@@ -421,9 +421,7 @@
 <span class="s2">    function _strip_wrappers(array::AbstractArray)::AbstractArray</span>
 <span class="s2">        return array</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _pairify_columns(items::Maybe</span><span class="si">{AbstractVector}</span><span class="s2">)::Maybe</span><span class="si">{DataAxesFormats.FrameColumns}</span>
 <span class="s2">        if items == nothing</span>
 <span class="s2">            return nothing</span>
@@ -431,9 +429,7 @@
 <span class="s2">            return [name =&gt; query for (name, query) in items]</span>
 <span class="s2">        end</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _pairify_axes(items::Maybe</span><span class="si">{AbstractVector}</span><span class="s2">)::Maybe</span><span class="si">{DataAxesFormats.ViewAxes}</span>
 <span class="s2">        if items == nothing</span>
 <span class="s2">            return nothing</span>
@@ -441,9 +437,7 @@
 <span class="s2">            return [key =&gt; query for (key, query) in items]</span>
 <span class="s2">        end</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _pairify_data(items::Maybe</span><span class="si">{AbstractVector}</span><span class="s2">)::Maybe</span><span class="si">{DataAxesFormats.ViewData}</span>
 <span class="s2">        if items == nothing</span>
 <span class="s2">            return nothing</span>
@@ -451,9 +445,7 @@
 <span class="s2">            return [key =&gt; query for (key, query) in items]</span>
 <span class="s2">        end</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function _pairify_merge(items::Maybe</span><span class="si">{AbstractVector}</span><span class="s2">)::Maybe</span><span class="si">{DataAxesFormats.MergeData}</span>
 <span class="s2">        if items == nothing</span>
 <span class="s2">            return nothing</span>
@@ -461,27 +453,26 @@
 <span class="s2">            return [key =&gt; query for (key, query) in items]</span>
 <span class="s2">        end</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function pyconvert_rule_jl_object(::Type</span><span class="si">{T}</span><span class="s2">, x::Py) where </span><span class="si">{T}</span>
 <span class="s2">        return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))</span>
 <span class="s2">    end</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    PythonCall.pyconvert_add_rule(&quot;dafpy.julia_import:JlObject&quot;, Any, pyconvert_rule_jl_object)</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
-
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    function pyconvert_rule_undef(::Type</span><span class="si">{T}</span><span class="s2">, x::Py) where </span><span class="si">{T}</span>
 <span class="s2">        return PythonCall.pyconvert_return(undef)</span>
 <span class="s2">    end</span>
+
+<span class="s2">    PythonCall.pyconvert_add_rule(&quot;dafpy.julia_import:JlObject&quot;, Any, pyconvert_rule_jl_object)</span>
+<span class="s2">    PythonCall.pyconvert_add_rule(&quot;dafpy.julia_import:UndefInitializer&quot;, UndefInitializer, pyconvert_rule_undef)</span>
+
+<span class="s2">    end  # module DafPy</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    PythonCall.pyconvert_add_rule(&quot;dafpy.julia_import:UndefInitializer&quot;, UndefInitializer, pyconvert_rule_undef)</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_jl_pairs</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </pre></div>
 
            </div>

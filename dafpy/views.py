@@ -75,6 +75,6 @@ def viewer(
     """
     return DafReadOnly(
         jl.DataAxesFormats.viewer(
-            dset, name=name, axes=jl._pairify_axes(_jl_pairs(axes)), data=jl._pairify_data(_jl_pairs(data))
+            dset, name=name, axes=jl.DafPy._pairify_axes(_jl_pairs(axes)), data=jl.DafPy._pairify_data(_jl_pairs(data))
         )
     )

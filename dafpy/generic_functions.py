@@ -38,7 +38,7 @@ def inefficient_action_handler(handler: AbnormalHandler) -> AbnormalHandler:
     `documentation <https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.0/matrix_layouts.html#TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER>`__
     for details.
     """
-    return PY_ABNORMAL_HANDLER[jl._inefficient_action_handler(JL_ABNORMAL_HANDLER[handler])]  # type: ignore
+    return PY_ABNORMAL_HANDLER[jl.DafPy._inefficient_action_handler(JL_ABNORMAL_HANDLER[handler])]  # type: ignore
 
 
 #: The (Julia) log levels.

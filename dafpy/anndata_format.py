@@ -54,4 +54,4 @@ def daf_as_h5ad(
     Note this just creates the ``h5ad`` file. We do not return the ``AnnData`` object, because it is a Julia
     (``Muon.jl``) ``AnnData`` object, which is **not** a Python ``anndata`` ``AnnData`` object.
     """
-    jl.daf_as_anndata(daf, obs_is=obs_is, var_is=var_is, X_is=X_is, h5ad=h5ad)
+    jl.DataAxesFormats.daf_as_anndata(daf, obs_is=obs_is, var_is=var_is, X_is=X_is, h5ad=h5ad)

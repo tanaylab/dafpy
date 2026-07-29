@@ -564,7 +564,9 @@ class DafReader(JlObject):
                 values = values.toarray()  # type: ignore
             assert 1 <= values.ndim <= 2
             if values.ndim == 1:
-                result = pd.Series(values, index=_from_julia_array(jl._optional_julia_vector_names(result)), copy=False)
+                result = pd.Series(
+                    values, index=_from_julia_array(jl.DafPy._optional_julia_vector_names(result)), copy=False
+                )
             else:
                 result = pd.DataFrame(
                     values,
@@ -599,7 +601,7 @@ class DafReader(JlObject):
         column will be first and the ``age`` column will be second.
         """
         if isinstance(columns, Mapping):
-            columns = jl._pairify_columns(_jl_pairs(columns))
+            columns = jl.DafPy._pairify_columns(_jl_pairs(columns))
         else:
             columns = _to_julia_array(columns)
         jl_frame = jl.DataAxesFormats.Queries.get_frame(self.jl_obj, axis, columns, cache=cache)
