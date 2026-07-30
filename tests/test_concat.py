@@ -18,7 +18,7 @@ def test_concatenate() -> None:  # pylint: disable=too-many-statements
     sources[1].set_scalar("version", 2)
 
     destination = dp.memory_daf(name="destination!")
-    dp.concatenate(destination, "cell", sources, merge={"version": "CollectAxis"})
+    dp.concatenate(destination, "cell", sources, merge={"version": dp.MergeAction.CollectAxis})
     assert destination.description() == dedent("""
             name: destination!
             type: MemoryDaf

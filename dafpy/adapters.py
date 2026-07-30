@@ -41,8 +41,8 @@ def adapter(
     output_axes: Optional[ViewAxes] = None,
     output_data: Optional[ViewData] = None,
     empty: Optional[EmptyData] = None,
-    relayout: bool = True,
-    overwrite: bool = False,
+    relayout: Optional[bool] = None,
+    overwrite: Optional[bool] = None,
 ) -> Iterator[DafWriter]:
     """
     Invoke a computation on a view of some ``daf`` data set and return the result; copy a view of the results into the

@@ -49,3 +49,11 @@ def test_helpers_are_in_their_own_module() -> None:
 def test_wrapped_packages_do_not_leak() -> None:
     for name in EXPORTED_NAMES:
         assert not _is_defined_in_main(name), f"the exported {name} leaked into Julia's Main"
+
+
+def test_the_enums_namespace_holds_the_same_types() -> None:
+    import dafpy as dp  # pylint: disable=import-outside-toplevel
+
+    assert sorted(dp.enums.__all__) == ["AbnormalHandler", "CacheGroup", "LogLevel", "MergeAction"]
+    for name in dp.enums.__all__:
+        assert getattr(dp.enums, name) is getattr(dp, name)

@@ -13,7 +13,7 @@
   
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-<title>generic_functions &mdash; Daf 0.3.0 documentation
+<title>enums &mdash; Daf 0.3.0 documentation
 </title>
       
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
@@ -44,9 +44,7 @@
     
 <link rel="search" title="Search" href="search.html" />
     
-<link rel="next" title="example_data" href="example_data.html" />
-    
-<link rel="prev" title="anndata_facade" href="anndata_facade.html" /> 
+<link rel="prev" title="example_data" href="example_data.html" /> 
 
 </head>
 
@@ -169,13 +167,23 @@
 </a>
 </li>
 
+<li class="toctree-l2">
+<a class="reference internal" href="generic_functions.html">generic_functions
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="example_data.html">example_data
+</a>
+</li>
+
 <li class="toctree-l2 current">
-<a class="current reference internal" href="#">generic_functions
+<a class="current reference internal" href="#">enums
 </a>
 <ul>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.generic_functions.AbnormalHandler">
+<a class="reference internal" href="#dafpy.enums.AbnormalHandler">
 <code class="docutils literal notranslate">
 <span class="pre">AbnormalHandler
 </span>
@@ -184,7 +192,7 @@
 <ul>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.AbnormalHandler.IgnoreHandler">
+<a class="reference internal" href="#dafpy.enums.AbnormalHandler.IgnoreHandler">
 <code class="docutils literal notranslate">
 <span class="pre">AbnormalHandler.IgnoreHandler
 </span>
@@ -193,7 +201,7 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.AbnormalHandler.WarnHandler">
+<a class="reference internal" href="#dafpy.enums.AbnormalHandler.WarnHandler">
 <code class="docutils literal notranslate">
 <span class="pre">AbnormalHandler.WarnHandler
 </span>
@@ -202,7 +210,7 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.AbnormalHandler.ErrorHandler">
+<a class="reference internal" href="#dafpy.enums.AbnormalHandler.ErrorHandler">
 <code class="docutils literal notranslate">
 <span class="pre">AbnormalHandler.ErrorHandler
 </span>
@@ -215,16 +223,47 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.generic_functions.inefficient_action_handler">
+<a class="reference internal" href="#dafpy.enums.CacheGroup">
 <code class="docutils literal notranslate">
-<span class="pre">inefficient_action_handler()
+<span class="pre">CacheGroup
+</span>
+</code>
+</a>
+<ul>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.enums.CacheGroup.MappedData">
+<code class="docutils literal notranslate">
+<span class="pre">CacheGroup.MappedData
 </span>
 </code>
 </a>
 </li>
 
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.enums.CacheGroup.MemoryData">
+<code class="docutils literal notranslate">
+<span class="pre">CacheGroup.MemoryData
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.enums.CacheGroup.QueryData">
+<code class="docutils literal notranslate">
+<span class="pre">CacheGroup.QueryData
+</span>
+</code>
+</a>
+</li>
+
+</ul>
+
+</li>
+
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.generic_functions.LogLevel">
+<a class="reference internal" href="#dafpy.enums.LogLevel">
 <code class="docutils literal notranslate">
 <span class="pre">LogLevel
 </span>
@@ -233,7 +272,7 @@
 <ul>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.LogLevel.Debug">
+<a class="reference internal" href="#dafpy.enums.LogLevel.Debug">
 <code class="docutils literal notranslate">
 <span class="pre">LogLevel.Debug
 </span>
@@ -242,7 +281,7 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.LogLevel.Info">
+<a class="reference internal" href="#dafpy.enums.LogLevel.Info">
 <code class="docutils literal notranslate">
 <span class="pre">LogLevel.Info
 </span>
@@ -251,7 +290,7 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.LogLevel.Warn">
+<a class="reference internal" href="#dafpy.enums.LogLevel.Warn">
 <code class="docutils literal notranslate">
 <span class="pre">LogLevel.Warn
 </span>
@@ -260,7 +299,7 @@
 </li>
 
 <li class="toctree-l4">
-<a class="reference internal" href="#dafpy.generic_functions.LogLevel.Error">
+<a class="reference internal" href="#dafpy.enums.LogLevel.Error">
 <code class="docutils literal notranslate">
 <span class="pre">LogLevel.Error
 </span>
@@ -273,9 +312,36 @@
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.generic_functions.setup_logger">
+<a class="reference internal" href="#dafpy.enums.MergeAction">
 <code class="docutils literal notranslate">
-<span class="pre">setup_logger()
+<span class="pre">MergeAction
+</span>
+</code>
+</a>
+<ul>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.enums.MergeAction.SkipProperty">
+<code class="docutils literal notranslate">
+<span class="pre">MergeAction.SkipProperty
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.enums.MergeAction.LastValue">
+<code class="docutils literal notranslate">
+<span class="pre">MergeAction.LastValue
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
+<a class="reference internal" href="#dafpy.enums.MergeAction.CollectAxis">
+<code class="docutils literal notranslate">
+<span class="pre">MergeAction.CollectAxis
 </span>
 </code>
 </a>
@@ -285,14 +351,8 @@
 
 </li>
 
-<li class="toctree-l2">
-<a class="reference internal" href="example_data.html">example_data
-</a>
-</li>
+</ul>
 
-<li class="toctree-l2">
-<a class="reference internal" href="enums.html">enums
-</a>
 </li>
 
 </ul>
@@ -339,12 +399,12 @@
 </a>
 </li>
       
-<li class="breadcrumb-item active">generic_functions
+<li class="breadcrumb-item active">enums
 </li>
       
 <li class="wy-breadcrumbs-aside">
             
-<a href="_sources/generic_functions.rst.txt" rel="nofollow"> View page source
+<a href="_sources/enums.rst.txt" rel="nofollow"> View page source
 </a>
       
 </li>
@@ -360,29 +420,82 @@
 <div itemprop="articleBody">
              
   
-<section id="module-dafpy.generic_functions">
+<section id="module-dafpy.enums">
 
-<span id="generic-functions">
+<span id="enums">
 </span>
-<h1>generic_functions
-<a class="headerlink" href="#module-dafpy.generic_functions" title="Link to this heading">¶
+<h1>enums
+<a class="headerlink" href="#module-dafpy.enums" title="Link to this heading">¶
 </a>
 </h1>
 
-<p>Functions from 
-<a class="reference external" href="https://tanaylab.github.io/TanayLabUtilities.jl">TanayLabUtilities
-</a> which it is useful to make
-available. In principle we should put these in a separate 
+<p>All the enumerated types, collected in one place so that auto-completion can list them.
+</p>
+
+<p>Since 
 <code class="docutils literal notranslate">
-<span class="pre">TanayLabUtilities.py
+<span class="pre">clear
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">&lt;TAB&gt;
 </span>
-</code> wrapper package, but that’s too much of
-a hassle.
+</code> does not offer the valid values (no IDE infers the type of an assignment target or of a
+keyword argument), the practical way to discover them is 
+<code class="docutils literal notranslate">
+<span class="pre">dafpy.enums.&lt;TAB&gt;
+</span>
+</code> for the types, and then 
+<code class="docutils literal notranslate">
+<span class="pre">.&lt;TAB&gt;
+</span>
+</code>
+again for the values of the chosen one. The same types are also available directly, e.g. 
+<code class="docutils literal notranslate">
+<span class="pre">dafpy.CacheGroup
+</span>
+</code>.
+</p>
+
+<p>You can also 
+<code class="docutils literal notranslate">
+<span class="pre">from
+</span> 
+<span class="pre">dafpy
+</span> 
+<span class="pre">import
+</span> 
+<span class="pre">enums
+</span> 
+<span class="pre">as
+</span> 
+<span class="pre">e
+</span>
+</code> and write 
+<code class="docutils literal notranslate">
+<span class="pre">e.CacheGroup.MappedData
+</span>
+</code>, or
+
+<code class="docutils literal notranslate">
+<span class="pre">from
+</span> 
+<span class="pre">dafpy.enums
+</span> 
+<span class="pre">import
+</span> 
+<span class="pre">*
+</span>
+</code> and write 
+<code class="docutils literal notranslate">
+<span class="pre">CacheGroup.MappedData
+</span>
+</code>.
 </p>
 
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.AbnormalHandler">
+<dt class="sig sig-object py" id="dafpy.enums.AbnormalHandler">
 
 <span class="property">
 <span class="k">
@@ -393,7 +506,7 @@ a hassle.
 </span>
 </span>
 <span class="sig-prename descclassname">
-<span class="pre">dafpy.generic_functions.
+<span class="pre">dafpy.enums.
 </span>
 </span>
 <span class="sig-name descname">
@@ -416,7 +529,7 @@ a hassle.
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.generic_functions.AbnormalHandler" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.AbnormalHandler" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -430,7 +543,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.AbnormalHandler.IgnoreHandler">
+<dt class="sig sig-object py" id="dafpy.enums.AbnormalHandler.IgnoreHandler">
 
 <span class="sig-name descname">
 <span class="pre">IgnoreHandler
@@ -448,7 +561,7 @@ for details.
 <span class="pre">'IgnoreHandler'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.AbnormalHandler.IgnoreHandler" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.AbnormalHandler.IgnoreHandler" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -462,7 +575,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.AbnormalHandler.WarnHandler">
+<dt class="sig sig-object py" id="dafpy.enums.AbnormalHandler.WarnHandler">
 
 <span class="sig-name descname">
 <span class="pre">WarnHandler
@@ -480,7 +593,7 @@ for details.
 <span class="pre">'WarnHandler'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.AbnormalHandler.WarnHandler" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.AbnormalHandler.WarnHandler" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -494,7 +607,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.AbnormalHandler.ErrorHandler">
+<dt class="sig sig-object py" id="dafpy.enums.AbnormalHandler.ErrorHandler">
 
 <span class="sig-name descname">
 <span class="pre">ErrorHandler
@@ -512,7 +625,7 @@ for details.
 <span class="pre">'ErrorHandler'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.AbnormalHandler.ErrorHandler" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.AbnormalHandler.ErrorHandler" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -528,80 +641,9 @@ for details.
 </dl>
 
 
-<dl class="py function">
-
-<dt class="sig sig-object py" id="dafpy.generic_functions.inefficient_action_handler">
-
-<span class="sig-prename descclassname">
-<span class="pre">dafpy.generic_functions.
-</span>
-</span>
-<span class="sig-name descname">
-<span class="pre">inefficient_action_handler
-</span>
-</span>
-<span class="sig-paren">(
-</span>
-<em class="sig-param">
-<span class="n">
-<span class="pre">handler
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<a class="reference internal" href="#dafpy.generic_functions.AbnormalHandler" title="dafpy.generic_functions.AbnormalHandler">
-<span class="pre">AbnormalHandler
-</span>
-</a>
-</span>
-</em>
-<span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<a class="reference internal" href="#dafpy.generic_functions.AbnormalHandler" title="dafpy.generic_functions.AbnormalHandler">
-<span class="pre">AbnormalHandler
-</span>
-</a>
-</span>
-</span>
-<a class="reference internal" href="_modules/dafpy/generic_functions.html#inefficient_action_handler">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
-<a class="headerlink" href="#dafpy.generic_functions.inefficient_action_handler" title="Link to this definition">¶
-</a>
-</dt>
-
-<dd>
-<p>Specify the 
-<code class="docutils literal notranslate">
-<span class="pre">AbnormalHandler
-</span>
-</code> to use when accessing a matrix in an inefficient way (“against the grain”). Returns
-the previous handler. See the Julia
-
-<a class="reference external" href="https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.0/matrix_layouts.html#TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER">documentation
-</a>
-for details.
-</p>
-
-</dd>
-</dl>
-
-
 <dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.LogLevel">
+<dt class="sig sig-object py" id="dafpy.enums.CacheGroup">
 
 <span class="property">
 <span class="k">
@@ -612,7 +654,159 @@ for details.
 </span>
 </span>
 <span class="sig-prename descclassname">
-<span class="pre">dafpy.generic_functions.
+<span class="pre">dafpy.enums.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">CacheGroup
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">value
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/data.html#CacheGroup">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.enums.CacheGroup" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Types of cached data inside 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.CacheGroup">documentation
+</a>
+for details.
+</p>
+
+<dl class="py attribute">
+
+<dt class="sig sig-object py" id="dafpy.enums.CacheGroup.MappedData">
+
+<span class="sig-name descname">
+<span class="pre">MappedData
+</span>
+</span>
+<span class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'MappedData'
+</span>
+</span>
+<a class="headerlink" href="#dafpy.enums.CacheGroup.MappedData" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Data mapped from disk files.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py attribute">
+
+<dt class="sig sig-object py" id="dafpy.enums.CacheGroup.MemoryData">
+
+<span class="sig-name descname">
+<span class="pre">MemoryData
+</span>
+</span>
+<span class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'MemoryData'
+</span>
+</span>
+<a class="headerlink" href="#dafpy.enums.CacheGroup.MemoryData" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Data that exists only in memory.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py attribute">
+
+<dt class="sig sig-object py" id="dafpy.enums.CacheGroup.QueryData">
+
+<span class="sig-name descname">
+<span class="pre">QueryData
+</span>
+</span>
+<span class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'QueryData'
+</span>
+</span>
+<a class="headerlink" href="#dafpy.enums.CacheGroup.QueryData" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Data computed by queries.
+</p>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.enums.LogLevel">
+
+<span class="property">
+<span class="k">
+<span class="pre">class
+</span>
+</span>
+<span class="w"> 
+</span>
+</span>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.enums.
 </span>
 </span>
 <span class="sig-name descname">
@@ -635,7 +829,7 @@ for details.
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.generic_functions.LogLevel" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.LogLevel" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -649,7 +843,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.LogLevel.Debug">
+<dt class="sig sig-object py" id="dafpy.enums.LogLevel.Debug">
 
 <span class="sig-name descname">
 <span class="pre">Debug
@@ -667,7 +861,7 @@ for details.
 <span class="pre">'Debug'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.LogLevel.Debug" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.LogLevel.Debug" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -681,7 +875,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.LogLevel.Info">
+<dt class="sig sig-object py" id="dafpy.enums.LogLevel.Info">
 
 <span class="sig-name descname">
 <span class="pre">Info
@@ -699,7 +893,7 @@ for details.
 <span class="pre">'Info'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.LogLevel.Info" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.LogLevel.Info" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -713,7 +907,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.LogLevel.Warn">
+<dt class="sig sig-object py" id="dafpy.enums.LogLevel.Warn">
 
 <span class="sig-name descname">
 <span class="pre">Warn
@@ -731,7 +925,7 @@ for details.
 <span class="pre">'Warn'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.LogLevel.Warn" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.LogLevel.Warn" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -745,7 +939,7 @@ for details.
 
 <dl class="py attribute">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.LogLevel.Error">
+<dt class="sig sig-object py" id="dafpy.enums.LogLevel.Error">
 
 <span class="sig-name descname">
 <span class="pre">Error
@@ -763,7 +957,7 @@ for details.
 <span class="pre">'Error'
 </span>
 </span>
-<a class="headerlink" href="#dafpy.generic_functions.LogLevel.Error" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.LogLevel.Error" title="Link to this definition">¶
 </a>
 </dt>
 
@@ -779,264 +973,150 @@ for details.
 </dl>
 
 
-<dl class="py function">
+<dl class="py class">
 
-<dt class="sig sig-object py" id="dafpy.generic_functions.setup_logger">
+<dt class="sig sig-object py" id="dafpy.enums.MergeAction">
 
+<span class="property">
+<span class="k">
+<span class="pre">class
+</span>
+</span>
+<span class="w"> 
+</span>
+</span>
 <span class="sig-prename descclassname">
-<span class="pre">dafpy.generic_functions.
+<span class="pre">dafpy.enums.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">setup_logger
+<span class="pre">MergeAction
 </span>
 </span>
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
 <span class="n">
-<span class="pre">io
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">TextIO
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">&lt;_io.TextIOWrapper
-</span> 
-<span class="pre">name='&lt;stderr&gt;'
-</span> 
-<span class="pre">mode='w'
-</span> 
-<span class="pre">encoding='utf-8'&gt;
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">*
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">level
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<a class="reference internal" href="#dafpy.generic_functions.LogLevel" title="dafpy.generic_functions.LogLevel">
-<span class="pre">LogLevel
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">show_time
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">show_module
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
-</span>
-</span>
-</em>, 
-<em class="sig-param">
-<span class="n">
-<span class="pre">show_location
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="o">
-<span class="pre">=
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="default_value">
-<span class="pre">None
+<span class="pre">value
 </span>
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">None
 </span>
-</span>
-</span>
-<a class="reference internal" href="_modules/dafpy/generic_functions.html#setup_logger">
+<a class="reference internal" href="_modules/dafpy/concat.html#MergeAction">
 <span class="viewcode-link">
 <span class="pre">[source]
 </span>
 </span>
 </a>
-<a class="headerlink" href="#dafpy.generic_functions.setup_logger" title="Link to this definition">¶
+<a class="headerlink" href="#dafpy.enums.MergeAction" title="Link to this definition">¶
 </a>
 </dt>
 
 <dd>
-<p>Setup a global logger that will print into 
-<code class="docutils literal notranslate">
-<span class="pre">io
-</span>
-</code> (which currently must be either 
-<code class="docutils literal notranslate">
-<span class="pre">sys.stdout
-</span>
-</code> or 
-<code class="docutils literal notranslate">
-<span class="pre">sys.stderr
-</span>
-</code>),
-printing messages with a timestamp prefix. See the Julia
+<p>The action for merging the values of a property from the concatenated data sets into the result data set. See the
+Julia
 
-<a class="reference external" href="https://tanaylab.github.io/TanayLabUtilities.jl/v0.1.0/logger.html#TanayLabUtilities.Logger.setup_logger">documentation
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/concat.html#DataAxesFormats.Concat.MergeAction">documentation
 </a>
 for details.
 </p>
+
+<dl class="py attribute">
+
+<dt class="sig sig-object py" id="dafpy.enums.MergeAction.SkipProperty">
+
+<span class="sig-name descname">
+<span class="pre">SkipProperty
+</span>
+</span>
+<span class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'SkipProperty'
+</span>
+</span>
+<a class="headerlink" href="#dafpy.enums.MergeAction.SkipProperty" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Do not include the property in the result.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py attribute">
+
+<dt class="sig sig-object py" id="dafpy.enums.MergeAction.LastValue">
+
+<span class="sig-name descname">
+<span class="pre">LastValue
+</span>
+</span>
+<span class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'LastValue'
+</span>
+</span>
+<a class="headerlink" href="#dafpy.enums.MergeAction.LastValue" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Use the value from the last concatenated data set.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py attribute">
+
+<dt class="sig sig-object py" id="dafpy.enums.MergeAction.CollectAxis">
+
+<span class="sig-name descname">
+<span class="pre">CollectAxis
+</span>
+</span>
+<span class="property">
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">'CollectAxis'
+</span>
+</span>
+<a class="headerlink" href="#dafpy.enums.MergeAction.CollectAxis" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>Collect the values along the concatenation axis.
+</p>
+
+</dd>
+</dl>
+
 
 </dd>
 </dl>
@@ -1053,14 +1133,9 @@ for details.
 <footer>
 <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         
-<a href="anndata_facade.html" class="btn btn-neutral float-left" title="anndata_facade" accesskey="p" rel="prev">
+<a href="example_data.html" class="btn btn-neutral float-left" title="example_data" accesskey="p" rel="prev">
 <span class="fa fa-arrow-circle-left" aria-hidden="true">
 </span> Previous
-</a>
-        
-<a href="example_data.html" class="btn btn-neutral float-right" title="example_data" accesskey="n" rel="next">Next 
-<span class="fa fa-arrow-circle-right" aria-hidden="true">
-</span>
 </a>
     
 </div>

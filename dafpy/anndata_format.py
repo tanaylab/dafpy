@@ -5,6 +5,7 @@ Import/export ``Daf`` data from/to ``AnnData``. See the Julia
 
 __all__ = ["h5ad_as_daf", "daf_as_h5ad"]
 
+from typing import Any
 from typing import Optional
 
 from .data import DafReader
@@ -12,7 +13,12 @@ from .data import DafWriter
 from .formats import memory_daf
 from .generic_functions import JL_ABNORMAL_HANDLER
 from .generic_functions import AbnormalHandler
+from .julia_import import _given
 from .julia_import import jl
+
+
+def _jl_handler(handler: Optional[AbnormalHandler]) -> Any:
+    return None if handler is None else JL_ABNORMAL_HANDLER[handler]
 
 
 def h5ad_as_daf(
@@ -22,7 +28,7 @@ def h5ad_as_daf(
     obs_is: Optional[str] = None,
     var_is: Optional[str] = None,
     X_is: Optional[str] = None,
-    unsupported_handler: AbnormalHandler = "WarnHandler",
+    unsupported_handler: Optional[AbnormalHandler] = None,
 ) -> DafWriter:
     """
     View ``AnnData`` as a ``Daf`` data set, specifically using a ``MemoryDaf``. See the Julia
@@ -38,7 +44,7 @@ def h5ad_as_daf(
             obs_is=obs_is,
             var_is=var_is,
             X_is=X_is,
-            unsupported_handler=JL_ABNORMAL_HANDLER[unsupported_handler],
+            **_given(unsupported_handler=_jl_handler(unsupported_handler)),
         )
     )
 

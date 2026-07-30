@@ -20,4 +20,4 @@ API
   anndata_facade
   generic_functions
   example_data
-
+  enums

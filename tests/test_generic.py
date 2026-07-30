@@ -14,8 +14,8 @@ from .utilities import assert_raises
 
 
 def test_generic_functions() -> None:
-    assert dp.inefficient_action_handler("ErrorHandler") == "WarnHandler"
-    assert dp.inefficient_action_handler("WarnHandler") == "ErrorHandler"
+    assert dp.inefficient_action_handler(dp.AbnormalHandler.ErrorHandler) == dp.AbnormalHandler.WarnHandler
+    assert dp.inefficient_action_handler(dp.AbnormalHandler.WarnHandler) == dp.AbnormalHandler.ErrorHandler
 
 
 def test_generic_logging() -> None:
@@ -23,7 +23,7 @@ def test_generic_logging() -> None:
         with assert_raises("not implemented: logging into anything other than stdout and stderr"):
             dp.setup_logger(file)
 
-    dp.setup_logger(stdout, level="Error")
+    dp.setup_logger(stdout, level=dp.LogLevel.Error)
     dp.setup_logger(stderr, level=0)
 
     dp.setup_logger()

@@ -25,6 +25,7 @@ import os
 import shutil
 import sys
 import warnings
+from enum import Enum
 from typing import Any
 from typing import Mapping
 from typing import MutableMapping
@@ -35,7 +36,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp  # type: ignore
 
-__all__ = ["jl", "jl_version", "UndefInitializer", "Undef", "use_default_julia_environment"]
+__all__ = ["jl", "jl_version", "JlEnum", "UndefInitializer", "Undef", "use_default_julia_environment"]
 
 IGNORE_REIMPORT = False
 
@@ -155,6 +156,18 @@ for package in (
     if jl.seval('Base.find_package("' + package + '")') is None:
         jl.seval('Pkg.add("' + package + '")')
     jl.seval("import " + package)
+
+
+class JlEnum(Enum):
+    """
+    A Python base class for a set of named values matching a Julia type.
+
+    Grouping the values in a class (as opposed to listing them in a ``Literal``) is what allows auto-completion to
+    list them; a ``Literal`` offers no completions at all.
+    """
+
+    def __str__(self) -> str:
+        return self.value
 
 
 class UndefInitializer:
@@ -387,6 +400,19 @@ jl.seval("""
 
     end  # module DafPy
     """)
+
+
+def _given(**kwargs: Any) -> Mapping[str, Any]:
+    """
+    Collect the keyword arguments that were actually specified (for internal use).
+
+    A ``None`` value means "use whatever the Julia default is", so it is dropped instead of being passed on. This is
+    also correct for the many Julia parameters that are ``Maybe`` and default to ``nothing``, where passing ``nothing``
+    and omitting the parameter are the same thing. It is **not** correct for a ``Maybe`` parameter whose default isn't
+    ``nothing`` (``dataset_axis`` of ``concatenate`` is the only one), since there ``None`` is a meaningful value; such
+    a parameter has to restate its default in Python and be passed unconditionally.
+    """
+    return {name: value for name, value in kwargs.items() if value is not None}
 
 
 def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:

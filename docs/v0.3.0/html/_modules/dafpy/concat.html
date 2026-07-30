@@ -77,8 +77,11 @@
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/concat.html&gt;`__ for details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="c1"># The enum values are named exactly as they are in Julia, so they are not UPPER_CASE.</span>
+<span class="c1"># pylint: disable=invalid-name</span>
+
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractSet</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
@@ -89,23 +92,40 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafReader</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafWriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">PropertyKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">JlEnum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_given</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_array</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;concatenate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MergeAction&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
-<span class="c1">#: The action for merging the values of a property from the concatenated data sets into the result data set. See the</span>
-<span class="c1">#: Julia</span>
-<span class="c1">#: `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/concat.html#DataAxesFormats.Concat.MergeAction&gt;`__</span>
-<span class="c1">#: for details.</span>
-<span class="n">MergeAction</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;SkipProperty&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;LastValue&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;CollectAxis&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MergeAction">
+<a class="viewcode-back" href="../../enums.html#dafpy.concat.MergeAction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MergeAction</span><span class="p">(</span><span class="n">JlEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The action for merging the values of a property from the concatenated data sets into the result data set. See the</span>
+<span class="sd">    Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/concat.html#DataAxesFormats.Concat.MergeAction&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Do not include the property in the result.</span>
+    <span class="n">SkipProperty</span> <span class="o">=</span> <span class="s2">&quot;SkipProperty&quot;</span>
+    <span class="c1">#: Use the value from the last concatenated data set.</span>
+    <span class="n">LastValue</span> <span class="o">=</span> <span class="s2">&quot;LastValue&quot;</span>
+    <span class="c1">#: Collect the values along the concatenation axis.</span>
+    <span class="n">CollectAxis</span> <span class="o">=</span> <span class="s2">&quot;CollectAxis&quot;</span></div>
+
+
 
 <span class="n">JL_MERGE_ACTION</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;SkipProperty&quot;</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">SkipProperty</span><span class="p">,</span>
-    <span class="s2">&quot;LastValue&quot;</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">LastValue</span><span class="p">,</span>
-    <span class="s2">&quot;CollectAxis&quot;</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">CollectAxis</span><span class="p">,</span>
+    <span class="n">MergeAction</span><span class="o">.</span><span class="n">SkipProperty</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">SkipProperty</span><span class="p">,</span>
+    <span class="n">MergeAction</span><span class="o">.</span><span class="n">LastValue</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">LastValue</span><span class="p">,</span>
+    <span class="n">MergeAction</span><span class="o">.</span><span class="n">CollectAxis</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">CollectAxis</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1">#: A mapping where the key is a ``PropertyKey`` and the value is ``MergeAction``. See the Julia</span>
@@ -124,14 +144,16 @@
     <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">sources</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span>
     <span class="n">names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="c1"># This is the one parameter whose Julia default isn&#39;t ``nothing`` even though it accepts ``nothing`` (to not add</span>
+    <span class="c1"># a dataset axis at all), so the default has to be restated here and passed unconditionally.</span>
     <span class="n">dataset_axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dataset&quot;</span><span class="p">,</span>
-    <span class="n">dataset_property</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">dataset_property</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">prefixed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">empty</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EmptyData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">sparse_if_saves_storage_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">sparse_if_saves_storage_fraction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">merge</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MergeData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Concatenate data from a ``sources`` sequence of ``Daf`` data sets into a single ``destination`` data set along one</span>
@@ -148,15 +170,17 @@
         <span class="n">destination</span><span class="p">,</span>
         <span class="n">_to_julia_array</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">pyconvert</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_DafReadersVector</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sources</span><span class="p">)),</span>
-        <span class="n">names</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">names</span><span class="p">),</span>
         <span class="n">dataset_axis</span><span class="o">=</span><span class="n">dataset_axis</span><span class="p">,</span>
-        <span class="n">dataset_property</span><span class="o">=</span><span class="n">dataset_property</span><span class="p">,</span>
-        <span class="n">prefix</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">prefix</span><span class="p">),</span>
-        <span class="n">prefixed</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">prefixed</span><span class="p">),</span>
-        <span class="n">empty</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
-        <span class="n">sparse_if_saves_storage_fraction</span><span class="o">=</span><span class="n">sparse_if_saves_storage_fraction</span><span class="p">,</span>
-        <span class="n">merge</span><span class="o">=</span><span class="n">merge_data</span><span class="p">,</span>
-        <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">_given</span><span class="p">(</span>
+            <span class="n">names</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">names</span><span class="p">),</span>
+            <span class="n">dataset_property</span><span class="o">=</span><span class="n">dataset_property</span><span class="p">,</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">prefix</span><span class="p">),</span>
+            <span class="n">prefixed</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">prefixed</span><span class="p">),</span>
+            <span class="n">empty</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
+            <span class="n">sparse_if_saves_storage_fraction</span><span class="o">=</span><span class="n">sparse_if_saves_storage_fraction</span><span class="p">,</span>
+            <span class="n">merge</span><span class="o">=</span><span class="n">merge_data</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="p">),</span>
     <span class="p">)</span></div>
 
 </pre></div>

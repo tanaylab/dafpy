@@ -11,6 +11,7 @@ from .data import DafWriter
 from .data import DataKey
 from .julia_import import Undef
 from .julia_import import UndefInitializer
+from .julia_import import _given
 from .julia_import import _to_julia_array
 from .julia_import import jl
 from .storage_types import StorageScalar
@@ -33,7 +34,7 @@ def copy_scalar(
     name: str,
     rename: Optional[str] = None,
     default: StorageScalar | UndefInitializer | None = Undef,
-    overwrite: bool = False,
+    overwrite: Optional[bool] = None,
 ) -> None:
     """
     Copy a scalar with some ``name`` from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the
@@ -47,7 +48,7 @@ def copy_scalar(
         name=name,
         rename=rename,
         default=_to_julia_array(default),
-        overwrite=overwrite,
+        **_given(overwrite=overwrite),
     )
 
 
@@ -58,8 +59,8 @@ def copy_axis(
     axis: str,
     rename: Optional[str] = None,
     default: StorageScalar | UndefInitializer | None = Undef,
-    overwrite: bool = False,
-    insist: bool = True,
+    overwrite: Optional[bool] = None,
+    insist: Optional[bool] = None,
 ) -> None:
     """
     Copy an axis from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -72,8 +73,7 @@ def copy_axis(
         axis=axis,
         rename=rename,
         default=_to_julia_array(default),
-        overwrite=overwrite,
-        insist=insist,
+        **_given(overwrite=overwrite, insist=insist),
     )
 
 
@@ -87,7 +87,7 @@ def copy_vector(
     rename: Optional[str] = None,
     default: StorageScalar | UndefInitializer | None = Undef,
     empty: Optional[StorageScalar] = None,
-    overwrite: bool = False,
+    overwrite: Optional[bool] = None,
 ) -> None:
     """
     Copy a vector from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -103,7 +103,7 @@ def copy_vector(
         rename=rename,
         default=_to_julia_array(default),
         empty=empty,
-        overwrite=overwrite,
+        **_given(overwrite=overwrite),
     )
 
 
@@ -119,8 +119,8 @@ def copy_matrix(
     rename: Optional[str] = None,
     default: StorageScalar | UndefInitializer | None = Undef,
     empty: Optional[StorageScalar] = None,
-    relayout: bool = True,
-    overwrite: bool = False,
+    relayout: Optional[bool] = None,
+    overwrite: Optional[bool] = None,
 ) -> None:
     """
     Copy a matrix from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -138,8 +138,7 @@ def copy_matrix(
         rename=rename,
         default=_to_julia_array(default),
         empty=empty,
-        relayout=relayout,
-        overwrite=overwrite,
+        **_given(relayout=relayout, overwrite=overwrite),
     )
 
 
@@ -155,8 +154,8 @@ def copy_tensor(
     columns_reaxis: Optional[str] = None,
     rename: Optional[str] = None,
     empty: Optional[StorageScalar] = None,
-    relayout: bool = True,
-    overwrite: bool = False,
+    relayout: Optional[bool] = None,
+    overwrite: Optional[bool] = None,
 ) -> None:
     """
     Copy a tensor from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -174,8 +173,7 @@ def copy_tensor(
         columns_reaxis=columns_reaxis,
         rename=rename,
         empty=empty,
-        relayout=relayout,
-        overwrite=overwrite,
+        **_given(relayout=relayout, overwrite=overwrite),
     )
 
 
@@ -190,8 +188,8 @@ def copy_all(
     destination: DafWriter,
     source: DafReader,
     empty: Optional[EmptyData] = None,
-    overwrite: bool = False,
-    relayout: bool = True,
+    overwrite: Optional[bool] = None,
+    relayout: Optional[bool] = None,
 ) -> None:
     """
     Copy all the content of a ``source`` ``DafReader`` into a ``destination`` ``DafWriter``. See the Julia
@@ -199,5 +197,5 @@ def copy_all(
     for details.
     """
     jl.DataAxesFormats.copy_all_b(
-        destination=destination, source=source, empty=empty, overwrite=overwrite, relayout=relayout
+        destination=destination, source=source, empty=empty, **_given(overwrite=overwrite, relayout=relayout)
     )

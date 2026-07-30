@@ -6,12 +6,15 @@ Interface of ``DafReader`` and ``DafWriter``. See the Julia
 for details.
 """
 
+# The enum values are named exactly as they are in Julia, so they are not UPPER_CASE.
+# pylint: disable=invalid-name
+
+
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 from typing import AbstractSet
 from typing import Any
 from typing import Iterator
-from typing import Literal
 from typing import Mapping
 from typing import Optional
 from typing import Self
@@ -29,12 +32,14 @@ import numpy as np
 import pandas as pd  # type: ignore
 import scipy.sparse as sp  # type: ignore
 
+from .julia_import import JlEnum
 from .julia_import import JlObject
 from .julia_import import Undef
 from .julia_import import UndefInitializer
 from .julia_import import _as_vector
 from .julia_import import _from_julia_array
 from .julia_import import _from_julia_frame
+from .julia_import import _given
 from .julia_import import _jl_pairs
 from .julia_import import _to_julia_array
 from .julia_import import _to_julia_type
@@ -47,15 +52,25 @@ from .storage_types import StorageScalar
 __all__ = ["DafReader", "DafReadOnly", "DafWriter", "CacheGroup"]
 
 
-#: Types of cached data inside ``Daf``. See the Julia
-#: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.CacheGroup>`__
-#: for details.
-CacheGroup = Literal["MappedData"] | Literal["MemoryData"] | Literal["QueryData"]
+class CacheGroup(JlEnum):
+    """
+    Types of cached data inside ``Daf``. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.CacheGroup>`__
+    for details.
+    """
+
+    #: Data mapped from disk files.
+    MappedData = "MappedData"
+    #: Data that exists only in memory.
+    MemoryData = "MemoryData"
+    #: Data computed by queries.
+    QueryData = "QueryData"
+
 
 JL_CACHE_TYPE = {
-    "MappedData": jl.DataAxesFormats.MappedData,
-    "MemoryData": jl.DataAxesFormats.MemoryData,
-    "QueryData": jl.DataAxesFormats.QueryData,
+    CacheGroup.MappedData: jl.DataAxesFormats.MappedData,
+    CacheGroup.MemoryData: jl.DataAxesFormats.MemoryData,
+    CacheGroup.QueryData: jl.DataAxesFormats.QueryData,
 }
 
 #: A key specifying an atomic data property in ``Daf``. See the Julia
@@ -99,13 +114,15 @@ class DafReader(JlObject):
         """
         return self.jl_obj.name
 
-    def description(self, *, cache: bool = False, deep: bool = False, tensors: bool = True) -> str:
+    def description(
+        self, *, cache: Optional[bool] = None, deep: Optional[bool] = None, tensors: Optional[bool] = None
+    ) -> str:
         """
         Return a (multi-line) description of the contents of ``Daf`` data. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.description>`__
         for details.
         """
-        return jl.DataAxesFormats.description(self.jl_obj, cache=cache, deep=deep, tensors=tensors)
+        return jl.DataAxesFormats.description(self.jl_obj, **_given(cache=cache, deep=deep, tensors=tensors))
 
     def has_scalar(self, name: str) -> bool:
         """
@@ -344,27 +361,27 @@ class DafReader(JlObject):
             return None
         return pd.Series(vector_value, index=self.axis_np_vector(axis), copy=False)
 
-    def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: bool = True) -> bool:
+    def has_matrix(self, rows_axis: str, columns_axis: str, name: str, *, relayout: Optional[bool] = None) -> bool:
         """
         Check whether a matrix property with some ``name`` exists for the ``rows_axis`` and the ``columns_axis`` in the
         ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.has_matrix>`__
         for details.
         """
-        return jl.DataAxesFormats.has_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout)
+        return jl.DataAxesFormats.has_matrix(self.jl_obj, rows_axis, columns_axis, name, **_given(relayout=relayout))
 
-    def matrices_set(self, rows_axis: str, columns_axis: str, *, relayout: bool = True) -> AbstractSet[str]:
+    def matrices_set(self, rows_axis: str, columns_axis: str, *, relayout: Optional[bool] = None) -> AbstractSet[str]:
         """
         The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set. See the
         Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.matrices_set>`__
         for details.
         """
-        return jl.DataAxesFormats.matrices_set(self.jl_obj, rows_axis, columns_axis, relayout=relayout)
+        return jl.DataAxesFormats.matrices_set(self.jl_obj, rows_axis, columns_axis, **_given(relayout=relayout))
 
     @overload
     def get_np_matrix(
-        self, rows_axis: str, columns_axis: str, name: str, *, default: None, relayout: bool = True
+        self, rows_axis: str, columns_axis: str, name: str, *, default: None, relayout: Optional[bool] = None
     ) -> Optional[np.ndarray | sp.csc_matrix]: ...
 
     @overload
@@ -375,7 +392,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
-        relayout: bool = True,
+        relayout: Optional[bool] = None,
     ) -> np.ndarray | sp.csc_matrix: ...
 
     def get_np_matrix(
@@ -385,7 +402,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
-        relayout: bool = True,
+        relayout: Optional[bool] = None,
     ) -> Optional[np.ndarray | sp.csc_matrix]:
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
@@ -404,12 +421,17 @@ class DafReader(JlObject):
         Also note that although we call this ``get_np_matrix``, the result is **not** the deprecated ``np.matrix``
         (which is to be avoided at all costs).
         """
-        if not jl.DataAxesFormats.has_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout):
+        if not jl.DataAxesFormats.has_matrix(self.jl_obj, rows_axis, columns_axis, name, **_given(relayout=relayout)):
             if default is None:
                 return None
             return _from_julia_array(
                 jl.DataAxesFormats.get_matrix(
-                    self.jl_obj, rows_axis, columns_axis, name, default=_to_julia_array(default), relayout=relayout
+                    self.jl_obj,
+                    rows_axis,
+                    columns_axis,
+                    name,
+                    default=_to_julia_array(default),
+                    **_given(relayout=relayout),
                 )
             )
 
@@ -418,7 +440,7 @@ class DafReader(JlObject):
         matrix_value = self.weakrefs.get(matrix_key)
         if matrix_value is None:
             matrix_value = _from_julia_array(
-                jl.DataAxesFormats.get_matrix(self.jl_obj, rows_axis, columns_axis, name, relayout=relayout)
+                jl.DataAxesFormats.get_matrix(self.jl_obj, rows_axis, columns_axis, name, **_given(relayout=relayout))
             )
             self.weakrefs[matrix_key] = matrix_value
         return matrix_value
@@ -431,7 +453,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: None,
-        relayout: bool = True,
+        relayout: Optional[bool] = None,
     ) -> Optional[pd.DataFrame]: ...
 
     @overload
@@ -442,7 +464,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
-        relayout: bool = True,
+        relayout: Optional[bool] = None,
     ) -> pd.DataFrame: ...
 
     def get_pd_matrix(
@@ -452,7 +474,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
-        relayout: bool = True,
+        relayout: Optional[bool] = None,
     ) -> Optional[pd.DataFrame]:
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
@@ -470,7 +492,7 @@ class DafReader(JlObject):
         (query) columns, possibly using a different data type for each.
         """
         matrix_value = self.get_np_matrix(
-            rows_axis, columns_axis, name, default=_to_julia_array(default), relayout=relayout
+            rows_axis, columns_axis, name, default=_to_julia_array(default), **_given(relayout=relayout)
         )
         if matrix_value is None:
             return None
@@ -506,14 +528,14 @@ class DafReader(JlObject):
 
     @overload
     def get_np_query(
-        self, query: str | Query, *, cache: bool = True
+        self, query: str | Query, *, cache: Optional[bool] = None
     ) -> StorageScalar | np.ndarray | AbstractSet[str]: ...
 
     @overload
-    def get_np_query(self, query: None = None, *, cache: bool = True) -> PendingNumpyQuery: ...
+    def get_np_query(self, query: None = None, *, cache: Optional[bool] = None) -> PendingNumpyQuery: ...
 
     def get_np_query(
-        self, query: str | Query | None = None, *, cache: bool = True
+        self, query: str | Query | None = None, *, cache: Optional[bool] = None
     ) -> StorageScalar | np.ndarray | AbstractSet[str] | PendingNumpyQuery:
         """
         Apply the full ``query`` to the ``Daf`` data set and return the result. See the Julia
@@ -529,21 +551,21 @@ class DafReader(JlObject):
         if query is None:
             return PendingNumpyQuery(lambda query: self.get_np_query(query, cache=cache))
 
-        result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, cache=cache)
+        result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, **_given(cache=cache))
         if not isinstance(result, (str, int, float, AbstractSet)):
             result = _from_julia_array(result)
         return result
 
     @overload
     def get_pd_query(
-        self, query: str | Query, *, cache: bool = True
+        self, query: str | Query, *, cache: Optional[bool] = None
     ) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str]: ...
 
     @overload
-    def get_pd_query(self, query: None = None, *, cache: bool = True) -> PendingPandasQuery: ...
+    def get_pd_query(self, query: None = None, *, cache: Optional[bool] = None) -> PendingPandasQuery: ...
 
     def get_pd_query(
-        self, query: str | Query | None = None, *, cache: bool = True
+        self, query: str | Query | None = None, *, cache: Optional[bool] = None
     ) -> StorageScalar | pd.Series | pd.DataFrame | AbstractSet[str] | PendingPandasQuery:
         """
         Similar to ``get_np_query``, but return a ``pandas`` series or data frame for vector and matrix data.
@@ -557,7 +579,7 @@ class DafReader(JlObject):
         if query is None:
             return PendingPandasQuery(lambda query: self.get_pd_query(query, cache=cache))
 
-        result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, cache=cache)
+        result = jl.DataAxesFormats.Queries.get_query(self.jl_obj, query, **_given(cache=cache))
         if not isinstance(result, (str, int, float, AbstractSet)):
             values = _from_julia_array(result)
             if sp.issparse(values):
@@ -586,7 +608,7 @@ class DafReader(JlObject):
         axis: str | Query,
         columns: Optional[Sequence[str | Tuple[str, str]] | Mapping[str, str | Query]] = None,
         *,
-        cache: bool = False,
+        cache: Optional[bool] = None,
     ) -> pd.DataFrame:
         """
         Return a ``DataFrame`` containing multiple vectors of the same ``axis``. See the Julia
@@ -604,7 +626,7 @@ class DafReader(JlObject):
             columns = jl.DafPy._pairify_columns(_jl_pairs(columns))
         else:
             columns = _to_julia_array(columns)
-        jl_frame = jl.DataAxesFormats.Queries.get_frame(self.jl_obj, axis, columns, cache=cache)
+        jl_frame = jl.DataAxesFormats.Queries.get_frame(self.jl_obj, axis, columns, **_given(cache=cache))
         return _from_julia_frame(jl_frame)
 
     def read_only(self, *, name: Optional[str] = None) -> "DafReadOnly":
@@ -663,7 +685,7 @@ class DafWriter(DafReader):
     for details.
     """
 
-    def set_scalar(self, name: str, value: StorageScalar, *, overwrite: bool = False) -> Self:
+    def set_scalar(self, name: str, value: StorageScalar, *, overwrite: Optional[bool] = None) -> Self:
         """
         Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.set_scalar!>`__
@@ -674,7 +696,7 @@ class DafWriter(DafReader):
         You can force the data type numeric scalars are stored in by using the appropriate ``numpy`` type (e.g., a
         ``np.uint8`` will be stored as a ``UInt8``).
         """
-        jl.DataAxesFormats.set_scalar_b(self.jl_obj, name, value, overwrite=overwrite)
+        jl.DataAxesFormats.set_scalar_b(self.jl_obj, name, value, **_given(overwrite=overwrite))
         return self
 
     def delete_scalar(self, name: str, *, must_exist: bool = True) -> Self:
@@ -688,7 +710,7 @@ class DafWriter(DafReader):
         jl.DataAxesFormats.delete_scalar_b(self.jl_obj, name, must_exist=must_exist)
         return self
 
-    def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray, *, overwrite: bool = False) -> Self:
+    def add_axis(self, axis: str, entries: Sequence[str] | np.ndarray, *, overwrite: Optional[bool] = None) -> Self:
         """
         Add a new ``axis`` to the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.add_axis!>`__
@@ -696,7 +718,7 @@ class DafWriter(DafReader):
 
         Returns ``self`` for chaining.
         """
-        jl.DataAxesFormats.add_axis_b(self.jl_obj, axis, _to_julia_array(entries), overwrite=overwrite)
+        jl.DataAxesFormats.add_axis_b(self.jl_obj, axis, _to_julia_array(entries), **_given(overwrite=overwrite))
         return self
 
     def delete_axis(self, axis: str, *, must_exist: bool = True) -> Self:
@@ -716,7 +738,7 @@ class DafWriter(DafReader):
         name: str,
         value: Sequence[StorageScalar] | np.ndarray | sp.csc_matrix | sp.csr_matrix,
         *,
-        overwrite: bool = False,
+        overwrite: Optional[bool] = None,
     ) -> Self:
         """
         Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
@@ -740,7 +762,7 @@ class DafWriter(DafReader):
                 value.data.dtype,
                 value.nnz,
                 value.indptr.dtype,
-                overwrite=overwrite,
+                **_given(overwrite=overwrite),
             ) as (nzind, nzval):
                 nzind[:] = value.indices[:]
                 nzind += 1
@@ -756,7 +778,7 @@ class DafWriter(DafReader):
                 value.data.dtype,
                 value.nnz,
                 value.indptr.dtype,
-                overwrite=overwrite,
+                **_given(overwrite=overwrite),
             ) as (nzind, nzval):
                 nzind[:] = np.where(np.ediff1d(value.indptr) == 1)[0]
                 nzind += 1
@@ -764,13 +786,13 @@ class DafWriter(DafReader):
             return self
 
         jl.DataAxesFormats.set_vector_b(
-            self.jl_obj, axis, name, _as_vector(_to_julia_array(value)), overwrite=overwrite
+            self.jl_obj, axis, name, _as_vector(_to_julia_array(value)), **_given(overwrite=overwrite)
         )
         return self
 
     @contextmanager
     def empty_dense_vector(
-        self, axis: str, name: str, eltype: Type, *, overwrite: bool = False
+        self, axis: str, name: str, eltype: Type, *, overwrite: Optional[bool] = None
     ) -> Iterator[np.ndarray]:
         """
         Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it
@@ -782,7 +804,7 @@ class DafWriter(DafReader):
         ``with empty_dense_vector(dset, ...) as empty_vector: ...``.
         """
         vector, cache_group = jl.DataAxesFormats.get_empty_dense_vector_b(
-            self.jl_obj, axis, name, _to_julia_type(eltype), overwrite=overwrite
+            self.jl_obj, axis, name, _to_julia_type(eltype), **_given(overwrite=overwrite)
         )
         try:
             yield _from_julia_array(vector, writeable=True)
@@ -792,7 +814,7 @@ class DafWriter(DafReader):
 
     @contextmanager
     def empty_sparse_vector(  # pylint: disable=too-many-positional-arguments
-        self, axis: str, name: str, eltype: Type, nnz: int, indtype: Type, *, overwrite: bool = False
+        self, axis: str, name: str, eltype: Type, nnz: int, indtype: Type, *, overwrite: Optional[bool] = None
     ) -> Iterator[Tuple[np.ndarray, np.ndarray]]:
         """
         Create an empty sparse vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, pass its
@@ -807,7 +829,7 @@ class DafWriter(DafReader):
         zero-copy share sparse data between Python and Julia. Sigh.
         """
         nzind, nzval, cache_group = jl.DataAxesFormats.get_empty_sparse_vector_b(
-            self.jl_obj, axis, name, _to_julia_type(eltype), nnz, _to_julia_type(indtype), overwrite=overwrite
+            self.jl_obj, axis, name, _to_julia_type(eltype), nnz, _to_julia_type(indtype), **_given(overwrite=overwrite)
         )
         try:
             yield (_from_julia_array(nzind, writeable=True), _from_julia_array(nzval, writeable=True))
@@ -833,8 +855,8 @@ class DafWriter(DafReader):
         name: str,
         value: np.ndarray | sp.csc_matrix,
         *,
-        overwrite: bool = False,
-        relayout: bool = True,
+        overwrite: Optional[bool] = None,
+        relayout: Optional[bool] = None,
     ) -> Self:
         """
         Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.
@@ -849,13 +871,18 @@ class DafWriter(DafReader):
         Returns ``self`` for chaining.
         """
         jl.DataAxesFormats.set_matrix_b(
-            self.jl_obj, rows_axis, columns_axis, name, _to_julia_array(value), overwrite=overwrite, relayout=relayout
+            self.jl_obj,
+            rows_axis,
+            columns_axis,
+            name,
+            _to_julia_array(value),
+            **_given(overwrite=overwrite, relayout=relayout),
         )
         return self
 
     @contextmanager
     def empty_dense_matrix(
-        self, rows_axis: str, columns_axis: str, name: str, eltype: Type, *, overwrite: bool = False
+        self, rows_axis: str, columns_axis: str, name: str, eltype: Type, *, overwrite: Optional[bool] = None
     ) -> Iterator[np.ndarray]:
         """
         Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and
@@ -867,7 +894,7 @@ class DafWriter(DafReader):
         ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.
         """
         matrix, cache_group = jl.DataAxesFormats.get_empty_dense_matrix_b(
-            self.jl_obj, rows_axis, columns_axis, name, _to_julia_type(eltype), overwrite=overwrite
+            self.jl_obj, rows_axis, columns_axis, name, _to_julia_type(eltype), **_given(overwrite=overwrite)
         )
         try:
             yield _from_julia_array(matrix, writeable=True)
@@ -887,7 +914,7 @@ class DafWriter(DafReader):
         nnz: int,
         indtype: Type,
         *,
-        overwrite: bool = False,
+        overwrite: Optional[bool] = None,
     ) -> Iterator[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
         """
         Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and
@@ -910,7 +937,7 @@ class DafWriter(DafReader):
             _to_julia_type(eltype),
             nnz,
             _to_julia_type(indtype),
-            overwrite=overwrite,
+            **_given(overwrite=overwrite),
         )
         try:
             yield (
@@ -924,7 +951,9 @@ class DafWriter(DafReader):
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
 
-    def relayout_matrix(self, rows_axis: str, columns_axis: str, name: str, *, overwrite: bool = False) -> Self:
+    def relayout_matrix(
+        self, rows_axis: str, columns_axis: str, name: str, *, overwrite: Optional[bool] = None
+    ) -> Self:
         """
         Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the
         ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with
@@ -934,7 +963,7 @@ class DafWriter(DafReader):
 
         Returns ``self`` for chaining.
         """
-        jl.DataAxesFormats.relayout_matrix_b(self.jl_obj, rows_axis, columns_axis, name, overwrite=overwrite)
+        jl.DataAxesFormats.relayout_matrix_b(self.jl_obj, rows_axis, columns_axis, name, **_given(overwrite=overwrite))
         return self
 
     def delete_matrix(self, rows_axis: str, columns_axis: str, name: str, *, must_exist: bool = True) -> Self:

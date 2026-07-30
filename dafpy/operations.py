@@ -4,8 +4,6 @@ A ``Daf`` query can use operations to process the data: ``EltwiseOperation`` tha
 `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/operations.html>`__ for details.
 """
 
-from math import e
-from math import inf
 from typing import AbstractSet
 from typing import Callable
 from typing import Optional
@@ -17,6 +15,7 @@ import numpy as np
 import pandas as pd  # type: ignore
 
 from .julia_import import JlObject
+from .julia_import import _given
 from .julia_import import _to_julia_type
 from .julia_import import jl
 from .storage_types import StorageScalar
@@ -147,8 +146,10 @@ class Clamp(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, min: float = -inf, max: float = inf) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Clamp(min=min, max=max))
+    def __init__(  # pylint: disable=redefined-builtin
+        self, *, min: Optional[float] = None, max: Optional[float] = None
+    ) -> None:
+        super().__init__(jl.DataAxesFormats.Clamp(**_given(min=min, max=max)))
 
 
 class Convert(EltwiseOperation):
@@ -181,9 +182,13 @@ class Log(EltwiseOperation):
     """
 
     def __init__(
-        self, *, type: Optional[Type] = None, base: float = e, eps: float = 0  # pylint: disable=redefined-builtin
+        self,
+        *,
+        type: Optional[Type] = None,  # pylint: disable=redefined-builtin
+        base: Optional[float] = None,
+        eps: Optional[float] = None,
     ) -> None:
-        super().__init__(jl.DataAxesFormats.Log(type=_to_julia_type(type), base=base, eps=eps))
+        super().__init__(jl.DataAxesFormats.Log(type=_to_julia_type(type), **_given(base=base, eps=eps)))
 
 
 class Significant(EltwiseOperation):

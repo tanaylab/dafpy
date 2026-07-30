@@ -234,7 +234,7 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
         1  2.0  Female
     """)[1:-1]
 
-    daf.empty_cache(clear="MappedData")
+    daf.empty_cache(clear=dp.CacheGroup.MappedData)
 
     assert np.all(daf[q("@ cell : batch") | dp.CountBy("age")] == np.array([[1, 0], [0, 1]]))
 

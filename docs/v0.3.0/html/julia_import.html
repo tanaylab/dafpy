@@ -128,6 +128,15 @@
 </li>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.julia_import.JlEnum">
+<code class="docutils literal notranslate">
+<span class="pre">JlEnum
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.julia_import.UndefInitializer">
 <code class="docutils literal notranslate">
 <span class="pre">UndefInitializer
@@ -225,6 +234,11 @@
 
 <li class="toctree-l2">
 <a class="reference internal" href="example_data.html">example_data
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="enums.html">enums
 </a>
 </li>
 
@@ -456,6 +470,66 @@ in all our Python packages that invoke Julia.
 
 <dd>
 <p>The version of Julia being used.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.julia_import.JlEnum">
+
+<span class="property">
+<span class="k">
+<span class="pre">class
+</span>
+</span>
+<span class="w"> 
+</span>
+</span>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.julia_import.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">JlEnum
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">value
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/julia_import.html#JlEnum">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.julia_import.JlEnum" title="Link to this definition">¶
+</a>
+</dt>
+
+<dd>
+<p>A Python base class for a set of named values matching a Julia type.
+</p>
+
+<p>Grouping the values in a class (as opposed to listing them in a 
+<code class="docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code>) is what allows auto-completion to
+list them; a 
+<code class="docutils literal notranslate">
+<span class="pre">Literal
+</span>
+</code> offers no completions at all.
 </p>
 
 </dd>

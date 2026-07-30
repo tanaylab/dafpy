@@ -3,7 +3,10 @@ Example data. See the Julia
 `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/example_data.html>`__ for details.
 """
 
+from typing import Optional
+
 from .data import DafWriter
+from .julia_import import _given
 from .julia_import import jl
 
 __all__ = [
@@ -15,38 +18,38 @@ __all__ = [
 
 def example_cells_daf(
     *,
-    name: str = "cells!",
+    name: Optional[str] = None,
 ) -> DafWriter:
     """
     Load the cells example data into a ``MemoryDaf``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/example_data.html#DataAxesFormats.ExampleData.example_cells_daf>`__
     for details.
     """
-    jl_obj = jl.DataAxesFormats.example_cells_daf(name=name)
+    jl_obj = jl.DataAxesFormats.example_cells_daf(**_given(name=name))
     return DafWriter(jl_obj)
 
 
 def example_metacells_daf(
     *,
-    name: str = "metacells!",
+    name: Optional[str] = None,
 ) -> DafWriter:
     """
     Load the metacells example data into a ``MemoryDaf``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/example_data.html#DataAxesFormats.ExampleData.example_metacells_daf>`__
     for details.
     """
-    jl_obj = jl.DataAxesFormats.example_metacells_daf(name=name)
+    jl_obj = jl.DataAxesFormats.example_metacells_daf(**_given(name=name))
     return DafWriter(jl_obj)
 
 
 def example_chain_daf(
     *,
-    name: str = "chain!",
+    name: Optional[str] = None,
 ) -> DafWriter:
     """
     Load a chain of both the cells and metacells example data. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/example_data.html#DataAxesFormats.ExampleData.example_chain_daf>`__
     for details.
     """
-    jl_obj = jl.DataAxesFormats.example_chain_daf(name=name)
+    jl_obj = jl.DataAxesFormats.example_chain_daf(**_given(name=name))
     return DafWriter(jl_obj)
