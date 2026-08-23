@@ -40,6 +40,7 @@ import sys
 import warnings
 from enum import Enum
 from typing import Any
+from typing import Collection
 from typing import Mapping
 from typing import MutableMapping
 from typing import Sequence
@@ -255,6 +256,21 @@ def _to_julia_array(value: Any) -> Any:  # pylint: disable=too-many-return-state
 
     if isinstance(value, np.ndarray) and value.dtype.type == np.str_:
         value = jl.Vector(value)
+
+    return value
+
+
+# A parameter which is either one scalar or a collection of them. A scalar crosses as itself, and so does a string,
+# which is a collection of characters as far as Python is concerned but a scalar as far as Julia is. A tuple also
+# crosses as itself, so everything else is converted to one: a Python list or set arrives as a ``PyList`` or ``PySet``,
+# which is neither an ``AbstractVector`` nor an ``AbstractSet``, and a parameter declared as a union of a scalar and a
+# collection of them therefore rejects it.
+def _to_julia_scalar_or_collection(value: Any) -> Any:
+    if value is None or isinstance(value, (str, bytes)):
+        return value
+
+    if isinstance(value, Collection):
+        return tuple(value)
 
     return value
 

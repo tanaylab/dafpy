@@ -10,6 +10,37 @@ from textwrap import dedent
 import dafpy as dp
 
 
+def test_empty_implicit() -> None:
+    # The value(s) meaning "there is no batch" may be given as one of them, or as any collection of them. A string is
+    # one of them, even though Python considers a string to be a collection of characters.
+    for empties, n_batches in (
+        ("Outliers", 2),
+        (("Outliers", "Doublet"), 1),
+        (["Outliers", "Doublet"], 1),
+        ({"Outliers", "Doublet"}, 1),
+    ):
+        memory = dp.memory_daf(name="memory!")
+        memory.add_axis("cell", ["A", "B", "C", "D"])
+        memory.set_vector("cell", "age", [1, 1, 3, 3])
+        memory.set_vector("cell", "batch", ["X", "X", "Outliers", "Doublet"])
+
+        dp.reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch", empty_implicit=empties)
+
+        # Giving only one of them leaves the other as a batch of its own, which is what tells the cases apart.
+        assert memory.description() == dedent(f"""
+            name: memory!
+            type: MemoryDaf
+            axes:
+              batch: {n_batches} entries
+              cell: 4 entries
+            vectors:
+              batch:
+                age: {n_batches} x Int64 (Dense)
+              cell:
+                batch: 4 x Str (Dense)
+        """)[1:]
+
+
 def test_reconstruction() -> None:
     memory = dp.memory_daf(name="memory!")
 
