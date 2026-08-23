@@ -275,6 +275,15 @@ def _to_julia_scalar_or_collection(value: Any) -> Any:
     return value
 
 
+# A parameter which is a set. A Python set arrives as a ``PySet``, which is not an ``AbstractSet``, so a parameter
+# declared as one rejects it; there is no Julia set to convert it to other than by constructing one.
+def _to_julia_set(value: Any) -> Any:
+    if value is None:
+        return value
+
+    return jl.Set(_to_julia_array(list(value)))
+
+
 def _from_julia_array(julia_array: Any, *, writeable: bool = False) -> np.ndarray | sp.csc_matrix:
     if julia_array is None:
         return None

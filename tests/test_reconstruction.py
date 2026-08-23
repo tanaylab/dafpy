@@ -41,6 +41,25 @@ def test_empty_implicit() -> None:
         """)[1:]
 
 
+def test_properties_sets() -> None:
+    # A Python set has to be converted to a Julia one, which is what a parameter declared as a set expects.
+    memory = dp.memory_daf(name="memory!")
+    memory.add_axis("cell", ["A", "B", "C", "D"])
+    memory.set_vector("cell", "age", [1, 1, 2, 3])
+    memory.set_vector("cell", "score", [0.0, 0.5, 1.0, 2.0])
+    memory.set_vector("cell", "batch", ["X", "X", "Y", ""])
+
+    results = dp.reconstruct_axis(
+        memory,
+        existing_axis="cell",
+        implicit_axis="batch",
+        implicit_properties={"age"},
+        skipped_properties=frozenset({"score"}),
+    )
+
+    assert list(results.keys()) == ["age"]
+
+
 def test_reconstruction() -> None:
     memory = dp.memory_daf(name="memory!")
 
