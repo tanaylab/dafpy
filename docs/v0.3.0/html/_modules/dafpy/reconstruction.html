@@ -88,7 +88,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafWriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_scalar_or_collection</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_strings_set</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.storage_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageScalar</span>
 
@@ -119,8 +119,8 @@
         <span class="n">implicit_axis</span><span class="o">=</span><span class="n">implicit_axis</span><span class="p">,</span>
         <span class="n">rename_axis</span><span class="o">=</span><span class="n">rename_axis</span><span class="p">,</span>
         <span class="n">empty_implicit</span><span class="o">=</span><span class="n">_to_julia_scalar_or_collection</span><span class="p">(</span><span class="n">empty_implicit</span><span class="p">),</span>
-        <span class="n">implicit_properties</span><span class="o">=</span><span class="n">_to_julia_set</span><span class="p">(</span><span class="n">implicit_properties</span><span class="p">),</span>
-        <span class="n">skipped_properties</span><span class="o">=</span><span class="n">_to_julia_set</span><span class="p">(</span><span class="n">skipped_properties</span><span class="p">),</span>
+        <span class="n">implicit_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">implicit_properties</span><span class="p">),</span>
+        <span class="n">skipped_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">skipped_properties</span><span class="p">),</span>
     <span class="p">)</span></div>
 
 </pre></div>

@@ -14,7 +14,7 @@ from typing import Union
 
 from .data import DafWriter
 from .julia_import import _to_julia_scalar_or_collection
-from .julia_import import _to_julia_set
+from .julia_import import _to_julia_strings_set
 from .julia_import import jl
 from .storage_types import StorageScalar
 
@@ -43,6 +43,6 @@ def reconstruct_axis(
         implicit_axis=implicit_axis,
         rename_axis=rename_axis,
         empty_implicit=_to_julia_scalar_or_collection(empty_implicit),
-        implicit_properties=_to_julia_set(implicit_properties),
-        skipped_properties=_to_julia_set(skipped_properties),
+        implicit_properties=_to_julia_strings_set(implicit_properties),
+        skipped_properties=_to_julia_strings_set(skipped_properties),
     )

@@ -60,6 +60,30 @@ def test_properties_sets() -> None:
     assert list(results.keys()) == ["age"]
 
 
+def test_no_properties() -> None:
+    # An empty set of properties to convert is how one says "create the axis and nothing else", which is what to do
+    # when the axis was created in advance and holds entries the data does not use: converting a property would then
+    # need a default for each of them. An empty Python set says nothing about what it would have held, so what is
+    # built for Julia has to be a set of names because it was asked for, not because of what is in it.
+    memory = dp.memory_daf(name="memory!")
+    memory.add_axis("cell", ["A", "B", "C"])
+    memory.set_vector("cell", "age", [1, 1, 2])
+    memory.set_vector("cell", "batch", ["X", "X", "Y"])
+    memory.add_axis("batch", ["X", "Y", "Z"])
+
+    results = dp.reconstruct_axis(
+        memory,
+        existing_axis="cell",
+        implicit_axis="batch",
+        implicit_properties=set(),
+    )
+
+    assert not results
+    assert list(memory.axis_np_vector("batch")) == ["X", "Y", "Z"]
+    assert memory.has_vector("cell", "age")
+    assert not memory.has_vector("batch", "age")
+
+
 def test_reconstruction() -> None:
     memory = dp.memory_daf(name="memory!")
 

@@ -275,13 +275,17 @@ def _to_julia_scalar_or_collection(value: Any) -> Any:
     return value
 
 
-# A parameter which is a set. A Python set arrives as a ``PySet``, which is not an ``AbstractSet``, so a parameter
-# declared as one rejects it; there is no Julia set to convert it to other than by constructing one.
-def _to_julia_set(value: Any) -> Any:
+# A parameter which is a set of names. A Python set arrives as a ``PySet``, which is not an ``AbstractSet``, so a
+# parameter declared as one rejects it; there is no Julia set to convert it to other than by constructing one.
+#
+# The element type is stated rather than taken from the values, because an empty Python set says nothing about what it
+# would have held, and a set of the wrong element type is rejected exactly as a ``PySet`` is. An empty set is not an
+# odd case here: it is how one says "convert none of the properties".
+def _to_julia_strings_set(value: Any) -> Any:
     if value is None:
         return value
 
-    return jl.Set(_to_julia_array(list(value)))
+    return jl.Set(jl.Vector[jl.String](list(value)))
 
 
 def _from_julia_array(julia_array: Any, *, writeable: bool = False) -> np.ndarray | sp.csc_matrix:

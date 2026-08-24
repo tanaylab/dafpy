@@ -355,13 +355,17 @@
     <span class="k">return</span> <span class="n">value</span>
 
 
-<span class="c1"># A parameter which is a set. A Python set arrives as a ``PySet``, which is not an ``AbstractSet``, so a parameter</span>
-<span class="c1"># declared as one rejects it; there is no Julia set to convert it to other than by constructing one.</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_to_julia_set</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="c1"># A parameter which is a set of names. A Python set arrives as a ``PySet``, which is not an ``AbstractSet``, so a</span>
+<span class="c1"># parameter declared as one rejects it; there is no Julia set to convert it to other than by constructing one.</span>
+<span class="c1">#</span>
+<span class="c1"># The element type is stated rather than taken from the values, because an empty Python set says nothing about what it</span>
+<span class="c1"># would have held, and a set of the wrong element type is rejected exactly as a ``PySet`` is. An empty set is not an</span>
+<span class="c1"># odd case here: it is how one says &quot;convert none of the properties&quot;.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_julia_strings_set</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
 
-    <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">String</span><span class="p">](</span><span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_from_julia_array</span><span class="p">(</span><span class="n">julia_array</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">writeable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">:</span>

@@ -21,7 +21,7 @@ from .data import PropertyKey
 from .julia_import import JlEnum
 from .julia_import import _given
 from .julia_import import _to_julia_array
-from .julia_import import _to_julia_set
+from .julia_import import _to_julia_strings_set
 from .julia_import import jl
 
 __all__ = [
@@ -91,9 +91,9 @@ def concatenate(  # pylint: disable=too-many-positional-arguments
     # Either one set of names, applying to every concatenation axis, or one set per axis. A Python set is not an
     # ``AbstractSet``, and a list of them is not an ``AbstractVector`` of one either, so both shapes are converted.
     if prefixed is None or isinstance(prefixed, (set, frozenset, AbstractSet)):
-        prefixed_data = _to_julia_set(prefixed)
+        prefixed_data = _to_julia_strings_set(prefixed)
     else:
-        prefixed_data = jl.DafPy._sets_vector([_to_julia_set(names_of_source) for names_of_source in prefixed])
+        prefixed_data = jl.DafPy._sets_vector([_to_julia_strings_set(names_of_source) for names_of_source in prefixed])
 
     jl.DataAxesFormats.concatenate_b(
         destination,
