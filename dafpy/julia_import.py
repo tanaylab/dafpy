@@ -403,6 +403,14 @@ jl.seval("""
         end
     end
 
+    function _sets_vector(items::Maybe{AbstractVector})::Maybe{Vector{Set{String}}}
+        if items == nothing
+            return nothing
+        else
+            return [Set{String}(item) for item in items]
+        end
+    end
+
     function pyconvert_rule_jl_object(::Type{T}, x::Py) where {T}
         return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))
     end

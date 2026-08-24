@@ -483,6 +483,14 @@
 <span class="s2">        end</span>
 <span class="s2">    end</span>
 
+<span class="s2">    function _sets_vector(items::Maybe</span><span class="si">{AbstractVector}</span><span class="s2">)::Maybe{Vector{Set</span><span class="si">{String}</span><span class="s2">}}</span>
+<span class="s2">        if items == nothing</span>
+<span class="s2">            return nothing</span>
+<span class="s2">        else</span>
+<span class="s2">            return [Set</span><span class="si">{String}</span><span class="s2">(item) for item in items]</span>
+<span class="s2">        end</span>
+<span class="s2">    end</span>
+
 <span class="s2">    function pyconvert_rule_jl_object(::Type</span><span class="si">{T}</span><span class="s2">, x::Py) where </span><span class="si">{T}</span>
 <span class="s2">        return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))</span>
 <span class="s2">    end</span>
