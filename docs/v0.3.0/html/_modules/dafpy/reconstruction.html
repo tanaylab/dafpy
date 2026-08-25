@@ -78,18 +78,20 @@
 <span class="sd">for details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;connect_axes&quot;</span><span class="p">,</span> <span class="s2">&quot;reconstruct_axis&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;connect_axes&quot;</span><span class="p">,</span> <span class="s2">&quot;reconstruct_axis&quot;</span><span class="p">,</span> <span class="s2">&quot;unify_empty_vector_values&quot;</span><span class="p">]</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractSet</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafWriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_given</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_scalar_or_collection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_strings_set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_type</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.storage_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageScalar</span>
 
@@ -102,15 +104,13 @@
     <span class="n">existing_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">implicit_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">rename_axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">empty_implicit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">,</span> <span class="n">Collection</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">implicit_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">skipped_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the</span>
-<span class="sd">    same name (or, if specified, call it ``rename_axis``). The ``empty_implicit`` value(s), meaning &quot;there is no value&quot;,</span>
-<span class="sd">    may be a single one or any collection of them, since data often spells &quot;no value&quot; in more than one way. See the</span>
-<span class="sd">    Julia</span>
+<span class="sd">    same name (or, if specified, call it ``rename_axis``). An empty string means there is no value; data spelling that</span>
+<span class="sd">    some other way should be passed through ``unify_empty_vector_values`` first. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.reconstruct_axis!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -119,7 +119,6 @@
         <span class="n">existing_axis</span><span class="o">=</span><span class="n">existing_axis</span><span class="p">,</span>
         <span class="n">implicit_axis</span><span class="o">=</span><span class="n">implicit_axis</span><span class="p">,</span>
         <span class="n">rename_axis</span><span class="o">=</span><span class="n">rename_axis</span><span class="p">,</span>
-        <span class="n">empty_implicit</span><span class="o">=</span><span class="n">_to_julia_scalar_or_collection</span><span class="p">(</span><span class="n">empty_implicit</span><span class="p">),</span>
         <span class="n">implicit_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">implicit_properties</span><span class="p">),</span>
         <span class="n">skipped_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">skipped_properties</span><span class="p">),</span>
     <span class="p">)</span></div>
@@ -155,6 +154,34 @@
         <span class="n">to_property</span><span class="o">=</span><span class="n">to_property</span><span class="p">,</span>
         <span class="n">connect_property</span><span class="o">=</span><span class="n">connect_property</span><span class="p">,</span>
         <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="unify_empty_vector_values">
+<a class="viewcode-back" href="../../reconstruction.html#dafpy.reconstruction.unify_empty_vector_values">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">unify_empty_vector_values</span><span class="p">(</span>
+    <span class="n">dset</span><span class="p">:</span> <span class="n">DafWriter</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="nb">property</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># pylint: disable=redefined-builtin</span>
+    <span class="n">empty_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">,</span> <span class="n">Collection</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]],</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">empty_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replace every one of the ``empty_values`` of a ``property`` of an ``axis`` with a single ``empty_value``, so that</span>
+<span class="sd">    &quot;there is no value here&quot; is spelled one way, converting the property to a ``dtype`` on the way if one is given. See</span>
+<span class="sd">    the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.unify_empty_vector_values!&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">unify_empty_vector_values_b</span><span class="p">(</span>
+        <span class="n">dset</span><span class="p">,</span>
+        <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span>
+        <span class="nb">property</span><span class="o">=</span><span class="nb">property</span><span class="p">,</span>
+        <span class="n">empty_values</span><span class="o">=</span><span class="n">_to_julia_scalar_or_collection</span><span class="p">(</span><span class="n">empty_values</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">_to_julia_type</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">empty_value</span><span class="o">=</span><span class="n">empty_value</span><span class="p">),</span>
     <span class="p">)</span></div>
 
 </pre></div>

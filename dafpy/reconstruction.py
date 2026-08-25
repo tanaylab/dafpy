@@ -4,18 +4,20 @@ Reconstruct implicit axes. See the Julia
 for details.
 """
 
-__all__ = ["connect_axes", "reconstruct_axis"]
+__all__ = ["connect_axes", "reconstruct_axis", "unify_empty_vector_values"]
 
 from typing import AbstractSet
 from typing import Collection
 from typing import Mapping
 from typing import Optional
+from typing import Type
 from typing import Union
 
 from .data import DafWriter
 from .julia_import import _given
 from .julia_import import _to_julia_scalar_or_collection
 from .julia_import import _to_julia_strings_set
+from .julia_import import _to_julia_type
 from .julia_import import jl
 from .storage_types import StorageScalar
 
@@ -26,15 +28,13 @@ def reconstruct_axis(
     existing_axis: str,
     implicit_axis: str,
     rename_axis: Optional[str] = None,
-    empty_implicit: Optional[Union[StorageScalar, Collection[StorageScalar]]] = None,
     implicit_properties: Optional[AbstractSet[str]] = None,
     skipped_properties: Optional[AbstractSet[str]] = None,
 ) -> Mapping[str, Optional[StorageScalar]]:
     """
     Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the
-    same name (or, if specified, call it ``rename_axis``). The ``empty_implicit`` value(s), meaning "there is no value",
-    may be a single one or any collection of them, since data often spells "no value" in more than one way. See the
-    Julia
+    same name (or, if specified, call it ``rename_axis``). An empty string means there is no value; data spelling that
+    some other way should be passed through ``unify_empty_vector_values`` first. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.reconstruct_axis!>`__
     for details.
     """
@@ -43,7 +43,6 @@ def reconstruct_axis(
         existing_axis=existing_axis,
         implicit_axis=implicit_axis,
         rename_axis=rename_axis,
-        empty_implicit=_to_julia_scalar_or_collection(empty_implicit),
         implicit_properties=_to_julia_strings_set(implicit_properties),
         skipped_properties=_to_julia_strings_set(skipped_properties),
     )
@@ -76,4 +75,29 @@ def connect_axes(
         to_property=to_property,
         connect_property=connect_property,
         **_given(overwrite=overwrite),
+    )
+
+
+def unify_empty_vector_values(
+    dset: DafWriter,
+    *,
+    axis: str,
+    property: str,  # pylint: disable=redefined-builtin
+    empty_values: Union[StorageScalar, Collection[StorageScalar]],
+    dtype: Optional[Type] = None,
+    empty_value: Optional[StorageScalar] = None,
+) -> None:
+    """
+    Replace every one of the ``empty_values`` of a ``property`` of an ``axis`` with a single ``empty_value``, so that
+    "there is no value here" is spelled one way, converting the property to a ``dtype`` on the way if one is given. See
+    the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.unify_empty_vector_values!>`__
+    for details.
+    """
+    jl.DataAxesFormats.unify_empty_vector_values_b(
+        dset,
+        axis=axis,
+        property=property,
+        empty_values=_to_julia_scalar_or_collection(empty_values),
+        **_given(dtype=_to_julia_type(dtype), empty_value=empty_value),
     )

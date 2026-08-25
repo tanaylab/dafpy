@@ -7,12 +7,15 @@ Test ``Daf`` axis reconstruction.
 
 from textwrap import dedent
 
+import numpy as np
+
 import dafpy as dp
 
 
-def test_empty_implicit() -> None:
+def test_empty_values() -> None:
     # The value(s) meaning "there is no batch" may be given as one of them, or as any collection of them. A string is
-    # one of them, even though Python considers a string to be a collection of characters.
+    # one of them, even though Python considers a string to be a collection of characters. Saying which values mean
+    # nothing is ``unify_empty_vector_values``, so that ``reconstruct_axis`` need only know about the empty string.
     for empties, n_batches in (
         ("Outliers", 2),
         (("Outliers", "Doublet"), 1),
@@ -24,7 +27,8 @@ def test_empty_implicit() -> None:
         memory.set_vector("cell", "age", [1, 1, 3, 3])
         memory.set_vector("cell", "batch", ["X", "X", "Outliers", "Doublet"])
 
-        dp.reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch", empty_implicit=empties)
+        dp.unify_empty_vector_values(memory, axis="cell", property="batch", empty_values=empties)
+        dp.reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch")
 
         # Giving only one of them leaves the other as a batch of its own, which is what tells the cases apart.
         assert memory.description() == dedent(f"""
@@ -39,6 +43,21 @@ def test_empty_implicit() -> None:
               cell:
                 batch: 4 x Str (Dense)
         """)[1:]
+
+
+def test_unify_to_a_type() -> None:
+    # A column of measurements is a column of strings because a few of its entries say ``NA``. The type has to reach
+    # Julia as a Julia type, which is the one thing this wrapper does beyond passing its arguments along.
+    memory = dp.memory_daf(name="memory!")
+    memory.add_axis("cell", ["A", "B", "C"])
+    memory.set_vector("cell", "qc", ["23.5", "NA", "24.5"])
+
+    dp.unify_empty_vector_values(memory, axis="cell", property="qc", empty_values="NA", dtype=np.float32)
+
+    values = memory.get_np_vector("cell", "qc")
+    assert values.dtype == np.float32
+    assert list(values[[0, 2]]) == [np.float32(23.5), np.float32(24.5)]
+    assert np.isnan(values[1])
 
 
 def test_properties_sets() -> None:
