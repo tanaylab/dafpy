@@ -78,7 +78,7 @@
 <span class="sd">for details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;reconstruct_axis&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;connect_axes&quot;</span><span class="p">,</span> <span class="s2">&quot;reconstruct_axis&quot;</span><span class="p">]</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractSet</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span>
@@ -87,6 +87,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafWriter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_given</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_scalar_or_collection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_to_julia_strings_set</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
@@ -121,6 +122,39 @@
         <span class="n">empty_implicit</span><span class="o">=</span><span class="n">_to_julia_scalar_or_collection</span><span class="p">(</span><span class="n">empty_implicit</span><span class="p">),</span>
         <span class="n">implicit_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">implicit_properties</span><span class="p">),</span>
         <span class="n">skipped_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">skipped_properties</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="connect_axes">
+<a class="viewcode-back" href="../../reconstruction.html#dafpy.reconstruction.connect_axes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">connect_axes</span><span class="p">(</span>
+    <span class="n">dset</span><span class="p">:</span> <span class="n">DafWriter</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">base_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">from_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">from_property</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">to_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">to_property</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">connect_property</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a ``base_axis`` with two vector properties, one holding a reference to ``from_axis`` and one to ``to_axis``,</span>
+<span class="sd">    create a property of ``from_axis`` that references ``to_axis``. This is only possible if every entry of</span>
+<span class="sd">    ``from_axis`` is always associated with a single entry of ``to_axis``. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.connect_axes!&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">connect_axes_b</span><span class="p">(</span>
+        <span class="n">dset</span><span class="p">,</span>
+        <span class="n">base_axis</span><span class="o">=</span><span class="n">base_axis</span><span class="p">,</span>
+        <span class="n">from_axis</span><span class="o">=</span><span class="n">from_axis</span><span class="p">,</span>
+        <span class="n">from_property</span><span class="o">=</span><span class="n">from_property</span><span class="p">,</span>
+        <span class="n">to_axis</span><span class="o">=</span><span class="n">to_axis</span><span class="p">,</span>
+        <span class="n">to_property</span><span class="o">=</span><span class="n">to_property</span><span class="p">,</span>
+        <span class="n">connect_property</span><span class="o">=</span><span class="n">connect_property</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">),</span>
     <span class="p">)</span></div>
 
 </pre></div>

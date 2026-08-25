@@ -120,6 +120,15 @@
 <ul>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.reconstruction.connect_axes">
+<code class="docutils literal notranslate">
+<span class="pre">connect_axes()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.reconstruction.reconstruct_axis">
 <code class="docutils literal notranslate">
 <span class="pre">reconstruct_axis()
@@ -277,6 +286,308 @@
 </a>
 for details.
 </p>
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.reconstruction.connect_axes">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.reconstruction.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">connect_axes
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">dset
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="keyword-only-separator o">
+<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="pre">*
+</span>
+</abbr>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">base_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">from_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">from_property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">to_axis
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">to_property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">connect_property
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">overwrite
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">None
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/reconstruction.html#connect_axes">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.reconstruction.connect_axes" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>Given a 
+<code class="docutils literal notranslate">
+<span class="pre">base_axis
+</span>
+</code> with two vector properties, one holding a reference to 
+<code class="docutils literal notranslate">
+<span class="pre">from_axis
+</span>
+</code> and one to 
+<code class="docutils literal notranslate">
+<span class="pre">to_axis
+</span>
+</code>,
+create a property of 
+<code class="docutils literal notranslate">
+<span class="pre">from_axis
+</span>
+</code> that references 
+<code class="docutils literal notranslate">
+<span class="pre">to_axis
+</span>
+</code>. This is only possible if every entry of
+
+<code class="docutils literal notranslate">
+<span class="pre">from_axis
+</span>
+</code> is always associated with a single entry of 
+<code class="docutils literal notranslate">
+<span class="pre">to_axis
+</span>
+</code>. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.connect_axes!">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
 
 <dl class="py function">
 

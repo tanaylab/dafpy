@@ -4,7 +4,7 @@ Reconstruct implicit axes. See the Julia
 for details.
 """
 
-__all__ = ["reconstruct_axis"]
+__all__ = ["connect_axes", "reconstruct_axis"]
 
 from typing import AbstractSet
 from typing import Collection
@@ -13,6 +13,7 @@ from typing import Optional
 from typing import Union
 
 from .data import DafWriter
+from .julia_import import _given
 from .julia_import import _to_julia_scalar_or_collection
 from .julia_import import _to_julia_strings_set
 from .julia_import import jl
@@ -45,4 +46,34 @@ def reconstruct_axis(
         empty_implicit=_to_julia_scalar_or_collection(empty_implicit),
         implicit_properties=_to_julia_strings_set(implicit_properties),
         skipped_properties=_to_julia_strings_set(skipped_properties),
+    )
+
+
+def connect_axes(
+    dset: DafWriter,
+    *,
+    base_axis: str,
+    from_axis: str,
+    from_property: Optional[str] = None,
+    to_axis: str,
+    to_property: Optional[str] = None,
+    connect_property: Optional[str] = None,
+    overwrite: Optional[bool] = None,
+) -> None:
+    """
+    Given a ``base_axis`` with two vector properties, one holding a reference to ``from_axis`` and one to ``to_axis``,
+    create a property of ``from_axis`` that references ``to_axis``. This is only possible if every entry of
+    ``from_axis`` is always associated with a single entry of ``to_axis``. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reconstruction.html#DataAxesFormats.Reconstruction.connect_axes!>`__
+    for details.
+    """
+    jl.DataAxesFormats.connect_axes_b(
+        dset,
+        base_axis=base_axis,
+        from_axis=from_axis,
+        from_property=from_property,
+        to_axis=to_axis,
+        to_property=to_property,
+        connect_property=connect_property,
+        **_given(overwrite=overwrite),
     )

@@ -60,6 +60,49 @@ def test_properties_sets() -> None:
     assert list(results.keys()) == ["age"]
 
 
+def test_connect_axes() -> None:
+    # Plates and sequencing runs are both properties of a batch, and each plate belongs to one run, but nothing says so
+    # where a plate can be asked about it. The last batch has no plate, which is not a problem: nothing is moved, so it
+    # keeps its own run.
+    memory = dp.memory_daf(name="memory!")
+    memory.add_axis("batch", ["B1", "B2", "B3", "B4"])
+    memory.add_axis("plate", ["P1", "P2", "P3"])
+    memory.add_axis("run", ["R1", "R2"])
+    memory.set_vector("batch", "plate", ["P1", "P1", "P2", ""])
+    memory.set_vector("batch", "run", ["R1", "R1", "R2", "R2"])
+
+    dp.connect_axes(memory, base_axis="batch", from_axis="plate", to_axis="run")
+
+    # P3 is named by no batch, so it is connected to nothing.
+    assert list(memory.get_np_vector("plate", "run")) == ["R1", "R2", ""]
+
+    # Nothing was moved, so the batch with no plate still has its run.
+    assert list(memory.get_np_vector("batch", "run")) == ["R1", "R1", "R2", "R2"]
+
+
+def test_connect_axes_names() -> None:
+    # The properties holding the references need not be named after the axes they refer to.
+    memory = dp.memory_daf(name="memory!")
+    memory.add_axis("batch", ["B1", "B2"])
+    memory.add_axis("plate", ["P1"])
+    memory.add_axis("run", ["R1"])
+    memory.set_vector("batch", "on_plate", ["P1", "P1"])
+    memory.set_vector("batch", "sequenced_by", ["R1", "R1"])
+
+    dp.connect_axes(
+        memory,
+        base_axis="batch",
+        from_axis="plate",
+        from_property="on_plate",
+        to_axis="run",
+        to_property="sequenced_by",
+        connect_property="sequenced_by",
+    )
+
+    assert list(memory.get_np_vector("plate", "sequenced_by")) == ["R1"]
+    assert not memory.has_vector("plate", "run")
+
+
 def test_no_properties() -> None:
     # An empty set of properties to convert is how one says "create the axis and nothing else", which is what to do
     # when the axis was created in advance and holds entries the data does not use: converting a property would then
