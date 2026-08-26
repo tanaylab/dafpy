@@ -64,6 +64,7 @@ from .concat import *  # isort: skip
 from .anndata_format import *  # isort: skip
 from .anndata_facade import *  # isort: skip
 from .reconstruction import *  # isort: skip
+from .reorder import *  # isort: skip
 from .example_data import *  # isort: skip
 from . import enums  # isort: skip
 from .enums import *  # isort: skip

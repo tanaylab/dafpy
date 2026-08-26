@@ -263,3 +263,16 @@ def test_query_result() -> None:  # pylint: disable=too-many-statements
 
     np_result = q("@ cell : age") | daf.get_np_query()
     assert np.all(np_result == np.array([-1, 2]))
+
+
+def test_escape_value() -> None:
+    # A name holding characters a query gives meaning to has to be escaped before it can be put in one, and the empty
+    # name has a spelling of its own.
+    assert dp.escape_value("simple") == "simple"
+    assert dp.escape_value("") == "''"
+    assert dp.unescape_value(dp.escape_value("a : b")) == "a : b"
+
+
+def test_full_vector_query() -> None:
+    # An axis query and a suffix query for a property become the query for that property of that axis.
+    assert str(dp.full_vector_query("@ cell", ": age")) == "@ cell : age"

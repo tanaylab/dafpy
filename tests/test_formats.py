@@ -481,3 +481,23 @@ def test_chains() -> None:
     write_chain = dp.chain_writer([first, second], name="chain!")
     write_chain.set_scalar("version", 3.0, overwrite=True)
     assert second.get_scalar("version") == 3.0
+
+
+def test_complete_chain(tmp_path) -> None:
+    # Unlike a plain chain, this records where the base is, so the chain can be reopened given only the new path.
+    base = dp.files_daf(f"{tmp_path}/base", "w", name="base!")
+    assert isinstance(base, dp.DafWriter)
+    base.add_axis("cell", ["A", "B"])
+    base.set_vector("cell", "age", [1, 2])
+
+    new = dp.files_daf(f"{tmp_path}/new", "w", name="new!")
+    assert isinstance(new, dp.DafWriter)
+    chain = dp.complete_chain(base_daf=base, new_daf=new, name="chain!")
+    chain.set_vector("cell", "score", [0.5, 1.5])
+
+    assert list(chain.axis_np_vector("cell")) == ["A", "B"]
+    assert list(chain.get_np_vector("cell", "age")) == [1, 2]
+
+    reopened = dp.complete_daf(f"{tmp_path}/new", "r", name="reopened!")
+    assert list(reopened.get_np_vector("cell", "age")) == [1, 2]
+    assert list(reopened.get_np_vector("cell", "score")) == [0.5, 1.5]

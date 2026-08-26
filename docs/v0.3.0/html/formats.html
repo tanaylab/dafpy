@@ -120,6 +120,11 @@
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="reorder.html">reorder
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="storage_types.html">storage_types
 </a>
 </li>
@@ -152,6 +157,15 @@
 <a class="reference internal" href="#dafpy.formats.chain_writer">
 <code class="docutils literal notranslate">
 <span class="pre">chain_writer()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.complete_chain">
+<code class="docutils literal notranslate">
+<span class="pre">complete_chain()
 </span>
 </code>
 </a>
@@ -622,6 +636,183 @@ details.
 <a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_writer">documentation
 </a> for
 details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.formats.complete_chain">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">complete_chain
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="keyword-only-separator o">
+<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="pre">*
+</span>
+</abbr>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">base_daf
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">new_daf
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">absolute
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#complete_chain">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.complete_chain" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>Chain a freshly created empty 
+<code class="docutils literal notranslate">
+<span class="pre">new_daf
+</span>
+</code> on top of 
+<code class="docutils literal notranslate">
+<span class="pre">base_daf
+</span>
+</code>, presenting them as a single 
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code> which
+
+<a class="reference internal" href="#dafpy.formats.complete_daf" title="dafpy.formats.complete_daf">
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">complete_daf
+</span>
+</code>
+</a> can reopen. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.complete_chain!">documentation
+</a>
+for details.
 </p>
 
 </dd>

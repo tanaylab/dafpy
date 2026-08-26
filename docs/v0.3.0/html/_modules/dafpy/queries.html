@@ -123,9 +123,12 @@
     <span class="s2">&quot;XorMask&quot;</span><span class="p">,</span>
     <span class="s2">&quot;XorNegatedMask&quot;</span><span class="p">,</span>
     <span class="s2">&quot;parse_query&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;escape_value&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_vector_query&quot;</span><span class="p">,</span>
     <span class="s2">&quot;is_axis_query&quot;</span><span class="p">,</span>
     <span class="s2">&quot;query_axis_name&quot;</span><span class="p">,</span>
     <span class="s2">&quot;query_result_dimensions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;unescape_value&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -675,6 +678,46 @@
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">query_result_dimensions</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="escape_value">
+<a class="viewcode-back" href="../../queries.html#dafpy.queries.escape_value">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">escape_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a string value, escape any special characters in it so it can be used in a query. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/tokens.html#DataAxesFormats.Tokens.escape_value&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">escape_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="unescape_value">
+<a class="viewcode-back" href="../../queries.html#dafpy.queries.unescape_value">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">unescape_value</span><span class="p">(</span><span class="n">escaped</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Undo :py:obj:`escape_value`, that is, given an escaped value, return the original string value. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/tokens.html#DataAxesFormats.Tokens.unescape_value&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">unescape_value</span><span class="p">(</span><span class="n">escaped</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="full_vector_query">
+<a class="viewcode-back" href="../../queries.html#dafpy.queries.full_vector_query">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">full_vector_query</span><span class="p">(</span>
+    <span class="n">axis_query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">,</span> <span class="n">vector_query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">,</span> <span class="n">vector_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QueryOperation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combine a query for an axis and a suffix query for a vector property into a full query for the vector values of the</span>
+<span class="sd">    axis. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.full_vector_query&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parsed_axis_query</span> <span class="o">=</span> <span class="n">parse_query</span><span class="p">(</span><span class="n">axis_query</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis_query</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">axis_query</span>
+    <span class="k">return</span> <span class="n">QueryOperation</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">full_vector_query</span><span class="p">(</span><span class="n">parsed_axis_query</span><span class="p">,</span> <span class="n">vector_query</span><span class="p">,</span> <span class="n">vector_name</span><span class="p">))</span></div>
 
 </pre></div>
 

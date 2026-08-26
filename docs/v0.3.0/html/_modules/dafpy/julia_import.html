@@ -438,6 +438,10 @@
 <span class="s2">        return Vector</span><span class="si">{DafReader}</span><span class="s2">(readers)</span>
 <span class="s2">    end</span>
 
+<span class="s2">    function _to_daf_writers(writers::AbstractVector)::Vector</span><span class="si">{DafWriter}</span>
+<span class="s2">        return Vector</span><span class="si">{DafWriter}</span><span class="s2">(writers)</span>
+<span class="s2">    end</span>
+
 <span class="s2">    const _DafReadersVector = Vector</span><span class="si">{DafReader}</span>
 
 <span class="s2">    function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector</span>
@@ -485,6 +489,10 @@
 <span class="s2">        else</span>
 <span class="s2">            return [key =&gt; query for (key, query) in items]</span>
 <span class="s2">        end</span>
+<span class="s2">    end</span>
+
+<span class="s2">    function _pairify_permutations(items::AbstractVector)::AbstractDict{String, Vector</span><span class="si">{Int}</span><span class="s2">}</span>
+<span class="s2">        return Dict{String, Vector</span><span class="si">{Int}</span><span class="s2">}(name =&gt; Vector</span><span class="si">{Int}</span><span class="s2">(permutation) for (name, permutation) in items)</span>
 <span class="s2">    end</span>
 
 <span class="s2">    function _sets_vector(items::Maybe</span><span class="si">{AbstractVector}</span><span class="s2">)::Maybe{Vector{Set</span><span class="si">{String}</span><span class="s2">}}</span>

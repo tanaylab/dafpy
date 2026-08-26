@@ -14,6 +14,7 @@ from .julia_import import jl
 __all__ = [
     "chain_reader",
     "chain_writer",
+    "complete_chain",
     "complete_daf",
     "files_daf",
     "files_to_zarr",
@@ -149,4 +150,20 @@ def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> D
     """
     return DafWriter(
         jl.DataAxesFormats.chain_writer(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), name=name)
+    )
+
+
+def complete_chain(
+    *, base_daf: DafReader, new_daf: DafWriter, name: Optional[str] = None, absolute: bool = False
+) -> DafWriter:
+    """
+    Chain a freshly created empty ``new_daf`` on top of ``base_daf``, presenting them as a single ``DafWriter`` which
+    :py:obj:`complete_daf` can reopen. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.complete_chain!>`__
+    for details.
+    """
+    return DafWriter(
+        jl.DataAxesFormats.complete_chain_b(
+            base_daf=base_daf.jl_obj, new_daf=new_daf.jl_obj, name=name, absolute=absolute
+        )
     )

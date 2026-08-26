@@ -13,7 +13,7 @@
   
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-<title>storage_types &mdash; Daf 0.3.0 documentation
+<title>reorder &mdash; Daf 0.3.0 documentation
 </title>
       
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
@@ -44,9 +44,9 @@
     
 <link rel="search" title="Search" href="search.html" />
     
-<link rel="next" title="queries" href="queries.html" />
+<link rel="next" title="storage_types" href="storage_types.html" />
     
-<link rel="prev" title="reorder" href="reorder.html" /> 
+<link rel="prev" title="reconstruction" href="reconstruction.html" /> 
 
 </head>
 
@@ -119,29 +119,24 @@
 </a>
 </li>
 
-<li class="toctree-l2">
-<a class="reference internal" href="reorder.html">reorder
-</a>
-</li>
-
 <li class="toctree-l2 current">
-<a class="current reference internal" href="#">storage_types
+<a class="current reference internal" href="#">reorder
 </a>
 <ul>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.storage_types.StorageNumber">
+<a class="reference internal" href="#dafpy.reorder.reorder_axes">
 <code class="docutils literal notranslate">
-<span class="pre">StorageNumber
+<span class="pre">reorder_axes()
 </span>
 </code>
 </a>
 </li>
 
 <li class="toctree-l3">
-<a class="reference internal" href="#dafpy.storage_types.StorageScalar">
+<a class="reference internal" href="#dafpy.reorder.reset_reorder_axes">
 <code class="docutils literal notranslate">
-<span class="pre">StorageScalar
+<span class="pre">reset_reorder_axes()
 </span>
 </code>
 </a>
@@ -149,6 +144,11 @@
 
 </ul>
 
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="storage_types.html">storage_types
+</a>
 </li>
 
 <li class="toctree-l2">
@@ -255,12 +255,12 @@
 </a>
 </li>
       
-<li class="breadcrumb-item active">storage_types
+<li class="breadcrumb-item active">reorder
 </li>
       
 <li class="wy-breadcrumbs-aside">
             
-<a href="_sources/storage_types.rst.txt" rel="nofollow"> View page source
+<a href="_sources/reorder.rst.txt" rel="nofollow"> View page source
 </a>
       
 </li>
@@ -276,212 +276,253 @@
 <div itemprop="articleBody">
              
   
-<section id="module-dafpy.storage_types">
+<section id="module-dafpy.reorder">
 
-<span id="storage-types">
+<span id="reorder">
 </span>
-<h1>storage_types
-<a class="headerlink" href="#module-dafpy.storage_types" title="Link to this heading">
+<h1>reorder
+<a class="headerlink" href="#module-dafpy.reorder" title="Link to this heading">
 </a>
 </h1>
 
-<p>Type definitions for the types that can be stored in 
+<p>Reorder the entries of 
 <code class="docutils literal notranslate">
 <span class="pre">Daf
 </span>
-</code>.
+</code> axes. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reorder.html">documentation
+</a> for details.
 </p>
 
-<dl class="py data">
+<dl class="py function">
 
-<dt class="sig sig-object py" id="dafpy.storage_types.StorageNumber">
+<dt class="sig sig-object py" id="dafpy.reorder.reorder_axes">
 
 <span class="sig-prename descclassname">
-<span class="pre">dafpy.storage_types.
+<span class="pre">dafpy.reorder.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">StorageNumber
+<span class="pre">reorder_axes
 </span>
 </span>
-<span class="property">
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">daf
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
 <span class="w"> 
 </span>
 <span class="p">
-<span class="pre">=
+<span class="pre">|
 </span>
 </span>
 <span class="w"> 
 </span>
-<span class="pre">bool
-</span> 
-<span class="pre">|
-</span> 
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">axes_permutations
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
 <span class="pre">int
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">float
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float64
+</span>
+<span class="p">
+<span class="pre">]
 </span>
 </span>
-<a class="headerlink" href="#dafpy.storage_types.StorageNumber" title="Link to this definition">
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<span class="pre">None
+</span>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/reorder.html#reorder_axes">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.reorder.reorder_axes" title="Link to this definition">
 </a>
 </dt>
 
 <dd>
-<p>Supported Python number types.
+<p>Reorder the entries of one or more axes, in one or more leaf 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> repositories. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reorder.html#DataAxesFormats.Reorder.reorder_axes!">documentation
+</a>
+for details.
 </p>
 
-<p>The built-in Python 
-<code class="docutils literal notranslate">
-<span class="pre">int
-</span>
-</code> and 
-<code class="docutils literal notranslate">
-<span class="pre">float
-</span>
-</code> types are automatically converted to 
-<code class="docutils literal notranslate">
-<span class="pre">np.int64
-</span>
-</code> and 
-<code class="docutils literal notranslate">
-<span class="pre">np.float64
-</span>
-</code>,
-respectively. Use the 
-<code class="docutils literal notranslate">
-<span class="pre">numpy
-</span>
-</code> types if you want to force the use of a specific (smaller) Julia type.
+<p>The permutations passed here are 0-based to fit the Python conventions.
 </p>
 
 </dd>
 </dl>
 
 
-<dl class="py data">
+<dl class="py function">
 
-<dt class="sig sig-object py" id="dafpy.storage_types.StorageScalar">
+<dt class="sig sig-object py" id="dafpy.reorder.reset_reorder_axes">
 
 <span class="sig-prename descclassname">
-<span class="pre">dafpy.storage_types.
+<span class="pre">dafpy.reorder.
 </span>
 </span>
 <span class="sig-name descname">
-<span class="pre">StorageScalar
+<span class="pre">reset_reorder_axes
 </span>
 </span>
-<span class="property">
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">daf
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
 <span class="w"> 
 </span>
 <span class="p">
-<span class="pre">=
+<span class="pre">|
 </span>
 </span>
 <span class="w"> 
 </span>
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
 <span class="pre">bool
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">int
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">float
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.int64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.uint64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">numpy.float64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">str
 </span>
 </span>
-<a class="headerlink" href="#dafpy.storage_types.StorageScalar" title="Link to this definition">
+</span>
+<a class="reference internal" href="_modules/dafpy/reorder.html#reset_reorder_axes">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.reorder.reset_reorder_axes" title="Link to this definition">
 </a>
 </dt>
 
 <dd>
-<p>Supported Python scalar types.
+<p>Roll back an interrupted 
+<a class="reference internal" href="#dafpy.reorder.reorder_axes" title="dafpy.reorder.reorder_axes">
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">reorder_axes
+</span>
+</code>
+</a> of one or more leaf 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> repositories, and return whether any of
+them had one to roll back. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reorder.html#DataAxesFormats.Reorder.reset_reorder_axes!">documentation
+</a>
+for details.
 </p>
 
 </dd>
@@ -499,12 +540,12 @@ respectively. Use the
 <footer>
 <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         
-<a href="reorder.html" class="btn btn-neutral float-left" title="reorder" accesskey="p" rel="prev">
+<a href="reconstruction.html" class="btn btn-neutral float-left" title="reconstruction" accesskey="p" rel="prev">
 <span class="fa fa-arrow-circle-left" aria-hidden="true">
 </span> Previous
 </a>
         
-<a href="queries.html" class="btn btn-neutral float-right" title="queries" accesskey="n" rel="next">Next 
+<a href="storage_types.html" class="btn btn-neutral float-right" title="storage_types" accesskey="n" rel="next">Next 
 <span class="fa fa-arrow-circle-right" aria-hidden="true">
 </span>
 </a>

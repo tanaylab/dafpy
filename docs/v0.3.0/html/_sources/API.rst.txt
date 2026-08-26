@@ -8,6 +8,7 @@ API
   julia_import
   data
   reconstruction
+  reorder
   storage_types
   queries
   operations

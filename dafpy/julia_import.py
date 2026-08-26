@@ -358,6 +358,10 @@ jl.seval("""
         return Vector{DafReader}(readers)
     end
 
+    function _to_daf_writers(writers::AbstractVector)::Vector{DafWriter}
+        return Vector{DafWriter}(writers)
+    end
+
     const _DafReadersVector = Vector{DafReader}
 
     function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector
@@ -405,6 +409,10 @@ jl.seval("""
         else
             return [key => query for (key, query) in items]
         end
+    end
+
+    function _pairify_permutations(items::AbstractVector)::AbstractDict{String, Vector{Int}}
+        return Dict{String, Vector{Int}}(name => Vector{Int}(permutation) for (name, permutation) in items)
     end
 
     function _sets_vector(items::Maybe{AbstractVector})::Maybe{Vector{Set{String}}}

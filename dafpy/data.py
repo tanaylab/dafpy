@@ -664,6 +664,15 @@ class DafReader(JlObject):
         """
         return jl.DataAxesFormats.complete_path(self.jl_obj)
 
+    def is_leaf(self) -> bool:
+        """
+        Return whether the ``Daf`` repository owns its data directly, rather than wrapping other repositories. See the
+        Julia
+        `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.is_leaf>`__
+        for details.
+        """
+        return bool(jl.DataAxesFormats.is_leaf(self.jl_obj))
+
 
 class DafReadOnly(DafReader):
     """

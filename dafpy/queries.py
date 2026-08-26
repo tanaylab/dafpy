@@ -49,9 +49,12 @@ __all__ = [
     "XorMask",
     "XorNegatedMask",
     "parse_query",
+    "escape_value",
+    "full_vector_query",
     "is_axis_query",
     "query_axis_name",
     "query_result_dimensions",
+    "unescape_value",
 ]
 
 
@@ -491,3 +494,34 @@ def query_result_dimensions(query: str | Query) -> int:
     for details.
     """
     return jl.DataAxesFormats.Queries.query_result_dimensions(query)
+
+
+def escape_value(value: str) -> str:
+    """
+    Given a string value, escape any special characters in it so it can be used in a query. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/tokens.html#DataAxesFormats.Tokens.escape_value>`__
+    for details.
+    """
+    return jl.DataAxesFormats.escape_value(value)
+
+
+def unescape_value(escaped: str) -> str:
+    """
+    Undo :py:obj:`escape_value`, that is, given an escaped value, return the original string value. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/tokens.html#DataAxesFormats.Tokens.unescape_value>`__
+    for details.
+    """
+    return jl.DataAxesFormats.unescape_value(escaped)
+
+
+def full_vector_query(
+    axis_query: str | Query, vector_query: str | Query, vector_name: Optional[str] = None
+) -> QueryOperation:
+    """
+    Combine a query for an axis and a suffix query for a vector property into a full query for the vector values of the
+    axis. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.full_vector_query>`__
+    for details.
+    """
+    parsed_axis_query = parse_query(axis_query) if isinstance(axis_query, str) else axis_query
+    return QueryOperation(jl.DataAxesFormats.Queries.full_vector_query(parsed_axis_query, vector_query, vector_name))
