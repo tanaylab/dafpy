@@ -442,6 +442,10 @@
 <span class="s2">        return Vector</span><span class="si">{DafWriter}</span><span class="s2">(writers)</span>
 <span class="s2">    end</span>
 
+<span class="s2">    function _to_base_dafs(bases::AbstractVector)::Vector{Union{BaseDaf, DafReader}}</span>
+<span class="s2">        return Vector{Union{BaseDaf, DafReader}}(bases)</span>
+<span class="s2">    end</span>
+
 <span class="s2">    const _DafReadersVector = Vector</span><span class="si">{DafReader}</span>
 
 <span class="s2">    function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector</span>

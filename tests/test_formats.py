@@ -501,3 +501,46 @@ def test_complete_chain(tmp_path) -> None:
     reopened = dp.complete_daf(f"{tmp_path}/new", "r", name="reopened!")
     assert list(reopened.get_np_vector("cell", "age")) == [1, 2]
     assert list(reopened.get_np_vector("cell", "score")) == [0.5, 1.5]
+
+
+def test_complete_chain_of_several(tmp_path) -> None:
+    # Two repositories resting on the same base, and a third resting on both of them, which is how one variant of an
+    # analysis rests on both the results shared by all variants and the parameters of this one.
+    cells = dp.files_daf(f"{tmp_path}/cells", "w", name="cells!")
+    assert isinstance(cells, dp.DafWriter)
+    cells.add_axis("cell", ["A", "B"])
+    cells.add_axis("gene", ["X", "Y"])
+    cells.set_vector("cell", "age", [1, 2])
+
+    results = dp.files_daf(f"{tmp_path}/results", "w", name="results!")
+    assert isinstance(results, dp.DafWriter)
+    dp.complete_chain(base_daf=cells, new_daf=results).set_vector("cell", "score", [0.5, 1.5])
+
+    masks = dp.files_daf(f"{tmp_path}/masks", "w", name="masks!")
+    assert isinstance(masks, dp.DafWriter)
+    dp.complete_chain(base_daf=cells, new_daf=masks).set_vector("gene", "is_marker", [True, False])
+
+    leaf = dp.files_daf(f"{tmp_path}/leaf", "w", name="leaf!")
+    assert isinstance(leaf, dp.DafWriter)
+    dp.complete_chain(base_daf=[results, masks], new_daf=leaf)
+
+    reopened = dp.complete_daf(f"{tmp_path}/leaf", "r", name="reopened!")
+    assert list(reopened.get_np_vector("cell", "age")) == [1, 2]
+    assert list(reopened.get_np_vector("cell", "score")) == [0.5, 1.5]
+    assert list(reopened.get_np_vector("gene", "is_marker")) == [True, False]
+
+
+def test_complete_chain_of_a_view(tmp_path) -> None:
+    # Only what the view exposes is chained on, and reopening applies the same view.
+    cells = dp.files_daf(f"{tmp_path}/cells", "w", name="cells!")
+    assert isinstance(cells, dp.DafWriter)
+    cells.add_axis("cell", ["A", "B"])
+    cells.add_axis("gene", ["X", "Y"])
+
+    metacells = dp.files_daf(f"{tmp_path}/metacells", "w", name="metacells!")
+    assert isinstance(metacells, dp.DafWriter)
+    dp.complete_chain(base_daf=dp.BaseDaf(cells, axes={"cell": "="}), new_daf=metacells)
+
+    reopened = dp.complete_daf(f"{tmp_path}/metacells", "r", name="reopened!")
+    assert set(reopened.axes_set()) == {"cell"}
+    assert not reopened.has_axis("gene")

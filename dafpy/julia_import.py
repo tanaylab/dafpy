@@ -362,6 +362,10 @@ jl.seval("""
         return Vector{DafWriter}(writers)
     end
 
+    function _to_base_dafs(bases::AbstractVector)::Vector{Union{BaseDaf, DafReader}}
+        return Vector{Union{BaseDaf, DafReader}}(bases)
+    end
+
     const _DafReadersVector = Vector{DafReader}
 
     function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector

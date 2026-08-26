@@ -9,9 +9,14 @@ from typing import Union
 from .data import DafReader
 from .data import DafReadOnly
 from .data import DafWriter
+from .julia_import import JlObject
+from .julia_import import _jl_pairs
 from .julia_import import jl
+from .views import ViewAxes
+from .views import ViewData
 
 __all__ = [
+    "BaseDaf",
     "chain_reader",
     "chain_writer",
     "complete_chain",
@@ -153,17 +158,40 @@ def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> D
     )
 
 
+class BaseDaf(JlObject):
+    """
+    One base repository of a :py:obj:`complete_chain`, and the view parameters to apply to it. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.BaseDaf>`__
+    for details.
+    """
+
+    def __init__(self, dset: DafReader, *, axes: Optional[ViewAxes] = None, data: Optional[ViewData] = None) -> None:
+        super().__init__(
+            jl.DataAxesFormats.BaseDaf(
+                daf=dset.jl_obj,
+                axes=jl.DafPy._pairify_axes(_jl_pairs(axes)),
+                data=jl.DafPy._pairify_data(_jl_pairs(data)),
+            )
+        )
+
+
 def complete_chain(
-    *, base_daf: DafReader, new_daf: DafWriter, name: Optional[str] = None, absolute: bool = False
+    *,
+    base_daf: Union[DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]],
+    new_daf: DafWriter,
+    name: Optional[str] = None,
+    absolute: bool = False,
 ) -> DafWriter:
     """
-    Chain a freshly created empty ``new_daf`` on top of ``base_daf``, presenting them as a single ``DafWriter`` which
-    :py:obj:`complete_daf` can reopen. See the Julia
+    Chain a freshly created empty ``new_daf`` on top of one or more base repositories, presenting them as a single
+    ``DafWriter`` which :py:obj:`complete_daf` can reopen. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.complete_chain!>`__
     for details.
     """
+    if isinstance(base_daf, (DafReader, BaseDaf)):
+        bases = base_daf.jl_obj
+    else:
+        bases = jl.DafPy._to_base_dafs([base.jl_obj for base in base_daf])
     return DafWriter(
-        jl.DataAxesFormats.complete_chain_b(
-            base_daf=base_daf.jl_obj, new_daf=new_daf.jl_obj, name=name, absolute=absolute
-        )
+        jl.DataAxesFormats.complete_chain_b(base_daf=bases, new_daf=new_daf.jl_obj, name=name, absolute=absolute)
     )

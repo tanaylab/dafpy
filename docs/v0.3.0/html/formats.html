@@ -145,6 +145,15 @@
 <ul>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.BaseDaf">
+<code class="docutils literal notranslate">
+<span class="pre">BaseDaf
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.formats.chain_reader">
 <code class="docutils literal notranslate">
 <span class="pre">chain_reader()
@@ -381,6 +390,420 @@
 </span>
 </code> data sets.
 </p>
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.formats.BaseDaf">
+
+<span class="property">
+<span class="k">
+<span class="pre">class
+</span>
+</span>
+<span class="w"> 
+</span>
+</span>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">BaseDaf
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">dset
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="keyword-only-separator o">
+<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="pre">*
+</span>
+</abbr>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">axes
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<span class="pre">LookupScalar
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">data
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">Mapping
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Tuple
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="p">
+<span class="pre">,
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<span class="pre">Axis
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<span class="pre">LookupScalar
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<span class="pre">Names
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<span class="pre">QuerySequence
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#BaseDaf">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.BaseDaf" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>One base repository of a 
+<a class="reference internal" href="#dafpy.formats.complete_chain" title="dafpy.formats.complete_chain">
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">complete_chain
+</span>
+</code>
+</a>, and the view parameters to apply to it. See the Julia
+
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.BaseDaf">documentation
+</a>
+for details.
+</p>
+
+</dd>
+</dl>
+
 
 <dl class="py function">
 
@@ -680,6 +1103,52 @@ details.
 <span class="pre">DafReader
 </span>
 </a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.formats.BaseDaf" title="dafpy.formats.BaseDaf">
+<span class="pre">BaseDaf
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">Sequence
+</span>
+<span class="p">
+<span class="pre">[
+</span>
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafReader" title="dafpy.data.DafReader">
+<span class="pre">DafReader
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="#dafpy.formats.BaseDaf" title="dafpy.formats.BaseDaf">
+<span class="pre">BaseDaf
+</span>
+</a>
+<span class="p">
+<span class="pre">]
+</span>
+</span>
 </span>
 </em>, 
 <em class="sig-param">
@@ -793,16 +1262,12 @@ details.
 <code class="docutils literal notranslate">
 <span class="pre">new_daf
 </span>
-</code> on top of 
-<code class="docutils literal notranslate">
-<span class="pre">base_daf
-</span>
-</code>, presenting them as a single 
+</code> on top of one or more base repositories, presenting them as a single
+
 <code class="docutils literal notranslate">
 <span class="pre">DafWriter
 </span>
-</code> which
-
+</code> which 
 <a class="reference internal" href="#dafpy.formats.complete_daf" title="dafpy.formats.complete_daf">
 <code class="xref py py-obj docutils literal notranslate">
 <span class="pre">complete_daf
