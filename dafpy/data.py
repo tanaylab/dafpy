@@ -49,7 +49,7 @@ from .operations import PendingPandasQuery
 from .queries import Query
 from .storage_types import StorageScalar
 
-__all__ = ["DafReader", "DafReadOnly", "DafWriter", "CacheGroup"]
+__all__ = ["DafReader", "DafReadOnly", "DafWriter", "CacheGroup", "DataKey", "PropertyKey"]
 
 
 class CacheGroup(JlEnum):
