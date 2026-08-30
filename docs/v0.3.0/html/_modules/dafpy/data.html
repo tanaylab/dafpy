@@ -81,7 +81,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># The enum values are named exactly as they are in Julia, so they are not UPPER_CASE.</span>
-<span class="c1"># pylint: disable=invalid-name</span>
+<span class="c1"># pylint: disable=invalid-name,too-many-lines</span>
 
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
@@ -1097,8 +1097,15 @@
 <div class="viewcode-block" id="DafWriter.empty_dense_matrix">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.empty_dense_matrix">[docs]</a>
     <span class="nd">@contextmanager</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">empty_dense_matrix</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">eltype</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">empty_dense_matrix</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-positional-arguments</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">eltype</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and</span>
@@ -1110,12 +1117,17 @@
 <span class="sd">        ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">matrix</span><span class="p">,</span> <span class="n">cache_group</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_empty_dense_matrix_b</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
+            <span class="n">rows_axis</span><span class="p">,</span>
+            <span class="n">columns_axis</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">filled_empty_dense_matrix_b</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">cache_group</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">cache_group</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">end_data_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
@@ -1134,6 +1146,7 @@
         <span class="n">indtype</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and</span>
@@ -1156,7 +1169,7 @@
             <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span>
             <span class="n">nnz</span><span class="p">,</span>
             <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">indtype</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="p">(</span>
@@ -1165,7 +1178,15 @@
                 <span class="n">_from_julia_array</span><span class="p">(</span><span class="n">nzval</span><span class="p">,</span> <span class="n">writeable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
             <span class="p">)</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">filled_empty_sparse_matrix_b</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">colptr</span><span class="p">,</span> <span class="n">rowval</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">cache_group</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
+                <span class="n">rows_axis</span><span class="p">,</span>
+                <span class="n">columns_axis</span><span class="p">,</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">colptr</span><span class="p">,</span>
+                <span class="n">rowval</span><span class="p">,</span>
+                <span class="n">nzval</span><span class="p">,</span>
+                <span class="n">cache_group</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">),</span>
             <span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">end_data_write_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>

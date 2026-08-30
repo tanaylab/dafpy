@@ -7,7 +7,7 @@ for details.
 """
 
 # The enum values are named exactly as they are in Julia, so they are not UPPER_CASE.
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,too-many-lines
 
 
 from contextlib import contextmanager
@@ -890,8 +890,15 @@ class DafWriter(DafReader):
         return self
 
     @contextmanager
-    def empty_dense_matrix(
-        self, rows_axis: str, columns_axis: str, name: str, eltype: Type, *, overwrite: Optional[bool] = None
+    def empty_dense_matrix(  # pylint: disable=too-many-positional-arguments
+        self,
+        rows_axis: str,
+        columns_axis: str,
+        name: str,
+        eltype: Type,
+        *,
+        overwrite: Optional[bool] = None,
+        relayout: Optional[bool] = None,
     ) -> Iterator[np.ndarray]:
         """
         Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and
@@ -903,12 +910,17 @@ class DafWriter(DafReader):
         ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.
         """
         matrix, cache_group = jl.DataAxesFormats.get_empty_dense_matrix_b(
-            self.jl_obj, rows_axis, columns_axis, name, _to_julia_type(eltype), **_given(overwrite=overwrite)
+            self.jl_obj,
+            rows_axis,
+            columns_axis,
+            name,
+            _to_julia_type(eltype),
+            **_given(overwrite=overwrite, relayout=relayout),
         )
         try:
             yield _from_julia_array(matrix, writeable=True)
             jl.DataAxesFormats.filled_empty_dense_matrix_b(
-                self.jl_obj, rows_axis, columns_axis, name, matrix, cache_group
+                self.jl_obj, rows_axis, columns_axis, name, matrix, cache_group, **_given(relayout=relayout)
             )
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
@@ -924,6 +936,7 @@ class DafWriter(DafReader):
         indtype: Type,
         *,
         overwrite: Optional[bool] = None,
+        relayout: Optional[bool] = None,
     ) -> Iterator[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
         """
         Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and
@@ -946,7 +959,7 @@ class DafWriter(DafReader):
             _to_julia_type(eltype),
             nnz,
             _to_julia_type(indtype),
-            **_given(overwrite=overwrite),
+            **_given(overwrite=overwrite, relayout=relayout),
         )
         try:
             yield (
@@ -955,7 +968,15 @@ class DafWriter(DafReader):
                 _from_julia_array(nzval, writeable=True),
             )
             jl.DataAxesFormats.filled_empty_sparse_matrix_b(
-                self.jl_obj, rows_axis, columns_axis, name, colptr, rowval, nzval, cache_group
+                self.jl_obj,
+                rows_axis,
+                columns_axis,
+                name,
+                colptr,
+                rowval,
+                nzval,
+                cache_group,
+                **_given(relayout=relayout),
             )
         finally:
             jl.DataAxesFormats.end_data_write_lock(self.jl_obj)
