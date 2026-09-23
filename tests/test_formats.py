@@ -85,6 +85,8 @@ def test_scalars(
 
     assert len(daf.scalars_set()) == 0
     assert not daf.has_scalar("foo")
+    assert daf.get_scalar("foo", default=None) is None
+    assert daf.get_scalar("foo", default=scalar_value) == scalar_value
     daf.set_scalar("foo", scalar_value)
     assert daf.has_scalar("foo")
     assert daf.get_scalar("foo") == scalar_value
@@ -461,6 +463,82 @@ def test_open_daf_dispatch() -> None:
     zarr_reader = dp.open_daf(f"{tmpdir.name}/test.daf.zarr", "r")
     assert isinstance(zarr_reader, dp.DafReadOnly)
     assert zarr_reader.get_scalar("version") == 3.0
+
+    zip_writer = dp.open_daf(f"{tmpdir.name}/test.daf.zip", "w", name="zip!")
+    assert isinstance(zip_writer, dp.DafWriter)
+    zip_writer.set_scalar("version", 4.0)
+    zip_reader = dp.open_daf(f"{tmpdir.name}/test.daf.zip", "r")
+    assert isinstance(zip_reader, dp.DafReadOnly)
+    assert zip_reader.get_scalar("version") == 4.0
+
+
+def test_zip_packed() -> None:
+    # ZipDaf is append-only, so it is tested here on its own rather than with the formats which allow deletion.
+    tmpdir = TemporaryDirectory()  # pylint: disable=consider-using-with
+    zip_path = f"{tmpdir.name}/test.daf.zip"
+
+    writer = dp.zip_daf(zip_path, "w", name="test!", packed=True)
+    assert isinstance(writer, dp.DafWriter)
+    writer.add_axis("cell", ["A", "B", "C"])
+    writer.add_axis("gene", ["X", "Y"])
+    writer.set_vector("cell", "age", np.array([1, 2, 3]), packed=False)
+    writer.set_matrix("cell", "gene", "UMIs", np.array([[0, 1, 2], [3, 4, 5]]).transpose(), relayout=False, packed=True)
+    writer.set_vector("gene", "score", np.array([0.5, 1.5], dtype=np.float32), packed=True)
+    writer.relayout_matrix("cell", "gene", "UMIs", packed=True)
+    assert writer.description() == dedent(f"""
+        name: test!
+        type: ZipDaf
+        path: {zip_path}
+        mode: w
+        axes:
+          cell: 3 entries
+          gene: 2 entries
+        vectors:
+          cell:
+            age: 3 x Int64 (Dense)
+          gene:
+            score: 2 x Float32 (Dense)
+        matrices:
+          cell,gene:
+            UMIs: 3 x 2 x Int64 in Columns (Dense)
+          gene,cell:
+            UMIs: 2 x 3 x Int64 in Columns (Dense)
+        """)[1:]
+
+    reader = dp.zip_daf(zip_path, "r")
+    assert isinstance(reader, dp.DafReadOnly)
+    assert np.array_equal(reader.get_np_vector("cell", "age"), np.array([1, 2, 3]))
+    assert np.array_equal(reader.get_np_vector("gene", "score"), np.array([0.5, 1.5], dtype=np.float32))
+    assert np.array_equal(reader.get_np_matrix("cell", "gene", "UMIs"), np.array([[0, 1, 2], [3, 4, 5]]).transpose())
+    assert np.array_equal(reader.get_np_matrix("gene", "cell", "UMIs"), np.array([[0, 1, 2], [3, 4, 5]]))
+
+
+def test_writer_keywords() -> None:
+    memory = dp.memory_daf(name="test!")
+    memory.add_axis("cell", ["A", "B", "C"])
+    memory.add_axis("gene", ["X", "Y"])
+
+    memory.set_vector("cell", "age", [1, 2, 3], eltype=np.float32)
+    assert memory.get_np_vector("cell", "age").dtype == np.float32
+    memory.set_vector("cell", "score", sp.csr_matrix(np.array([[0.0, 1.0, 0.0]])), eltype=np.float32)
+    assert memory.get_np_vector("cell", "score").dtype == np.float32
+    with memory.empty_dense_vector("gene", "score", np.float32, packed=True) as empty_vector:
+        empty_vector[:] = [0.5, 1.5]  # pylint: disable=unsupported-assignment-operation
+    assert np.array_equal(memory.get_np_vector("gene", "score"), np.array([0.5, 1.5], dtype=np.float32))
+
+    memory.set_matrix("cell", "gene", "UMIs", np.array([[0, 1, 2], [3, 4, 5]]).transpose(), eltype=np.float32)
+    assert memory.get_np_matrix("cell", "gene", "UMIs").dtype == np.float32
+    assert memory.has_matrix("gene", "cell", "UMIs", relayout=False)
+
+    memory.set_matrix("cell", "gene", "U_is_high", np.zeros((2, 3), dtype=bool).transpose(), relayout=False)
+    memory.set_matrix("cell", "gene", "V_is_high", np.zeros((2, 3), dtype=bool).transpose(), relayout=False)
+    memory.add_axis("batch", ["U", "V"])
+    assert set(memory.matrices_set("cell", "gene", tensors=False)) == {"UMIs", "U_is_high", "V_is_high"}
+    assert set(memory.matrices_set("cell", "gene")) == {"UMIs", "/batch/_is_high"}
+
+    memory.delete_matrix("cell", "gene", "UMIs", relayout=False)
+    assert not memory.has_matrix("cell", "gene", "UMIs", relayout=False)
+    assert memory.has_matrix("gene", "cell", "UMIs", relayout=False)
 
 
 def test_chains() -> None:

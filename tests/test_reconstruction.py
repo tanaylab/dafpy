@@ -169,3 +169,19 @@ def test_reconstruction() -> None:
             batch: 4 x Str (Dense)
             score: 4 x Float64 (PyArray; Dense)
     """)[1:]
+
+
+def test_properties_defaults() -> None:
+    # A reconstructed axis created in advance may hold entries no existing entry uses. The defaults are what gives such
+    # entries their property values.
+    memory = dp.memory_daf(name="memory!")
+    memory.add_axis("cell", ["A", "B", "C", "D"])
+    memory.set_vector("cell", "age", [1, 1, 3, 3])
+    memory.set_vector("cell", "batch", ["X", "X", "Y", ""])
+    memory.add_axis("batch", ["X", "Y", "Z"])
+
+    results = dp.reconstruct_axis(memory, existing_axis="cell", implicit_axis="batch", properties_defaults={"age": 4})
+
+    assert list(results.keys()) == ["age"]
+    assert results["age"] == 3
+    assert list(memory.get_np_vector("batch", "age")) == [1, 3, 4]

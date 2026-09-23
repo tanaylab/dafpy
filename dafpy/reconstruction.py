@@ -30,6 +30,7 @@ def reconstruct_axis(
     rename_axis: Optional[str] = None,
     implicit_properties: Optional[AbstractSet[str]] = None,
     skipped_properties: Optional[AbstractSet[str]] = None,
+    properties_defaults: Optional[Mapping[str, Optional[StorageScalar]]] = None,
 ) -> Mapping[str, Optional[StorageScalar]]:
     """
     Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the
@@ -45,6 +46,7 @@ def reconstruct_axis(
         rename_axis=rename_axis,
         implicit_properties=_to_julia_strings_set(implicit_properties),
         skipped_properties=_to_julia_strings_set(skipped_properties),
+        properties_defaults=properties_defaults,
     )
 
 

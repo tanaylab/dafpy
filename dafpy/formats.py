@@ -29,6 +29,7 @@ __all__ = [
     "open_daf",
     "zarr_daf",
     "zarr_to_files",
+    "zip_daf",
 ]
 
 
@@ -40,47 +41,61 @@ def _wrap_daf(jl_obj) -> DafReadOnly | DafWriter:
     return DafReadOnly(jl_obj)
 
 
-def complete_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
+def complete_daf(
+    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+) -> DafReadOnly | DafWriter:
     """
     Open a complete chain of ``Daf`` repositories by tracing back through the ``base_daf_repository``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf>`__
     for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.complete_daf(path, mode, name=name))
+    return _wrap_daf(jl.DataAxesFormats.complete_daf(path, mode, name=name, packed=packed))
 
 
-def open_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
+def open_daf(
+    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+) -> DafReadOnly | DafWriter:
     """
     Open a ``Daf`` data set, dispatching to the appropriate backend based on ``path``. Zarr suffixes (``.daf.zarr``,
-    ``.daf.zarr.zip``, ``.dafs.zarr.zip#/...``) open a :py:func:`zarr_daf`; ``http://`` or ``https://`` URLs open a
-    :py:func:`http_daf` (read-only); ``.h5df`` and ``.h5dfs#`` paths open an :py:func:`h5df`; anything else opens a
-    :py:func:`files_daf`. See the Julia
+    ``.daf.zarr.zip``, ``.dafs.zarr.zip#/...``) open a :py:func:`zarr_daf`; ZIP suffixes (``.daf.zip``,
+    ``.dafs.zip#/...``) open a :py:func:`zip_daf`; ``http://`` or ``https://`` URLs open a :py:func:`http_daf`
+    (read-only); ``.h5df`` and ``.h5dfs#`` paths open an :py:func:`h5df`; anything else opens a :py:func:`files_daf`.
+    If ``packed``, writes through the returned data set default to the packed (chunked and compressed) on-disk
+    encoding. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.open_daf>`__
     for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.open_daf(path, mode, name=name))
+    return _wrap_daf(jl.DataAxesFormats.open_daf(path, mode, name=name, packed=packed))
 
 
-def memory_daf(jl_obj: Optional[jl.DataAxesFormats.MemoryDaf] = None, *, name: str = "memory") -> DafWriter:
+def memory_daf(
+    jl_obj: Optional[jl.DataAxesFormats.MemoryDaf] = None, *, name: str = "memory", packed: bool = False
+) -> DafWriter:
     """
     Simple in-memory storage. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/memory_format.html>`__ for details.
     """
     if jl_obj is None:
-        jl_obj = jl.DataAxesFormats.MemoryDaf(name=name)
+        jl_obj = jl.DataAxesFormats.MemoryDaf(name=name, packed=packed)
     return DafWriter(jl_obj)
 
 
-def files_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
+def files_daf(
+    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in disk files. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/files_format.html>`__ for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.FilesDaf(path, mode, name=name))
+    return _wrap_daf(jl.DataAxesFormats.FilesDaf(path, mode, name=name, packed=packed))
 
 
 def h5df(
-    root: Union[str, jl.HDF5.File, jl.HDF5.Group], mode: str = "r", *, name: Optional[str] = None
+    root: Union[str, jl.HDF5.File, jl.HDF5.Group],
+    mode: str = "r",
+    *,
+    name: Optional[str] = None,
+    packed: bool = False,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in an HDF5 disk file. See the Julia
@@ -91,10 +106,12 @@ def h5df(
     ``Daf`` API does **not** support using the Python ``HDF5`` API. This is because the ``Daf`` Python API is just a
     thin wrapper for the Julia ``Daf`` implementation, which doesn't "speak Python".
     """
-    return _wrap_daf(jl.DataAxesFormats.H5df(root, mode, name=name))
+    return _wrap_daf(jl.DataAxesFormats.H5df(root, mode, name=name, packed=packed))
 
 
-def zarr_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafReadOnly | DafWriter:
+def zarr_daf(
+    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in a Zarr directory tree, Zarr ZIP archive, or remote HTTP(S) Zarr group. The ``path``
     follows one of these conventions: ``something.daf.zarr`` (directory), ``something.daf.zarr.zip`` (single-daf ZIP),
@@ -102,15 +119,24 @@ def zarr_daf(path: str, mode: str = "r", *, name: Optional[str] = None) -> DafRe
     HTTP; read-only). See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zarr_format.html>`__ for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.ZarrDaf(path, mode, name=name))
+    return _wrap_daf(jl.DataAxesFormats.ZarrDaf(path, mode, name=name, packed=packed))
 
 
-def http_daf(url: str, *, name: Optional[str] = None) -> DafReadOnly:
+def zip_daf(path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False) -> DafReadOnly | DafWriter:
+    """
+    A ``Daf`` storage format in a single ZIP archive of the :py:func:`files_daf` on-disk layout. The ``path`` is either
+    ``something.daf.zip`` (single-daf ZIP) or ``something.dafs.zip#/group`` (sub-daf inside a multi-daf ZIP). See the
+    Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zip_files.html>`__ for details.
+    """
+    return _wrap_daf(jl.DataAxesFormats.ZipDaf(path, mode, name=name, packed=packed))
+
+
+def http_daf(url: str, *, name: Optional[str] = None, packed: bool = False) -> DafReadOnly:
     """
     Read-only access to a :py:func:`files_daf` served over ``http://`` or ``https://``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/http_format.html>`__ for details.
     """
-    return DafReadOnly(jl.DataAxesFormats.HttpDaf(url, name=name))
+    return DafReadOnly(jl.DataAxesFormats.HttpDaf(url, name=name, packed=packed))
 
 
 def files_to_zarr(*, files_path: str, zarr_path: str) -> None:
