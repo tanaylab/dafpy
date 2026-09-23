@@ -339,6 +339,20 @@ def _from_julia_frame(
     return pd.DataFrame(data)
 
 
+# A ``pandas`` frame becomes a Julia ``DataFrame`` of the same columns. A numeric column crosses as an array, which
+# ``pandas`` may or may not share. A string column is copied, since Python and Julia strings have nothing in common in
+# memory.
+def _to_julia_frame(frame: pd.DataFrame) -> Any:
+    columns = []
+    for name in frame.columns:
+        column = frame[name].to_numpy()
+        if column.dtype.kind in ("O", "U", "T"):
+            columns.append(jl.Vector[jl.String](list(column)))
+        else:
+            columns.append(_to_julia_array(column))
+    return jl.DafPy._to_frame([str(name) for name in frame.columns], columns)
+
+
 jl.seval("""
     module DafPy
 
@@ -346,6 +360,7 @@ jl.seval("""
     using PythonCall
     using TanayLabUtilities
 
+    import DataFrames
     import NamedArrays
 
     function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler
@@ -364,6 +379,10 @@ jl.seval("""
 
     function _to_base_dafs(bases::AbstractVector)::Vector{Union{BaseDaf, DafReader}}
         return Vector{Union{BaseDaf, DafReader}}(bases)
+    end
+
+    function _to_frame(names::AbstractVector, columns::AbstractVector)::DataFrames.DataFrame
+        return DataFrames.DataFrame([String(name) => column for (name, column) in zip(names, columns)]; copycols = false)
     end
 
     const _DafReadersVector = Vector{DafReader}

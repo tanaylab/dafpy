@@ -5,6 +5,11 @@ Test the Julia environment set up by ``Daf``.
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
+import numpy as np
+import pandas as pd
+
+from dafpy.julia_import import _from_julia_frame
+from dafpy.julia_import import _to_julia_frame
 from dafpy.julia_import import jl
 
 #: Helpers that ``Daf`` defines for its own use. They live in the ``DafPy`` module so that other Python packages
@@ -19,6 +24,7 @@ HELPER_NAMES = (
     "_pairify_merge",
     "_strip_wrappers",
     "_to_daf_readers",
+    "_to_frame",
     "pyconvert_rule_jl_object",
     "pyconvert_rule_undef",
 )
@@ -57,3 +63,26 @@ def test_the_enums_namespace_holds_the_same_types() -> None:
     assert sorted(dp.enums.__all__) == ["AbnormalHandler", "CacheGroup", "LogLevel", "MergeAction"]
     for name in dp.enums.__all__:
         assert getattr(dp.enums, name) is getattr(dp, name)
+
+
+def test_frames_round_trip() -> None:
+    frame = pd.DataFrame(
+        {
+            "name": ["A", "B", "C"],
+            "count": np.array([1, 2, 3], dtype="int32"),
+            "score": [0.5, 1.5, 2.5],
+            "is_good": [True, False, True],
+        }
+    )
+
+    jl_frame = _to_julia_frame(frame)
+    assert int(jl.DataFrames.nrow(jl_frame)) == 3
+    assert [str(name) for name in jl.names(jl_frame)] == ["name", "count", "score", "is_good"]
+    assert str(jl.eltype(jl.getindex(jl_frame, jl.Colon(), "count"))) == "Int32"
+
+    back = _from_julia_frame(jl_frame)
+    assert list(back.columns) == ["name", "count", "score", "is_good"]
+    assert list(back["name"]) == ["A", "B", "C"]
+    assert list(back["count"]) == [1, 2, 3]
+    assert list(back["score"]) == [0.5, 1.5, 2.5]
+    assert list(back["is_good"]) == [True, False, True]
