@@ -106,6 +106,7 @@
     <span class="n">rename_axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">implicit_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">skipped_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">properties_defaults</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the</span>
@@ -121,6 +122,7 @@
         <span class="n">rename_axis</span><span class="o">=</span><span class="n">rename_axis</span><span class="p">,</span>
         <span class="n">implicit_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">implicit_properties</span><span class="p">),</span>
         <span class="n">skipped_properties</span><span class="o">=</span><span class="n">_to_julia_strings_set</span><span class="p">(</span><span class="n">skipped_properties</span><span class="p">),</span>
+        <span class="n">properties_defaults</span><span class="o">=</span><span class="n">properties_defaults</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 

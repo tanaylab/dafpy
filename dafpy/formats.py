@@ -27,15 +27,19 @@ __all__ = [
     "http_daf",
     "memory_daf",
     "open_daf",
+    "wrap_daf",
     "zarr_daf",
     "zarr_to_files",
     "zip_daf",
 ]
 
 
-# Wrap a Julia Daf object in the matching Python class: DafWriter for a Julia DafWriter subtype; DafReadOnly for
-# anything else (a DafReadOnly subtype, or a bare DafReader such as HttpDaf).
-def _wrap_daf(jl_obj) -> DafReadOnly | DafWriter:
+def wrap_daf(jl_obj) -> DafReadOnly | DafWriter:
+    """
+    Wrap a Julia ``Daf`` object in the matching Python class. This is a :py:class:`DafWriter` for a Julia ``DafWriter``,
+    and a :py:class:`DafReadOnly` for anything else (a Julia ``DafReadOnly``, or a bare ``DafReader`` such as an
+    ``HttpDaf``). This is needed when some other Julia code returns a ``Daf`` object.
+    """
     if jl.isa(jl_obj, jl.DataAxesFormats.DafWriter):
         return DafWriter(jl_obj)
     return DafReadOnly(jl_obj)
@@ -49,7 +53,7 @@ def complete_daf(
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf>`__
     for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.complete_daf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.complete_daf(path, mode, name=name, packed=packed))
 
 
 def open_daf(
@@ -65,7 +69,7 @@ def open_daf(
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.open_daf>`__
     for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.open_daf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.open_daf(path, mode, name=name, packed=packed))
 
 
 def memory_daf(
@@ -87,7 +91,7 @@ def files_daf(
     A ``Daf`` storage format in disk files. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/files_format.html>`__ for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.FilesDaf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.FilesDaf(path, mode, name=name, packed=packed))
 
 
 def h5df(
@@ -106,7 +110,7 @@ def h5df(
     ``Daf`` API does **not** support using the Python ``HDF5`` API. This is because the ``Daf`` Python API is just a
     thin wrapper for the Julia ``Daf`` implementation, which doesn't "speak Python".
     """
-    return _wrap_daf(jl.DataAxesFormats.H5df(root, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.H5df(root, mode, name=name, packed=packed))
 
 
 def zarr_daf(
@@ -119,7 +123,7 @@ def zarr_daf(
     HTTP; read-only). See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zarr_format.html>`__ for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.ZarrDaf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.ZarrDaf(path, mode, name=name, packed=packed))
 
 
 def zip_daf(path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False) -> DafReadOnly | DafWriter:
@@ -128,7 +132,7 @@ def zip_daf(path: str, mode: str = "r", *, name: Optional[str] = None, packed: b
     ``something.daf.zip`` (single-daf ZIP) or ``something.dafs.zip#/group`` (sub-daf inside a multi-daf ZIP). See the
     Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zip_files.html>`__ for details.
     """
-    return _wrap_daf(jl.DataAxesFormats.ZipDaf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.ZipDaf(path, mode, name=name, packed=packed))
 
 
 def http_daf(url: str, *, name: Optional[str] = None, packed: bool = False) -> DafReadOnly:

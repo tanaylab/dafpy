@@ -419,6 +419,20 @@
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
 
+<span class="c1"># A ``pandas`` frame becomes a Julia ``DataFrame`` of the same columns. A numeric column crosses as an array, which</span>
+<span class="c1"># ``pandas`` may or may not share. A string column is copied, since Python and Julia strings have nothing in common in</span>
+<span class="c1"># memory.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_julia_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">column</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">):</span>
+            <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">String</span><span class="p">](</span><span class="nb">list</span><span class="p">(</span><span class="n">column</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">column</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_frame</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span> <span class="n">columns</span><span class="p">)</span>
+
+
 <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    module DafPy</span>
 
@@ -426,6 +440,7 @@
 <span class="s2">    using PythonCall</span>
 <span class="s2">    using TanayLabUtilities</span>
 
+<span class="s2">    import DataFrames</span>
 <span class="s2">    import NamedArrays</span>
 
 <span class="s2">    function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler</span>
@@ -444,6 +459,10 @@
 
 <span class="s2">    function _to_base_dafs(bases::AbstractVector)::Vector{Union{BaseDaf, DafReader}}</span>
 <span class="s2">        return Vector{Union{BaseDaf, DafReader}}(bases)</span>
+<span class="s2">    end</span>
+
+<span class="s2">    function _to_frame(names::AbstractVector, columns::AbstractVector)::DataFrames.DataFrame</span>
+<span class="s2">        return DataFrames.DataFrame([String(name) =&gt; column for (name, column) in zip(names, columns)]; copycols = false)</span>
 <span class="s2">    end</span>
 
 <span class="s2">    const _DafReadersVector = Vector</span><span class="si">{DafReader}</span>

@@ -244,6 +244,15 @@
 </li>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.wrap_daf">
+<code class="docutils literal notranslate">
+<span class="pre">wrap_daf()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.formats.zarr_daf">
 <code class="docutils literal notranslate">
 <span class="pre">zarr_daf()
@@ -256,6 +265,15 @@
 <a class="reference internal" href="#dafpy.formats.zarr_to_files">
 <code class="docutils literal notranslate">
 <span class="pre">zarr_to_files()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.formats.zip_daf">
+<code class="docutils literal notranslate">
+<span class="pre">zip_daf()
 </span>
 </code>
 </a>
@@ -1387,6 +1405,34 @@ for details.
 <span class="pre">None
 </span>
 </span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
 </em>
 <span class="sig-paren">)
 </span> 
@@ -1543,6 +1589,34 @@ for details.
 </span>
 <span class="default_value">
 <span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
 </span>
 </span>
 </em>
@@ -1824,6 +1898,34 @@ for details.
 <span class="pre">None
 </span>
 </span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
 </em>
 <span class="sig-paren">)
 </span> 
@@ -1981,6 +2083,34 @@ thin wrapper for the Julia
 <span class="pre">None
 </span>
 </span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
 </em>
 <span class="sig-paren">)
 </span> 
@@ -2108,6 +2238,34 @@ thin wrapper for the Julia
 </span>
 <span class="default_value">
 <span class="pre">'memory'
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
 </span>
 </span>
 </em>
@@ -2247,6 +2405,34 @@ thin wrapper for the Julia
 <span class="pre">None
 </span>
 </span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
 </em>
 <span class="sig-paren">)
 </span> 
@@ -2310,6 +2496,21 @@ thin wrapper for the Julia
 <span class="pre">zarr_daf()
 </span>
 </code>
+</a>; ZIP suffixes (
+<code class="docutils literal notranslate">
+<span class="pre">.daf.zip
+</span>
+</code>,
+
+<code class="docutils literal notranslate">
+<span class="pre">.dafs.zip#/...
+</span>
+</code>) open a 
+<a class="reference internal" href="#dafpy.formats.zip_daf" title="dafpy.formats.zip_daf">
+<code class="xref py py-func docutils literal notranslate">
+<span class="pre">zip_daf()
+</span>
+</code>
 </a>; 
 <code class="docutils literal notranslate">
 <span class="pre">http://
@@ -2318,14 +2519,14 @@ thin wrapper for the Julia
 <code class="docutils literal notranslate">
 <span class="pre">https://
 </span>
-</code> URLs open a
-
+</code> URLs open a 
 <a class="reference internal" href="#dafpy.formats.http_daf" title="dafpy.formats.http_daf">
 <code class="xref py py-func docutils literal notranslate">
 <span class="pre">http_daf()
 </span>
 </code>
-</a> (read-only); 
+</a>
+(read-only); 
 <code class="docutils literal notranslate">
 <span class="pre">.h5df
 </span>
@@ -2339,18 +2540,119 @@ thin wrapper for the Julia
 <span class="pre">h5df()
 </span>
 </code>
-</a>; anything else opens a
-
+</a>; anything else opens a 
 <a class="reference internal" href="#dafpy.formats.files_daf" title="dafpy.formats.files_daf">
 <code class="xref py py-func docutils literal notranslate">
 <span class="pre">files_daf()
 </span>
 </code>
-</a>. See the Julia
+</a>.
+If 
+<code class="docutils literal notranslate">
+<span class="pre">packed
+</span>
+</code>, writes through the returned data set default to the packed (chunked and compressed) on-disk
+encoding. See the Julia
 
 <a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.open_daf">documentation
 </a>
 for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.formats.wrap_daf">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">wrap_daf
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">jl_obj
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="data.html#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
+<span class="pre">DafReadOnly
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#wrap_daf">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.wrap_daf" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>Wrap a Julia 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> object in the matching Python class. This is a 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code> for a Julia 
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter
+</span>
+</code>,
+and a 
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafReadOnly
+</span>
+</code> for anything else (a Julia 
+<code class="docutils literal notranslate">
+<span class="pre">DafReadOnly
+</span>
+</code>, or a bare 
+<code class="docutils literal notranslate">
+<span class="pre">DafReader
+</span>
+</code> such as an
+
+<code class="docutils literal notranslate">
+<span class="pre">HttpDaf
+</span>
+</code>). This is needed when some other Julia code returns a 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> object.
 </p>
 
 </dd>
@@ -2458,6 +2760,34 @@ for details.
 </span>
 <span class="default_value">
 <span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
 </span>
 </span>
 </em>
@@ -2648,6 +2978,206 @@ Julia
 <a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zarr_convert.html#DataAxesFormats.ZarrConvert.zarr_to_files">documentation
 </a>
 for details.
+</p>
+
+</dd>
+</dl>
+
+
+<dl class="py function">
+
+<dt class="sig sig-object py" id="dafpy.formats.zip_daf">
+
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.formats.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">zip_daf
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">path
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">mode
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">'r'
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="keyword-only-separator o">
+<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="pre">*
+</span>
+</abbr>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">name
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">str
+</span>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="pre">None
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">None
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">packed
+</span>
+</span>
+<span class="p">
+<span class="pre">:
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="n">
+<span class="pre">bool
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="w"> 
+</span>
+<span class="default_value">
+<span class="pre">False
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span> 
+<span class="sig-return">
+<span class="sig-return-icon">&#x2192;
+</span> 
+<span class="sig-return-typehint">
+<a class="reference internal" href="data.html#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
+<span class="pre">DafReadOnly
+</span>
+</a>
+<span class="w"> 
+</span>
+<span class="p">
+<span class="pre">|
+</span>
+</span>
+<span class="w"> 
+</span>
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<span class="pre">DafWriter
+</span>
+</a>
+</span>
+</span>
+<a class="reference internal" href="_modules/dafpy/formats.html#zip_daf">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.formats.zip_daf" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>A 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> storage format in a single ZIP archive of the 
+<a class="reference internal" href="#dafpy.formats.files_daf" title="dafpy.formats.files_daf">
+<code class="xref py py-func docutils literal notranslate">
+<span class="pre">files_daf()
+</span>
+</code>
+</a> on-disk layout. The 
+<code class="docutils literal notranslate">
+<span class="pre">path
+</span>
+</code> is either
+
+<code class="docutils literal notranslate">
+<span class="pre">something.daf.zip
+</span>
+</code> (single-daf ZIP) or 
+<code class="docutils literal notranslate">
+<span class="pre">something.dafs.zip#/group
+</span>
+</code> (sub-daf inside a multi-daf ZIP). See the
+Julia 
+<a class="reference external" href="https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zip_files.html">documentation
+</a> for details.
 </p>
 
 </dd>
