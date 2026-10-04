@@ -1,5 +1,5 @@
 """
-Test the ``DafAnnData`` AnnData facade.
+Test the ``DafAnnDataReader`` and ``DafAnnDataWriter`` AnnData facades.
 """
 
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 
 import dafpy as dp
-from dafpy.anndata_facade import DafAnnData
+from dafpy.anndata_facade import DafAnnDataReader
+from dafpy.anndata_facade import DafAnnDataWriter
 
 from .utilities import assert_raises
 
@@ -26,15 +27,15 @@ def _chain():
 
 
 def _cells_adata():
-    return DafAnnData(_cells(), obs_axis="cell", var_axis="gene", x_matrix="UMIs")
+    return DafAnnDataWriter(_cells(), obs_axis="cell", var_axis="gene", x_matrix="UMIs")
 
 
 def _metacells_adata():
-    return DafAnnData(_metacells(), obs_axis="metacell", var_axis="gene", x_matrix="fraction")
+    return DafAnnDataWriter(_metacells(), obs_axis="metacell", var_axis="gene", x_matrix="fraction")
 
 
 def _chain_adata():
-    return DafAnnData(_chain(), obs_axis="cell", var_axis="gene", x_matrix="UMIs")
+    return DafAnnDataWriter(_chain(), obs_axis="cell", var_axis="gene", x_matrix="UMIs")
 
 
 def test_n_obs() -> None:
@@ -67,16 +68,32 @@ def test_var_names_type() -> None:
 
 def test_daf_property() -> None:
     daf = _cells()
-    adata = DafAnnData(daf, obs_axis="cell", var_axis="gene", x_matrix="UMIs")
+    adata = DafAnnDataWriter(daf, obs_axis="cell", var_axis="gene", x_matrix="UMIs")
     assert adata.daf is daf
 
 
 def test_as_anndata() -> None:
     daf = _cells()
     adata = daf.as_anndata(obs_axis="cell", var_axis="gene", x_matrix="UMIs")
+    assert isinstance(adata, DafAnnDataWriter)
     assert adata.daf is daf
     assert adata.n_obs == 856
     assert adata.n_vars == 683
+
+
+def test_as_anndata_of_read_only() -> None:
+    adata = _cells().read_only().as_anndata(obs_axis="cell", var_axis="gene", x_matrix="UMIs")
+    assert isinstance(adata, DafAnnDataReader)
+    assert not isinstance(adata, DafAnnDataWriter)
+    assert adata.n_obs == 856
+
+
+def test_slices_and_queries_are_read_only() -> None:
+    adata = _metacells_adata()
+    first_type = str(adata.obs["type"].iloc[0])
+    for derived in (adata[:3, :], adata[:, :], adata.query_obs(f"type = {first_type}")):
+        assert isinstance(derived, DafAnnDataReader)
+        assert not isinstance(derived, DafAnnDataWriter)
 
 
 def test_X_shape() -> None:  # pylint: disable=invalid-name
@@ -444,7 +461,7 @@ def test_slice_obs_vectors_preserved() -> None:
 
 
 def test_slice_wrong_index_count_raises() -> None:
-    with assert_raises("DafAnnData slicing requires two indices"):
+    with assert_raises("DafAnnDataWriter slicing requires two indices"):
         _ = _cells_adata()[:50]
 
 
@@ -467,38 +484,38 @@ def test_query_var() -> None:
 
 def test_readonly_obs_write_raises() -> None:
     sliced = _cells_adata()[:10, :]
-    with assert_raises("DafReadOnly"):
-        sliced.obs["new_col"] = np.zeros(10)
+    with assert_raises("does not support item assignment"):
+        sliced.obs["new_col"] = np.zeros(10)  # type: ignore[index]  # pylint: disable=unsupported-assignment-operation
 
 
 def test_readonly_var_write_raises() -> None:
     sliced = _cells_adata()[:, :10]
-    with assert_raises("DafReadOnly"):
-        sliced.var["new_col"] = np.zeros(10)
+    with assert_raises("does not support item assignment"):
+        sliced.var["new_col"] = np.zeros(10)  # type: ignore[index]  # pylint: disable=unsupported-assignment-operation
 
 
 def test_readonly_uns_write_raises() -> None:
     sliced = _cells_adata()[:10, :]
-    with assert_raises("DafReadOnly"):
-        sliced.uns["new_key"] = "value"
+    with assert_raises("does not support item assignment"):
+        sliced.uns["new_key"] = "value"  # type: ignore[index]  # pylint: disable=unsupported-assignment-operation
 
 
 def test_readonly_layers_write_raises() -> None:
     sliced = _cells_adata()[:10, :]
-    with assert_raises("DafReadOnly"):
-        sliced.layers["new"] = np.zeros((10, 683))
+    with assert_raises("does not support item assignment"):
+        sliced.layers["new"] = np.zeros((10, 683))  # type: ignore[index]  # pylint: disable=unsupported-assignment-operation
 
 
 def test_readonly_obsp_write_raises() -> None:
     sliced = _metacells_adata()[:3, :]
-    with assert_raises("DafReadOnly"):
-        sliced.obsp["sim"] = np.zeros((3, 3))
+    with assert_raises("does not support item assignment"):
+        sliced.obsp["sim"] = np.zeros((3, 3))  # type: ignore[index]  # pylint: disable=unsupported-assignment-operation
 
 
 def test_readonly_obsm_write_raises() -> None:
     sliced = _metacells_adata()[:3, :]
-    with assert_raises("DafReadOnly"):
-        sliced.obsm["type:w"] = np.zeros((3, 4))
+    with assert_raises("does not support item assignment"):
+        sliced.obsm["type:w"] = np.zeros((3, 4))  # type: ignore[index]  # pylint: disable=unsupported-assignment-operation
 
 
 def test_repr_does_not_raise() -> None:
@@ -661,7 +678,7 @@ def test_uns_repr() -> None:
 
 
 def test_uns_setter_bulk() -> None:
-    # DafAnnData.uns = mapping bulk-sets all entries
+    # DafAnnDataWriter.uns = mapping bulk-sets all entries
     adata = _cells_adata()
     adata.uns = {"batch": "run1", "version": 2}
     assert adata.uns["batch"] == "run1"

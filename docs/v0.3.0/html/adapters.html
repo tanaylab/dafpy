@@ -323,344 +323,132 @@ pipelines in Python or any other language, if one insists on doing so.
 <span class="sig-paren">(
 </span>
 <em class="sig-param">
-<span class="pre">daf:
-</span> 
-<span class="pre">~dafpy.data.DafWriter,
-</span> 
-<span class="pre">*,
-</span> 
-<span class="pre">input_axes:
-</span> 
-<span class="pre">~typing.Mapping[str,
-</span> 
-<span class="pre">str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Axis
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.LookupScalar
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Names
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.operations.QuerySequence
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">None]
-</span> 
-<span class="pre">|
-</span> 
+<span class="n">
+<span class="pre">daf
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">*
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">input_axes
+</span>
+</span>
+<span class="o">
+<span class="pre">=
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
-</span> 
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">input_data
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">input_data:
-</span> 
-<span class="pre">~typing.Mapping[str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str],
-</span> 
-<span class="pre">str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Axis
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.LookupScalar
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Names
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.operations.QuerySequence
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">None]
-</span> 
-<span class="pre">|
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
-</span> 
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">capture
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">capture:
-</span> 
-<span class="pre">~typing.Callable[[...],
-</span> 
-<span class="pre">~dafpy.data.DafWriter]
-</span> 
-<span class="pre">=
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">&lt;function
 </span> 
-<span class="pre">memory_daf&gt;,
-</span> 
-<span class="pre">output_axes:
-</span> 
-<span class="pre">~typing.Mapping[str,
-</span> 
-<span class="pre">str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Axis
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.LookupScalar
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Names
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.operations.QuerySequence
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">None]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">None
-</span> 
+<span class="pre">memory_daf&gt;
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">output_axes
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">output_data:
-</span> 
-<span class="pre">~typing.Mapping[str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str],
-</span> 
-<span class="pre">str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Axis
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.LookupScalar
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.queries.Names
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~dafpy.operations.QuerySequence
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">None]
-</span> 
-<span class="pre">|
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
-</span> 
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">output_data
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">empty:
-</span> 
-<span class="pre">~typing.Mapping[str
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~typing.Tuple[str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str,
-</span> 
-<span class="pre">str],
-</span> 
-<span class="pre">bool
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">int
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">float
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.int8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.int16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.int32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.int64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.uint8
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.uint16
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.uint32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.uint64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.float32
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">~numpy.float64
-</span> 
-<span class="pre">|
-</span> 
-<span class="pre">str]
-</span> 
-<span class="pre">|
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
-</span> 
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">empty
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">relayout:
-</span> 
-<span class="pre">bool
-</span> 
-<span class="pre">|
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
-</span> 
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">relayout
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
-<span class="pre">None,
-</span> 
-<span class="pre">overwrite:
-</span> 
-<span class="pre">bool
-</span> 
-<span class="pre">|
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
-</span> 
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">overwrite
+</span>
+</span>
+<span class="o">
 <span class="pre">=
-</span> 
+</span>
+</span>
+<span class="default_value">
 <span class="pre">None
+</span>
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Iterator
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
-<span class="pre">DafWriter
-</span>
-</a>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/adapters.html#adapter">
 <span class="viewcode-link">
@@ -688,6 +476,542 @@ base
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>daf
+</strong> (
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<em>DafWriter
+</em>
+</a>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>input_axes
+</strong> (
+<em>Mapping
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>input_data
+</strong> (
+<em>Mapping
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>]
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>capture
+</strong> (
+<em>Callable
+</em>
+<em>[
+</em>
+<em>[
+</em>
+<em>...
+</em>
+<em>]
+</em>
+<em>, 
+</em>
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<em>DafWriter
+</em>
+</a>
+<em>]
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>output_axes
+</strong> (
+<em>Mapping
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>output_data
+</strong> (
+<em>Mapping
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>]
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>empty
+</strong> (
+<em>Mapping
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>]
+</em>
+<em>, 
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Iterator
+</em>[
+<a class="reference internal" href="data.html#dafpy.data.DafWriter" title="dafpy.data.DafWriter">
+<em>DafWriter
+</em>
+</a>]
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>

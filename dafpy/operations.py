@@ -21,6 +21,8 @@ from .julia_import import jl
 from .storage_types import StorageScalar
 
 __all__ = [
+    "PendingNumpyQuery",
+    "PendingPandasQuery",
     "QueryOperation",
     "QuerySequence",
     "EltwiseOperation",

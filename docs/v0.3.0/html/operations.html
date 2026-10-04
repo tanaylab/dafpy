@@ -140,6 +140,24 @@
 <ul>
 
 <li class="toctree-l3">
+<a class="reference internal" href="#dafpy.operations.PendingNumpyQuery">
+<code class="docutils literal notranslate">
+<span class="pre">PendingNumpyQuery
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
+<a class="reference internal" href="#dafpy.operations.PendingPandasQuery">
+<code class="docutils literal notranslate">
+<span class="pre">PendingPandasQuery
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l3">
 <a class="reference internal" href="#dafpy.operations.QueryOperation">
 <code class="docutils literal notranslate">
 <span class="pre">QueryOperation
@@ -477,6 +495,156 @@
 
 <dl class="py class">
 
+<dt class="sig sig-object py" id="dafpy.operations.PendingNumpyQuery">
+
+<span class="property">
+<span class="k">
+<span class="pre">class
+</span>
+</span>
+<span class="w"> 
+</span>
+</span>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">PendingNumpyQuery
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">run
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/operations.html#PendingNumpyQuery">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.operations.PendingNumpyQuery" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>Used to implement 
+<code class="docutils literal notranslate">
+<span class="pre">query
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">daf.get_np_query()
+</span>
+</code>.
+</p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>run
+</strong> (
+<em>Callable
+</em>)
+</p>
+
+</dd>
+
+</dl>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
+<dt class="sig sig-object py" id="dafpy.operations.PendingPandasQuery">
+
+<span class="property">
+<span class="k">
+<span class="pre">class
+</span>
+</span>
+<span class="w"> 
+</span>
+</span>
+<span class="sig-prename descclassname">
+<span class="pre">dafpy.operations.
+</span>
+</span>
+<span class="sig-name descname">
+<span class="pre">PendingPandasQuery
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="n">
+<span class="pre">run
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/operations.html#PendingPandasQuery">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.operations.PendingPandasQuery" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>Used to implement 
+<code class="docutils literal notranslate">
+<span class="pre">query
+</span> 
+<span class="pre">|
+</span> 
+<span class="pre">daf.get_pd_query()
+</span>
+</code>.
+</p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>run
+</strong> (
+<em>Callable
+</em>)
+</p>
+
+</dd>
+
+</dl>
+
+</dd>
+</dl>
+
+
+<dl class="py class">
+
 <dt class="sig sig-object py" id="dafpy.operations.QueryOperation">
 
 <span class="property">
@@ -538,6 +706,10 @@ for details.
 </code>
 operator in Julia).
 </p>
+
+<dl class="field-list simple">
+
+</dl>
 
 </dd>
 </dl>
@@ -611,6 +783,10 @@ for details.
 operator in Julia).
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -662,6 +838,10 @@ operator in Julia).
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+</dl>
 
 </dd>
 </dl>
@@ -715,6 +895,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -754,33 +938,9 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -806,6 +966,29 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -846,33 +1029,9 @@ for details.
 <span class="pre">min
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -884,33 +1043,9 @@ for details.
 <span class="pre">max
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -936,6 +1071,48 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>min
+</strong> (
+<em>float
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>max
+</strong> (
+<em>float
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -976,16 +1153,6 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-</span>
 </em>
 <span class="sig-paren">)
 </span>
@@ -1006,6 +1173,25 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>)
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1046,33 +1232,9 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1098,6 +1260,29 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1138,33 +1323,9 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1176,33 +1337,9 @@ for details.
 <span class="pre">base
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1214,33 +1351,9 @@ for details.
 <span class="pre">eps
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1266,6 +1379,61 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>base
+</strong> (
+<em>float
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eps
+</strong> (
+<em>float
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1309,6 +1477,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1350,6 +1522,10 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+</dl>
 
 </dd>
 </dl>
@@ -1393,6 +1569,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1435,6 +1615,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1474,33 +1658,9 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1510,16 +1670,6 @@ for details.
 <em class="sig-param">
 <span class="n">
 <span class="pre">p
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
 </span>
 </span>
 </em>
@@ -1543,6 +1693,44 @@ lower. See the Julia
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>p
+</strong> (
+<em>float
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1583,33 +1771,9 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1635,6 +1799,29 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1675,49 +1862,15 @@ for details.
 <span class="pre">high
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">low
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1743,6 +1896,44 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>high
+</strong> (
+<em>float
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>low
+</strong> (
+<em>float
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1785,6 +1976,10 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+</dl>
 
 </dd>
 </dl>
@@ -1829,6 +2024,10 @@ values. See the Julia
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1868,33 +2067,9 @@ for details.
 <span class="pre">type
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1920,6 +2095,29 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>type
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1963,6 +2161,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 </dd>
 </dl>
 
@@ -2004,6 +2206,10 @@ the Julia
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+</dl>
 
 </dd>
 </dl>

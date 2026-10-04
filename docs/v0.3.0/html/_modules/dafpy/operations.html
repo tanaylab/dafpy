@@ -95,6 +95,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.storage_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageScalar</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;PendingNumpyQuery&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PendingPandasQuery&quot;</span><span class="p">,</span>
     <span class="s2">&quot;QueryOperation&quot;</span><span class="p">,</span>
     <span class="s2">&quot;QuerySequence&quot;</span><span class="p">,</span>
     <span class="s2">&quot;EltwiseOperation&quot;</span><span class="p">,</span>
@@ -119,22 +121,28 @@
 <span class="p">]</span>
 
 
+<div class="viewcode-block" id="PendingNumpyQuery">
+<a class="viewcode-back" href="../../operations.html#dafpy.operations.PendingNumpyQuery">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PendingNumpyQuery</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Used to implement ``query | daf.get_np_query()``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">run</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">run</span></div>
 
 
+
+<div class="viewcode-block" id="PendingPandasQuery">
+<a class="viewcode-back" href="../../operations.html#dafpy.operations.PendingPandasQuery">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PendingPandasQuery</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Used to implement ``query | daf.get_pd_query()``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">run</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">run</span></div>
+
 
 
 <div class="viewcode-block" id="QueryOperation">

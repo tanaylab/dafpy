@@ -24,7 +24,8 @@ from typing import Type
 from typing import overload
 
 if TYPE_CHECKING:
-    from .anndata_facade import DafAnnData
+    from .anndata_facade import DafAnnDataReader
+    from .anndata_facade import DafAnnDataWriter
 
 from weakref import WeakValueDictionary
 
@@ -648,22 +649,16 @@ class DafReader(JlObject):
         """
         return DafReadOnly(jl.DataAxesFormats.read_only(self.jl_obj, name=name))
 
-    def as_anndata(self, *, obs_axis: str, var_axis: str, x_matrix: str) -> "DafAnnData":
+    def as_anndata(self, *, obs_axis: str, var_axis: str, x_matrix: str) -> "DafAnnDataReader":
         """
-        Wrap this ``Daf`` data set as an ``AnnData``-like facade. See :class:`~dafpy.DafAnnData` for details.
-
-        Parameters
-        ----------
-        obs_axis:
-            Name of the Daf axis that corresponds to AnnData's observations (rows of ``X``).
-        var_axis:
-            Name of the Daf axis that corresponds to AnnData's variables (columns of ``X``).
-        x_matrix:
-            Name of the ``(obs_axis, var_axis)`` matrix exposed as ``X``.
+        Wrap this ``Daf`` data set as a read-only ``AnnData``-like facade. See
+        :class:`~dafpy.anndata_facade.DafAnnDataReader` for details. The ``obs_axis`` holds AnnData's observations (the
+        rows of ``X``). The ``var_axis`` holds AnnData's variables (the columns of ``X``). The ``x_matrix`` is the name
+        of the ``(obs_axis, var_axis)`` matrix which is exposed as ``X``.
         """
-        from .anndata_facade import DafAnnData  # pylint: disable=import-outside-toplevel
+        from .anndata_facade import DafAnnDataReader  # pylint: disable=import-outside-toplevel
 
-        return DafAnnData(self, obs_axis=obs_axis, var_axis=var_axis, x_matrix=x_matrix)
+        return DafAnnDataReader(self, obs_axis=obs_axis, var_axis=var_axis, x_matrix=x_matrix)
 
     def complete_path(self) -> Optional[str]:
         """
@@ -703,6 +698,16 @@ class DafWriter(DafReader):
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.DafWriter>`__
     for details.
     """
+
+    def as_anndata(self, *, obs_axis: str, var_axis: str, x_matrix: str) -> "DafAnnDataWriter":
+        """
+        Wrap this ``Daf`` data set as a writable ``AnnData``-like facade. See
+        :class:`~dafpy.anndata_facade.DafAnnDataWriter` for details. The parameters are the same as for
+        :meth:`DafReader.as_anndata`.
+        """
+        from .anndata_facade import DafAnnDataWriter  # pylint: disable=import-outside-toplevel
+
+        return DafAnnDataWriter(self, obs_axis=obs_axis, var_axis=var_axis, x_matrix=x_matrix)
 
     def set_scalar(self, name: str, value: StorageScalar, *, overwrite: Optional[bool] = None) -> Self:
         """

@@ -38,6 +38,8 @@ extensions = [
 ]
 
 autodoc_member_order = 'bysource'
+# Sphinx mangles nested tuple types (e.g. ``Tuple[float, float]``) in signatures, so the types are listed below instead.
+autodoc_typehints = 'description'
 autosectionlabel_prefix_document = True
 nitpicky = True
 nitpick_ignore = [
@@ -54,8 +56,12 @@ nitpick_ignore = [
     ('py:class', 'numpy.ndarray'),
     ('py:class', 'pandas.core.series.Series'),
     ('py:class', 'pandas.core.frame.DataFrame'),
+    ('py:class', 'pandas.core.indexes.base.Index'),
     ('py:class', 'scipy.sparse._csc.csc_matrix'),
     ('py:class', 'scipy.sparse._csr.csr_matrix'),
+    ('py:class', 'Julia: DataAxesFormats.MemoryFormat.MemoryDaf'),
+    ('py:class', 'Julia: HDF5.File'),
+    ('py:class', 'Julia: HDF5.Group'),
 ]
 
 # Add any paths that contain templates here, relative to this directory.

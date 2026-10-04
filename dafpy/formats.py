@@ -36,9 +36,9 @@ __all__ = [
 
 def wrap_daf(jl_obj) -> DafReadOnly | DafWriter:
     """
-    Wrap a Julia ``Daf`` object in the matching Python class. This is a :py:class:`DafWriter` for a Julia ``DafWriter``,
-    and a :py:class:`DafReadOnly` for anything else (a Julia ``DafReadOnly``, or a bare ``DafReader`` such as an
-    ``HttpDaf``). This is needed when some other Julia code returns a ``Daf`` object.
+    Wrap a Julia ``Daf`` object in the matching Python class. This is a :py:class:`~dafpy.data.DafWriter` for a Julia
+    ``DafWriter``, and a :py:class:`~dafpy.data.DafReadOnly` for anything else (a Julia ``DafReadOnly``, or a bare
+    ``DafReader`` such as an ``HttpDaf``). This is needed when some other Julia code returns a ``Daf`` object.
     """
     if jl.isa(jl_obj, jl.DataAxesFormats.DafWriter):
         return DafWriter(jl_obj)

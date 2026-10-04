@@ -98,7 +98,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">overload</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnData</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnDataReader</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnDataWriter</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">weakref</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeakValueDictionary</span>
 
@@ -810,22 +811,16 @@
 
 <div class="viewcode-block" id="DafReader.as_anndata">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.as_anndata">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnData&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnDataReader&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wrap this ``Daf`` data set as an ``AnnData``-like facade. See :class:`~dafpy.DafAnnData` for details.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        obs_axis:</span>
-<span class="sd">            Name of the Daf axis that corresponds to AnnData&#39;s observations (rows of ``X``).</span>
-<span class="sd">        var_axis:</span>
-<span class="sd">            Name of the Daf axis that corresponds to AnnData&#39;s variables (columns of ``X``).</span>
-<span class="sd">        x_matrix:</span>
-<span class="sd">            Name of the ``(obs_axis, var_axis)`` matrix exposed as ``X``.</span>
+<span class="sd">        Wrap this ``Daf`` data set as a read-only ``AnnData``-like facade. See</span>
+<span class="sd">        :class:`~dafpy.anndata_facade.DafAnnDataReader` for details. The ``obs_axis`` holds AnnData&#39;s observations (the</span>
+<span class="sd">        rows of ``X``). The ``var_axis`` holds AnnData&#39;s variables (the columns of ``X``). The ``x_matrix`` is the name</span>
+<span class="sd">        of the ``(obs_axis, var_axis)`` matrix which is exposed as ``X``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnData</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnDataReader</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
 
-        <span class="k">return</span> <span class="n">DafAnnData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="n">x_matrix</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">DafAnnDataReader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="n">x_matrix</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.complete_path">
@@ -881,6 +876,19 @@
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.DafWriter&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DafWriter.as_anndata">
+<a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.as_anndata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnDataWriter&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrap this ``Daf`` data set as a writable ``AnnData``-like facade. See</span>
+<span class="sd">        :class:`~dafpy.anndata_facade.DafAnnDataWriter` for details. The parameters are the same as for</span>
+<span class="sd">        :meth:`DafReader.as_anndata`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnDataWriter</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
+        <span class="k">return</span> <span class="n">DafAnnDataWriter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="n">x_matrix</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="DafWriter.set_scalar">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.set_scalar">[docs]</a>

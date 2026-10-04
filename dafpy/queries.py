@@ -397,8 +397,8 @@ class GroupRowsBy(QueryOperation):
 
 class ReduceToColumn(QueryOperation):
     """
-    Specify a :class:`ReductionOperation` to convert each row of a grouped matrix to a single value, reducing the matrix
-    to a single column per group. Must be preceded by :class:`GroupColumnsBy`. See the Julia
+    Specify a :class:`~dafpy.operations.ReductionOperation` to convert each row of a grouped matrix to a single value,
+    reducing the matrix to a single column per group. Must be preceded by :class:`GroupColumnsBy`. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.ReduceToColumn>`__
     for details.
     """
@@ -409,8 +409,8 @@ class ReduceToColumn(QueryOperation):
 
 class ReduceToRow(QueryOperation):
     """
-    Specify a :class:`ReductionOperation` to convert each column of a grouped matrix to a single value, reducing the
-    matrix to a single row per group. Must be preceded by :class:`GroupRowsBy`. See the Julia
+    Specify a :class:`~dafpy.operations.ReductionOperation` to convert each column of a grouped matrix to a single
+    value, reducing the matrix to a single row per group. Must be preceded by :class:`GroupRowsBy`. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.ReduceToRow>`__
     for details.
     """

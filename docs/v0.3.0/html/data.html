@@ -438,6 +438,15 @@
 <ul>
 
 <li class="toctree-l4">
+<a class="reference internal" href="#dafpy.data.DafWriter.as_anndata">
+<code class="docutils literal notranslate">
+<span class="pre">DafWriter.as_anndata()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l4">
 <a class="reference internal" href="#dafpy.data.DafWriter.set_scalar">
 <code class="docutils literal notranslate">
 <span class="pre">DafWriter.set_scalar()
@@ -842,6 +851,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 <dl class="py property">
 
 <dt class="sig sig-object py" id="dafpy.data.DafReader.name">
@@ -907,33 +920,9 @@ for details.
 <span class="pre">cache
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -945,33 +934,9 @@ for details.
 <span class="pre">deep
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -983,33 +948,9 @@ for details.
 <span class="pre">tensors
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -1017,14 +958,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">str
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.description">
 <span class="viewcode-link">
@@ -1048,6 +981,72 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>cache
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>deep
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>tensors
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>str
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1067,26 +1066,8 @@ for details.
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.has_scalar">
 <span class="viewcode-link">
@@ -1113,6 +1094,36 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -1716,6 +1727,118 @@ stored in the
 </code>).
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>default
+</strong> (
+<em>None
+</em>
+<em> | 
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.UndefInitializer" title="dafpy.julia_import.UndefInitializer">
+<em>UndefInitializer
+</em>
+</a>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool | int | float | 
+<em>int8
+</em> | 
+<em>int16
+</em> | 
+<em>int32
+</em> | 
+<em>int64
+</em> | 
+<em>uint8
+</em> | 
+<em>uint16
+</em> | 
+<em>uint32
+</em> | 
+<em>uint64
+</em> | 
+<em>float32
+</em> | 
+<em>float64
+</em> | str | None
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1731,24 +1854,6 @@ stored in the
 <span class="sig-paren">(
 </span>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">AbstractSet
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.scalars_set">
 <span class="viewcode-link">
@@ -1772,6 +1877,23 @@ stored in the
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<em>AbstractSet
+</em>[str]
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1791,26 +1913,8 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.has_axis">
 <span class="viewcode-link">
@@ -1838,6 +1942,36 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1853,24 +1987,6 @@ for details.
 <span class="sig-paren">(
 </span>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">AbstractSet
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axes_set">
 <span class="viewcode-link">
@@ -1894,6 +2010,23 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<em>AbstractSet
+</em>[str]
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1913,26 +2046,8 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">int
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axis_length">
 <span class="viewcode-link">
@@ -1960,6 +2075,36 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>int
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -1979,26 +2124,8 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">ndarray
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axis_np_vector">
 <span class="viewcode-link">
@@ -2033,6 +2160,38 @@ for details.
 <p>This creates an in-memory copy of the data, which is cached for repeated calls.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>ndarray
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -2052,59 +2211,15 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">indices
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">int
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -2124,23 +2239,9 @@ for details.
 <span class="pre">allow_empty
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">False
@@ -2148,14 +2249,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">ndarray
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axis_np_entries">
 <span class="viewcode-link">
@@ -2205,6 +2298,72 @@ for details.
 </code> are converted to the empty string.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>indices
+</strong> (
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>int
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>allow_empty
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>ndarray
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -2224,44 +2383,8 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Mapping
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axis_dict">
 <span class="viewcode-link">
@@ -2280,6 +2403,38 @@ for details.
 </span>
 </code> entry names to their (0-based) integer index.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Mapping
+</em>[str, int]
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -2300,40 +2455,10 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">entries
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
 </span>
 </span>
 </em>, 
@@ -2350,23 +2475,9 @@ for details.
 <span class="pre">allow_empty
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">False
@@ -2374,14 +2485,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">ndarray
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axis_np_indices">
 <span class="viewcode-link">
@@ -2421,6 +2524,68 @@ for details.
 the empty string is converted to the index -1.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>entries
+</strong> (
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>]
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>allow_empty
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>ndarray
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -2440,40 +2605,10 @@ the empty string is converted to the index -1.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">entries
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
 </span>
 </span>
 </em>, 
@@ -2490,23 +2625,9 @@ the empty string is converted to the index -1.
 <span class="pre">allow_empty
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">False
@@ -2514,14 +2635,6 @@ the empty string is converted to the index -1.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Series
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.axis_pd_indices">
 <span class="viewcode-link">
@@ -2553,6 +2666,68 @@ the empty string is converted to the index -1.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>entries
+</strong> (
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>]
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>allow_empty
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Series
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -2572,42 +2747,14 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.has_vector">
 <span class="viewcode-link">
@@ -2640,6 +2787,51 @@ Julia
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -2659,36 +2851,8 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">AbstractSet
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.vectors_set">
 <span class="viewcode-link">
@@ -2722,6 +2886,38 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>AbstractSet
+</em>[str]
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -3264,6 +3460,166 @@ Since Python has no concept of sparse vectors (because “reasons”), you can�
 vector using the Python API.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>default
+</strong> (
+<em>None
+</em>
+<em> | 
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>ndarray
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.UndefInitializer" title="dafpy.julia_import.UndefInitializer">
+<em>UndefInitializer
+</em>
+</a>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>ndarray
+</em> | None
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -3786,6 +4142,190 @@ for details.
 as the index.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>default
+</strong> (
+<em>None
+</em>
+<em> | 
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>ndarray
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.UndefInitializer" title="dafpy.julia_import.UndefInitializer">
+<em>UndefInitializer
+</em>
+</a>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Series
+</em> | None
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -3805,46 +4345,16 @@ as the index.
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -3861,33 +4371,9 @@ as the index.
 <span class="pre">relayout
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -3895,14 +4381,6 @@ as the index.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.has_matrix">
 <span class="viewcode-link">
@@ -3939,6 +4417,73 @@ as the index.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -3958,30 +4503,10 @@ for details.
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -3998,33 +4523,9 @@ for details.
 <span class="pre">tensors
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -4036,33 +4537,9 @@ for details.
 <span class="pre">relayout
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -4070,24 +4547,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">AbstractSet
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.matrices_set">
 <span class="viewcode-link">
@@ -4119,6 +4578,79 @@ Julia
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>tensors
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>AbstractSet
+</em>[str]
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -4823,6 +5355,214 @@ efficient zero-copy operation). This will also (zero-copy) convert the
 (which is to be avoided at all costs).
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>default
+</strong> (
+<em>None
+</em>
+<em> | 
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>ndarray
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.UndefInitializer" title="dafpy.julia_import.UndefInitializer">
+<em>UndefInitializer
+</em>
+</a>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>ndarray
+</em> | 
+<em>csc_matrix
+</em> | None
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -5482,6 +6222,212 @@ axes as the indices.
 (query) columns, possibly using a different data type for each.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>default
+</strong> (
+<em>None
+</em>
+<em> | 
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>ndarray
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.UndefInitializer" title="dafpy.julia_import.UndefInitializer">
+<em>UndefInitializer
+</em>
+</a>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>DataFrame
+</em> | None
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -5509,35 +6455,9 @@ axes as the indices.
 <span class="pre">clear
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<a class="reference internal" href="#dafpy.data.CacheGroup" title="dafpy.data.CacheGroup">
-<span class="pre">CacheGroup
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -5549,35 +6469,9 @@ axes as the indices.
 <span class="pre">keep
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<a class="reference internal" href="#dafpy.data.CacheGroup" title="dafpy.data.CacheGroup">
-<span class="pre">CacheGroup
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -5585,14 +6479,6 @@ axes as the indices.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">None
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.empty_cache">
 <span class="viewcode-link">
@@ -5611,6 +6497,63 @@ axes as the indices.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>clear
+</strong> (
+<a class="reference internal" href="#dafpy.data.CacheGroup" title="dafpy.data.CacheGroup">
+<em>CacheGroup
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>keep
+</strong> (
+<a class="reference internal" href="#dafpy.data.CacheGroup" title="dafpy.data.CacheGroup">
+<em>CacheGroup
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>None
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -5631,74 +6574,8 @@ for details.
 <span class="pre">query
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
-<span class="pre">Axis
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
-<span class="pre">LookupScalar
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
-<span class="pre">Names
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
-<span class="pre">QuerySequence
-</span>
-</a>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.has_query">
 <span class="viewcode-link">
@@ -5726,6 +6603,60 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>query
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -5745,74 +6676,8 @@ for details.
 <span class="pre">query
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
-<span class="pre">Axis
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
-<span class="pre">LookupScalar
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
-<span class="pre">Names
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
-<span class="pre">QuerySequence
-</span>
-</a>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.query_requires_relayout">
 <span class="viewcode-link">
@@ -5843,6 +6708,60 @@ for details.
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>query
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -6236,8 +7155,10 @@ for details.
 <span class="sig-return-icon">&#x2192;
 </span> 
 <span class="sig-return-typehint">
+<a class="reference internal" href="operations.html#dafpy.operations.PendingNumpyQuery" title="dafpy.operations.PendingNumpyQuery">
 <span class="pre">PendingNumpyQuery
 </span>
+</a>
 </span>
 </span>
 </dt>
@@ -6301,6 +7222,111 @@ useful when constructing the query in parts (e.g.
 </span>
 </code>).
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>query
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>cache
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool | int | float | 
+<em>int8
+</em> | 
+<em>int16
+</em> | 
+<em>int32
+</em> | 
+<em>int64
+</em> | 
+<em>uint8
+</em> | 
+<em>uint16
+</em> | 
+<em>uint32
+</em> | 
+<em>uint64
+</em> | 
+<em>float32
+</em> | 
+<em>float64
+</em> | str | 
+<em>ndarray
+</em> | 
+<em>AbstractSet
+</em>[str] | 
+<a class="reference internal" href="operations.html#dafpy.operations.PendingNumpyQuery" title="dafpy.operations.PendingNumpyQuery">
+<em>PendingNumpyQuery
+</em>
+</a>
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -6704,8 +7730,10 @@ useful when constructing the query in parts (e.g.
 <span class="sig-return-icon">&#x2192;
 </span> 
 <span class="sig-return-typehint">
+<a class="reference internal" href="operations.html#dafpy.operations.PendingPandasQuery" title="dafpy.operations.PendingPandasQuery">
 <span class="pre">PendingPandasQuery
 </span>
+</a>
 </span>
 </span>
 </dt>
@@ -6762,6 +7790,113 @@ useful when constructing the query in parts (e.g.
 </code>).
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>query
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>cache
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>bool | int | float | 
+<em>int8
+</em> | 
+<em>int16
+</em> | 
+<em>int32
+</em> | 
+<em>int64
+</em> | 
+<em>uint8
+</em> | 
+<em>uint16
+</em> | 
+<em>uint32
+</em> | 
+<em>uint64
+</em> | 
+<em>float32
+</em> | 
+<em>float64
+</em> | str | 
+<em>Series
+</em> | 
+<em>DataFrame
+</em> | 
+<em>AbstractSet
+</em>[str] | 
+<a class="reference internal" href="operations.html#dafpy.operations.PendingPandasQuery" title="dafpy.operations.PendingPandasQuery">
+<em>PendingPandasQuery
+</em>
+</a>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -6781,211 +7916,15 @@ useful when constructing the query in parts (e.g.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
-<span class="pre">Axis
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
-<span class="pre">LookupScalar
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
-<span class="pre">Names
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
-<span class="pre">QuerySequence
-</span>
-</a>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">Mapping
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
-<span class="pre">Axis
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
-<span class="pre">LookupScalar
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
-<span class="pre">Names
-</span>
-</a>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
-<span class="pre">QuerySequence
-</span>
-</a>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -7005,33 +7944,9 @@ useful when constructing the query in parts (e.g.
 <span class="pre">cache
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -7039,14 +7954,6 @@ useful when constructing the query in parts (e.g.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">DataFrame
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.get_pd_frame">
 <span class="viewcode-link">
@@ -7125,6 +8032,152 @@ column will be first and the
 </code> column will be second.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns
+</strong> (
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<em>Tuple
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em>]
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>Mapping
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>, 
+</em>
+<em>str
+</em>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Axis" title="dafpy.queries.Axis">
+<em>Axis
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.LookupScalar" title="dafpy.queries.LookupScalar">
+<em>LookupScalar
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="queries.html#dafpy.queries.Names" title="dafpy.queries.Names">
+<em>Names
+</em>
+</a>
+<em> | 
+</em>
+<a class="reference internal" href="operations.html#dafpy.operations.QuerySequence" title="dafpy.operations.QuerySequence">
+<em>QuerySequence
+</em>
+</a>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>cache
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>DataFrame
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -7152,33 +8205,9 @@ column will be first and the
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -7186,16 +8215,6 @@ column will be first and the
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<a class="reference internal" href="#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
-<span class="pre">DafReadOnly
-</span>
-</a>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.read_only">
 <span class="viewcode-link">
@@ -7224,6 +8243,44 @@ Julia
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<a class="reference internal" href="#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
+<em>DafReadOnly
+</em>
+</a>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -7251,30 +8308,10 @@ for details.
 <span class="pre">obs_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">var_axis
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -7283,28 +8320,8 @@ for details.
 <span class="pre">x_matrix
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<a class="reference internal" href="anndata_facade.html#dafpy.anndata_facade.DafAnnData" title="dafpy.anndata_facade.DafAnnData">
-<span class="pre">DafAnnData
-</span>
-</a>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.as_anndata">
 <span class="viewcode-link">
@@ -7321,71 +8338,107 @@ for details.
 <code class="docutils literal notranslate">
 <span class="pre">Daf
 </span>
-</code> data set as an 
+</code> data set as a read-only 
 <code class="docutils literal notranslate">
 <span class="pre">AnnData
 </span>
-</code>-like facade. See 
+</code>-like facade. See
+
+<a class="reference internal" href="anndata_facade.html#dafpy.anndata_facade.DafAnnDataReader" title="dafpy.anndata_facade.DafAnnDataReader">
 <code class="xref py py-class docutils literal notranslate">
-<span class="pre">DafAnnData
+<span class="pre">DafAnnDataReader
 </span>
-</code> for details.
-</p>
-
-<section id="parameters">
-
-<h2>Parameters
-<a class="headerlink" href="#parameters" title="Link to this heading">
-</a>
-</h2>
-
-<dl class="simple">
-
-<dt>obs_axis:
-</dt>
-<dd>
-<p>Name of the Daf axis that corresponds to AnnData’s observations (rows of 
+</code>
+</a> for details. The 
+<code class="docutils literal notranslate">
+<span class="pre">obs_axis
+</span>
+</code> holds AnnData’s observations (the
+rows of 
 <code class="docutils literal notranslate">
 <span class="pre">X
 </span>
-</code>).
-</p>
-
-</dd>
-
-<dt>var_axis:
-</dt>
-<dd>
-<p>Name of the Daf axis that corresponds to AnnData’s variables (columns of 
+</code>). The 
+<code class="docutils literal notranslate">
+<span class="pre">var_axis
+</span>
+</code> holds AnnData’s variables (the columns of 
 <code class="docutils literal notranslate">
 <span class="pre">X
 </span>
-</code>).
-</p>
-
-</dd>
-
-<dt>x_matrix:
-</dt>
-<dd>
-<p>Name of the 
+</code>). The 
+<code class="docutils literal notranslate">
+<span class="pre">x_matrix
+</span>
+</code> is the name
+of the 
 <code class="docutils literal notranslate">
 <span class="pre">(obs_axis,
 </span> 
 <span class="pre">var_axis)
 </span>
-</code> matrix exposed as 
+</code> matrix which is exposed as 
 <code class="docutils literal notranslate">
 <span class="pre">X
 </span>
 </code>.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>obs_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>var_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>x_matrix
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<a class="reference internal" href="anndata_facade.html#dafpy.anndata_facade.DafAnnDataReader" title="dafpy.anndata_facade.DafAnnDataReader">DafAnnDataReader
+</a>
+</p>
+
 </dd>
 
 </dl>
-
-</section>
 
 </dd>
 </dl>
@@ -7402,24 +8455,6 @@ for details.
 <span class="sig-paren">(
 </span>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.complete_path">
 <span class="viewcode-link">
@@ -7444,6 +8479,21 @@ given to See the Julia
 for details.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>str | None
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -7459,14 +8509,6 @@ for details.
 <span class="sig-paren">(
 </span>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">bool
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReader.is_leaf">
 <span class="viewcode-link">
@@ -7490,6 +8532,21 @@ Julia
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>bool
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -7551,6 +8608,10 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
 <dl class="py method">
 
 <dt class="sig sig-object py" id="dafpy.data.DafReadOnly.read_only">
@@ -7574,33 +8635,9 @@ for details.
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -7608,16 +8645,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<a class="reference internal" href="#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
-<span class="pre">DafReadOnly
-</span>
-</a>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafReadOnly.read_only">
 <span class="viewcode-link">
@@ -7645,6 +8672,44 @@ Julia
 </a>
 for details.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<a class="reference internal" href="#dafpy.data.DafReadOnly" title="dafpy.data.DafReadOnly">
+<em>DafReadOnly
+</em>
+</a>
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>
@@ -7706,6 +8771,144 @@ for details.
 for details.
 </p>
 
+<dl class="field-list simple">
+
+</dl>
+
+<dl class="py method">
+
+<dt class="sig sig-object py" id="dafpy.data.DafWriter.as_anndata">
+
+<span class="sig-name descname">
+<span class="pre">as_anndata
+</span>
+</span>
+<span class="sig-paren">(
+</span>
+<em class="sig-param">
+<span class="keyword-only-separator o">
+<abbr title="Keyword-only parameters separator (PEP 3102)">
+<span class="pre">*
+</span>
+</abbr>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">obs_axis
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">var_axis
+</span>
+</span>
+</em>, 
+<em class="sig-param">
+<span class="n">
+<span class="pre">x_matrix
+</span>
+</span>
+</em>
+<span class="sig-paren">)
+</span>
+<a class="reference internal" href="_modules/dafpy/data.html#DafWriter.as_anndata">
+<span class="viewcode-link">
+<span class="pre">[source]
+</span>
+</span>
+</a>
+<a class="headerlink" href="#dafpy.data.DafWriter.as_anndata" title="Link to this definition">
+</a>
+</dt>
+
+<dd>
+<p>Wrap this 
+<code class="docutils literal notranslate">
+<span class="pre">Daf
+</span>
+</code> data set as a writable 
+<code class="docutils literal notranslate">
+<span class="pre">AnnData
+</span>
+</code>-like facade. See
+
+<a class="reference internal" href="anndata_facade.html#dafpy.anndata_facade.DafAnnDataWriter" title="dafpy.anndata_facade.DafAnnDataWriter">
+<code class="xref py py-class docutils literal notranslate">
+<span class="pre">DafAnnDataWriter
+</span>
+</code>
+</a> for details. The parameters are the same as for
+
+<a class="reference internal" href="#dafpy.data.DafReader.as_anndata" title="dafpy.data.DafReader.as_anndata">
+<code class="xref py py-meth docutils literal notranslate">
+<span class="pre">DafReader.as_anndata()
+</span>
+</code>
+</a>.
+</p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>obs_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>var_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>x_matrix
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<a class="reference internal" href="anndata_facade.html#dafpy.anndata_facade.DafAnnDataWriter" title="dafpy.anndata_facade.DafAnnDataWriter">DafAnnDataWriter
+</a>
+</p>
+
+</dd>
+
+</dl>
+
+</dd>
+</dl>
+
+
 <dl class="py method">
 
 <dt class="sig sig-object py" id="dafpy.data.DafWriter.set_scalar">
@@ -7721,160 +8924,10 @@ for details.
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">value
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int8
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int16
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int32
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int64
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint8
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint16
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint32
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint64
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">float32
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">float64
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -7891,33 +8944,9 @@ for details.
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -7925,14 +8954,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.set_scalar">
 <span class="viewcode-link">
@@ -7987,6 +9008,118 @@ for details.
 </code>).
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>value
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -8006,16 +9139,6 @@ for details.
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="keyword-only-separator o">
@@ -8030,23 +9153,9 @@ for details.
 <span class="pre">must_exist
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">True
@@ -8054,14 +9163,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.delete_scalar">
 <span class="viewcode-link">
@@ -8096,6 +9197,53 @@ for details.
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>must_exist
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -8115,50 +9263,10 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">entries
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">ndarray
 </span>
 </span>
 </em>, 
@@ -8175,33 +9283,9 @@ for details.
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -8209,14 +9293,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.add_axis">
 <span class="viewcode-link">
@@ -8251,6 +9327,76 @@ for details.
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>entries
+</strong> (
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>ndarray
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -8270,16 +9416,6 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="keyword-only-separator o">
@@ -8294,23 +9430,9 @@ for details.
 <span class="pre">must_exist
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">True
@@ -8318,14 +9440,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.delete_axis">
 <span class="viewcode-link">
@@ -8360,6 +9474,53 @@ for details.
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>must_exist
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -8379,216 +9540,16 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">value
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Sequence
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">float
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int8
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int16
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int32
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">int64
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint8
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint16
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint32
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">uint64
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">float32
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">float64
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">str
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">ndarray
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">csc_matrix
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">csr_matrix
 </span>
 </span>
 </em>, 
@@ -8605,33 +9566,9 @@ for details.
 <span class="pre">eltype
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -8643,33 +9580,9 @@ for details.
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -8681,33 +9594,9 @@ for details.
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -8715,14 +9604,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.set_vector">
 <span class="viewcode-link">
@@ -8789,6 +9670,171 @@ allows creating sparse vectors in
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>value
+</strong> (
+<em>Sequence
+</em>
+<em>[
+</em>
+<em>bool
+</em>
+<em> | 
+</em>
+<em>int
+</em>
+<em> | 
+</em>
+<em>float
+</em>
+<em> | 
+</em>
+<em>int8
+</em>
+<em> | 
+</em>
+<em>int16
+</em>
+<em> | 
+</em>
+<em>int32
+</em>
+<em> | 
+</em>
+<em>int64
+</em>
+<em> | 
+</em>
+<em>uint8
+</em>
+<em> | 
+</em>
+<em>uint16
+</em>
+<em> | 
+</em>
+<em>uint32
+</em>
+<em> | 
+</em>
+<em>uint64
+</em>
+<em> | 
+</em>
+<em>float32
+</em>
+<em> | 
+</em>
+<em>float64
+</em>
+<em> | 
+</em>
+<em>str
+</em>
+<em>] 
+</em>
+<em>| 
+</em>
+<em>ndarray
+</em>
+<em> | 
+</em>
+<em>csc_matrix
+</em>
+<em> | 
+</em>
+<em>csr_matrix
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eltype
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -8808,46 +9854,16 @@ allows creating sparse vectors in
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">eltype
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
 </span>
 </span>
 </em>, 
@@ -8864,33 +9880,9 @@ allows creating sparse vectors in
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -8902,33 +9894,9 @@ allows creating sparse vectors in
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -8936,24 +9904,6 @@ allows creating sparse vectors in
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Iterator
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.empty_dense_vector">
 <span class="viewcode-link">
@@ -9012,6 +9962,90 @@ for details.
 </code>.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eltype
+</strong> (
+<em>Type
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Iterator
+</em>[
+<em>ndarray
+</em>]
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -9031,30 +10065,10 @@ for details.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -9063,46 +10077,16 @@ for details.
 <span class="pre">eltype
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">nnz
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">int
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">indtype
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
 </span>
 </span>
 </em>, 
@@ -9119,33 +10103,9 @@ for details.
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9157,33 +10117,9 @@ for details.
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9191,42 +10127,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Iterator
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.empty_sparse_vector">
 <span class="viewcode-link">
@@ -9314,6 +10214,112 @@ opposed to 0-based indices typically used by
 zero-copy share sparse data between Python and Julia. Sigh.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eltype
+</strong> (
+<em>Type
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>nnz
+</strong> (
+<em>int
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>indtype
+</strong> (
+<em>Type
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Iterator
+</em>[
+<em>Tuple
+</em>[
+<em>ndarray
+</em>, 
+<em>ndarray
+</em>]]
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -9333,30 +10339,10 @@ zero-copy share sparse data between Python and Julia. Sigh.
 <span class="pre">axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -9373,23 +10359,9 @@ zero-copy share sparse data between Python and Julia. Sigh.
 <span class="pre">must_exist
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">True
@@ -9397,14 +10369,6 @@ zero-copy share sparse data between Python and Julia. Sigh.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.delete_vector">
 <span class="viewcode-link">
@@ -9443,6 +10407,62 @@ for details.
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>must_exist
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -9462,30 +10482,10 @@ for details.
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -9494,40 +10494,10 @@ for details.
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">value
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">ndarray
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">csc_matrix
 </span>
 </span>
 </em>, 
@@ -9544,33 +10514,9 @@ for details.
 <span class="pre">eltype
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9582,33 +10528,9 @@ for details.
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9620,33 +10542,9 @@ for details.
 <span class="pre">relayout
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9658,33 +10556,9 @@ for details.
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9692,14 +10566,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.set_matrix">
 <span class="viewcode-link">
@@ -9768,6 +10634,127 @@ efficient zero-copy operation).
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>value
+</strong> (
+<em>ndarray
+</em>
+<em> | 
+</em>
+<em>csc_matrix
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eltype
+</strong> (
+<em>Type
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -9787,30 +10774,10 @@ efficient zero-copy operation).
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -9819,30 +10786,10 @@ efficient zero-copy operation).
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">eltype
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
 </span>
 </span>
 </em>, 
@@ -9859,33 +10806,9 @@ efficient zero-copy operation).
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9897,33 +10820,9 @@ efficient zero-copy operation).
 <span class="pre">relayout
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9935,33 +10834,9 @@ efficient zero-copy operation).
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -9969,24 +10844,6 @@ efficient zero-copy operation).
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Iterator
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.empty_dense_matrix">
 <span class="viewcode-link">
@@ -10049,6 +10906,112 @@ for details.
 </code>.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eltype
+</strong> (
+<em>Type
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Iterator
+</em>[
+<em>ndarray
+</em>]
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -10068,30 +11031,10 @@ for details.
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -10100,30 +11043,10 @@ for details.
 <span class="pre">name
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">eltype
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
 </span>
 </span>
 </em>, 
@@ -10132,30 +11055,10 @@ for details.
 <span class="pre">nnz
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">int
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">indtype
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">Type
 </span>
 </span>
 </em>, 
@@ -10172,33 +11075,9 @@ for details.
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -10210,33 +11089,9 @@ for details.
 <span class="pre">relayout
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -10248,33 +11103,9 @@ for details.
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -10282,50 +11113,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Iterator
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">Tuple
-</span>
-<span class="p">
-<span class="pre">[
-</span>
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">,
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">ndarray
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-<span class="p">
-<span class="pre">]
-</span>
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.empty_sparse_matrix">
 <span class="viewcode-link">
@@ -10428,6 +11215,136 @@ with
 difference in the indexing, we can’t zero-copy share sparse data between Python and Julia. Sigh.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>eltype
+</strong> (
+<em>Type
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>nnz
+</strong> (
+<em>int
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>indtype
+</strong> (
+<em>Type
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Iterator
+</em>[
+<em>Tuple
+</em>[
+<em>ndarray
+</em>, 
+<em>ndarray
+</em>, 
+<em>ndarray
+</em>]]
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -10447,46 +11364,16 @@ difference in the indexing, we can’t zero-copy share sparse data between Pytho
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -10503,33 +11390,9 @@ difference in the indexing, we can’t zero-copy share sparse data between Pytho
 <span class="pre">overwrite
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -10541,33 +11404,9 @@ difference in the indexing, we can’t zero-copy share sparse data between Pytho
 <span class="pre">packed
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -10575,14 +11414,6 @@ difference in the indexing, we can’t zero-copy share sparse data between Pytho
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.relayout_matrix">
 <span class="viewcode-link">
@@ -10627,6 +11458,88 @@ for details.
 </code> for chaining.
 </p>
 
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>overwrite
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>packed
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
+
 </dd>
 </dl>
 
@@ -10646,46 +11559,16 @@ for details.
 <span class="pre">rows_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">columns_axis
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
-</span>
-</span>
 </em>, 
 <em class="sig-param">
 <span class="n">
 <span class="pre">name
-</span>
-</span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">str
 </span>
 </span>
 </em>, 
@@ -10702,23 +11585,9 @@ for details.
 <span class="pre">must_exist
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">True
@@ -10730,33 +11599,9 @@ for details.
 <span class="pre">relayout
 </span>
 </span>
-<span class="p">
-<span class="pre">:
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="n">
-<span class="pre">bool
-</span>
-<span class="w"> 
-</span>
-<span class="p">
-<span class="pre">|
-</span>
-</span>
-<span class="w"> 
-</span>
-<span class="pre">None
-</span>
-</span>
-<span class="w"> 
-</span>
 <span class="o">
 <span class="pre">=
 </span>
-</span>
-<span class="w"> 
 </span>
 <span class="default_value">
 <span class="pre">None
@@ -10764,14 +11609,6 @@ for details.
 </span>
 </em>
 <span class="sig-paren">)
-</span> 
-<span class="sig-return">
-<span class="sig-return-icon">&#x2192;
-</span> 
-<span class="sig-return-typehint">
-<span class="pre">Self
-</span>
-</span>
 </span>
 <a class="reference internal" href="_modules/dafpy/data.html#DafWriter.delete_matrix">
 <span class="viewcode-link">
@@ -10814,6 +11651,84 @@ for details.
 </span>
 </code> for chaining.
 </p>
+
+<dl class="field-list simple">
+
+<dt class="field-odd">Parameters
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-odd">
+<ul class="simple">
+
+<li>
+<p>
+<strong>rows_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>columns_axis
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>name
+</strong> (
+<em>str
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>must_exist
+</strong> (
+<em>bool
+</em>)
+</p>
+</li>
+
+<li>
+<p>
+<strong>relayout
+</strong> (
+<em>bool
+</em>
+<em> | 
+</em>
+<em>None
+</em>)
+</p>
+</li>
+
+</ul>
+
+</dd>
+
+<dt class="field-even">Return type
+<span class="colon">:
+</span>
+</dt>
+
+<dd class="field-even">
+<p>
+<em>Self
+</em>
+</p>
+
+</dd>
+
+</dl>
 
 </dd>
 </dl>

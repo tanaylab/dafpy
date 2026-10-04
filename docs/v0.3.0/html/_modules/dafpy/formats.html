@@ -112,9 +112,9 @@
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.wrap_daf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">wrap_daf</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrap a Julia ``Daf`` object in the matching Python class. This is a :py:class:`DafWriter` for a Julia ``DafWriter``,</span>
-<span class="sd">    and a :py:class:`DafReadOnly` for anything else (a Julia ``DafReadOnly``, or a bare ``DafReader`` such as an</span>
-<span class="sd">    ``HttpDaf``). This is needed when some other Julia code returns a ``Daf`` object.</span>
+<span class="sd">    Wrap a Julia ``Daf`` object in the matching Python class. This is a :py:class:`~dafpy.data.DafWriter` for a Julia</span>
+<span class="sd">    ``DafWriter``, and a :py:class:`~dafpy.data.DafReadOnly` for anything else (a Julia ``DafReadOnly``, or a bare</span>
+<span class="sd">    ``DafReader`` such as an ``HttpDaf``). This is needed when some other Julia code returns a ``Daf`` object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">jl</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">DafWriter</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
