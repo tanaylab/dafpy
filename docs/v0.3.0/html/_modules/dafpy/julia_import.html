@@ -72,7 +72,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for dafpy.julia_import</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Import the Julia environment.</span>
 
 <span class="sd">This imports the ``juliacall`` module to obtain a Julia run-time (as ``jl``), and uses it to import the</span>
@@ -87,7 +87,7 @@
 <span class="sd">from a Julia prompt, and whose versions you do not choose.</span>
 
 <span class="sd">``juliacall`` can be pointed at a Julia instead, through ``PYTHON_JULIACALL_EXE`` and ``PYTHON_JULIACALL_PROJECT``, but</span>
-<span class="sd">it has no way to say &quot;the Julia I already have&quot;: the first must be an executable and the second a directory which</span>
+<span class="sd">it has no way to say "the Julia I already have": the first must be an executable and the second a directory which</span>
 <span class="sd">exists. Setting either of them to ``@default`` here means exactly that - the ``julia`` in the path, and the environment</span>
 <span class="sd">that Julia would use by itself, which it is asked for rather than being worked out from the depot and the version.</span>
 <span class="sd">They are expanded before ``juliacall`` sees them, and are independent, so one may be ``@default`` while the other is</span>
@@ -106,7 +106,7 @@
 
 <span class="sd">This code is based on the code from the ``pysr`` Python package, adapted to our needs. TODO: Much of this is replicated</span>
 <span class="sd">in all our Python packages that invoke Julia.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
@@ -124,39 +124,39 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>  <span class="c1"># type: ignore</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;jl&quot;</span><span class="p">,</span> <span class="s2">&quot;jl_version&quot;</span><span class="p">,</span> <span class="s2">&quot;JlEnum&quot;</span><span class="p">,</span> <span class="s2">&quot;UndefInitializer&quot;</span><span class="p">,</span> <span class="s2">&quot;Undef&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"jl"</span><span class="p">,</span> <span class="s2">"jl_version"</span><span class="p">,</span> <span class="s2">"JlEnum"</span><span class="p">,</span> <span class="s2">"UndefInitializer"</span><span class="p">,</span> <span class="s2">"Undef"</span><span class="p">]</span>
 
 <span class="c1"># The value of ``PYTHON_JULIACALL_EXE`` or ``PYTHON_JULIACALL_PROJECT`` asking for the Julia you already have, rather</span>
 <span class="c1"># than the one ``juliapkg`` would install for itself. Not exported: it has to be in the environment before anything</span>
 <span class="c1"># which reaches Julia is imported, so by the time it could be read from here it would be too late to use.</span>
-<span class="n">_DEFAULT_JULIA</span> <span class="o">=</span> <span class="s2">&quot;@default&quot;</span>
+<span class="n">_DEFAULT_JULIA</span> <span class="o">=</span> <span class="s2">"@default"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_default_julia_exe</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return the path of the Julia which is in the path (for internal use).</span>
 
-<span class="sd">    This is resolved to the real binary, because ``juliacall`` works out where Julia&#39;s system image is from the path of</span>
-<span class="sd">    the executable it is given, and the directory holding ``juliaup``&#39;s shim has no ``lib/julia`` beside it.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">julia_exe</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;julia&quot;</span><span class="p">)</span>
+<span class="sd">    This is resolved to the real binary, because ``juliacall`` works out where Julia's system image is from the path of</span>
+<span class="sd">    the executable it is given, and the directory holding ``juliaup``'s shim has no ``lib/julia`` beside it.</span>
+<span class="sd">    """</span>
+    <span class="n">julia_exe</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">"julia"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">julia_exe</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PYTHON_JULIACALL_EXE=</span><span class="si">{</span><span class="n">_DEFAULT_JULIA</span><span class="si">}</span><span class="s2">: there is no julia in the path&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"PYTHON_JULIACALL_EXE=</span><span class="si">{</span><span class="n">_DEFAULT_JULIA</span><span class="si">}</span><span class="s2">: there is no julia in the path"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">julia_exe</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_default_julia_project</span><span class="p">(</span><span class="n">julia_exe</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return the path of the default environment of some Julia (for internal use).</span>
 
 <span class="sd">    Which environment that is depends on the depot, on the version, and on ``JULIA_PROJECT``, which conda sets to an</span>
 <span class="sd">    environment named after the conda environment. It is therefore asked of that Julia rather than worked out here.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">julia_exe</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="s2">&quot;print(dirname(Base.active_project()))&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">julia_exe</span><span class="p">,</span> <span class="s2">"-e"</span><span class="p">,</span> <span class="s2">"print(dirname(Base.active_project()))"</span><span class="p">],</span>
             <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -164,23 +164,23 @@
         <span class="p">)</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">except</span> <span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">TimeoutExpired</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;PYTHON_JULIACALL_PROJECT=</span><span class="si">{</span><span class="n">_DEFAULT_JULIA</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">julia_exe</span><span class="si">}</span><span class="s2"> did not report its default environment&quot;</span>
+            <span class="sa">f</span><span class="s2">"PYTHON_JULIACALL_PROJECT=</span><span class="si">{</span><span class="n">_DEFAULT_JULIA</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">julia_exe</span><span class="si">}</span><span class="s2"> did not report its default environment"</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exception</span>
 
 
-<span class="c1"># Expand the ``@default`` we accept in the two variables ``juliacall`` uses to locate Julia. It has no notion of &quot;the</span>
-<span class="c1"># Julia I already have&quot;: ``PYTHON_JULIACALL_EXE`` must be an executable and ``PYTHON_JULIACALL_PROJECT`` a directory</span>
+<span class="c1"># Expand the ``@default`` we accept in the two variables ``juliacall`` uses to locate Julia. It has no notion of "the</span>
+<span class="c1"># Julia I already have": ``PYTHON_JULIACALL_EXE`` must be an executable and ``PYTHON_JULIACALL_PROJECT`` a directory</span>
 <span class="c1"># which exists, and if neither is given then ``juliapkg`` installs a Julia and an environment of its own.</span>
 <span class="c1">#</span>
 <span class="c1"># This has to happen before ``juliacall`` is imported, since that is when it reads them. If something else imported it</span>
 <span class="c1"># first, then it has already rejected ``@default`` as a path which does not exist - which is the point of using a value</span>
 <span class="c1"># it cannot accept, rather than a variable of our own which it would silently ignore.</span>
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_EXE&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">_DEFAULT_JULIA</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIACALL_EXE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_default_julia_exe</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PYTHON_JULIACALL_EXE"</span><span class="p">)</span> <span class="o">==</span> <span class="n">_DEFAULT_JULIA</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYTHON_JULIACALL_EXE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_default_julia_exe</span><span class="p">()</span>
 
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_PROJECT&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">_DEFAULT_JULIA</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHON_JULIACALL_PROJECT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_default_julia_project</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHON_JULIACALL_EXE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_default_julia_exe</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PYTHON_JULIACALL_PROJECT"</span><span class="p">)</span> <span class="o">==</span> <span class="n">_DEFAULT_JULIA</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYTHON_JULIACALL_PROJECT"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_default_julia_project</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PYTHON_JULIACALL_EXE"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_default_julia_exe</span><span class="p">()</span>
     <span class="p">)</span>
 
 <span class="c1"># How Julia is run is left as you set it. ``juliacall`` warns by itself when signal handling is unset and Julia has more</span>
@@ -191,11 +191,11 @@
 <span class="c1"># ``somegraphspy`` and ``metacellspy`` are imported: the first of them ends by importing ``juliacall``, so the rest stay</span>
 <span class="c1"># quiet. Recording it in the variable instead would not work - ``juliacall`` reads an empty value as an empty value, and</span>
 <span class="c1"># refuses it.</span>
-<span class="k">if</span> <span class="s2">&quot;juliacall&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span> <span class="ow">and</span> <span class="s2">&quot;PYTHON_JULIACALL_THREADS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+<span class="k">if</span> <span class="s2">"juliacall"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span> <span class="ow">and</span> <span class="s2">"PYTHON_JULIACALL_THREADS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;PYTHON_JULIACALL_THREADS is not set, so Julia will use a single thread. Set it to &#39;auto&#39; to use the whole &quot;</span>
-        <span class="s2">&quot;machine, and set PYTHON_JULIACALL_HANDLE_SIGNALS to &#39;yes&#39; along with it, or Julia and Python will fight over &quot;</span>
-        <span class="s2">&quot;signals and the process will die with a segfault.&quot;</span>
+        <span class="s2">"PYTHON_JULIACALL_THREADS is not set, so Julia will use a single thread. Set it to 'auto' to use the whole "</span>
+        <span class="s2">"machine, and set PYTHON_JULIACALL_HANDLE_SIGNALS to 'yes' along with it, or Julia and Python will fight over "</span>
+        <span class="s2">"signals and the process will die with a segfault."</span>
     <span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">juliacall</span><span class="w"> </span><span class="kn">import</span> <span class="n">Main</span>  <span class="c1"># type: ignore</span>
@@ -207,32 +207,32 @@
 <span class="c1">#: The version of Julia being used.</span>
 <span class="n">jl_version</span> <span class="o">=</span> <span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">minor</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">VERSION</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
 
-<span class="c1"># Everything is imported rather than ``using``, so no package&#39;s exports leak into Julia&#39;s ``Main``. This keeps</span>
+<span class="c1"># Everything is imported rather than ``using``, so no package's exports leak into Julia's ``Main``. This keeps</span>
 <span class="c1"># ``Main`` clear for other Python packages that wrap Julia packages and are used in the same session.</span>
 <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="p">(</span>
-    <span class="s2">&quot;DataAxesFormats&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DataFrames&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;HDF5&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;LinearAlgebra&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Logging&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Muon&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;NamedArrays&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PythonCall&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SparseArrays&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TanayLabUtilities&quot;</span><span class="p">,</span>
+    <span class="s2">"DataAxesFormats"</span><span class="p">,</span>
+    <span class="s2">"DataFrames"</span><span class="p">,</span>
+    <span class="s2">"HDF5"</span><span class="p">,</span>
+    <span class="s2">"LinearAlgebra"</span><span class="p">,</span>
+    <span class="s2">"Logging"</span><span class="p">,</span>
+    <span class="s2">"Muon"</span><span class="p">,</span>
+    <span class="s2">"NamedArrays"</span><span class="p">,</span>
+    <span class="s2">"PythonCall"</span><span class="p">,</span>
+    <span class="s2">"SparseArrays"</span><span class="p">,</span>
+    <span class="s2">"TanayLabUtilities"</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;import &quot;</span> <span class="o">+</span> <span class="n">package</span><span class="p">)</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">"import "</span> <span class="o">+</span> <span class="n">package</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="JlEnum">
 <a class="viewcode-back" href="../../julia_import.html#dafpy.julia_import.JlEnum">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">JlEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A Python base class for a set of named values matching a Julia type.</span>
 
 <span class="sd">    Grouping the values in a class (as opposed to listing them in a ``Literal``) is what allows auto-completion to</span>
 <span class="sd">    list them; a ``Literal`` offers no completions at all.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span></div>
@@ -242,14 +242,14 @@
 <div class="viewcode-block" id="UndefInitializer">
 <a class="viewcode-back" href="../../julia_import.html#dafpy.julia_import.UndefInitializer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">UndefInitializer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A Python class to use instead of Julia&#39;s ``UndefInitializer``. We need this to allow ``@overload`` to work in the</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    A Python class to use instead of Julia's ``UndefInitializer``. We need this to allow ``@overload`` to work in the</span>
 <span class="sd">    presence of ``Undef``.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    """</span></div>
 
 
 
-<span class="c1">#: A Python value to use instead of Julia&#39;s ``undef``. We need this to allow ``@overload`` to work in the presence of</span>
+<span class="c1">#: A Python value to use instead of Julia's ``undef``. We need this to allow ``@overload`` to work in the presence of</span>
 <span class="c1">#: ``undef``.</span>
 <span class="n">Undef</span> <span class="o">=</span> <span class="n">UndefInitializer</span><span class="p">()</span>  <span class="c1"># pylint: disable=invalid-name</span>
 
@@ -272,9 +272,9 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">JlObject</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A Python base class for wrapping a Julia object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl_obj</span>
@@ -284,9 +284,9 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">wrap_jl_object</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Wrap a Julia object (for internal use).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="n">JlObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span>
@@ -360,7 +360,7 @@
 <span class="c1">#</span>
 <span class="c1"># The element type is stated rather than taken from the values, because an empty Python set says nothing about what it</span>
 <span class="c1"># would have held, and a set of the wrong element type is rejected exactly as a ``PySet`` is. An empty set is not an</span>
-<span class="c1"># odd case here: it is how one says &quot;convert none of the properties&quot;.</span>
+<span class="c1"># odd case here: it is how one says "convert none of the properties".</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_to_julia_strings_set</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
@@ -392,7 +392,7 @@
         <span class="k">pass</span>
 
     <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">julia_array</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">"object"</span><span class="p">:</span>
         <span class="n">python_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">python_array</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">python_array</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">!=</span> <span class="n">writeable</span><span class="p">:</span>
         <span class="n">python_array</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="n">writeable</span>
@@ -426,14 +426,14 @@
     <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">column</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"O"</span><span class="p">,</span> <span class="s2">"U"</span><span class="p">,</span> <span class="s2">"T"</span><span class="p">):</span>
             <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">String</span><span class="p">](</span><span class="nb">list</span><span class="p">(</span><span class="n">column</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">column</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_frame</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span> <span class="n">columns</span><span class="p">)</span>
 
 
-<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="n">jl</span><span class="o">.</span><span class="n">seval</span><span class="p">(</span><span class="s2">"""</span>
 <span class="s2">    module DafPy</span>
 
 <span class="s2">    using DataAxesFormats</span>
@@ -534,23 +534,23 @@
 <span class="s2">        return PythonCall.pyconvert_return(undef)</span>
 <span class="s2">    end</span>
 
-<span class="s2">    PythonCall.pyconvert_add_rule(&quot;dafpy.julia_import:JlObject&quot;, Any, pyconvert_rule_jl_object)</span>
-<span class="s2">    PythonCall.pyconvert_add_rule(&quot;dafpy.julia_import:UndefInitializer&quot;, UndefInitializer, pyconvert_rule_undef)</span>
+<span class="s2">    PythonCall.pyconvert_add_rule("dafpy.julia_import:JlObject", Any, pyconvert_rule_jl_object)</span>
+<span class="s2">    PythonCall.pyconvert_add_rule("dafpy.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)</span>
 
 <span class="s2">    end  # module DafPy</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+<span class="s2">    """</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_given</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Collect the keyword arguments that were actually specified (for internal use).</span>
 
-<span class="sd">    A ``None`` value means &quot;use whatever the Julia default is&quot;, so it is dropped instead of being passed on. This is</span>
+<span class="sd">    A ``None`` value means "use whatever the Julia default is", so it is dropped instead of being passed on. This is</span>
 <span class="sd">    also correct for the many Julia parameters that are ``Maybe`` and default to ``nothing``, where passing ``nothing``</span>
-<span class="sd">    and omitting the parameter are the same thing. It is **not** correct for a ``Maybe`` parameter whose default isn&#39;t</span>
+<span class="sd">    and omitting the parameter are the same thing. It is **not** correct for a ``Maybe`` parameter whose default isn't</span>
 <span class="sd">    ``nothing`` (``dataset_axis`` of ``concatenate`` is the only one), since there ``None`` is a meaningful value; such</span>
 <span class="sd">    a parameter has to restate its default in Python and be passed unconditionally.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
 
 

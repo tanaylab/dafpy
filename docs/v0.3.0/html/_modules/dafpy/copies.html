@@ -72,10 +72,10 @@
            <div itemprop="articleBody">
              
   <h1>Source code for dafpy.copies</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copy data between ``Daf`` data sets. See the Julia</span>
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html&gt;`__ for details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
@@ -93,14 +93,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.storage_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageScalar</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;copy_all&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DataTypes&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;EmptyData&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;copy_scalar&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;copy_axis&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;copy_vector&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;copy_matrix&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;copy_tensor&quot;</span><span class="p">,</span>
+    <span class="s2">"copy_all"</span><span class="p">,</span>
+    <span class="s2">"DataTypes"</span><span class="p">,</span>
+    <span class="s2">"EmptyData"</span><span class="p">,</span>
+    <span class="s2">"copy_scalar"</span><span class="p">,</span>
+    <span class="s2">"copy_axis"</span><span class="p">,</span>
+    <span class="s2">"copy_vector"</span><span class="p">,</span>
+    <span class="s2">"copy_matrix"</span><span class="p">,</span>
+    <span class="s2">"copy_tensor"</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -117,12 +117,12 @@
     <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">insist</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy a scalar with some ``name`` from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the</span>
 <span class="sd">    Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_scalar!&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_scalar_b</span><span class="p">(</span>
         <span class="n">destination</span><span class="o">=</span><span class="n">destination</span><span class="p">,</span>
         <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
@@ -146,11 +146,11 @@
     <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">insist</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy an axis from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_axis!&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_axis_b</span><span class="p">(</span>
         <span class="n">destination</span><span class="o">=</span><span class="n">destination</span><span class="p">,</span>
         <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
@@ -181,11 +181,11 @@
     <span class="n">insist</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy a vector from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_vector!&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_vector_b</span><span class="p">(</span>
         <span class="n">destination</span><span class="o">=</span><span class="n">destination</span><span class="p">,</span>
         <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
@@ -229,11 +229,11 @@
     <span class="n">insist</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy a matrix from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_matrix!&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_matrix_b</span><span class="p">(</span>
         <span class="n">destination</span><span class="o">=</span><span class="n">destination</span><span class="p">,</span>
         <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
@@ -280,11 +280,11 @@
     <span class="n">insist</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy a tensor from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_tensor!&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_tensor_b</span><span class="p">(</span>
         <span class="n">destination</span><span class="o">=</span><span class="n">destination</span><span class="p">,</span>
         <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
@@ -333,11 +333,11 @@
     <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy all the content of a ``source`` ``DafReader`` into a ``destination`` ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_all!&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">types</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">types</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">copy_all_b</span><span class="p">(</span>

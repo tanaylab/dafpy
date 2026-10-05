@@ -72,13 +72,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for dafpy.data</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Interface of ``DafReader`` and ``DafWriter``. See the Julia</span>
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html&gt;`__,</span>
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html&gt;`__ and</span>
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html&gt;`__</span>
 <span class="sd">for details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># The enum values are named exactly as they are in Julia, so they are not UPPER_CASE.</span>
 <span class="c1"># pylint: disable=invalid-name,too-many-lines</span>
@@ -124,24 +124,24 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.queries</span><span class="w"> </span><span class="kn">import</span> <span class="n">Query</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.storage_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageScalar</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DafReader&quot;</span><span class="p">,</span> <span class="s2">&quot;DafReadOnly&quot;</span><span class="p">,</span> <span class="s2">&quot;DafWriter&quot;</span><span class="p">,</span> <span class="s2">&quot;CacheGroup&quot;</span><span class="p">,</span> <span class="s2">&quot;DataKey&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyKey&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"DafReader"</span><span class="p">,</span> <span class="s2">"DafReadOnly"</span><span class="p">,</span> <span class="s2">"DafWriter"</span><span class="p">,</span> <span class="s2">"CacheGroup"</span><span class="p">,</span> <span class="s2">"DataKey"</span><span class="p">,</span> <span class="s2">"PropertyKey"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="CacheGroup">
 <a class="viewcode-back" href="../../enums.html#dafpy.data.CacheGroup">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CacheGroup</span><span class="p">(</span><span class="n">JlEnum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Types of cached data inside ``Daf``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.CacheGroup&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1">#: Data mapped from disk files.</span>
-    <span class="n">MappedData</span> <span class="o">=</span> <span class="s2">&quot;MappedData&quot;</span>
+    <span class="n">MappedData</span> <span class="o">=</span> <span class="s2">"MappedData"</span>
     <span class="c1">#: Data that exists only in memory.</span>
-    <span class="n">MemoryData</span> <span class="o">=</span> <span class="s2">&quot;MemoryData&quot;</span>
+    <span class="n">MemoryData</span> <span class="o">=</span> <span class="s2">"MemoryData"</span>
     <span class="c1">#: Data computed by queries.</span>
-    <span class="n">QueryData</span> <span class="o">=</span> <span class="s2">&quot;QueryData&quot;</span></div>
+    <span class="n">QueryData</span> <span class="o">=</span> <span class="s2">"QueryData"</span></div>
 
 
 
@@ -169,19 +169,19 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">WeakRefAbleDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Inheritance is required to allow weak reference to the built-in ``dict`` type (in CPython, anyway).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 
 <div class="viewcode-block" id="DafReader">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DafReader</span><span class="p">(</span><span class="n">JlObject</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read-only access to ``Daf`` data. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.DafReader&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span>
@@ -189,9 +189,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return the (hopefully unique) name of the ``Daf`` data set.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="o">.</span><span class="n">name</span>
 
 <div class="viewcode-block" id="DafReader.description">
@@ -199,22 +199,22 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">description</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">deep</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tensors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a (multi-line) description of the contents of ``Daf`` data. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.description&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="n">deep</span><span class="p">,</span> <span class="n">tensors</span><span class="o">=</span><span class="n">tensors</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_scalar">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.has_scalar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Check whether a scalar property with some ``name`` exists in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.has_scalar&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">has_scalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
@@ -227,71 +227,71 @@
 <div class="viewcode-block" id="DafReader.get_scalar">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.get_scalar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">UndefInitializer</span> <span class="o">=</span> <span class="n">Undef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the value of a scalar property with some ``name`` in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_scalar&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        Numeric scalars are always returned as ``int`` or ``float``, regardless of the specific data type they are</span>
 <span class="sd">        stored in the ``Daf`` data set (e.g., a ``UInt8`` will be returned as an ``int`` instead of a ``np.uint8``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.scalars_set">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.scalars_set">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">scalars_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The names of the scalar properties in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.scalars_set&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">scalars_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_axis">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.has_axis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Check whether some ``axis`` exists in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.has_axis&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">has_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.axes_set">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.axes_set">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">axes_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The set of names of the axes of the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.axes_set&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">axes_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.axis_length">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.axis_length">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The number of entries along the ``axis`` in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.axis_length&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">axis_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.axis_np_vector">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.axis_np_vector">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">axis_np_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        A ``numpy`` vector of unique names of the entries of some ``axis`` of the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.axis_vector&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        This creates an in-memory copy of the data, which is cached for repeated calls.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">axis_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">axis_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
         <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">axis_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
@@ -306,21 +306,21 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">axis_np_entries</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a ``numpy`` vector of the names of entries of the ``indices`` in the ``axis``. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.axis_entries&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        The ``indices`` passed here are 0-based to fit the Python conventions. This means that if ``allow_empty``,</span>
 <span class="sd">        *negative* ``indices`` are converted to the empty string.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis_np_vector</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">entries</span>
 
         <span class="k">if</span> <span class="n">allow_empty</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">entries</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">""</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">entries</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"str"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">entries</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span></div>
 
@@ -328,9 +328,9 @@
 <div class="viewcode-block" id="DafReader.axis_dict">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.axis_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">axis_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a dictionary converting ``axis`` entry names to their (0-based) integer index.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">axis_version_counter</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">axis_version_counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
         <span class="n">axis_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">axis_version_counter</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">axis_dictionary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weakrefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis_key</span><span class="p">)</span>
@@ -345,18 +345,18 @@
 <div class="viewcode-block" id="DafReader.axis_np_indices">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.axis_np_indices">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">axis_np_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a ``numpy`` vector of the indices of the ``entries`` in the ``axis``. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.axis_indices&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        The indices returned here are 0-based to fit the Python conventions. This means that if ``allow_empty``,</span>
 <span class="sd">        the empty string is converted to the index -1.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">axis_dictionary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis_dict</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="s2">"int32"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">entries</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">allow_empty</span> <span class="ow">and</span> <span class="n">entry</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">allow_empty</span> <span class="ow">and</span> <span class="n">entry</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                 <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis_dictionary</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span>
@@ -366,11 +366,11 @@
 <div class="viewcode-block" id="DafReader.axis_pd_indices">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.axis_pd_indices">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">axis_pd_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a ``pandas`` series of the indices of the ``entries`` in the ``axis``. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.axis_indices&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">axis_np_indices</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">entries</span><span class="p">,</span> <span class="n">allow_empty</span><span class="o">=</span><span class="n">allow_empty</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span></div>
@@ -379,24 +379,24 @@
 <div class="viewcode-block" id="DafReader.has_vector">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.has_vector">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Check whether a vector property with some ``name`` exists for the ``axis`` in the ``Daf`` data set. See the</span>
 <span class="sd">        Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.has_vector&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.vectors_set">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.vectors_set">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">vectors_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The set of names of the vector properties for the ``axis`` in ``Daf`` data set, **not** including the special</span>
 <span class="sd">        ``name`` property. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.vectors_set&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">vectors_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
 
 
@@ -427,7 +427,7 @@
         <span class="o">*</span><span class="p">,</span>
         <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">UndefInitializer</span> <span class="o">=</span> <span class="n">Undef</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_vector&gt;`__</span>
 <span class="sd">        for details.</span>
@@ -435,9 +435,9 @@
 <span class="sd">        This always returns a ``numpy`` vector (unless ``default`` is ``None`` and the vector does not exist). If the</span>
 <span class="sd">        stored data is numeric and dense, this is a zero-copy view of the data stored in the ``Daf`` data set.</span>
 <span class="sd">        Otherwise, a Python copy of the data as a dense ``numpy`` array is returned (and cached for repeated calls).</span>
-<span class="sd">        Since Python has no concept of sparse vectors (because &quot;reasons&quot;), you can&#39;t zero-copy view a sparse ``Daf``</span>
+<span class="sd">        Since Python has no concept of sparse vectors (because "reasons"), you can't zero-copy view a sparse ``Daf``</span>
 <span class="sd">        vector using the Python API.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">has_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
@@ -481,14 +481,14 @@
         <span class="o">*</span><span class="p">,</span>
         <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">UndefInitializer</span> <span class="o">=</span> <span class="n">Undef</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_vector&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        This is a wrapper around ``get_np_vector`` which returns a ``pandas`` series using the entry names of the axis</span>
 <span class="sd">        as the index.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">vector_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_vector</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">vector_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -498,12 +498,12 @@
 <div class="viewcode-block" id="DafReader.has_matrix">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.has_matrix">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Check whether a matrix property with some ``name`` exists for the ``rows_axis`` and the ``columns_axis`` in the</span>
 <span class="sd">        ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.has_matrix&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">))</span></div>
 
 
@@ -512,12 +512,12 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">matrices_set</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">tensors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The names of the matrix properties for the ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set. See the</span>
 <span class="sd">        Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.matrices_set&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">matrices_set</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">tensors</span><span class="o">=</span><span class="n">tensors</span><span class="p">,</span> <span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span>
         <span class="p">)</span></div>
@@ -550,7 +550,7 @@
         <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">UndefInitializer</span> <span class="o">=</span> <span class="n">Undef</span><span class="p">,</span>
         <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the</span>
 <span class="sd">        ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_matrix&gt;`__</span>
@@ -566,7 +566,7 @@
 
 <span class="sd">        Also note that although we call this ``get_np_matrix``, the result is **not** the deprecated ``np.matrix``</span>
 <span class="sd">        (which is to be avoided at all costs).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">has_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
@@ -625,7 +625,7 @@
         <span class="n">default</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StorageScalar</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">UndefInitializer</span> <span class="o">=</span> <span class="n">Undef</span><span class="p">,</span>
         <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the</span>
 <span class="sd">        ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_matrix&gt;`__</span>
@@ -634,12 +634,12 @@
 <span class="sd">        This is a wrapper around ``get_np_matrix`` which returns a ``pandas`` data frame using the entry names of the</span>
 <span class="sd">        axes as the indices.</span>
 
-<span class="sd">        Note that since ``pandas`` data frames can&#39;t contain a sparse matrix, the data will always be in a dense</span>
+<span class="sd">        Note that since ``pandas`` data frames can't contain a sparse matrix, the data will always be in a dense</span>
 <span class="sd">        ``numpy`` matrix, so take care not to invoke this for a too-large sparse data matrix.</span>
 
-<span class="sd">        This is not to be confused with ``get_frame`` which returns a &quot;real&quot; ``pandas`` data frame, with arbitrary</span>
+<span class="sd">        This is not to be confused with ``get_frame`` which returns a "real" ``pandas`` data frame, with arbitrary</span>
 <span class="sd">        (query) columns, possibly using a different data type for each.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">matrix_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_matrix</span><span class="p">(</span>
             <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_to_julia_array</span><span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span>
         <span class="p">)</span>
@@ -655,33 +655,33 @@
 <div class="viewcode-block" id="DafReader.empty_cache">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.empty_cache">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">empty_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">clear</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CacheGroup</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">keep</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CacheGroup</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Clear some cached data. By default, completely empties the caches. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.empty_cache!&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">empty_cache_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="n">_to_jl_cache_group</span><span class="p">(</span><span class="n">clear</span><span class="p">),</span> <span class="n">keep</span><span class="o">=</span><span class="n">_to_jl_cache_group</span><span class="p">(</span><span class="n">keep</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafReader.has_query">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.has_query">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return whether the ``query`` can be applied to the ``Daf`` data. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.has_query&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">has_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.query_requires_relayout">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.query_requires_relayout">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">query_requires_relayout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Whether computing the ``query`` for the ``daf`` data requires ``relayout`` of some matrix. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.query_requires_relayout&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">Queries</span><span class="o">.</span><span class="n">query_requires_relayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span></div>
 
 
@@ -698,17 +698,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_np_query</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">PendingNumpyQuery</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Apply the full ``query`` to the ``Daf`` data set and return the result. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.get_query&gt;`__</span>
 <span class="sd">        for details.</span>
 
-<span class="sd">        If the result isn&#39;t a scalar, and isn&#39;t an array of names, then we return a ``numpy`` array or a ``scipy``</span>
+<span class="sd">        If the result isn't a scalar, and isn't an array of names, then we return a ``numpy`` array or a ``scipy``</span>
 <span class="sd">        ``csc_matrix``.</span>
 
 <span class="sd">        If the ``query`` is not specified, this is intended to be used as ``query | daf.get_np_query()``. This is</span>
-<span class="sd">        useful when constructing the query in parts (e.g. ``Axis(&quot;cell&quot;) |&gt; Lookup(&quot;metacell&quot;) |&gt; daf.get_np_query()``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        useful when constructing the query in parts (e.g. ``Axis("cell") |&gt; Lookup("metacell") |&gt; daf.get_np_query()``).</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">query</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">PendingNumpyQuery</span><span class="p">(</span><span class="k">lambda</span> <span class="n">query</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_np_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">))</span>
 
@@ -731,15 +731,15 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_pd_query</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">PendingPandasQuery</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Similar to ``get_np_query``, but return a ``pandas`` series or data frame for vector and matrix data.</span>
 
-<span class="sd">        Note that since ``pandas`` data frames can&#39;t contain a sparse matrix, the data will always be in a dense</span>
+<span class="sd">        Note that since ``pandas`` data frames can't contain a sparse matrix, the data will always be in a dense</span>
 <span class="sd">        ``numpy`` matrix, so take care not to invoke this for a too-large sparse data matrix.</span>
 
 <span class="sd">        If the ``query`` is not specified, this is intended to be used as ``query | daf.get_np_query()``. This is</span>
-<span class="sd">        useful when constructing the query in parts (e.g. ``Axis(&quot;cell&quot;) |&gt; Lookup(&quot;metacell&quot;) |&gt; daf.get_np_query()``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        useful when constructing the query in parts (e.g. ``Axis("cell") |&gt; Lookup("metacell") |&gt; daf.get_np_query()``).</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">query</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">PendingPandasQuery</span><span class="p">(</span><span class="k">lambda</span> <span class="n">query</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">))</span>
 
@@ -763,9 +763,9 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Query</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StorageScalar</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">AbstractSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The shorthand ``data[query]`` is equivalent to ``data.get_pd_query(query, cache = False)``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DafReader.get_pd_frame">
@@ -777,7 +777,7 @@
         <span class="o">*</span><span class="p">,</span>
         <span class="n">cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a ``DataFrame`` containing multiple vectors of the same ``axis``. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.get_frame&gt;`__</span>
 <span class="sd">        for details.</span>
@@ -786,9 +786,9 @@
 <span class="sd">        column can be the result of an arbitrary query and may have a different data type.</span>
 
 <span class="sd">        The order of the columns matters. Luckily, the default dictionary type is ordered in modern Python, so if you</span>
-<span class="sd">        write ``columns = {&quot;color&quot;: &quot;: type =&gt; color&quot;, &quot;age&quot;: &quot;: batch =&gt; age&quot;}`` you can trust that the ``color``</span>
+<span class="sd">        write ``columns = {"color": ": type =&gt; color", "age": ": batch =&gt; age"}`` you can trust that the ``color``</span>
 <span class="sd">        column will be first and the ``age`` column will be second.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_pairify_columns</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
@@ -799,25 +799,25 @@
 
 <div class="viewcode-block" id="DafReader.read_only">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.read_only">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">read_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafReadOnly&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"DafReadOnly"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Wrap the ``Daf`` data set with a ``DafReadOnlyWrapper`` to protect it against accidental modification. See the</span>
 <span class="sd">        Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/read_only.html#DataAxesFormats.ReadOnly.read_only&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">read_only</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DafReader.as_anndata">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.as_anndata">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnDataReader&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"DafAnnDataReader"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Wrap this ``Daf`` data set as a read-only ``AnnData``-like facade. See</span>
-<span class="sd">        :class:`~dafpy.anndata_facade.DafAnnDataReader` for details. The ``obs_axis`` holds AnnData&#39;s observations (the</span>
-<span class="sd">        rows of ``X``). The ``var_axis`` holds AnnData&#39;s variables (the columns of ``X``). The ``x_matrix`` is the name</span>
+<span class="sd">        :class:`~dafpy.anndata_facade.DafAnnDataReader` for details. The ``obs_axis`` holds AnnData's observations (the</span>
+<span class="sd">        rows of ``X``). The ``var_axis`` holds AnnData's variables (the columns of ``X``). The ``x_matrix`` is the name</span>
 <span class="sd">        of the ``(obs_axis, var_axis)`` matrix which is exposed as ``X``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnDataReader</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
 
         <span class="k">return</span> <span class="n">DafAnnDataReader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="n">x_matrix</span><span class="p">)</span></div>
@@ -826,24 +826,24 @@
 <div class="viewcode-block" id="DafReader.complete_path">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.complete_path">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">complete_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        If the ``Daf`` repository is persistent (resides on disk), the absolute path leading to it. This path can be</span>
 <span class="sd">        given to See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.complete_path&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DafReader.is_leaf">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReader.is_leaf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return whether the ``Daf`` repository owns its data directly, rather than wrapping other repositories. See the</span>
 <span class="sd">        Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.is_leaf&gt;`__</span>
 <span class="sd">        for details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">))</span></div>
 </div>
 
@@ -852,15 +852,15 @@
 <div class="viewcode-block" id="DafReadOnly">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReadOnly">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DafReadOnly</span><span class="p">(</span><span class="n">DafReader</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A read-only ``DafReader``, which doesn&#39;t allow any modification of the data. See the Julia</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    A read-only ``DafReader``, which doesn't allow any modification of the data. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/read_only.html#DataAxesFormats.ReadOnly.DafReadOnly&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="DafReadOnly.read_only">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafReadOnly.read_only">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">read_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafReadOnly&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"DafReadOnly"</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read_only</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
@@ -871,20 +871,20 @@
 <div class="viewcode-block" id="DafWriter">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DafWriter</span><span class="p">(</span><span class="n">DafReader</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read-write access to ``Daf`` data. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/formats.html#DataAxesFormats.Formats.DafWriter&gt;`__</span>
 <span class="sd">    for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="DafWriter.as_anndata">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.as_anndata">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DafAnnDataWriter&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">var_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"DafAnnDataWriter"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Wrap this ``Daf`` data set as a writable ``AnnData``-like facade. See</span>
 <span class="sd">        :class:`~dafpy.anndata_facade.DafAnnDataWriter` for details. The parameters are the same as for</span>
 <span class="sd">        :meth:`DafReader.as_anndata`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.anndata_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafAnnDataWriter</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
 
         <span class="k">return</span> <span class="n">DafAnnDataWriter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_axis</span><span class="o">=</span><span class="n">obs_axis</span><span class="p">,</span> <span class="n">var_axis</span><span class="o">=</span><span class="n">var_axis</span><span class="p">,</span> <span class="n">x_matrix</span><span class="o">=</span><span class="n">x_matrix</span><span class="p">)</span></div>
@@ -893,7 +893,7 @@
 <div class="viewcode-block" id="DafWriter.set_scalar">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.set_scalar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">StorageScalar</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the ``value`` of a scalar property with some ``name`` in a ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.set_scalar!&gt;`__</span>
 <span class="sd">        for details.</span>
@@ -902,7 +902,7 @@
 
 <span class="sd">        You can force the data type numeric scalars are stored in by using the appropriate ``numpy`` type (e.g., a</span>
 <span class="sd">        ``np.uint8`` will be stored as a ``UInt8``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">set_scalar_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -910,13 +910,13 @@
 <div class="viewcode-block" id="DafWriter.delete_scalar">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.delete_scalar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">delete_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Delete a scalar property with some ``name`` from the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.delete_scalar!&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">delete_scalar_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -924,13 +924,13 @@
 <div class="viewcode-block" id="DafWriter.add_axis">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.add_axis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Add a new ``axis`` to the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.add_axis!&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">add_axis_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">_to_julia_array</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -938,13 +938,13 @@
 <div class="viewcode-block" id="DafWriter.delete_axis">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.delete_axis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">delete_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Delete an ``axis`` from the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.delete_axis!&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">delete_axis_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -961,7 +961,7 @@
         <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set a vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.set_vector!&gt;`__</span>
 <span class="sd">        for details.</span>
@@ -973,7 +973,7 @@
 <span class="sd">        allows creating sparse vectors in ``Daf`` by passing a 1xN slice of a sparse (column-major) Python matrix.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="p">):</span>
@@ -1022,7 +1022,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">empty_dense_vector</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">eltype</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create an empty dense vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, and pass it</span>
 <span class="sd">        to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.empty_dense_vector!&gt;`__</span>
@@ -1030,7 +1030,7 @@
 
 <span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
 <span class="sd">        ``with empty_dense_vector(dset, ...) as empty_vector: ...``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">vector</span><span class="p">,</span> <span class="n">cache_group</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_empty_dense_vector_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_to_julia_type</span><span class="p">(</span><span class="n">eltype</span><span class="p">),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)</span>
         <span class="p">)</span>
@@ -1055,7 +1055,7 @@
         <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create an empty sparse vector property with some ``name`` for some ``axis`` in the ``Daf`` data set, pass its</span>
 <span class="sd">        parts (``nzind`` and ``nzval``) to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.empty_sparse_vector!&gt;`__</span>
@@ -1063,10 +1063,10 @@
 
 <span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
 <span class="sd">        ``with empty_sparse_vector(dset, ...) as (empty_nzind, empty_nzval): ...``. The arrays are to be filled with</span>
-<span class="sd">        *Julia&#39;s* ``SparseVector`` data, that is, ``empty_nzind`` needs to be filled with **1**-based indices (as</span>
-<span class="sd">        opposed to 0-based indices typically used by ``scipy.sparse``). Due to this difference in the indexing, we can&#39;t</span>
+<span class="sd">        *Julia's* ``SparseVector`` data, that is, ``empty_nzind`` needs to be filled with **1**-based indices (as</span>
+<span class="sd">        opposed to 0-based indices typically used by ``scipy.sparse``). Due to this difference in the indexing, we can't</span>
 <span class="sd">        zero-copy share sparse data between Python and Julia. Sigh.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">nzind</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">cache_group</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_empty_sparse_vector_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
             <span class="n">axis</span><span class="p">,</span>
@@ -1086,13 +1086,13 @@
 <div class="viewcode-block" id="DafWriter.delete_vector">
 <a class="viewcode-back" href="../../data.html#dafpy.data.DafWriter.delete_vector">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">delete_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Delete a vector property with some ``name`` for some ``axis`` from the ``Daf`` data set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.delete_vector!&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">delete_vector_b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -1111,7 +1111,7 @@
         <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the ``Daf`` data set.</span>
 <span class="sd">        See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.set_matrix!&gt;`__</span>
@@ -1122,7 +1122,7 @@
 <span class="sd">        efficient zero-copy operation).</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">set_matrix_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
             <span class="n">rows_axis</span><span class="p">,</span>
@@ -1148,7 +1148,7 @@
         <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create an empty (column-major) dense matrix property with some ``name`` for some ``rows_axis`` and</span>
 <span class="sd">        ``columns_axis`` in the ``Daf`` data set, and pass it to the block to be filled. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.empty_dense_matrix!&gt;`__</span>
@@ -1156,7 +1156,7 @@
 
 <span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
 <span class="sd">        ``with empty_dense_matrix(dset, ...) as empty_matrix: ...``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">matrix</span><span class="p">,</span> <span class="n">cache_group</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_empty_dense_matrix_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
             <span class="n">rows_axis</span><span class="p">,</span>
@@ -1190,7 +1190,7 @@
         <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create an empty (column-major) sparse matrix property with some ``name`` for some ``rows_axis`` and</span>
 <span class="sd">        ``columns_axis`` in the ``Daf`` data set, and pass its parts (``colptr``, ``rowval`` and ``nzval``) to the block</span>
 <span class="sd">        to be filles. See the Julia</span>
@@ -1199,10 +1199,10 @@
 
 <span class="sd">        Note this is a Python ``contextmanager``, that is, is meant to be used with the ``with`` statement:</span>
 <span class="sd">        ``with empty_sparse_vector(dset, ...) as (empty_colptr, empty_rowval, empty_nzval): ...``. The arrays are to be</span>
-<span class="sd">        filled with *Julia&#39;s* ``SparseVector`` data, that is, ``empty_colptr`` and ``empty_rowval`` need to be filled</span>
+<span class="sd">        filled with *Julia's* ``SparseVector`` data, that is, ``empty_colptr`` and ``empty_rowval`` need to be filled</span>
 <span class="sd">        with **1**-based indices (as opposed to 0-based indices used by ``scipy.sparse.cs[cr]_matrix``). Due to this</span>
-<span class="sd">        difference in the indexing, we can&#39;t zero-copy share sparse data between Python and Julia. Sigh.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        difference in the indexing, we can't zero-copy share sparse data between Python and Julia. Sigh.</span>
+<span class="sd">        """</span>
         <span class="n">colptr</span><span class="p">,</span> <span class="n">rowval</span><span class="p">,</span> <span class="n">nzval</span><span class="p">,</span> <span class="n">cache_group</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_empty_sparse_matrix_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
             <span class="n">rows_axis</span><span class="p">,</span>
@@ -1245,7 +1245,7 @@
         <span class="n">overwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">packed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Given a matrix property with some ``name`` exists (in column-major layout) in the ``Daf`` data set for the</span>
 <span class="sd">        ``rows_axis`` and the ``columns_axis``, then relayout it and store the row-major result as well (that is, with</span>
 <span class="sd">        flipped axes). See the Julia</span>
@@ -1253,7 +1253,7 @@
 <span class="sd">        for details.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">relayout_matrix_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)</span>
         <span class="p">)</span>
@@ -1265,14 +1265,14 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">delete_matrix</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">must_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">relayout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Delete a matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` from the ``Daf`` data</span>
 <span class="sd">        set. See the Julia</span>
 <span class="sd">        `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/writers.html#DataAxesFormats.Writers.delete_matrix!&gt;`__</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        Returns ``self`` for chaining.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">delete_matrix_b</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">rows_axis</span><span class="p">,</span> <span class="n">columns_axis</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="n">must_exist</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">relayout</span><span class="o">=</span><span class="n">relayout</span><span class="p">)</span>
         <span class="p">)</span>

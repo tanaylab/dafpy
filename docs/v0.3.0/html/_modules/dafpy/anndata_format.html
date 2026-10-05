@@ -72,12 +72,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for dafpy.anndata_format</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Import/export ``Daf`` data from/to ``AnnData``. See the Julia</span>
 <span class="sd">`documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/anndata_format.html&gt;`__ for details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;h5ad_as_daf&quot;</span><span class="p">,</span> <span class="s2">&quot;daf_as_h5ad&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"h5ad_as_daf"</span><span class="p">,</span> <span class="s2">"daf_as_h5ad"</span><span class="p">]</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
@@ -106,13 +106,13 @@
     <span class="n">X_is</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">unsupported_handler</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbnormalHandler</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    View ``AnnData`` as a ``Daf`` data set, specifically using a ``MemoryDaf``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/anndata_format.html#DataAxesFormats.AnnDataFormat.anndata_as_daf&gt;`__ for</span>
 <span class="sd">    details.</span>
 
 <span class="sd">    Note that you only pass an ``h5ad`` path, since the Julia ``AnnData`` object comes from the ``Muon.jl`` package and</span>
-<span class="sd">    is not compatible with the Python ``anndata`` object.&quot;&quot;&quot;</span>
+<span class="sd">    is not compatible with the Python ``anndata`` object."""</span>
     <span class="k">return</span> <span class="n">memory_daf</span><span class="p">(</span>
         <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">anndata_as_daf</span><span class="p">(</span>
             <span class="n">h5ad</span><span class="p">,</span>
@@ -131,14 +131,14 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">daf_as_h5ad</span><span class="p">(</span>
     <span class="n">daf</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">obs_is</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">var_is</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">X_is</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">h5ad</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    View the ``Daf`` data set as ``AnnData``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/anndata_format.html#DataAxesFormats.AnnDataFormat.daf_as_anndata&gt;`__</span>
 <span class="sd">    for details.</span>
 
 <span class="sd">    Note this just creates the ``h5ad`` file. We do not return the ``AnnData`` object, because it is a Julia</span>
 <span class="sd">    (``Muon.jl``) ``AnnData`` object, which is **not** a Python ``anndata`` ``AnnData`` object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">daf_as_anndata</span><span class="p">(</span><span class="n">daf</span><span class="p">,</span> <span class="n">obs_is</span><span class="o">=</span><span class="n">obs_is</span><span class="p">,</span> <span class="n">var_is</span><span class="o">=</span><span class="n">var_is</span><span class="p">,</span> <span class="n">X_is</span><span class="o">=</span><span class="n">X_is</span><span class="p">,</span> <span class="n">h5ad</span><span class="o">=</span><span class="n">h5ad</span><span class="p">)</span></div>
 
 </pre></div>

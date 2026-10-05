@@ -20,7 +20,7 @@ classifiers = [
 requires-python = ">= 3.11"
 dependencies = [
     "juliacall",
-    "numpy",
+    "numpy >= 2",
     "pandas",
     "scipy",
 ]
