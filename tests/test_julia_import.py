@@ -5,10 +5,14 @@ Test the Julia environment set up by ``Daf``.
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
+from typing import Any
+
 import numpy as np
 import pandas as pd
+import pytest
 
 from dafpy.julia_import import _from_julia_frame
+from dafpy.julia_import import _to_julia_array
 from dafpy.julia_import import _to_julia_frame
 from dafpy.julia_import import jl
 
@@ -86,3 +90,41 @@ def test_frames_round_trip() -> None:
     assert list(back["count"]) == [1, 2, 3]
     assert list(back["score"]) == [0.5, 1.5, 2.5]
     assert list(back["is_good"]) == [True, False, True]
+
+
+def _is_julia_strings_vector(value: Any) -> bool:
+    return bool(jl.seval("value -> value isa AbstractVector{<:AbstractString}")(value))  # NOT F-STRING
+
+
+def test_to_julia_array_of_strings() -> None:
+    for value in (
+        np.array(["a", "b"], dtype=object),
+        np.array([b"a", b"b"]),
+        pd.Series(["a", "b"]),
+        pd.Index(["a", "b"]),
+        pd.Categorical(["a", "b"]),
+    ):
+        converted = _to_julia_array(value)
+        assert _is_julia_strings_vector(converted), f"not a vector of strings: {type(value)}"
+        assert [str(entry) for entry in converted] == ["a", "b"]
+
+
+def test_to_julia_array_of_numbers() -> None:
+    converted = _to_julia_array(np.array([1, 2], dtype=object))
+    assert converted.dtype == np.int64
+    assert list(converted) == [1, 2]
+
+    converted = _to_julia_array(pd.Series([0.5, 1.5]))
+    assert converted.dtype == np.float64
+    assert list(converted) == [0.5, 1.5]
+
+
+def test_to_julia_array_rejects_missing_strings() -> None:
+    with pytest.raises(TypeError, match="entry 0 is a str and whose entry 1 is a NoneType"):
+        _to_julia_array(np.array(["a", None], dtype=object))
+
+    with pytest.raises(TypeError, match="entry 0 is a str and whose entry 1 is a float"):
+        _to_julia_array(pd.Categorical(["a", None]))
+
+    with pytest.raises(TypeError, match="an array of NoneType"):
+        _to_julia_array(np.array([None, None], dtype=object))

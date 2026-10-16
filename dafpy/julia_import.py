@@ -254,10 +254,47 @@ def _to_julia_array(value: Any) -> Any:  # pylint: disable=too-many-return-state
         except ValueError:
             return jl.Vector(value)
 
+    value = _typed_array(value)
+
     if isinstance(value, np.ndarray) and value.dtype.type == np.str_:
         value = jl.Vector(value)
 
     return value
+
+
+# Julia cannot type the elements of a ``pandas`` ``Series``, ``Index`` or ``Categorical``, or of a ``numpy`` array of
+# ``object`` or ``bytes``. Each would arrive as a ``PyIterable{Any}`` or a ``PyArray{Py}``, which a typed parameter
+# rejects. So these are converted to a ``numpy`` array of strings or of numbers. An ``object`` array is converted only if
+# all its elements are strings, or all are numbers. Anything else (e.g., a ``None`` or a ``NaN`` among strings) is an
+# error, rather than silently becoming the string ``"None"`` or ``"nan"``.
+def _typed_array(value: Any) -> Any:
+    if isinstance(value, (pd.Series, pd.Index, pd.Categorical)):
+        value = np.asarray(value)
+
+    if not isinstance(value, np.ndarray):
+        return value
+
+    if value.dtype.type == np.bytes_:
+        return np.char.decode(value, "utf-8")
+
+    if value.dtype != object:
+        return value
+
+    entries = value.ravel()
+    if all(isinstance(entry, str) for entry in entries):
+        return value.astype(str)
+
+    if all(isinstance(entry, (bool, int, float, np.bool_, np.integer, np.floating)) for entry in entries):
+        return np.array(value.tolist())
+
+    first_type = type(entries[0])
+    for index, entry in enumerate(entries):
+        if type(entry) is not first_type:  # pylint: disable=unidiomatic-typecheck
+            raise TypeError(
+                f"can't pass to Julia an array whose entry 0 is a {first_type.__name__} "
+                f"and whose entry {index} is a {type(entry).__name__}"
+            )
+    raise TypeError(f"can't pass to Julia an array of {first_type.__name__}")
 
 
 # A parameter which is either one scalar or a collection of them. A scalar crosses as itself, and so does a string,
