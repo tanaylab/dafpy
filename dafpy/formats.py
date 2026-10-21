@@ -2,6 +2,9 @@
 Concrete formats of ``Daf`` data sets.
 """
 
+from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Sequence
 from typing import Union
@@ -9,6 +12,7 @@ from typing import Union
 from .data import DafReader
 from .data import DafReadOnly
 from .data import DafWriter
+from .data import DataKey
 from .julia_import import JlObject
 from .julia_import import _jl_pairs
 from .julia_import import jl
@@ -17,16 +21,19 @@ from .views import ViewData
 
 __all__ = [
     "BaseDaf",
+    "RecordedBase",
     "chain_reader",
     "chain_writer",
     "complete_chain",
     "complete_daf",
     "files_daf",
     "files_to_zarr",
+    "get_base_daf_links",
     "h5df",
     "http_daf",
     "memory_daf",
     "open_daf",
+    "set_base_daf_links",
     "wrap_daf",
     "zarr_daf",
     "zarr_to_files",
@@ -49,7 +56,8 @@ def complete_daf(
     path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
 ) -> DafReadOnly | DafWriter:
     """
-    Open a complete chain of ``Daf`` repositories by tracing back through the ``base_daf_repository``. See the Julia
+    Open a complete chain of ``Daf`` repositories by tracing back through the bases recorded in each one (see
+    :py:obj:`get_base_daf_links`). See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf>`__
     for details.
     """
@@ -218,10 +226,74 @@ def complete_chain(
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.complete_chain!>`__
     for details.
     """
-    if isinstance(base_daf, (DafReader, BaseDaf)):
-        bases = base_daf.jl_obj
-    else:
-        bases = jl.DafPy._to_base_dafs([base.jl_obj for base in base_daf])
     return DafWriter(
-        jl.DataAxesFormats.complete_chain_b(base_daf=bases, new_daf=new_daf.jl_obj, name=name, absolute=absolute)
+        jl.DataAxesFormats.complete_chain_b(
+            base_daf=_jl_base_daf(base_daf), new_daf=new_daf.jl_obj, name=name, absolute=absolute
+        )
+    )
+
+
+def _jl_base_daf(base_daf: Union[DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]]) -> Any:
+    # Convert the bases of a chain to what the Julia functions take.
+    if isinstance(base_daf, (DafReader, BaseDaf)):
+        return base_daf.jl_obj
+    return jl.DafPy._to_base_dafs([base.jl_obj for base in base_daf])
+
+
+class RecordedBase:
+    """
+    One immediate base of a stored repository, as returned by :py:func:`get_base_daf_links`. The ``path`` is as
+    recorded, that is, relative to the directory of the repository naming it, unless it was recorded as an absolute
+    path. The ``axes`` and ``data`` are the view parameters applied to the base, or ``None`` if the whole of it is used.
+    See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.RecordedBase>`__
+    for details.
+    """
+
+    def __init__(self, jl_obj: Any) -> None:
+        self.jl_obj = jl_obj
+        self.path = str(jl_obj.path)
+        self.axes: Optional[Dict[str, Optional[str]]] = _recorded_view_parameters(jl_obj.axes)
+        self.data: Optional[Dict[DataKey, Optional[str]]] = _recorded_view_parameters(jl_obj.data)
+
+
+def _recorded_view_parameters(jl_pairs: Any) -> Optional[Dict[Any, Optional[str]]]:
+    # Convert the recorded view parameters of a base. A key is a name, or a tuple of names, and a value is a string or
+    # nothing.
+    if jl_pairs is None:
+        return None
+    return {
+        (key if isinstance(key, str) else tuple(str(name) for name in key)): (None if value is None else str(value))
+        for key, value in jl_pairs
+    }
+
+
+def get_base_daf_links(dset: DafReader) -> Optional[List[RecordedBase]]:
+    """
+    The immediate bases recorded in a stored repository, which :py:obj:`complete_daf` chains it on top of, or ``None``
+    if it has none. The bases are not opened. Only a stored repository has bases: a chain or a view has none of its own.
+    See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.get_base_daf_links>`__
+    for details.
+    """
+    jl_bases = jl.DataAxesFormats.get_base_daf_links(dset.jl_obj)
+    if jl_bases is None:
+        return None
+    return [RecordedBase(jl_base) for jl_base in jl_bases]
+
+
+def set_base_daf_links(
+    dset: DafWriter,
+    base_daf: Union[None, DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]],
+    *,
+    absolute: bool = False,
+) -> None:
+    """
+    Record the immediate bases of a stored repository, replacing any it had, or record that it has none, if
+    ``base_daf`` is ``None``. See the Julia
+    `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.set_base_daf_links!>`__
+    for details.
+    """
+    jl.DataAxesFormats.set_base_daf_links_b(
+        dset.jl_obj, None if base_daf is None else _jl_base_daf(base_daf), absolute=absolute
     )

@@ -622,3 +622,38 @@ def test_complete_chain_of_a_view(tmp_path) -> None:
     reopened = dp.complete_daf(f"{tmp_path}/metacells", "r", name="reopened!")
     assert set(reopened.axes_set()) == {"cell"}
     assert not reopened.has_axis("gene")
+
+
+def test_base_daf_links(tmp_path) -> None:
+    # The bases are recorded in the stored repository, and can be replaced or removed.
+    cells = dp.files_daf(f"{tmp_path}/cells", "w", name="cells!")
+    assert isinstance(cells, dp.DafWriter)
+    cells.add_axis("cell", ["A", "B"])
+    cells.add_axis("gene", ["X", "Y"])
+
+    metacells = dp.files_daf(f"{tmp_path}/metacells", "w", name="metacells!")
+    assert isinstance(metacells, dp.DafWriter)
+    assert dp.get_base_daf_links(metacells) is None
+
+    dp.set_base_daf_links(
+        metacells, dp.BaseDaf(cells, axes={"cell": "=", "gene": "="}, data={("cell", "gene", "*"): "="})
+    )
+    bases = dp.get_base_daf_links(metacells)
+    assert bases is not None
+    assert len(bases) == 1
+    assert bases[0].path == "cells"
+    assert bases[0].axes == {"cell": "=", "gene": "="}
+    assert bases[0].data == {("cell", "gene", "*"): "="}
+
+    dp.set_base_daf_links(metacells, cells)
+    bases = dp.get_base_daf_links(metacells)
+    assert bases is not None
+    assert len(bases) == 1
+    assert bases[0].path == "cells"
+    assert bases[0].axes is None
+    assert bases[0].data is None
+
+    assert dp.get_base_daf_links(dp.complete_daf(f"{tmp_path}/metacells", "r")) is None
+
+    dp.set_base_daf_links(metacells, None)
+    assert dp.get_base_daf_links(metacells) is None
