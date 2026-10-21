@@ -36,11 +36,11 @@ def test_views() -> None:  # pylint: disable=too-many-statements
               batch:
                 sex: 3 x Str (Dense)
               cell:
-                age: 2 x Float64 (PyArray; Dense)
+                age: 2 x Float64 (Dense)
                 batch: 2 x Str (Dense)
             matrices:
               gene,cell:
-                UMIs: 3 x 2 x Int64 in Columns (PyArray; Dense)
+                UMIs: 3 x 2 x Int64 (Dense)
             """)[1:]
 
     view = dp.viewer(
@@ -59,9 +59,9 @@ def test_views() -> None:  # pylint: disable=too-many-statements
               var: 3 entries
             vectors:
               obs:
-                age: 2 x Float64 (PyArray; Dense)
+                age: 2 x Float64 (Dense)
                 batch: 2 x Str (Dense)
             matrices:
               var,obs:
-                X: 3 x 2 x Int64 in Columns (PyArray; Dense)
+                X: 3 x 2 x Int64 (Dense)
             """)[1:]

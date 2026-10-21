@@ -167,7 +167,7 @@ def test_reconstruction() -> None:
             age: 2 x Int64 (Dense)
           cell:
             batch: 4 x Str (Dense)
-            score: 4 x Float64 (PyArray; Dense)
+            score: 4 x Float64 (Dense)
     """)[1:]
 
 

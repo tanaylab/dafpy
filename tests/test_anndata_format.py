@@ -30,7 +30,7 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
               gene: 3 entries
             matrices:
               gene,cell:
-                UMIs: 3 x 2 x Int64 in Columns (PyArray; Dense)
+                UMIs: 3 x 2 x Int64 (Dense)
             """)[1:]
 
     with TemporaryDirectory() as tmpdir:
@@ -49,5 +49,5 @@ def test_h5ad() -> None:  # pylint: disable=too-many-statements
                   gene: 3 entries
                 matrices:
                   gene,cell:
-                    UMIs: 3 x 2 x Int64 in Columns (Dense)
+                    UMIs: 3 x 2 x Int64 (Dense)
                 """)[1:]

@@ -366,7 +366,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
               gene: 3 entries
             matrices:
               cell,gene:
-                UMIs: 2 x 3 x Int8 in Columns
+                UMIs: 2 x 3 x Int8 (Dense)
             """)[1:-1]
     )
 
@@ -391,7 +391,7 @@ def test_dense_matrices(format_data: Tuple[str, Callable[[], Tuple[dp.DafWriter,
               gene: 3 entries
             matrices:
               cell,gene:
-                UMIs: 2 x 3 x Int8 in Columns
+                UMIs: 2 x 3 x Int8 (Dense)
             """)[1:-1]
     )
 
@@ -500,9 +500,9 @@ def test_zip_packed() -> None:
             score: 2 x Float32 (Dense)
         matrices:
           cell,gene:
-            UMIs: 3 x 2 x Int64 in Columns (Dense)
+            UMIs: 3 x 2 x Int64 (Dense)
           gene,cell:
-            UMIs: 2 x 3 x Int64 in Columns (Dense)
+            UMIs: 2 x 3 x Int64 (Dense)
         """)[1:]
 
     reader = dp.zip_daf(zip_path, "r")
