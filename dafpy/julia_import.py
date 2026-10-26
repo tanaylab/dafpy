@@ -50,7 +50,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp  # type: ignore
 
-__all__ = ["jl", "jl_version", "JlEnum", "UndefInitializer", "Undef"]
+__all__ = ["jl", "jl_version", "DefaultValue", "DEFAULT", "JlEnum", "UndefInitializer", "Undef"]
 
 # The value of ``PYTHON_JULIACALL_EXE`` or ``PYTHON_JULIACALL_PROJECT`` asking for the Julia you already have, rather
 # than the one ``juliapkg`` would install for itself. Not exported: it has to be in the environment before anything
@@ -172,6 +172,22 @@ class UndefInitializer:
 #: A Python value to use instead of Julia's ``undef``. We need this to allow ``@overload`` to work in the presence of
 #: ``undef``.
 Undef = UndefInitializer()  # pylint: disable=invalid-name
+
+
+class DefaultValue:
+    """
+    A Python class for the value of a parameter that was not specified.
+
+    We can't use ``None`` for this because ``None`` is how one specifies Julia's ``nothing``, and not every parameter
+    defaults to ``nothing`` (e.g., the ``packed`` of ``complete_daf`` defaults to ``false``).
+    """
+
+    def __repr__(self) -> str:
+        return "DEFAULT"
+
+
+#: A Python value for a parameter that was not specified, so the Julia default should be used instead.
+DEFAULT = DefaultValue()
 
 
 JULIA_TYPE_OF_PY_TYPE = {
@@ -319,7 +335,7 @@ def _to_julia_scalar_or_collection(value: Any) -> Any:
 # would have held, and a set of the wrong element type is rejected exactly as a ``PySet`` is. An empty set is not an
 # odd case here: it is how one says "convert none of the properties".
 def _to_julia_strings_set(value: Any) -> Any:
-    if value is None:
+    if value is None or value is DEFAULT:
         return value
 
     return jl.Set(jl.Vector[jl.String](list(value)))
@@ -498,17 +514,17 @@ jl.seval("""
     """)
 
 
+def _to_julia(value: Any) -> Any:
+    # The value to pass to Julia for a keyword argument. The wrappers convert their arguments themselves, so this passes
+    # it as it is.
+    return value
+
+
 def _given(**kwargs: Any) -> Mapping[str, Any]:
     """
     Collect the keyword arguments that were actually specified (for internal use).
-
-    A ``None`` value means "use whatever the Julia default is", so it is dropped instead of being passed on. This is
-    also correct for the many Julia parameters that are ``Maybe`` and default to ``nothing``, where passing ``nothing``
-    and omitting the parameter are the same thing. It is **not** correct for a ``Maybe`` parameter whose default isn't
-    ``nothing`` (``dataset_axis`` of ``concatenate`` is the only one), since there ``None`` is a meaningful value; such
-    a parameter has to restate its default in Python and be passed unconditionally.
     """
-    return {name: value for name, value in kwargs.items() if value is not None}
+    return {name: _to_julia(value) for name, value in kwargs.items() if value is not DEFAULT}
 
 
 def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:

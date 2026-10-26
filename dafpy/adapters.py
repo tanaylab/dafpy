@@ -15,13 +15,14 @@ pipelines in Python or any other language, if one insists on doing so.
 from contextlib import contextmanager
 from typing import Callable
 from typing import Iterator
-from typing import Optional
 
 from .copies import EmptyData
 from .copies import copy_all
 from .data import DafWriter
 from .formats import chain_writer
 from .formats import memory_daf
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .views import ViewAxes
 from .views import ViewData
 from .views import viewer
@@ -35,14 +36,14 @@ __all__ = [
 def adapter(
     daf: DafWriter,
     *,
-    input_axes: Optional[ViewAxes] = None,
-    input_data: Optional[ViewData] = None,
+    input_axes: ViewAxes | None | DefaultValue = DEFAULT,
+    input_data: ViewData | None | DefaultValue = DEFAULT,
     capture: Callable[..., DafWriter] = memory_daf,
-    output_axes: Optional[ViewAxes] = None,
-    output_data: Optional[ViewData] = None,
-    empty: Optional[EmptyData] = None,
-    relayout: Optional[bool] = None,
-    overwrite: Optional[bool] = None,
+    output_axes: ViewAxes | None | DefaultValue = DEFAULT,
+    output_data: ViewData | None | DefaultValue = DEFAULT,
+    empty: EmptyData | None | DefaultValue = DEFAULT,
+    relayout: bool | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
 ) -> Iterator[DafWriter]:
     """
     Invoke a computation on a view of some ``daf`` data set and return the result; copy a view of the results into the

@@ -9,7 +9,6 @@ Concatenate multiple ``Daf`` data sets along some axis. See the Julia
 
 from typing import AbstractSet
 from typing import Mapping
-from typing import Optional
 from typing import Sequence
 
 import numpy as np
@@ -18,6 +17,8 @@ from .copies import EmptyData
 from .data import DafReader
 from .data import DafWriter
 from .data import PropertyKey
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import JlEnum
 from .julia_import import _given
 from .julia_import import _to_julia_array
@@ -65,17 +66,15 @@ def concatenate(  # pylint: disable=too-many-positional-arguments
     destination: DafWriter,
     axis: str | Sequence[str],
     sources: Sequence[DafReader],
-    names: Optional[Sequence[str]] = None,
-    # This is the one parameter whose Julia default isn't ``nothing`` even though it accepts ``nothing`` (to not add
-    # a dataset axis at all), so the default has to be restated here and passed unconditionally.
-    dataset_axis: Optional[str] = "dataset",
-    dataset_property: Optional[bool] = None,
-    prefix: Optional[bool | Sequence[bool]] = None,
-    prefixed: Optional[AbstractSet[str] | Sequence[AbstractSet[str]]] = None,
-    empty: Optional[EmptyData] = None,
-    sparse_if_saves_storage_fraction: Optional[float] = None,
-    merge: Optional[MergeData] = None,
-    overwrite: Optional[bool] = None,
+    names: Sequence[str] | None | DefaultValue = DEFAULT,
+    dataset_axis: str | None | DefaultValue = DEFAULT,
+    dataset_property: bool | DefaultValue = DEFAULT,
+    prefix: bool | Sequence[bool] | DefaultValue = DEFAULT,
+    prefixed: AbstractSet[str] | Sequence[AbstractSet[str]] | None | DefaultValue = DEFAULT,
+    empty: EmptyData | None | DefaultValue = DEFAULT,
+    sparse_if_saves_storage_fraction: float | DefaultValue = DEFAULT,
+    merge: MergeData | None | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
 ) -> None:
     """
     Concatenate data from a ``sources`` sequence of ``Daf`` data sets into a single ``destination`` data set along one
@@ -83,14 +82,14 @@ def concatenate(  # pylint: disable=too-many-positional-arguments
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/concat.html#DataAxesFormats.Concat.concatenate!>`__
     for details.
     """
-    if merge is None:
-        merge_data = None
+    if merge is None or isinstance(merge, DefaultValue):
+        merge_data = merge
     else:
         merge_data = jl.DafPy._pairify_merge([(key, JL_MERGE_ACTION[value]) for key, value in merge.items()])
 
     # Either one set of names, applying to every concatenation axis, or one set per axis. A Python set is not an
     # ``AbstractSet``, and a list of them is not an ``AbstractVector`` of one either, so both shapes are converted.
-    if prefixed is None or isinstance(prefixed, (set, frozenset, AbstractSet)):
+    if prefixed is None or isinstance(prefixed, (DefaultValue, set, frozenset, AbstractSet)):
         prefixed_data = _to_julia_strings_set(prefixed)
     else:
         prefixed_data = jl.DafPy._sets_vector([_to_julia_strings_set(names_of_source) for names_of_source in prefixed])
@@ -99,9 +98,9 @@ def concatenate(  # pylint: disable=too-many-positional-arguments
         destination,
         _to_julia_array(axis),
         jl.pyconvert(jl.DafPy._DafReadersVector, np.array(sources)),
-        dataset_axis=dataset_axis,
         **_given(
             names=_to_julia_array(names),
+            dataset_axis=dataset_axis,
             dataset_property=dataset_property,
             prefix=_to_julia_array(prefix),
             prefixed=prefixed_data,

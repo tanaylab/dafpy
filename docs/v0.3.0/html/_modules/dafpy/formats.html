@@ -76,6 +76,9 @@
 <span class="sd">Concrete formats of ``Daf`` data sets.</span>
 <span class="sd">"""</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
@@ -83,7 +86,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafReader</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafReadOnly</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DafWriter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultValue</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">JlObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_given</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">_jl_pairs</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.julia_import</span><span class="w"> </span><span class="kn">import</span> <span class="n">jl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewAxes</span>
@@ -91,16 +98,19 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"BaseDaf"</span><span class="p">,</span>
+    <span class="s2">"RecordedBase"</span><span class="p">,</span>
     <span class="s2">"chain_reader"</span><span class="p">,</span>
     <span class="s2">"chain_writer"</span><span class="p">,</span>
     <span class="s2">"complete_chain"</span><span class="p">,</span>
     <span class="s2">"complete_daf"</span><span class="p">,</span>
     <span class="s2">"files_daf"</span><span class="p">,</span>
     <span class="s2">"files_to_zarr"</span><span class="p">,</span>
+    <span class="s2">"get_base_daf_links"</span><span class="p">,</span>
     <span class="s2">"h5df"</span><span class="p">,</span>
     <span class="s2">"http_daf"</span><span class="p">,</span>
     <span class="s2">"memory_daf"</span><span class="p">,</span>
     <span class="s2">"open_daf"</span><span class="p">,</span>
+    <span class="s2">"set_base_daf_links"</span><span class="p">,</span>
     <span class="s2">"wrap_daf"</span><span class="p">,</span>
     <span class="s2">"zarr_daf"</span><span class="p">,</span>
     <span class="s2">"zarr_to_files"</span><span class="p">,</span>
@@ -125,21 +135,30 @@
 <div class="viewcode-block" id="complete_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.complete_daf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">complete_daf</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Open a complete chain of ``Daf`` repositories by tracing back through the ``base_daf_repository``. See the Julia</span>
+<span class="sd">    Open a complete chain of ``Daf`` repositories by tracing back through the bases recorded in each one (see</span>
+<span class="sd">    :py:obj:`get_base_daf_links`). See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="open_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.open_daf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">open_daf</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Open a ``Daf`` data set, dispatching to the appropriate backend based on ``path``. Zarr suffixes (``.daf.zarr``,</span>
@@ -151,21 +170,24 @@
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.open_daf&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">open_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">open_daf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="memory_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.memory_daf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">memory_daf</span><span class="p">(</span>
-    <span class="n">jl_obj</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">MemoryDaf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"memory"</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">jl_obj</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">MemoryDaf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Simple in-memory storage. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/memory_format.html&gt;`__ for details.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">jl_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">MemoryDaf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)</span>
+        <span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">MemoryDaf</span><span class="p">(</span><span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span><span class="n">jl_obj</span><span class="p">)</span></div>
 
 
@@ -173,13 +195,17 @@
 <div class="viewcode-block" id="files_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.files_daf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">files_daf</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A ``Daf`` storage format in disk files. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/files_format.html&gt;`__ for details.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">FilesDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">FilesDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
@@ -189,8 +215,8 @@
     <span class="n">root</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">HDF5</span><span class="o">.</span><span class="n">File</span><span class="p">,</span> <span class="n">jl</span><span class="o">.</span><span class="n">HDF5</span><span class="o">.</span><span class="n">Group</span><span class="p">],</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A ``Daf`` storage format in an HDF5 disk file. See the Julia</span>
@@ -201,14 +227,18 @@
 <span class="sd">    ``Daf`` API does **not** support using the Python ``HDF5`` API. This is because the ``Daf`` Python API is just a</span>
 <span class="sd">    thin wrapper for the Julia ``Daf`` implementation, which doesn't "speak Python".</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">H5df</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">H5df</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="zarr_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.zarr_daf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">zarr_daf</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A ``Daf`` storage format in a Zarr directory tree, Zarr ZIP archive, or remote HTTP(S) Zarr group. The ``path``</span>
@@ -217,30 +247,41 @@
 <span class="sd">    HTTP; read-only). See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zarr_format.html&gt;`__ for details.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ZarrDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ZarrDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="zip_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.zip_daf">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">zip_daf</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">zip_daf</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span> <span class="o">|</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A ``Daf`` storage format in a single ZIP archive of the :py:func:`files_daf` on-disk layout. The ``path`` is either</span>
 <span class="sd">    ``something.daf.zip`` (single-daf ZIP) or ``something.dafs.zip#/group`` (sub-daf inside a multi-daf ZIP). See the</span>
 <span class="sd">    Julia `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zip_files.html&gt;`__ for details.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ZipDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">wrap_daf</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">ZipDaf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
 <div class="viewcode-block" id="http_daf">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.http_daf">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">http_daf</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">packed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">http_daf</span><span class="p">(</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">packed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read-only access to a :py:func:`files_daf` served over ``http://`` or ``https://``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/http_format.html&gt;`__ for details.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">HttpDaf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">HttpDaf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="o">=</span><span class="n">packed</span><span class="p">)))</span></div>
 
 
 
@@ -275,28 +316,28 @@
 
 <div class="viewcode-block" id="chain_reader">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.chain_reader">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">chain_reader</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chain_reader</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafReadOnly</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_reader&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="n">DafReadOnly</span><span class="p">(</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">chain_reader</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dsets</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">chain_reader</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dsets</span><span class="p">]),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span>
     <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="chain_writer">
 <a class="viewcode-back" href="../../formats.html#dafpy.formats.chain_writer">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">chain_writer</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chain_writer</span><span class="p">(</span><span class="n">dsets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DafReader</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia</span>
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_writer&gt;`__ for</span>
 <span class="sd">    details.</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">chain_writer</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dsets</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">chain_writer</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_daf_readers</span><span class="p">([</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dsets</span><span class="p">]),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span>
     <span class="p">)</span></div>
 
 
@@ -310,12 +351,20 @@
 <span class="sd">    for details.</span>
 <span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dset</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewAxes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dset</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">axes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ViewAxes</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ViewData</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">BaseDaf</span><span class="p">(</span>
                 <span class="n">daf</span><span class="o">=</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span>
-                <span class="n">axes</span><span class="o">=</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_pairify_axes</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">axes</span><span class="p">)),</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_pairify_data</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+                <span class="o">**</span><span class="n">_given</span><span class="p">(</span>
+                    <span class="n">axes</span><span class="o">=</span><span class="n">axes</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">)</span> <span class="k">else</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_pairify_axes</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">axes</span><span class="p">)),</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">data</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">)</span> <span class="k">else</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_pairify_data</span><span class="p">(</span><span class="n">_jl_pairs</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+                <span class="p">),</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
 
@@ -327,8 +376,8 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">base_daf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">]]],</span>
     <span class="n">new_daf</span><span class="p">:</span> <span class="n">DafWriter</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">absolute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+    <span class="n">absolute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DafWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Chain a freshly created empty ``new_daf`` on top of one or more base repositories, presenting them as a single</span>
@@ -336,12 +385,85 @@
 <span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.complete_chain!&gt;`__</span>
 <span class="sd">    for details.</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_daf</span><span class="p">,</span> <span class="p">(</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">)):</span>
-        <span class="n">bases</span> <span class="o">=</span> <span class="n">base_daf</span><span class="o">.</span><span class="n">jl_obj</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">bases</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_base_dafs</span><span class="p">([</span><span class="n">base</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">base_daf</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">DafWriter</span><span class="p">(</span>
-        <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_chain_b</span><span class="p">(</span><span class="n">base_daf</span><span class="o">=</span><span class="n">bases</span><span class="p">,</span> <span class="n">new_daf</span><span class="o">=</span><span class="n">new_daf</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="n">absolute</span><span class="p">)</span>
+        <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">complete_chain_b</span><span class="p">(</span>
+            <span class="n">base_daf</span><span class="o">=</span><span class="n">_jl_base_daf</span><span class="p">(</span><span class="n">base_daf</span><span class="p">),</span> <span class="n">new_daf</span><span class="o">=</span><span class="n">new_daf</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="n">absolute</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_jl_base_daf</span><span class="p">(</span><span class="n">base_daf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">]]])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="c1"># Convert the bases of a chain to what the Julia functions take.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_daf</span><span class="p">,</span> <span class="p">(</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">base_daf</span><span class="o">.</span><span class="n">jl_obj</span>
+    <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">DafPy</span><span class="o">.</span><span class="n">_to_base_dafs</span><span class="p">([</span><span class="n">base</span><span class="o">.</span><span class="n">jl_obj</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">base_daf</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="RecordedBase">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.RecordedBase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RecordedBase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    One immediate base of a stored repository, as returned by :py:func:`get_base_daf_links`. The ``path`` is as</span>
+<span class="sd">    recorded, that is, relative to the directory of the repository naming it, unless it was recorded as an absolute</span>
+<span class="sd">    path. The ``axes`` and ``data`` are the view parameters applied to the base, or ``None`` if the whole of it is used.</span>
+<span class="sd">    See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.RecordedBase&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jl_obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jl_obj</span> <span class="o">=</span> <span class="n">jl_obj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">jl_obj</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">_recorded_view_parameters</span><span class="p">(</span><span class="n">jl_obj</span><span class="o">.</span><span class="n">axes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">DataKey</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">_recorded_view_parameters</span><span class="p">(</span><span class="n">jl_obj</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_recorded_view_parameters</span><span class="p">(</span><span class="n">jl_pairs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
+    <span class="c1"># Convert the recorded view parameters of a base. A key is a name, or a tuple of names, and a value is a string or</span>
+    <span class="c1"># nothing.</span>
+    <span class="k">if</span> <span class="n">jl_pairs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">key</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">key</span><span class="p">)):</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">jl_pairs</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_base_daf_links">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.get_base_daf_links">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_base_daf_links</span><span class="p">(</span><span class="n">dset</span><span class="p">:</span> <span class="n">DafReader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">RecordedBase</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    The immediate bases recorded in a stored repository, which :py:obj:`complete_daf` chains it on top of, or ``None``</span>
+<span class="sd">    if it has none. The bases are not opened. Only a stored repository has bases: a chain or a view has none of its own.</span>
+<span class="sd">    See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.get_base_daf_links&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    """</span>
+    <span class="n">jl_bases</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">get_base_daf_links</span><span class="p">(</span><span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">jl_bases</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">RecordedBase</span><span class="p">(</span><span class="n">jl_base</span><span class="p">)</span> <span class="k">for</span> <span class="n">jl_base</span> <span class="ow">in</span> <span class="n">jl_bases</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="set_base_daf_links">
+<a class="viewcode-back" href="../../formats.html#dafpy.formats.set_base_daf_links">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_base_daf_links</span><span class="p">(</span>
+    <span class="n">dset</span><span class="p">:</span> <span class="n">DafWriter</span><span class="p">,</span>
+    <span class="n">base_daf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DafReader</span><span class="p">,</span> <span class="n">BaseDaf</span><span class="p">]]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">absolute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">DefaultValue</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Record the immediate bases of a stored repository, replacing any it had, or record that it has none, if</span>
+<span class="sd">    ``base_daf`` is ``None``. See the Julia</span>
+<span class="sd">    `documentation &lt;https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.set_base_daf_links!&gt;`__</span>
+<span class="sd">    for details.</span>
+<span class="sd">    """</span>
+    <span class="n">jl</span><span class="o">.</span><span class="n">DataAxesFormats</span><span class="o">.</span><span class="n">set_base_daf_links_b</span><span class="p">(</span>
+        <span class="n">dset</span><span class="o">.</span><span class="n">jl_obj</span><span class="p">,</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">base_daf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_jl_base_daf</span><span class="p">(</span><span class="n">base_daf</span><span class="p">),</span> <span class="o">**</span><span class="n">_given</span><span class="p">(</span><span class="n">absolute</span><span class="o">=</span><span class="n">absolute</span><span class="p">)</span>
     <span class="p">)</span></div>
 
 </pre></div>

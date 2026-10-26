@@ -4,12 +4,13 @@ Copy data between ``Daf`` data sets. See the Julia
 """
 
 from typing import Mapping
-from typing import Optional
 from typing import Type
 
 from .data import DafReader
 from .data import DafWriter
 from .data import DataKey
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import Undef
 from .julia_import import UndefInitializer
 from .julia_import import _given
@@ -35,11 +36,11 @@ def copy_scalar(
     destination: DafWriter,
     source: DafReader,
     name: str,
-    rename: Optional[str] = None,
-    type: Optional[Type] = None,  # pylint: disable=redefined-builtin
+    rename: str | None | DefaultValue = DEFAULT,
+    type: Type | None | DefaultValue = DEFAULT,  # pylint: disable=redefined-builtin
     default: StorageScalar | UndefInitializer | None = Undef,
-    overwrite: Optional[bool] = None,
-    insist: Optional[bool] = None,
+    overwrite: bool | DefaultValue = DEFAULT,
+    insist: bool | DefaultValue = DEFAULT,
 ) -> None:
     """
     Copy a scalar with some ``name`` from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the
@@ -51,9 +52,8 @@ def copy_scalar(
         destination=destination,
         source=source,
         name=name,
-        rename=rename,
         default=_to_julia_array(default),
-        **_given(type=_to_julia_type(type), overwrite=overwrite, insist=insist),
+        **_given(rename=rename, type=_to_julia_type(type), overwrite=overwrite, insist=insist),
     )
 
 
@@ -62,10 +62,10 @@ def copy_axis(
     destination: DafWriter,
     source: DafReader,
     axis: str,
-    rename: Optional[str] = None,
+    rename: str | None | DefaultValue = DEFAULT,
     default: StorageScalar | UndefInitializer | None = Undef,
-    overwrite: Optional[bool] = None,
-    insist: Optional[bool] = None,
+    overwrite: bool | DefaultValue = DEFAULT,
+    insist: bool | DefaultValue = DEFAULT,
 ) -> None:
     """
     Copy an axis from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -76,9 +76,8 @@ def copy_axis(
         destination=destination,
         source=source,
         axis=axis,
-        rename=rename,
         default=_to_julia_array(default),
-        **_given(overwrite=overwrite, insist=insist),
+        **_given(rename=rename, overwrite=overwrite, insist=insist),
     )
 
 
@@ -88,16 +87,16 @@ def copy_vector(
     source: DafReader,
     axis: str,
     name: str,
-    reaxis: Optional[str] = None,
-    rename: Optional[str] = None,
-    eltype: Optional[Type] = None,
+    reaxis: str | None | DefaultValue = DEFAULT,
+    rename: str | None | DefaultValue = DEFAULT,
+    eltype: Type | None | DefaultValue = DEFAULT,
     default: StorageScalar | UndefInitializer | None = Undef,
-    empty: Optional[StorageScalar] = None,
-    bestify: Optional[bool] = None,
-    min_sparse_saving_fraction: Optional[float] = None,
-    overwrite: Optional[bool] = None,
-    insist: Optional[bool] = None,
-    packed: Optional[bool] = None,
+    empty: StorageScalar | None | DefaultValue = DEFAULT,
+    bestify: bool | DefaultValue = DEFAULT,
+    min_sparse_saving_fraction: float | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
+    insist: bool | DefaultValue = DEFAULT,
+    packed: bool | None | DefaultValue = DEFAULT,
 ) -> None:
     """
     Copy a vector from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -109,12 +108,12 @@ def copy_vector(
         source=source,
         axis=axis,
         name=name,
-        reaxis=reaxis,
-        rename=rename,
         default=_to_julia_array(default),
-        empty=empty,
         **_given(
+            reaxis=reaxis,
+            rename=rename,
             eltype=_to_julia_type(eltype),
+            empty=empty,
             bestify=bestify,
             min_sparse_saving_fraction=min_sparse_saving_fraction,
             overwrite=overwrite,
@@ -131,18 +130,18 @@ def copy_matrix(  # pylint: disable=too-many-locals
     rows_axis: str,
     columns_axis: str,
     name: str,
-    rows_reaxis: Optional[str] = None,
-    columns_reaxis: Optional[str] = None,
-    rename: Optional[str] = None,
-    eltype: Optional[Type] = None,
+    rows_reaxis: str | None | DefaultValue = DEFAULT,
+    columns_reaxis: str | None | DefaultValue = DEFAULT,
+    rename: str | None | DefaultValue = DEFAULT,
+    eltype: Type | None | DefaultValue = DEFAULT,
     default: StorageScalar | UndefInitializer | None = Undef,
-    empty: Optional[StorageScalar] = None,
-    bestify: Optional[bool] = None,
-    min_sparse_saving_fraction: Optional[float] = None,
-    relayout: Optional[bool] = None,
-    overwrite: Optional[bool] = None,
-    insist: Optional[bool] = None,
-    packed: Optional[bool] = None,
+    empty: StorageScalar | None | DefaultValue = DEFAULT,
+    bestify: bool | DefaultValue = DEFAULT,
+    min_sparse_saving_fraction: float | DefaultValue = DEFAULT,
+    relayout: bool | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
+    insist: bool | DefaultValue = DEFAULT,
+    packed: bool | None | DefaultValue = DEFAULT,
 ) -> None:
     """
     Copy a matrix from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -155,13 +154,13 @@ def copy_matrix(  # pylint: disable=too-many-locals
         rows_axis=rows_axis,
         columns_axis=columns_axis,
         name=name,
-        rows_reaxis=rows_reaxis,
-        columns_reaxis=columns_reaxis,
-        rename=rename,
         default=_to_julia_array(default),
-        empty=empty,
         **_given(
+            rows_reaxis=rows_reaxis,
+            columns_reaxis=columns_reaxis,
+            rename=rename,
             eltype=_to_julia_type(eltype),
+            empty=empty,
             bestify=bestify,
             min_sparse_saving_fraction=min_sparse_saving_fraction,
             relayout=relayout,
@@ -180,17 +179,17 @@ def copy_tensor(  # pylint: disable=too-many-locals
     rows_axis: str,
     columns_axis: str,
     name: str,
-    rows_reaxis: Optional[str] = None,
-    columns_reaxis: Optional[str] = None,
-    rename: Optional[str] = None,
-    eltype: Optional[Type] = None,
-    empty: Optional[StorageScalar] = None,
-    bestify: Optional[bool] = None,
-    min_sparse_saving_fraction: Optional[float] = None,
-    relayout: Optional[bool] = None,
-    overwrite: Optional[bool] = None,
-    insist: Optional[bool] = None,
-    packed: Optional[bool] = None,
+    rows_reaxis: str | None | DefaultValue = DEFAULT,
+    columns_reaxis: str | None | DefaultValue = DEFAULT,
+    rename: str | None | DefaultValue = DEFAULT,
+    eltype: Type | None | DefaultValue = DEFAULT,
+    empty: StorageScalar | None | DefaultValue = DEFAULT,
+    bestify: bool | DefaultValue = DEFAULT,
+    min_sparse_saving_fraction: float | DefaultValue = DEFAULT,
+    relayout: bool | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
+    insist: bool | DefaultValue = DEFAULT,
+    packed: bool | None | DefaultValue = DEFAULT,
 ) -> None:
     """
     Copy a tensor from some ``source`` ``DafReader`` into some ``destination`` ``DafWriter``. See the Julia
@@ -204,12 +203,12 @@ def copy_tensor(  # pylint: disable=too-many-locals
         rows_axis=rows_axis,
         columns_axis=columns_axis,
         name=name,
-        rows_reaxis=rows_reaxis,
-        columns_reaxis=columns_reaxis,
-        rename=rename,
-        empty=empty,
         **_given(
+            rows_reaxis=rows_reaxis,
+            columns_reaxis=columns_reaxis,
+            rename=rename,
             eltype=_to_julia_type(eltype),
+            empty=empty,
             bestify=bestify,
             min_sparse_saving_fraction=min_sparse_saving_fraction,
             relayout=relayout,
@@ -235,24 +234,22 @@ def copy_all(
     *,
     destination: DafWriter,
     source: DafReader,
-    empty: Optional[EmptyData] = None,
-    types: Optional[DataTypes] = None,
-    overwrite: Optional[bool] = None,
-    insist: Optional[bool] = None,
-    relayout: Optional[bool] = None,
-    packed: Optional[bool] = None,
+    empty: EmptyData | None | DefaultValue = DEFAULT,
+    types: DataTypes | None | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
+    insist: bool | DefaultValue = DEFAULT,
+    relayout: bool | DefaultValue = DEFAULT,
+    packed: bool | None | DefaultValue = DEFAULT,
 ) -> None:
     """
     Copy all the content of a ``source`` ``DafReader`` into a ``destination`` ``DafWriter``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/copies.html#DataAxesFormats.Copies.copy_all!>`__
     for details.
     """
-    if types is not None:
+    if isinstance(types, Mapping):
         types = {key: _to_julia_type(value) for key, value in types.items()}
     jl.DataAxesFormats.copy_all_b(
         destination=destination,
         source=source,
-        empty=empty,
-        types=types,
-        **_given(overwrite=overwrite, insist=insist, relayout=relayout, packed=packed),
+        **_given(empty=empty, types=types, overwrite=overwrite, insist=insist, relayout=relayout, packed=packed),
     )

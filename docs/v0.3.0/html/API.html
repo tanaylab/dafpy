@@ -484,6 +484,54 @@ memory.
 </p>
 </li>
 
+<li>
+<p>Parameters default to 
+<code class="docutils literal notranslate">
+<span class="pre">DEFAULT
+</span>
+</code> rather than to 
+<code class="docutils literal notranslate">
+<span class="pre">None
+</span>
+</code>, so that 
+<code class="docutils literal notranslate">
+<span class="pre">None
+</span>
+</code> can be passed to explicitly mean Julia’s
+
+<code class="docutils literal notranslate">
+<span class="pre">nothing
+</span>
+</code>. This matters because some parameters have a default which isn’t 
+<code class="docutils literal notranslate">
+<span class="pre">nothing
+</span>
+</code> (e.g., the
+
+<code class="docutils literal notranslate">
+<span class="pre">dataset_axis
+</span>
+</code> of 
+<code class="docutils literal notranslate">
+<span class="pre">concatenate
+</span>
+</code> is 
+<code class="docutils literal notranslate">
+<span class="pre">&quot;dataset&quot;
+</span>
+</code>), so 
+<code class="docutils literal notranslate">
+<span class="pre">dataset_axis
+</span> 
+<span class="pre">=
+</span> 
+<span class="pre">None
+</span>
+</code> is the only way to ask for no
+dataset axis at all.
+</p>
+</li>
+
 </ul>
 
 <p>Otherwise, the API works “just the same” :-) The documentation therefore mostly just links to the relevant entry in the
@@ -514,6 +562,24 @@ Julia
 <a class="reference internal" href="julia_import.html#dafpy.julia_import.jl_version">
 <code class="docutils literal notranslate">
 <span class="pre">jl_version
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.DefaultValue">
+<code class="docutils literal notranslate">
+<span class="pre">DefaultValue
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="julia_import.html#dafpy.julia_import.DEFAULT">
+<code class="docutils literal notranslate">
+<span class="pre">DEFAULT
 </span>
 </code>
 </a>
@@ -1778,6 +1844,15 @@ Julia
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="formats.html#dafpy.formats.RecordedBase">
+<code class="docutils literal notranslate">
+<span class="pre">RecordedBase
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="formats.html#dafpy.formats.chain_reader">
 <code class="docutils literal notranslate">
 <span class="pre">chain_reader()
@@ -1832,6 +1907,15 @@ Julia
 </li>
 
 <li class="toctree-l2">
+<a class="reference internal" href="formats.html#dafpy.formats.get_base_daf_links">
+<code class="docutils literal notranslate">
+<span class="pre">get_base_daf_links()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
 <a class="reference internal" href="formats.html#dafpy.formats.h5df">
 <code class="docutils literal notranslate">
 <span class="pre">h5df()
@@ -1862,6 +1946,15 @@ Julia
 <a class="reference internal" href="formats.html#dafpy.formats.open_daf">
 <code class="docutils literal notranslate">
 <span class="pre">open_daf()
+</span>
+</code>
+</a>
+</li>
+
+<li class="toctree-l2">
+<a class="reference internal" href="formats.html#dafpy.formats.set_base_daf_links">
+<code class="docutils literal notranslate">
+<span class="pre">set_base_daf_links()
 </span>
 </code>
 </a>

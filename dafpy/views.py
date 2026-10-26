@@ -5,11 +5,13 @@ for details.
 """
 
 from typing import Mapping
-from typing import Optional
 
 from .data import DafReader
 from .data import DafReadOnly
 from .data import DataKey
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
+from .julia_import import _given
 from .julia_import import _jl_pairs
 from .julia_import import jl
 from .queries import Query
@@ -62,7 +64,11 @@ ViewData = Mapping[DataKey, str | Query | None]
 
 
 def viewer(
-    dset: DafReader, *, name: Optional[str] = None, axes: Optional[ViewAxes] = None, data: Optional[ViewData] = None
+    dset: DafReader,
+    *,
+    name: str | None | DefaultValue = DEFAULT,
+    axes: ViewAxes | None | DefaultValue = DEFAULT,
+    data: ViewData | None | DefaultValue = DEFAULT,
 ) -> DafReadOnly:
     """
     Wrap ``Daf`` data set with a read-only ``DafView``. See the Julia
@@ -75,6 +81,11 @@ def viewer(
     """
     return DafReadOnly(
         jl.DataAxesFormats.viewer(
-            dset, name=name, axes=jl.DafPy._pairify_axes(_jl_pairs(axes)), data=jl.DafPy._pairify_data(_jl_pairs(data))
+            dset,
+            **_given(
+                name=name,
+                axes=axes if isinstance(axes, DefaultValue) else jl.DafPy._pairify_axes(_jl_pairs(axes)),
+                data=data if isinstance(data, DefaultValue) else jl.DafPy._pairify_data(_jl_pairs(data)),
+            ),
         )
     )

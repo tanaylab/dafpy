@@ -3,9 +3,9 @@ Example data. See the Julia
 `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/example_data.html>`__ for details.
 """
 
-from typing import Optional
-
 from .data import DafWriter
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import _given
 from .julia_import import jl
 
@@ -18,7 +18,7 @@ __all__ = [
 
 def example_cells_daf(
     *,
-    name: Optional[str] = None,
+    name: str | DefaultValue = DEFAULT,
 ) -> DafWriter:
     """
     Load the cells example data into a ``MemoryDaf``. See the Julia
@@ -31,7 +31,7 @@ def example_cells_daf(
 
 def example_metacells_daf(
     *,
-    name: Optional[str] = None,
+    name: str | DefaultValue = DEFAULT,
 ) -> DafWriter:
     """
     Load the metacells example data into a ``MemoryDaf``. See the Julia
@@ -44,7 +44,7 @@ def example_metacells_daf(
 
 def example_chain_daf(
     *,
-    name: Optional[str] = None,
+    name: str | DefaultValue = DEFAULT,
 ) -> DafWriter:
     """
     Load a chain of both the cells and metacells example data. See the Julia

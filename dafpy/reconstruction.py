@@ -14,6 +14,8 @@ from typing import Type
 from typing import Union
 
 from .data import DafWriter
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import _given
 from .julia_import import _to_julia_scalar_or_collection
 from .julia_import import _to_julia_strings_set
@@ -27,10 +29,10 @@ def reconstruct_axis(
     *,
     existing_axis: str,
     implicit_axis: str,
-    rename_axis: Optional[str] = None,
-    implicit_properties: Optional[AbstractSet[str]] = None,
-    skipped_properties: Optional[AbstractSet[str]] = None,
-    properties_defaults: Optional[Mapping[str, Optional[StorageScalar]]] = None,
+    rename_axis: Union[str, None, DefaultValue] = DEFAULT,
+    implicit_properties: Union[AbstractSet[str], None, DefaultValue] = DEFAULT,
+    skipped_properties: Union[AbstractSet[str], None, DefaultValue] = DEFAULT,
+    properties_defaults: Union[Mapping[str, Optional[StorageScalar]], None, DefaultValue] = DEFAULT,
 ) -> Mapping[str, Optional[StorageScalar]]:
     """
     Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the
@@ -43,10 +45,12 @@ def reconstruct_axis(
         dset,
         existing_axis=existing_axis,
         implicit_axis=implicit_axis,
-        rename_axis=rename_axis,
-        implicit_properties=_to_julia_strings_set(implicit_properties),
-        skipped_properties=_to_julia_strings_set(skipped_properties),
-        properties_defaults=properties_defaults,
+        **_given(
+            rename_axis=rename_axis,
+            implicit_properties=_to_julia_strings_set(implicit_properties),
+            skipped_properties=_to_julia_strings_set(skipped_properties),
+            properties_defaults=properties_defaults,
+        ),
     )
 
 
@@ -55,11 +59,11 @@ def connect_axes(
     *,
     base_axis: str,
     from_axis: str,
-    from_property: Optional[str] = None,
+    from_property: Union[str, None, DefaultValue] = DEFAULT,
     to_axis: str,
-    to_property: Optional[str] = None,
-    connect_property: Optional[str] = None,
-    overwrite: Optional[bool] = None,
+    to_property: Union[str, None, DefaultValue] = DEFAULT,
+    connect_property: Union[str, None, DefaultValue] = DEFAULT,
+    overwrite: Union[bool, DefaultValue] = DEFAULT,
 ) -> None:
     """
     Given a ``base_axis`` with two vector properties, one holding a reference to ``from_axis`` and one to ``to_axis``,
@@ -72,11 +76,13 @@ def connect_axes(
         dset,
         base_axis=base_axis,
         from_axis=from_axis,
-        from_property=from_property,
         to_axis=to_axis,
-        to_property=to_property,
-        connect_property=connect_property,
-        **_given(overwrite=overwrite),
+        **_given(
+            from_property=from_property,
+            to_property=to_property,
+            connect_property=connect_property,
+            overwrite=overwrite,
+        ),
     )
 
 
@@ -86,8 +92,8 @@ def unify_empty_vector_values(
     axis: str,
     property: str,  # pylint: disable=redefined-builtin
     empty_values: Union[StorageScalar, Collection[StorageScalar]],
-    dtype: Optional[Type] = None,
-    empty_value: Optional[StorageScalar] = None,
+    dtype: Union[Type, None, DefaultValue] = DEFAULT,
+    empty_value: Union[StorageScalar, None, DefaultValue] = DEFAULT,
 ) -> None:
     """
     Replace every one of the ``empty_values`` of a ``property`` of an ``axis`` with a single ``empty_value``, so that

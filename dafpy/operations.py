@@ -6,7 +6,6 @@ A ``Daf`` query can use operations to process the data: ``EltwiseOperation`` tha
 
 from typing import AbstractSet
 from typing import Callable
-from typing import Optional
 from typing import Type
 from typing import Union
 from typing import overload
@@ -14,6 +13,8 @@ from typing import overload
 import numpy as np
 import pandas as pd  # type: ignore
 
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import JlObject
 from .julia_import import _given
 from .julia_import import _to_julia_type
@@ -126,8 +127,8 @@ class Abs(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Abs(type=_to_julia_type(type)))
+    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+        super().__init__(jl.DataAxesFormats.Abs(**_given(type=_to_julia_type(type))))
 
 
 class Round(EltwiseOperation):
@@ -137,8 +138,8 @@ class Round(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Round(type=_to_julia_type(type)))
+    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+        super().__init__(jl.DataAxesFormats.Round(**_given(type=_to_julia_type(type))))
 
 
 class Clamp(EltwiseOperation):
@@ -149,7 +150,7 @@ class Clamp(EltwiseOperation):
     """
 
     def __init__(  # pylint: disable=redefined-builtin
-        self, *, min: Optional[float] = None, max: Optional[float] = None
+        self, *, min: Union[float, DefaultValue] = DEFAULT, max: Union[float, DefaultValue] = DEFAULT
     ) -> None:
         super().__init__(jl.DataAxesFormats.Clamp(**_given(min=min, max=max)))
 
@@ -162,7 +163,7 @@ class Convert(EltwiseOperation):
     """
 
     def __init__(self, *, type: Type) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Convert(type=_to_julia_type(type)))
+        super().__init__(jl.DataAxesFormats.Convert(**_given(type=_to_julia_type(type))))
 
 
 class Fraction(EltwiseOperation):
@@ -172,8 +173,8 @@ class Fraction(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Fraction(type=_to_julia_type(type)))
+    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+        super().__init__(jl.DataAxesFormats.Fraction(**_given(type=_to_julia_type(type))))
 
 
 class Log(EltwiseOperation):
@@ -186,11 +187,11 @@ class Log(EltwiseOperation):
     def __init__(
         self,
         *,
-        type: Optional[Type] = None,  # pylint: disable=redefined-builtin
-        base: Optional[float] = None,
-        eps: Optional[float] = None,
+        type: Union[Type, None, DefaultValue] = DEFAULT,  # pylint: disable=redefined-builtin
+        base: Union[float, DefaultValue] = DEFAULT,
+        eps: Union[float, DefaultValue] = DEFAULT,
     ) -> None:
-        super().__init__(jl.DataAxesFormats.Log(type=_to_julia_type(type), **_given(base=base, eps=eps)))
+        super().__init__(jl.DataAxesFormats.Log(**_given(type=_to_julia_type(type), base=base, eps=eps)))
 
 
 class Significant(EltwiseOperation):
@@ -200,8 +201,8 @@ class Significant(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, high: float, low: Optional[float] = None) -> None:
-        super().__init__(jl.DataAxesFormats.Significant(high=high, low=low))
+    def __init__(self, *, high: float, low: Union[float, None, DefaultValue] = DEFAULT) -> None:
+        super().__init__(jl.DataAxesFormats.Significant(high=high, **_given(low=low)))
 
 
 class Sum(ReductionOperation):
@@ -211,8 +212,8 @@ class Sum(ReductionOperation):
     for details.
     """
 
-    def __init__(self, *, type: Optional[Type] = None) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Sum(type=_to_julia_type(type)))
+    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+        super().__init__(jl.DataAxesFormats.Sum(**_given(type=_to_julia_type(type))))
 
 
 class Min(ReductionOperation):
@@ -245,8 +246,10 @@ class Quantile(ReductionOperation):
     for details.
     """
 
-    def __init__(self, *, type: Optional[Type] = None, p: float) -> None:  # pylint: disable=redefined-builtin
-        super().__init__(jl.DataAxesFormats.Quantile(type=_to_julia_type(type), p=p))
+    def __init__(  # pylint: disable=redefined-builtin
+        self, *, type: Union[Type, None, DefaultValue] = DEFAULT, p: float
+    ) -> None:
+        super().__init__(jl.DataAxesFormats.Quantile(p=p, **_given(type=_to_julia_type(type))))
 
 
 class Mean(ReductionOperation):

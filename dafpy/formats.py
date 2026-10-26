@@ -13,7 +13,10 @@ from .data import DafReader
 from .data import DafReadOnly
 from .data import DafWriter
 from .data import DataKey
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import JlObject
+from .julia_import import _given
 from .julia_import import _jl_pairs
 from .julia_import import jl
 from .views import ViewAxes
@@ -53,7 +56,11 @@ def wrap_daf(jl_obj) -> DafReadOnly | DafWriter:
 
 
 def complete_daf(
-    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+    path: str,
+    mode: str = "r",
+    *,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     Open a complete chain of ``Daf`` repositories by tracing back through the bases recorded in each one (see
@@ -61,11 +68,15 @@ def complete_daf(
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.complete_daf>`__
     for details.
     """
-    return wrap_daf(jl.DataAxesFormats.complete_daf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.complete_daf(path, mode, **_given(name=name, packed=packed)))
 
 
 def open_daf(
-    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+    path: str,
+    mode: str = "r",
+    *,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     Open a ``Daf`` data set, dispatching to the appropriate backend based on ``path``. Zarr suffixes (``.daf.zarr``,
@@ -77,37 +88,44 @@ def open_daf(
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/complete.html#DataAxesFormats.CompleteDaf.open_daf>`__
     for details.
     """
-    return wrap_daf(jl.DataAxesFormats.open_daf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.open_daf(path, mode, **_given(name=name, packed=packed)))
 
 
 def memory_daf(
-    jl_obj: Optional[jl.DataAxesFormats.MemoryDaf] = None, *, name: str = "memory", packed: bool = False
+    jl_obj: Optional[jl.DataAxesFormats.MemoryDaf] = None,
+    *,
+    name: Union[str, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafWriter:
     """
     Simple in-memory storage. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/memory_format.html>`__ for details.
     """
     if jl_obj is None:
-        jl_obj = jl.DataAxesFormats.MemoryDaf(name=name, packed=packed)
+        jl_obj = jl.DataAxesFormats.MemoryDaf(**_given(name=name, packed=packed))
     return DafWriter(jl_obj)
 
 
 def files_daf(
-    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+    path: str,
+    mode: str = "r",
+    *,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in disk files. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/files_format.html>`__ for details.
     """
-    return wrap_daf(jl.DataAxesFormats.FilesDaf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.FilesDaf(path, mode, **_given(name=name, packed=packed)))
 
 
 def h5df(
     root: Union[str, jl.HDF5.File, jl.HDF5.Group],
     mode: str = "r",
     *,
-    name: Optional[str] = None,
-    packed: bool = False,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in an HDF5 disk file. See the Julia
@@ -118,11 +136,15 @@ def h5df(
     ``Daf`` API does **not** support using the Python ``HDF5`` API. This is because the ``Daf`` Python API is just a
     thin wrapper for the Julia ``Daf`` implementation, which doesn't "speak Python".
     """
-    return wrap_daf(jl.DataAxesFormats.H5df(root, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.H5df(root, mode, **_given(name=name, packed=packed)))
 
 
 def zarr_daf(
-    path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False
+    path: str,
+    mode: str = "r",
+    *,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in a Zarr directory tree, Zarr ZIP archive, or remote HTTP(S) Zarr group. The ``path``
@@ -131,24 +153,35 @@ def zarr_daf(
     HTTP; read-only). See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zarr_format.html>`__ for details.
     """
-    return wrap_daf(jl.DataAxesFormats.ZarrDaf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.ZarrDaf(path, mode, **_given(name=name, packed=packed)))
 
 
-def zip_daf(path: str, mode: str = "r", *, name: Optional[str] = None, packed: bool = False) -> DafReadOnly | DafWriter:
+def zip_daf(
+    path: str,
+    mode: str = "r",
+    *,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
+) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in a single ZIP archive of the :py:func:`files_daf` on-disk layout. The ``path`` is either
     ``something.daf.zip`` (single-daf ZIP) or ``something.dafs.zip#/group`` (sub-daf inside a multi-daf ZIP). See the
     Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/zip_files.html>`__ for details.
     """
-    return wrap_daf(jl.DataAxesFormats.ZipDaf(path, mode, name=name, packed=packed))
+    return wrap_daf(jl.DataAxesFormats.ZipDaf(path, mode, **_given(name=name, packed=packed)))
 
 
-def http_daf(url: str, *, name: Optional[str] = None, packed: bool = False) -> DafReadOnly:
+def http_daf(
+    url: str,
+    *,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    packed: Union[bool, DefaultValue] = DEFAULT,
+) -> DafReadOnly:
     """
     Read-only access to a :py:func:`files_daf` served over ``http://`` or ``https://``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/http_format.html>`__ for details.
     """
-    return DafReadOnly(jl.DataAxesFormats.HttpDaf(url, name=name, packed=packed))
+    return DafReadOnly(jl.DataAxesFormats.HttpDaf(url, **_given(name=name, packed=packed)))
 
 
 def files_to_zarr(*, files_path: str, zarr_path: str) -> None:
@@ -174,25 +207,25 @@ def zarr_to_files(*, zarr_path: str, files_path: str) -> None:
     jl.DataAxesFormats.zarr_to_files(zarr_path=zarr_path, files_path=files_path)
 
 
-def chain_reader(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafReadOnly:
+def chain_reader(dsets: Sequence[DafReader], *, name: Union[str, None, DefaultValue] = DEFAULT) -> DafReadOnly:
     """
     Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_reader>`__ for
     details.
     """
     return DafReadOnly(
-        jl.DataAxesFormats.chain_reader(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), name=name)
+        jl.DataAxesFormats.chain_reader(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), **_given(name=name))
     )
 
 
-def chain_writer(dsets: Sequence[DafReader], *, name: Optional[str] = None) -> DafWriter:
+def chain_writer(dsets: Sequence[DafReader], *, name: Union[str, None, DefaultValue] = DEFAULT) -> DafWriter:
     """
     Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_writer>`__ for
     details.
     """
     return DafWriter(
-        jl.DataAxesFormats.chain_writer(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), name=name)
+        jl.DataAxesFormats.chain_writer(jl.DafPy._to_daf_readers([dset.jl_obj for dset in dsets]), **_given(name=name))
     )
 
 
@@ -203,12 +236,20 @@ class BaseDaf(JlObject):
     for details.
     """
 
-    def __init__(self, dset: DafReader, *, axes: Optional[ViewAxes] = None, data: Optional[ViewData] = None) -> None:
+    def __init__(
+        self,
+        dset: DafReader,
+        *,
+        axes: Union[ViewAxes, None, DefaultValue] = DEFAULT,
+        data: Union[ViewData, None, DefaultValue] = DEFAULT,
+    ) -> None:
         super().__init__(
             jl.DataAxesFormats.BaseDaf(
                 daf=dset.jl_obj,
-                axes=jl.DafPy._pairify_axes(_jl_pairs(axes)),
-                data=jl.DafPy._pairify_data(_jl_pairs(data)),
+                **_given(
+                    axes=axes if isinstance(axes, DefaultValue) else jl.DafPy._pairify_axes(_jl_pairs(axes)),
+                    data=data if isinstance(data, DefaultValue) else jl.DafPy._pairify_data(_jl_pairs(data)),
+                ),
             )
         )
 
@@ -217,8 +258,8 @@ def complete_chain(
     *,
     base_daf: Union[DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]],
     new_daf: DafWriter,
-    name: Optional[str] = None,
-    absolute: bool = False,
+    name: Union[str, None, DefaultValue] = DEFAULT,
+    absolute: Union[bool, DefaultValue] = DEFAULT,
 ) -> DafWriter:
     """
     Chain a freshly created empty ``new_daf`` on top of one or more base repositories, presenting them as a single
@@ -228,7 +269,7 @@ def complete_chain(
     """
     return DafWriter(
         jl.DataAxesFormats.complete_chain_b(
-            base_daf=_jl_base_daf(base_daf), new_daf=new_daf.jl_obj, name=name, absolute=absolute
+            base_daf=_jl_base_daf(base_daf), new_daf=new_daf.jl_obj, **_given(name=name, absolute=absolute)
         )
     )
 
@@ -286,7 +327,7 @@ def set_base_daf_links(
     dset: DafWriter,
     base_daf: Union[None, DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]],
     *,
-    absolute: bool = False,
+    absolute: Union[bool, DefaultValue] = DEFAULT,
 ) -> None:
     """
     Record the immediate bases of a stored repository, replacing any it had, or record that it has none, if
@@ -295,5 +336,5 @@ def set_base_daf_links(
     for details.
     """
     jl.DataAxesFormats.set_base_daf_links_b(
-        dset.jl_obj, None if base_daf is None else _jl_base_daf(base_daf), absolute=absolute
+        dset.jl_obj, None if base_daf is None else _jl_base_daf(base_daf), **_given(absolute=absolute)
     )

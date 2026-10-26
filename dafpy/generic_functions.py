@@ -10,9 +10,10 @@ a hassle.
 
 from sys import stderr
 from sys import stdout
-from typing import Optional
 from typing import TextIO
 
+from .julia_import import DEFAULT
+from .julia_import import DefaultValue
 from .julia_import import JlEnum
 from .julia_import import _given
 from .julia_import import jl
@@ -84,10 +85,10 @@ JL_LOG_LEVEL = {
 def setup_logger(
     io: TextIO = stderr,
     *,
-    level: Optional[LogLevel | int] = None,
-    show_time: Optional[bool] = None,
-    show_module: Optional[bool] = None,
-    show_location: Optional[bool] = None,
+    level: LogLevel | int | DefaultValue = DEFAULT,
+    show_time: bool | DefaultValue = DEFAULT,
+    show_module: bool | DefaultValue = DEFAULT,
+    show_location: bool | DefaultValue = DEFAULT,
 ) -> None:
     """
     Setup a global logger that will print into ``io`` (which currently must be either ``sys.stdout`` or ``sys.stderr``),
@@ -102,8 +103,8 @@ def setup_logger(
     else:
         raise ValueError("not implemented: logging into anything other than stdout and stderr")
 
-    if level is None:
-        jl_level = None
+    if isinstance(level, DefaultValue):
+        jl_level = level
     elif isinstance(level, int):
         jl_level = jl.Logging.LogLevel(level)
     else:

@@ -40,6 +40,11 @@ This is a thin wrapper for the ``DataAxesFormats.jl`` Julia package, with the fo
   for a data frame of a large sparse matrix (e.g., the UMIs matrix of a large data set), as this will consume a *lot* of
   memory.
 
+* Parameters default to ``DEFAULT`` rather than to ``None``, so that ``None`` can be passed to explicitly mean Julia's
+  ``nothing``. This matters because some parameters have a default which isn't ``nothing`` (e.g., the
+  ``dataset_axis`` of ``concatenate`` is ``"dataset"``), so ``dataset_axis = None`` is the only way to ask for no
+  dataset axis at all.
+
 Otherwise, the API works "just the same" :-) The documentation therefore mostly just links to the relevant entry in the
 Julia `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/index.html>`__.
 """

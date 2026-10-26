@@ -124,7 +124,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>  <span class="c1"># type: ignore</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"jl"</span><span class="p">,</span> <span class="s2">"jl_version"</span><span class="p">,</span> <span class="s2">"JlEnum"</span><span class="p">,</span> <span class="s2">"UndefInitializer"</span><span class="p">,</span> <span class="s2">"Undef"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"jl"</span><span class="p">,</span> <span class="s2">"jl_version"</span><span class="p">,</span> <span class="s2">"DefaultValue"</span><span class="p">,</span> <span class="s2">"DEFAULT"</span><span class="p">,</span> <span class="s2">"JlEnum"</span><span class="p">,</span> <span class="s2">"UndefInitializer"</span><span class="p">,</span> <span class="s2">"Undef"</span><span class="p">]</span>
 
 <span class="c1"># The value of ``PYTHON_JULIACALL_EXE`` or ``PYTHON_JULIACALL_PROJECT`` asking for the Julia you already have, rather</span>
 <span class="c1"># than the one ``juliapkg`` would install for itself. Not exported: it has to be in the environment before anything</span>
@@ -254,6 +254,25 @@
 <span class="n">Undef</span> <span class="o">=</span> <span class="n">UndefInitializer</span><span class="p">()</span>  <span class="c1"># pylint: disable=invalid-name</span>
 
 
+<div class="viewcode-block" id="DefaultValue">
+<a class="viewcode-back" href="../../julia_import.html#dafpy.julia_import.DefaultValue">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DefaultValue</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    A Python class for the value of a parameter that was not specified.</span>
+
+<span class="sd">    We can't use ``None`` for this because ``None`` is how one specifies Julia's ``nothing``, and not every parameter</span>
+<span class="sd">    defaults to ``nothing`` (e.g., the ``packed`` of ``complete_daf`` defaults to ``false``).</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"DEFAULT"</span></div>
+
+
+
+<span class="c1">#: A Python value for a parameter that was not specified, so the Julia default should be used instead.</span>
+<span class="n">DEFAULT</span> <span class="o">=</span> <span class="n">DefaultValue</span><span class="p">()</span>
+
+
 <span class="n">JULIA_TYPE_OF_PY_TYPE</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nb">bool</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span>
     <span class="nb">int</span><span class="p">:</span> <span class="n">jl</span><span class="o">.</span><span class="n">Int64</span><span class="p">,</span>
@@ -334,10 +353,47 @@
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
+    <span class="n">value</span> <span class="o">=</span> <span class="n">_typed_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="c1"># Julia cannot type the elements of a ``pandas`` ``Series``, ``Index`` or ``Categorical``, or of a ``numpy`` array of</span>
+<span class="c1"># ``object`` or ``bytes``. Each would arrive as a ``PyIterable{Any}`` or a ``PyArray{Py}``, which a typed parameter</span>
+<span class="c1"># rejects. So these are converted to a ``numpy`` array of strings or of numbers. An ``object`` array is converted only if</span>
+<span class="c1"># all its elements are strings, or all are numbers. Anything else (e.g., a ``None`` or a ``NaN`` among strings) is an</span>
+<span class="c1"># error, rather than silently becoming the string ``"None"`` or ``"nan"``.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_typed_array</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">)):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="nb">object</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="n">first_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">entries</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">first_type</span><span class="p">:</span>  <span class="c1"># pylint: disable=unidiomatic-typecheck</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"can't pass to Julia an array whose entry 0 is a </span><span class="si">{</span><span class="n">first_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"and whose entry </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> is a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"can't pass to Julia an array of </span><span class="si">{</span><span class="n">first_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
 <span class="c1"># A parameter which is either one scalar or a collection of them. A scalar crosses as itself, and so does a string,</span>
@@ -362,7 +418,7 @@
 <span class="c1"># would have held, and a set of the wrong element type is rejected exactly as a ``PySet`` is. An empty set is not an</span>
 <span class="c1"># odd case here: it is how one says "convert none of the properties".</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_to_julia_strings_set</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">DEFAULT</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">return</span> <span class="n">jl</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">jl</span><span class="o">.</span><span class="n">Vector</span><span class="p">[</span><span class="n">jl</span><span class="o">.</span><span class="n">String</span><span class="p">](</span><span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
@@ -541,17 +597,17 @@
 <span class="s2">    """</span><span class="p">)</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="c1"># The value to pass to Julia for a keyword argument. The wrappers convert their arguments themselves, so this passes</span>
+    <span class="c1"># it as it is.</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_given</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Collect the keyword arguments that were actually specified (for internal use).</span>
-
-<span class="sd">    A ``None`` value means "use whatever the Julia default is", so it is dropped instead of being passed on. This is</span>
-<span class="sd">    also correct for the many Julia parameters that are ``Maybe`` and default to ``nothing``, where passing ``nothing``</span>
-<span class="sd">    and omitting the parameter are the same thing. It is **not** correct for a ``Maybe`` parameter whose default isn't</span>
-<span class="sd">    ``nothing`` (``dataset_axis`` of ``concatenate`` is the only one), since there ``None`` is a meaningful value; such</span>
-<span class="sd">    a parameter has to restate its default in Python and be passed unconditionally.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">_to_julia</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">DEFAULT</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_jl_pairs</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
