@@ -2,7 +2,8 @@
 Import the Julia environment.
 
 This imports the ``juliacall`` module to obtain a Julia run-time (as ``jl``), and uses it to import the
-``DataAxesFormats.jl`` Julia package.
+``DataAxesFormats.jl`` Julia package. Our own Julia code is the Julia package ``DafPy``, which ships inside this
+package, in ``julia/DafPy``. It also caches the code our calls compile, so a session does not compile it again.
 
 How Julia is run, and which Julia is run, is left to ``juliacall``, and is configured by its own environment variables,
 which must be set before importing anything that reaches Julia. This adds one thing to them: ``@default``.
@@ -34,9 +35,11 @@ This code is based on the code from the ``pysr`` Python package, adapted to our 
 in all our Python packages that invoke Julia.
 """
 
+import builtins
 import os
 import shutil
 import sys
+import tomllib
 import warnings
 from enum import Enum
 from typing import Any
@@ -126,28 +129,28 @@ if "juliacall" not in sys.modules and "PYTHON_JULIACALL_THREADS" not in os.envir
 
 from juliacall import Main  # type: ignore
 
-#: The interface to the Julia run-time.
-jl = Main
+# Our Julia code is the Julia package ``DafPy``, in ``julia/DafPy`` beside this file. It also caches the code our calls
+# compile. Its ``Project.toml`` lists the Julia packages we use.
+_GLUE_PROJECT_PATH = os.path.join(os.path.dirname(__file__), "julia", "DafPy", "Project.toml")
 
+# While ``DafPy`` itself is precompiled, Julia may not import anything into ``Main``, so ``DafPy`` hands itself over
+# instead, and it binds the same names.
+_DAFPY_GLUE: Any = getattr(builtins, "_dafpy_glue", None)
+
+#: The interface to the Julia run-time. This is Julia's ``Main``, except while ``DafPy`` itself is precompiled.
+jl = Main if _DAFPY_GLUE is None else _DAFPY_GLUE
+
+if _DAFPY_GLUE is None:
+    with open(_GLUE_PROJECT_PATH, "rb") as glue_project_file:
+        _GLUE_PACKAGES = tomllib.load(glue_project_file)["deps"]
+    # Everything is imported rather than ``using``, so no package's exports leak into Julia's ``Main``. This keeps
+    # ``Main`` clear for other Python packages that wrap Julia packages and are used in the same session.
+    for package in ["DafPy"] + sorted(_GLUE_PACKAGES):
+        if package != "PrecompileTools":
+            jl.seval("import " + package)
 
 #: The version of Julia being used.
 jl_version = (jl.VERSION.major, jl.VERSION.minor, jl.VERSION.patch)
-
-# Everything is imported rather than ``using``, so no package's exports leak into Julia's ``Main``. This keeps
-# ``Main`` clear for other Python packages that wrap Julia packages and are used in the same session.
-for package in (
-    "DataAxesFormats",
-    "DataFrames",
-    "HDF5",
-    "LinearAlgebra",
-    "Logging",
-    "Muon",
-    "NamedArrays",
-    "PythonCall",
-    "SparseArrays",
-    "TanayLabUtilities",
-):
-    jl.seval("import " + package)
 
 
 class JlEnum(Enum):
@@ -404,114 +407,6 @@ def _to_julia_frame(frame: pd.DataFrame) -> Any:
         else:
             columns.append(_to_julia_array(column))
     return jl.DafPy._to_frame([str(name) for name in frame.columns], columns)
-
-
-jl.seval("""
-    module DafPy
-
-    using DataAxesFormats
-    using PythonCall
-    using TanayLabUtilities
-
-    import DataFrames
-    import NamedArrays
-
-    function _inefficient_action_handler(new_handler::AbnormalHandler)::AbnormalHandler
-        old_handler = TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER
-        TanayLabUtilities.MatrixLayouts.GLOBAL_INEFFICIENT_ACTION_HANDLER = new_handler
-        return old_handler
-    end
-
-    function _to_daf_readers(readers::AbstractVector)::Vector{DafReader}
-        return Vector{DafReader}(readers)
-    end
-
-    function _to_daf_writers(writers::AbstractVector)::Vector{DafWriter}
-        return Vector{DafWriter}(writers)
-    end
-
-    function _to_base_dafs(bases::AbstractVector)::Vector{Union{BaseDaf, DafReader}}
-        return Vector{Union{BaseDaf, DafReader}}(bases)
-    end
-
-    function _to_frame(names::AbstractVector, columns::AbstractVector)::DataFrames.DataFrame
-        return DataFrames.DataFrame([String(name) => column for (name, column) in zip(names, columns)]; copycols = false)
-    end
-
-    const _DafReadersVector = Vector{DafReader}
-
-    function _optional_julia_vector_names(vector::NamedArrays.NamedVector)::AbstractVector
-        return names(vector, 1)
-    end
-    function _optional_julia_vector_names(array::AbstractVector)::Nothing
-        return nothing
-    end
-
-    function _strip_wrappers(array::Union{ReadOnlyArray, NamedArrays.NamedArray})::AbstractArray
-        array = parent(array)
-        return _strip_wrappers(array)
-    end
-    function _strip_wrappers(array::AbstractArray)::AbstractArray
-        return array
-    end
-
-    function _pairify_columns(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.FrameColumns}
-        if items == nothing
-            return nothing
-        else
-            return [name => query for (name, query) in items]
-        end
-    end
-
-    function _pairify_axes(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewAxes}
-        if items == nothing
-            return nothing
-        else
-            return [key => query for (key, query) in items]
-        end
-    end
-
-    function _pairify_data(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.ViewData}
-        if items == nothing
-            return nothing
-        else
-            return [key => query for (key, query) in items]
-        end
-    end
-
-    function _pairify_merge(items::Maybe{AbstractVector})::Maybe{DataAxesFormats.MergeData}
-        if items == nothing
-            return nothing
-        else
-            return [key => query for (key, query) in items]
-        end
-    end
-
-    function _pairify_permutations(items::AbstractVector)::AbstractDict{String, Vector{Int}}
-        return Dict{String, Vector{Int}}(name => Vector{Int}(permutation) for (name, permutation) in items)
-    end
-
-    function _sets_vector(items::Maybe{AbstractVector})::Maybe{Vector{Set{String}}}
-        if items == nothing
-            return nothing
-        else
-            return [Set{String}(item) for item in items]
-        end
-    end
-
-    function pyconvert_rule_jl_object(::Type{T}, x::Py) where {T}
-        return PythonCall.pyconvert_return(pyconvert(T, x.jl_obj))
-    end
-
-    function pyconvert_rule_undef(::Type{T}, x::Py) where {T}
-        return PythonCall.pyconvert_return(undef)
-    end
-
-    PythonCall.pyconvert_add_rule("dafpy.julia_import:JlObject", Any, pyconvert_rule_jl_object)
-    PythonCall.pyconvert_add_rule("dafpy.julia_import:UndefInitializer", UndefInitializer, pyconvert_rule_undef)
-
-    end  # module DafPy
-    """)
 
 
 def _to_julia(value: Any) -> Any:

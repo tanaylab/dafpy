@@ -5,12 +5,17 @@ Test the Julia environment set up by ``Daf``.
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
+import json
+import os
+import tomllib
 from typing import Any
 
 import numpy as np
 import pandas as pd
 import pytest
 
+import dafpy
+from dafpy.julia_import import _GLUE_PROJECT_PATH
 from dafpy.julia_import import _from_julia_frame
 from dafpy.julia_import import _to_julia_array
 from dafpy.julia_import import _to_julia_frame
@@ -61,12 +66,28 @@ def test_wrapped_packages_do_not_leak() -> None:
         assert not _is_defined_in_main(name), f"the exported {name} leaked into Julia's Main"
 
 
-def test_the_enums_namespace_holds_the_same_types() -> None:
-    import dafpy as dp  # pylint: disable=import-outside-toplevel
+def _glue_project() -> dict[str, Any]:
+    with open(_GLUE_PROJECT_PATH, "rb") as file:
+        return tomllib.load(file)
 
-    assert sorted(dp.enums.__all__) == ["AbnormalHandler", "CacheGroup", "LogLevel", "MergeAction"]
-    for name in dp.enums.__all__:
-        assert getattr(dp.enums, name) is getattr(dp, name)
+
+def test_glue_version_is_the_package_version() -> None:
+    assert _glue_project()["version"] == dafpy.__version__
+
+
+def test_url_packages_are_glue_dependencies() -> None:
+    with open(os.path.join(os.path.dirname(dafpy.__file__), "juliapkg.json"), encoding="utf8") as file:
+        packages = json.load(file)["packages"]
+    glue_packages = _glue_project()["deps"]
+    for name, package in packages.items():
+        if "url" in package and name != "DafPy":
+            assert name in glue_packages, f"the URL package {name} of juliapkg.json is not a dependency of DafPy"
+
+
+def test_the_enums_namespace_holds_the_same_types() -> None:
+    assert sorted(dafpy.enums.__all__) == ["AbnormalHandler", "CacheGroup", "LogLevel", "MergeAction"]
+    for name in dafpy.enums.__all__:
+        assert getattr(dafpy.enums, name) is getattr(dafpy, name)
 
 
 def test_frames_round_trip() -> None:

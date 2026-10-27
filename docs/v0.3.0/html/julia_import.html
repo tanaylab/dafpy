@@ -346,7 +346,16 @@
 <code class="docutils literal notranslate">
 <span class="pre">DataAxesFormats.jl
 </span>
-</code> Julia package.
+</code> Julia package. Our own Julia code is the Julia package 
+<code class="docutils literal notranslate">
+<span class="pre">DafPy
+</span>
+</code>, which ships inside this
+package, in 
+<code class="docutils literal notranslate">
+<span class="pre">julia/DafPy
+</span>
+</code>. It also caches the code our calls compile, so a session does not compile it again.
 </p>
 
 <p>How Julia is run, and which Julia is run, is left to 
@@ -515,7 +524,15 @@ in all our Python packages that invoke Julia.
 </dt>
 
 <dd>
-<p>The interface to the Julia run-time.
+<p>The interface to the Julia run-time. This is Julia’s 
+<code class="docutils literal notranslate">
+<span class="pre">Main
+</span>
+</code>, except while 
+<code class="docutils literal notranslate">
+<span class="pre">DafPy
+</span>
+</code> itself is precompiled.
 </p>
 
 </dd>

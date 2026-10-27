@@ -22,6 +22,7 @@ htmlcov
 *junk*
 .make.*
 *.manifest
+Manifest.toml
 metacells/should_check_avx2.py
 metacells/*.so
 .mypy_cache/
