@@ -43,4 +43,10 @@ def test_compile_tracing(tmp_path) -> None:
     assert set_vector_entries[0]["call_site"].startswith("<string>:")
     assert set_vector_entries[0]["compiled"]
 
-    assert "dafpy.data.DafWriter.set_vector" in report(str(tmp_path))
+    text = report(str(tmp_path))
+    assert "dafpy.data.DafWriter.set_vector" in text
+    julia_part = text.split("for their Workloads", 1)[1]
+    assert "DataAxesFormats:" in julia_part
+    assert "DataAxesFormats.Writers.set_vector!" in julia_part
+    assert "Array{Int8, 1}" in julia_part  # NOT F-STRING
+    assert "PyArray" not in julia_part

@@ -7,7 +7,9 @@ per outermost call of a public function which compiled something. Each line says
 kind of arguments, from where, and what Julia compiled for it. Calls which compiled nothing are not written.
 
 To summarize the records of a directory, run ``python -m dafpy.compile_tracing <directory>``. What it lists is what the
-workloads which our Julia packages run when they are precompiled do not cover yet.
+precompiled workloads do not cover yet. It lists it twice. First per call of our Python packages, for their
+``workloads.py``, which serves Python users. Then per method of our Julia packages, with Python types as Julia ones, for
+their ``Workloads`` module, which serves Julia users.
 
 ``dafpy`` and ``somegraphspy`` each hold an identical copy of this module, since neither depends on the other.
 """
@@ -42,6 +44,17 @@ WRAPPED_DUNDERS = ("__getitem__", "__setitem__", "__contains__", "__call__")
 
 # A call which compiled for less than this, and wrote no trace lines, is taken to have compiled nothing.
 MIN_COMPILE_SECONDS = 0.001
+
+# Our Julia packages. A compiled method belongs to the first of these its line names, for that package's workload.
+OUR_JULIA_PACKAGES = ("MetacellsGraphs", "Metacells", "SomeGraphs", "DataAxesFormats", "TanayLabUtilities")
+
+# PythonCall's wrappers of Python values, and the Julia types a Julia user would pass instead.
+JULIA_TYPE_OF_PYTHON_TYPE = (
+    (re.compile(r"PythonCall\.PyArray\{([^{},]+), ([0-9]+), [^{}]*\}"), r"Array{\1, \2}"),  # NOT F-STRING
+    (re.compile(r"PythonCall\.PyList\{([^{}]+)\}"), r"Vector{\1}"),  # NOT F-STRING
+    (re.compile(r"PythonCall\.PyDict\{([^{},]+), ([^{}]+)\}"), r"Dict{\1, \2}"),  # NOT F-STRING
+    (re.compile(r"PythonCall\.Py\b"), "Py"),
+)
 
 # A line of Julia's compile trace, when it is written with its timing.
 TRACE_LINE = re.compile(r"^#=\s*([0-9.]+) ms =# (precompile\(.*\))( # recompile)?$")
@@ -305,10 +318,57 @@ def report(directory: str) -> str:
                     entry = json.loads(line)
                     calls[entry["callable"]].append(entry)
 
-    lines: List[str] = []
+    lines = ["What compiled in each call of our Python packages (for their workloads.py):"]
     for callable_name, entries in sorted(calls.items(), key=lambda item: -total_compile_seconds(item[1])):
         lines += callable_report(callable_name, entries)
+    lines += ["", "What compiled of each of our Julia packages, with Python types as Julia ones (for their Workloads):"]
+    lines += julia_report(calls)
     return "\n".join(lines)
+
+
+def julia_report(calls: Dict[str, List[Dict[str, Any]]]) -> List[str]:
+    """
+    The lines of the report about the methods of each of our Julia packages, for Julia users (for internal use).
+    """
+    milliseconds_of_statement_of_package: Dict[str, Dict[str, float]] = defaultdict(lambda: defaultdict(float))
+    for entries in calls.values():
+        for entry in entries:
+            for compiled in entry["compiled"]:
+                statement = julia_statement(compiled["statement"])
+                package = None if statement is None else julia_package(statement)
+                if statement is not None and package is not None:
+                    milliseconds_of_statement_of_package[package][statement] += compiled["milliseconds"]
+
+    lines = []
+    for package in OUR_JULIA_PACKAGES:
+        milliseconds_of_statement = milliseconds_of_statement_of_package.get(package)
+        if milliseconds_of_statement:
+            lines.append(f"{package}:")
+            for statement, milliseconds in sorted(milliseconds_of_statement.items(), key=lambda item: -item[1]):
+                lines.append(f"    {milliseconds:8.1f} ms {statement}")
+    return lines
+
+
+def julia_statement(statement: str) -> Optional[str]:
+    """
+    A compiled method as a Julia user would need it, with Python types as Julia ones, or ``None`` if only Python needs
+    it (for internal use).
+    """
+    if statement.startswith("precompile(Tuple{typeof(PythonCall."):  # NOT F-STRING
+        return None
+    for pattern, replacement in JULIA_TYPE_OF_PYTHON_TYPE:
+        statement = pattern.sub(replacement, statement)
+    return statement
+
+
+def julia_package(statement: str) -> Optional[str]:
+    """
+    The first of our Julia packages a compiled method names, if any (for internal use).
+    """
+    for package in OUR_JULIA_PACKAGES:
+        if f"{package}." in statement:
+            return package
+    return None
 
 
 def total_compile_seconds(entries: List[Dict[str, Any]]) -> float:
@@ -328,11 +388,17 @@ def callable_report(callable_name: str, entries: List[Dict[str, Any]]) -> List[s
     for site in sorted({entry["call_site"] for entry in entries}):
         lines.append(f"    called from: {site}")
     milliseconds_of_statement: Dict[str, float] = defaultdict(float)
+    recompiled_statements = set()
     for entry in entries:
         for compiled in entry["compiled"]:
             milliseconds_of_statement[compiled["statement"]] += compiled["milliseconds"]
+            if compiled["is_recompile"]:
+                recompiled_statements.add(compiled["statement"])
     for statement, milliseconds in sorted(milliseconds_of_statement.items(), key=lambda item: -item[1]):
-        lines.append(f"    {milliseconds:8.1f} ms {statement}")
+        # A recompile was cached, but a package this session loaded made it invalid. So it needs a workload of a package
+        # built with that package loaded too, rather than one more call where it was cached.
+        recompile = " # recompile" if statement in recompiled_statements else ""
+        lines.append(f"    {milliseconds:8.1f} ms {statement}{recompile}")
     return lines
 
 
