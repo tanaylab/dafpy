@@ -195,6 +195,13 @@ class DefaultValue:
     def __repr__(self) -> str:
         return "DEFAULT"
 
+    # A copy is the same object, so a copied ``DEFAULT`` is still ``DEFAULT``.
+    def __copy__(self) -> "DefaultValue":
+        return self
+
+    def __deepcopy__(self, memo: Any) -> "DefaultValue":
+        return self
+
 
 #: A Python value for a parameter that was not specified, so the Julia default should be used instead.
 DEFAULT = DefaultValue()

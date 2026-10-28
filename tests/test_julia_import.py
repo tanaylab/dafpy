@@ -5,6 +5,7 @@ Test the Julia environment set up by ``Daf``.
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-function-docstring
 # flake8: noqa: F403,F405
 
+import copy
 import json
 import os
 import tomllib
@@ -17,6 +18,7 @@ import pytest
 
 import dafpy
 from dafpy.julia_import import _GLUE_PROJECT_PATH
+from dafpy.julia_import import DEFAULT
 from dafpy.julia_import import _from_julia_frame
 from dafpy.julia_import import _to_julia_array
 from dafpy.julia_import import _to_julia_frame
@@ -164,3 +166,8 @@ def test_to_julia_array_rejects_missing_strings() -> None:
 
     with pytest.raises(TypeError, match="an array of NoneType"):
         _to_julia_array(np.array([None, None], dtype=object))
+
+
+def test_copied_default_is_default() -> None:
+    assert copy.copy(DEFAULT) is DEFAULT
+    assert copy.deepcopy({"packed": DEFAULT})["packed"] is DEFAULT
