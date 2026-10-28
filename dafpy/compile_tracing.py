@@ -6,7 +6,8 @@ writes two files there. ``<pid>.trace.jl`` is Julia's own compile trace. ``<pid>
 per outermost call of a public function which compiled something. Each line says which function was called, with what
 kind of arguments, from where, and what Julia compiled for it. Calls which compiled nothing are not written.
 
-To summarize the records of a directory, run ``python -m dafpy.compile_tracing <directory>``. What it lists is what the
+To summarize the records of a directory, run ``python -m dafpy.compile_tracing <directory>``, or
+``python -m somegraphspy.compile_tracing <directory>`` where only ``somegraphspy`` is installed. What it lists is what the
 precompiled workloads do not cover yet. It lists it twice. First per call of our Python packages, for their
 ``workloads.py``, which serves Python users. Then per method of our Julia packages, with Python types as Julia ones, for
 their ``Workloads`` module, which serves Julia users.
@@ -39,8 +40,8 @@ SWITCH = "METACELLS_TRACE_COMPILE"
 OUR_PACKAGES = ("dafpy", "somegraphspy", "metacellspy", "metacellsgraphspy", "metacellswidgets")
 
 # The methods of a class which are wrapped beside its public ones, since some of our API goes through them (e.g.,
-# ``daf["@ cell : age"]``).
-WRAPPED_DUNDERS = ("__getitem__", "__setitem__", "__contains__", "__call__")
+# ``daf["@ cell : age"]``, or constructing a wrapper of a Julia value).
+WRAPPED_DUNDERS = ("__init__", "__getitem__", "__setitem__", "__contains__", "__call__")
 
 # A call which compiled for less than this, and wrote no trace lines, is taken to have compiled nothing.
 MIN_COMPILE_SECONDS = 0.001
