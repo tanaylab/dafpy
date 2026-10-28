@@ -708,7 +708,7 @@ class DafReadOnly(DafReader):
     """
 
     def read_only(self, *, name: str | None | DefaultValue = DEFAULT) -> "DafReadOnly":
-        if name is None or name is DEFAULT:
+        if name is None or isinstance(name, DefaultValue):
             return self
         return super().read_only(name=name)
 

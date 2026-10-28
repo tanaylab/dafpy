@@ -42,6 +42,7 @@ import sys
 import tomllib
 import warnings
 from enum import Enum
+from types import EllipsisType
 from typing import Any
 from typing import Collection
 from typing import Mapping
@@ -184,27 +185,13 @@ class UndefInitializer:
 Undef = UndefInitializer()  # pylint: disable=invalid-name
 
 
-class DefaultValue:
-    """
-    A Python class for the value of a parameter that was not specified.
+#: The type of :py:obj:`DEFAULT`, the value of a parameter that was not specified.
+DefaultValue = EllipsisType
 
-    We can't use ``None`` for this because ``None`` is how one specifies Julia's ``nothing``, and not every parameter
-    defaults to ``nothing`` (e.g., the ``packed`` of ``complete_daf`` defaults to ``false``).
-    """
-
-    def __repr__(self) -> str:
-        return "DEFAULT"
-
-    # A copy is the same object, so a copied ``DEFAULT`` is still ``DEFAULT``.
-    def __copy__(self) -> "DefaultValue":
-        return self
-
-    def __deepcopy__(self, memo: Any) -> "DefaultValue":
-        return self
-
-
-#: A Python value for a parameter that was not specified, so the Julia default should be used instead.
-DEFAULT = DefaultValue()
+#: A Python value for a parameter that was not specified, so the Julia default should be used instead. We can't use
+#: ``None`` for this because ``None`` is how one specifies Julia's ``nothing``, and not every parameter defaults to
+#: ``nothing``. It is Python's ``...`` (``Ellipsis``), so it is the same object in every package.
+DEFAULT = ...
 
 
 JULIA_TYPE_OF_PY_TYPE = {
@@ -352,7 +339,7 @@ def _to_julia_scalar_or_collection(value: Any) -> Any:
 # would have held, and a set of the wrong element type is rejected exactly as a ``PySet`` is. An empty set is not an
 # odd case here: it is how one says "convert none of the properties".
 def _to_julia_strings_set(value: Any) -> Any:
-    if value is None or value is DEFAULT:
+    if value is None or isinstance(value, DefaultValue):
         return value
 
     return jl.Set(jl.Vector[jl.String](list(value)))
@@ -433,7 +420,7 @@ def _given(**kwargs: Any) -> Mapping[str, Any]:
     """
     Collect the keyword arguments that were actually specified (for internal use).
     """
-    return {name: _to_julia(value) for name, value in kwargs.items() if value is not DEFAULT}
+    return {name: _to_julia(value) for name, value in kwargs.items() if not isinstance(value, DefaultValue)}
 
 
 def _jl_pairs(mapping: Mapping | None) -> Sequence[Tuple[str, Any]] | None:

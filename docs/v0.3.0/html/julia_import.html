@@ -579,18 +579,10 @@ in all our Python packages that invoke Julia.
 </dl>
 
 
-<dl class="py class">
+<dl class="py attribute">
 
 <dt class="sig sig-object py" id="dafpy.julia_import.DefaultValue">
 
-<span class="property">
-<span class="k">
-<span class="pre">class
-</span>
-</span>
-<span class="w"> 
-</span>
-</span>
 <span class="sig-prename descclassname">
 <span class="pre">dafpy.julia_import.
 </span>
@@ -599,50 +591,18 @@ in all our Python packages that invoke Julia.
 <span class="pre">DefaultValue
 </span>
 </span>
-<a class="reference internal" href="_modules/dafpy/julia_import.html#DefaultValue">
-<span class="viewcode-link">
-<span class="pre">[source]
-</span>
-</span>
-</a>
 <a class="headerlink" href="#dafpy.julia_import.DefaultValue" title="Link to this definition">
 </a>
 </dt>
 
 <dd>
-<p>A Python class for the value of a parameter that was not specified.
-</p>
-
-<p>We can’t use 
-<code class="docutils literal notranslate">
-<span class="pre">None
+<p>The type of 
+<a class="reference internal" href="#dafpy.julia_import.DEFAULT" title="dafpy.julia_import.DEFAULT">
+<code class="xref py py-obj docutils literal notranslate">
+<span class="pre">DEFAULT
 </span>
-</code> for this because 
-<code class="docutils literal notranslate">
-<span class="pre">None
-</span>
-</code> is how one specifies Julia’s 
-<code class="docutils literal notranslate">
-<span class="pre">nothing
-</span>
-</code>, and not every parameter
-defaults to 
-<code class="docutils literal notranslate">
-<span class="pre">nothing
-</span>
-</code> (e.g., the 
-<code class="docutils literal notranslate">
-<span class="pre">packed
-</span>
-</code> of 
-<code class="docutils literal notranslate">
-<span class="pre">complete_daf
-</span>
-</code> defaults to 
-<code class="docutils literal notranslate">
-<span class="pre">false
-</span>
-</code>).
+</code>
+</a>, the value of a parameter that was not specified.
 </p>
 
 </dd>
@@ -670,7 +630,7 @@ defaults to
 </span>
 <span class="w"> 
 </span>
-<span class="pre">DEFAULT
+<span class="pre">Ellipsis
 </span>
 </span>
 <a class="headerlink" href="#dafpy.julia_import.DEFAULT" title="Link to this definition">
@@ -678,7 +638,33 @@ defaults to
 </dt>
 
 <dd>
-<p>A Python value for a parameter that was not specified, so the Julia default should be used instead.
+<p>A Python value for a parameter that was not specified, so the Julia default should be used instead. We can’t use
+
+<code class="docutils literal notranslate">
+<span class="pre">None
+</span>
+</code> for this because 
+<code class="docutils literal notranslate">
+<span class="pre">None
+</span>
+</code> is how one specifies Julia’s 
+<code class="docutils literal notranslate">
+<span class="pre">nothing
+</span>
+</code>, and not every parameter defaults to
+
+<code class="docutils literal notranslate">
+<span class="pre">nothing
+</span>
+</code>. It is Python’s 
+<code class="docutils literal notranslate">
+<span class="pre">...
+</span>
+</code> (
+<code class="docutils literal notranslate">
+<span class="pre">Ellipsis
+</span>
+</code>), so it is the same object in every package.
 </p>
 
 </dd>
