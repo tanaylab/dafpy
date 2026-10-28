@@ -201,7 +201,14 @@
         <span class="s2">"signals and the process will die with a segfault."</span>
     <span class="p">)</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">juliacall</span><span class="w"> </span><span class="kn">import</span> <span class="n">Main</span>  <span class="c1"># type: ignore</span>
+<span class="c1"># If ``METACELLS_TRACE_COMPILE`` is set, Julia is started writing its compile trace (see ``compile_tracing``). The module</span>
+<span class="c1"># is imported only then, so ``python -m dafpy.compile_tracing`` does not find it imported already.</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"METACELLS_TRACE_COMPILE"</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.compile_tracing</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_julia</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
+    <span class="n">configure_julia</span><span class="p">()</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">juliacall</span><span class="w"> </span><span class="kn">import</span> <span class="n">Main</span>  <span class="c1"># type: ignore # isort: skip</span>
 
 <span class="c1"># Our Julia code is the Julia package ``DafPy``, in ``julia/DafPy`` beside this file. It also caches the code our calls</span>
 <span class="c1"># compile. Its ``Project.toml`` lists the Julia packages we use.</span>

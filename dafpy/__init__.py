@@ -55,6 +55,8 @@ __version__ = "0.3.0"
 
 # pylint: disable=wildcard-import,unused-wildcard-import
 
+import os as _os  # isort: skip
+
 from .julia_import import *  # isort: skip
 from .generic_functions import *  # isort: skip
 from .storage_types import *  # isort: skip
@@ -73,3 +75,11 @@ from .reorder import *  # isort: skip
 from .example_data import *  # isort: skip
 from . import enums  # isort: skip
 from .enums import *  # isort: skip
+
+# If ``METACELLS_TRACE_COMPILE`` is set, each public function records what Julia compiles while it runs (see
+# ``compile_tracing``). The module is imported only then, so ``python -m dafpy.compile_tracing`` does not find it
+# imported already.
+if _os.environ.get("METACELLS_TRACE_COMPILE"):
+    from .compile_tracing import wrap_package as _wrap_package  # isort: skip
+
+    _wrap_package(__name__)

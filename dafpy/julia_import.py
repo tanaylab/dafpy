@@ -127,7 +127,14 @@ if "juliacall" not in sys.modules and "PYTHON_JULIACALL_THREADS" not in os.envir
         "signals and the process will die with a segfault."
     )
 
-from juliacall import Main  # type: ignore
+# If ``METACELLS_TRACE_COMPILE`` is set, Julia is started writing its compile trace (see ``compile_tracing``). The module
+# is imported only then, so ``python -m dafpy.compile_tracing`` does not find it imported already.
+if os.environ.get("METACELLS_TRACE_COMPILE"):
+    from .compile_tracing import configure_julia  # pylint: disable=import-outside-toplevel
+
+    configure_julia()
+
+from juliacall import Main  # type: ignore # isort: skip
 
 # Our Julia code is the Julia package ``DafPy``, in ``julia/DafPy`` beside this file. It also caches the code our calls
 # compile. Its ``Project.toml`` lists the Julia packages we use.
