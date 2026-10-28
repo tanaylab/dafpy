@@ -6,7 +6,6 @@ Reorder the entries of ``Daf`` axes. See the Julia
 from typing import Any
 from typing import Mapping
 from typing import Sequence
-from typing import Union
 
 import numpy as np
 
@@ -17,13 +16,13 @@ from .julia_import import jl
 __all__ = ["reorder_axes", "reset_reorder_axes"]
 
 
-def _to_julia_writers(daf: Union[DafWriter, Sequence[DafWriter]]) -> Any:
+def _to_julia_writers(daf: DafWriter | Sequence[DafWriter]) -> Any:
     if isinstance(daf, DafWriter):
         daf = [daf]
     return jl.DafPy._to_daf_writers([writer.jl_obj for writer in daf])
 
 
-def reorder_axes(daf: Union[DafWriter, Sequence[DafWriter]], axes_permutations: Mapping[str, Sequence[int]]) -> None:
+def reorder_axes(daf: DafWriter | Sequence[DafWriter], axes_permutations: Mapping[str, Sequence[int]]) -> None:
     """
     Reorder the entries of one or more axes, in one or more leaf ``Daf`` repositories. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/reorder.html#DataAxesFormats.Reorder.reorder_axes!>`__
@@ -41,7 +40,7 @@ def reorder_axes(daf: Union[DafWriter, Sequence[DafWriter]], axes_permutations: 
     )
 
 
-def reset_reorder_axes(daf: Union[DafWriter, Sequence[DafWriter]]) -> bool:
+def reset_reorder_axes(daf: DafWriter | Sequence[DafWriter]) -> bool:
     """
     Roll back an interrupted :py:obj:`reorder_axes` of one or more leaf ``Daf`` repositories, and return whether any of
     them had one to roll back. See the Julia

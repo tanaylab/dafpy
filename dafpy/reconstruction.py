@@ -9,9 +9,7 @@ __all__ = ["connect_axes", "reconstruct_axis", "unify_empty_vector_values"]
 from typing import AbstractSet
 from typing import Collection
 from typing import Mapping
-from typing import Optional
 from typing import Type
-from typing import Union
 
 from .data import DafWriter
 from .julia_import import DEFAULT
@@ -29,11 +27,11 @@ def reconstruct_axis(
     *,
     existing_axis: str,
     implicit_axis: str,
-    rename_axis: Union[str, None, DefaultValue] = DEFAULT,
-    implicit_properties: Union[AbstractSet[str], None, DefaultValue] = DEFAULT,
-    skipped_properties: Union[AbstractSet[str], None, DefaultValue] = DEFAULT,
-    properties_defaults: Union[Mapping[str, Optional[StorageScalar]], None, DefaultValue] = DEFAULT,
-) -> Mapping[str, Optional[StorageScalar]]:
+    rename_axis: str | None | DefaultValue = DEFAULT,
+    implicit_properties: AbstractSet[str] | None | DefaultValue = DEFAULT,
+    skipped_properties: AbstractSet[str] | None | DefaultValue = DEFAULT,
+    properties_defaults: Mapping[str, StorageScalar | None] | None | DefaultValue = DEFAULT,
+) -> Mapping[str, StorageScalar | None]:
     """
     Given an ``existing_axis`` in a ``Daf`` data set, which has a property ``implicit_axis``, create a new axis with the
     same name (or, if specified, call it ``rename_axis``). An empty string means there is no value; data spelling that
@@ -59,11 +57,11 @@ def connect_axes(
     *,
     base_axis: str,
     from_axis: str,
-    from_property: Union[str, None, DefaultValue] = DEFAULT,
+    from_property: str | None | DefaultValue = DEFAULT,
     to_axis: str,
-    to_property: Union[str, None, DefaultValue] = DEFAULT,
-    connect_property: Union[str, None, DefaultValue] = DEFAULT,
-    overwrite: Union[bool, DefaultValue] = DEFAULT,
+    to_property: str | None | DefaultValue = DEFAULT,
+    connect_property: str | None | DefaultValue = DEFAULT,
+    overwrite: bool | DefaultValue = DEFAULT,
 ) -> None:
     """
     Given a ``base_axis`` with two vector properties, one holding a reference to ``from_axis`` and one to ``to_axis``,
@@ -91,9 +89,9 @@ def unify_empty_vector_values(
     *,
     axis: str,
     property: str,  # pylint: disable=redefined-builtin
-    empty_values: Union[StorageScalar, Collection[StorageScalar]],
-    dtype: Union[Type, None, DefaultValue] = DEFAULT,
-    empty_value: Union[StorageScalar, None, DefaultValue] = DEFAULT,
+    empty_values: StorageScalar | Collection[StorageScalar],
+    dtype: Type | None | DefaultValue = DEFAULT,
+    empty_value: StorageScalar | None | DefaultValue = DEFAULT,
 ) -> None:
     """
     Replace every one of the ``empty_values`` of a ``property`` of an ``axis`` with a single ``empty_value``, so that

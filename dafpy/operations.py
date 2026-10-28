@@ -7,7 +7,6 @@ A ``Daf`` query can use operations to process the data: ``EltwiseOperation`` tha
 from typing import AbstractSet
 from typing import Callable
 from typing import Type
-from typing import Union
 from typing import overload
 
 import numpy as np
@@ -86,8 +85,8 @@ class QueryOperation(JlObject):
     def __or__(self, other: "QueryOperation") -> "QuerySequence": ...
 
     def __or__(
-        self, other: Union["QueryOperation", PendingNumpyQuery, PendingPandasQuery]
-    ) -> Union["QuerySequence", StorageScalar, np.ndarray, pd.Series, pd.DataFrame, AbstractSet[str]]:
+        self, other: "QueryOperation | PendingNumpyQuery | PendingPandasQuery"
+    ) -> "QuerySequence | StorageScalar | np.ndarray | pd.Series | pd.DataFrame | AbstractSet[str]":
         if isinstance(other, (PendingNumpyQuery, PendingPandasQuery)):
             return other.run(self)
         return QuerySequence(jl.DataAxesFormats.QuerySequence(self, other))
@@ -127,7 +126,7 @@ class Abs(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+    def __init__(self, *, type: Type | None | DefaultValue = DEFAULT) -> None:  # pylint: disable=redefined-builtin
         super().__init__(jl.DataAxesFormats.Abs(**_given(type=_to_julia_type(type))))
 
 
@@ -138,7 +137,7 @@ class Round(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+    def __init__(self, *, type: Type | None | DefaultValue = DEFAULT) -> None:  # pylint: disable=redefined-builtin
         super().__init__(jl.DataAxesFormats.Round(**_given(type=_to_julia_type(type))))
 
 
@@ -150,7 +149,7 @@ class Clamp(EltwiseOperation):
     """
 
     def __init__(  # pylint: disable=redefined-builtin
-        self, *, min: Union[float, DefaultValue] = DEFAULT, max: Union[float, DefaultValue] = DEFAULT
+        self, *, min: float | DefaultValue = DEFAULT, max: float | DefaultValue = DEFAULT
     ) -> None:
         super().__init__(jl.DataAxesFormats.Clamp(**_given(min=min, max=max)))
 
@@ -173,7 +172,7 @@ class Fraction(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+    def __init__(self, *, type: Type | None | DefaultValue = DEFAULT) -> None:  # pylint: disable=redefined-builtin
         super().__init__(jl.DataAxesFormats.Fraction(**_given(type=_to_julia_type(type))))
 
 
@@ -187,9 +186,9 @@ class Log(EltwiseOperation):
     def __init__(
         self,
         *,
-        type: Union[Type, None, DefaultValue] = DEFAULT,  # pylint: disable=redefined-builtin
-        base: Union[float, DefaultValue] = DEFAULT,
-        eps: Union[float, DefaultValue] = DEFAULT,
+        type: Type | None | DefaultValue = DEFAULT,  # pylint: disable=redefined-builtin
+        base: float | DefaultValue = DEFAULT,
+        eps: float | DefaultValue = DEFAULT,
     ) -> None:
         super().__init__(jl.DataAxesFormats.Log(**_given(type=_to_julia_type(type), base=base, eps=eps)))
 
@@ -201,7 +200,7 @@ class Significant(EltwiseOperation):
     for details.
     """
 
-    def __init__(self, *, high: float, low: Union[float, None, DefaultValue] = DEFAULT) -> None:
+    def __init__(self, *, high: float, low: float | None | DefaultValue = DEFAULT) -> None:
         super().__init__(jl.DataAxesFormats.Significant(high=high, **_given(low=low)))
 
 
@@ -212,7 +211,7 @@ class Sum(ReductionOperation):
     for details.
     """
 
-    def __init__(self, *, type: Union[Type, None, DefaultValue] = DEFAULT) -> None:  # pylint: disable=redefined-builtin
+    def __init__(self, *, type: Type | None | DefaultValue = DEFAULT) -> None:  # pylint: disable=redefined-builtin
         super().__init__(jl.DataAxesFormats.Sum(**_given(type=_to_julia_type(type))))
 
 
@@ -247,7 +246,7 @@ class Quantile(ReductionOperation):
     """
 
     def __init__(  # pylint: disable=redefined-builtin
-        self, *, type: Union[Type, None, DefaultValue] = DEFAULT, p: float
+        self, *, type: Type | None | DefaultValue = DEFAULT, p: float
     ) -> None:
         super().__init__(jl.DataAxesFormats.Quantile(p=p, **_given(type=_to_julia_type(type))))
 

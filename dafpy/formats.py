@@ -5,9 +5,7 @@ Concrete formats of ``Daf`` data sets.
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Optional
 from typing import Sequence
-from typing import Union
 
 from .data import DafReader
 from .data import DafReadOnly
@@ -59,8 +57,8 @@ def complete_daf(
     path: str,
     mode: str = "r",
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     Open a complete chain of ``Daf`` repositories by tracing back through the bases recorded in each one (see
@@ -75,8 +73,8 @@ def open_daf(
     path: str,
     mode: str = "r",
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     Open a ``Daf`` data set, dispatching to the appropriate backend based on ``path``. Zarr suffixes (``.daf.zarr``,
@@ -92,10 +90,10 @@ def open_daf(
 
 
 def memory_daf(
-    jl_obj: Optional[jl.DataAxesFormats.MemoryDaf] = None,
+    jl_obj: "jl.DataAxesFormats.MemoryDaf | None" = None,
     *,
-    name: Union[str, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafWriter:
     """
     Simple in-memory storage. See the Julia
@@ -110,8 +108,8 @@ def files_daf(
     path: str,
     mode: str = "r",
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in disk files. See the Julia
@@ -121,11 +119,11 @@ def files_daf(
 
 
 def h5df(
-    root: Union[str, jl.HDF5.File, jl.HDF5.Group],
+    root: "str | jl.HDF5.File | jl.HDF5.Group",
     mode: str = "r",
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in an HDF5 disk file. See the Julia
@@ -143,8 +141,8 @@ def zarr_daf(
     path: str,
     mode: str = "r",
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in a Zarr directory tree, Zarr ZIP archive, or remote HTTP(S) Zarr group. The ``path``
@@ -160,8 +158,8 @@ def zip_daf(
     path: str,
     mode: str = "r",
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly | DafWriter:
     """
     A ``Daf`` storage format in a single ZIP archive of the :py:func:`files_daf` on-disk layout. The ``path`` is either
@@ -174,8 +172,8 @@ def zip_daf(
 def http_daf(
     url: str,
     *,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    packed: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    packed: bool | DefaultValue = DEFAULT,
 ) -> DafReadOnly:
     """
     Read-only access to a :py:func:`files_daf` served over ``http://`` or ``https://``. See the Julia
@@ -207,7 +205,7 @@ def zarr_to_files(*, zarr_path: str, files_path: str) -> None:
     jl.DataAxesFormats.zarr_to_files(zarr_path=zarr_path, files_path=files_path)
 
 
-def chain_reader(dsets: Sequence[DafReader], *, name: Union[str, None, DefaultValue] = DEFAULT) -> DafReadOnly:
+def chain_reader(dsets: Sequence[DafReader], *, name: str | None | DefaultValue = DEFAULT) -> DafReadOnly:
     """
     Create a read-only chain wrapper of ``DafReader``, presenting them as a single ``DafReader``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_reader>`__ for
@@ -218,7 +216,7 @@ def chain_reader(dsets: Sequence[DafReader], *, name: Union[str, None, DefaultVa
     )
 
 
-def chain_writer(dsets: Sequence[DafReader], *, name: Union[str, None, DefaultValue] = DEFAULT) -> DafWriter:
+def chain_writer(dsets: Sequence[DafReader], *, name: str | None | DefaultValue = DEFAULT) -> DafWriter:
     """
     Create a chain wrapper for a chain of ``DafReader`` data, presenting them as a single ``DafWriter``. See the Julia
     `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/chains.html#DataAxesFormats.Chains.chain_writer>`__ for
@@ -240,8 +238,8 @@ class BaseDaf(JlObject):
         self,
         dset: DafReader,
         *,
-        axes: Union[ViewAxes, None, DefaultValue] = DEFAULT,
-        data: Union[ViewData, None, DefaultValue] = DEFAULT,
+        axes: ViewAxes | None | DefaultValue = DEFAULT,
+        data: ViewData | None | DefaultValue = DEFAULT,
     ) -> None:
         super().__init__(
             jl.DataAxesFormats.BaseDaf(
@@ -256,10 +254,10 @@ class BaseDaf(JlObject):
 
 def complete_chain(
     *,
-    base_daf: Union[DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]],
+    base_daf: DafReader | BaseDaf | Sequence[DafReader | BaseDaf],
     new_daf: DafWriter,
-    name: Union[str, None, DefaultValue] = DEFAULT,
-    absolute: Union[bool, DefaultValue] = DEFAULT,
+    name: str | None | DefaultValue = DEFAULT,
+    absolute: bool | DefaultValue = DEFAULT,
 ) -> DafWriter:
     """
     Chain a freshly created empty ``new_daf`` on top of one or more base repositories, presenting them as a single
@@ -274,7 +272,7 @@ def complete_chain(
     )
 
 
-def _jl_base_daf(base_daf: Union[DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]]) -> Any:
+def _jl_base_daf(base_daf: DafReader | BaseDaf | Sequence[DafReader | BaseDaf]) -> Any:
     # Convert the bases of a chain to what the Julia functions take.
     if isinstance(base_daf, (DafReader, BaseDaf)):
         return base_daf.jl_obj
@@ -294,11 +292,11 @@ class RecordedBase:
     def __init__(self, jl_obj: Any) -> None:
         self.jl_obj = jl_obj
         self.path = str(jl_obj.path)
-        self.axes: Optional[Dict[str, Optional[str]]] = _recorded_view_parameters(jl_obj.axes)
-        self.data: Optional[Dict[DataKey, Optional[str]]] = _recorded_view_parameters(jl_obj.data)
+        self.axes: Dict[str, str | None] | None = _recorded_view_parameters(jl_obj.axes)
+        self.data: Dict[DataKey, str | None] | None = _recorded_view_parameters(jl_obj.data)
 
 
-def _recorded_view_parameters(jl_pairs: Any) -> Optional[Dict[Any, Optional[str]]]:
+def _recorded_view_parameters(jl_pairs: Any) -> Dict[Any, str | None] | None:
     # Convert the recorded view parameters of a base. A key is a name, or a tuple of names, and a value is a string or
     # nothing.
     if jl_pairs is None:
@@ -309,7 +307,7 @@ def _recorded_view_parameters(jl_pairs: Any) -> Optional[Dict[Any, Optional[str]
     }
 
 
-def get_base_daf_links(dset: DafReader) -> Optional[List[RecordedBase]]:
+def get_base_daf_links(dset: DafReader) -> List[RecordedBase] | None:
     """
     The immediate bases recorded in a stored repository, which :py:obj:`complete_daf` chains it on top of, or ``None``
     if it has none. The bases are not opened. Only a stored repository has bases: a chain or a view has none of its own.
@@ -325,9 +323,9 @@ def get_base_daf_links(dset: DafReader) -> Optional[List[RecordedBase]]:
 
 def set_base_daf_links(
     dset: DafWriter,
-    base_daf: Union[None, DafReader, BaseDaf, Sequence[Union[DafReader, BaseDaf]]],
+    base_daf: None | DafReader | BaseDaf | Sequence[DafReader | BaseDaf],
     *,
-    absolute: Union[bool, DefaultValue] = DEFAULT,
+    absolute: bool | DefaultValue = DEFAULT,
 ) -> None:
     """
     Record the immediate bases of a stored repository, replacing any it had, or record that it has none, if

@@ -16,7 +16,6 @@ from typing import AbstractSet
 from typing import Any
 from typing import Iterator
 from typing import Mapping
-from typing import Optional
 from typing import Self
 from typing import Sequence
 from typing import Tuple
@@ -141,12 +140,12 @@ class DafReader(JlObject):
         return jl.DataAxesFormats.has_scalar(self.jl_obj, name)
 
     @overload
-    def get_scalar(self, name: str, *, default: None) -> Optional[StorageScalar]: ...
+    def get_scalar(self, name: str, *, default: None) -> StorageScalar | None: ...
 
     @overload
     def get_scalar(self, name: str, *, default: StorageScalar | UndefInitializer = Undef) -> StorageScalar: ...
 
-    def get_scalar(self, name, *, default: None | StorageScalar | UndefInitializer = Undef) -> Optional[StorageScalar]:
+    def get_scalar(self, name, *, default: None | StorageScalar | UndefInitializer = Undef) -> StorageScalar | None:
         """
         Get the value of a scalar property with some ``name`` in the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_scalar>`__
@@ -206,7 +205,7 @@ class DafReader(JlObject):
         return axis_entries
 
     def axis_np_entries(
-        self, axis: str, indices: Optional[Sequence[int]] = None, *, allow_empty: bool = False
+        self, axis: str, indices: Sequence[int] | None = None, *, allow_empty: bool = False
     ) -> np.ndarray:
         """
         Return a ``numpy`` vector of the names of entries of the ``indices`` in the ``axis``. See the Julia
@@ -293,7 +292,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: None,
-    ) -> Optional[np.ndarray]: ...
+    ) -> np.ndarray | None: ...
 
     @overload
     def get_np_vector(
@@ -310,7 +309,7 @@ class DafReader(JlObject):
         name,
         *,
         default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
-    ) -> Optional[np.ndarray]:
+    ) -> np.ndarray | None:
         """
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_vector>`__
@@ -344,7 +343,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: None,
-    ) -> Optional[pd.Series]: ...
+    ) -> pd.Series | None: ...
 
     @overload
     def get_pd_vector(
@@ -361,7 +360,7 @@ class DafReader(JlObject):
         name: str,
         *,
         default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
-    ) -> Optional[pd.Series]:
+    ) -> pd.Series | None:
         """
         Get the vector property with some ``name`` for some ``axis`` in the ``Daf`` data set. See the Julia
         `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/readers.html#DataAxesFormats.Readers.get_vector>`__
@@ -407,7 +406,7 @@ class DafReader(JlObject):
     @overload
     def get_np_matrix(
         self, rows_axis: str, columns_axis: str, name: str, *, default: None, relayout: bool | DefaultValue = DEFAULT
-    ) -> Optional[np.ndarray | sp.csc_matrix]: ...
+    ) -> np.ndarray | sp.csc_matrix | None: ...
 
     @overload
     def get_np_matrix(
@@ -428,7 +427,7 @@ class DafReader(JlObject):
         *,
         default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
         relayout: bool | DefaultValue = DEFAULT,
-    ) -> Optional[np.ndarray | sp.csc_matrix]:
+    ) -> np.ndarray | sp.csc_matrix | None:
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
         ``Daf`` data set. See the Julia
@@ -479,7 +478,7 @@ class DafReader(JlObject):
         *,
         default: None,
         relayout: bool | DefaultValue = DEFAULT,
-    ) -> Optional[pd.DataFrame]: ...
+    ) -> pd.DataFrame | None: ...
 
     @overload
     def get_pd_matrix(
@@ -500,7 +499,7 @@ class DafReader(JlObject):
         *,
         default: None | StorageScalar | Sequence[StorageScalar] | np.ndarray | UndefInitializer = Undef,
         relayout: bool | DefaultValue = DEFAULT,
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame | None:
         """
         Get the column-major matrix property with some ``name`` for some ``rows_axis`` and ``columns_axis`` in the
         ``Daf`` data set. See the Julia
@@ -638,7 +637,7 @@ class DafReader(JlObject):
     def get_pd_frame(
         self,
         axis: str | Query,
-        columns: Optional[Sequence[str | Tuple[str, str]] | Mapping[str, str | Query]] = None,
+        columns: Sequence[str | Tuple[str, str]] | Mapping[str, str | Query] | None = None,
         *,
         cache: bool | DefaultValue = DEFAULT,
     ) -> pd.DataFrame:
@@ -681,7 +680,7 @@ class DafReader(JlObject):
 
         return DafAnnDataReader(self, obs_axis=obs_axis, var_axis=var_axis, x_matrix=x_matrix)
 
-    def complete_path(self) -> Optional[str]:
+    def complete_path(self) -> str | None:
         """
         If the ``Daf`` repository is persistent (resides on disk), the absolute path leading to it. This path can be
         given to See the Julia

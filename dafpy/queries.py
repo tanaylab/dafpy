@@ -3,9 +3,6 @@ Extract data from a ``DafReader``. See the Julia
 `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html>`__ for details.
 """
 
-from typing import Optional
-from typing import Union
-
 from .julia_import import jl
 from .operations import QueryOperation
 from .operations import QuerySequence
@@ -124,7 +121,7 @@ class IfNot(QueryOperation):
     for details.
     """
 
-    def __init__(self, final_value: Optional[StorageScalar] = None) -> None:
+    def __init__(self, final_value: StorageScalar | None = None) -> None:
         super().__init__(jl.DataAxesFormats.IfNot(final_value))
 
 
@@ -136,7 +133,7 @@ class AsAxis(QueryOperation):
     for details.
     """
 
-    def __init__(self, axis: Optional[str] = None) -> None:
+    def __init__(self, axis: str | None = None) -> None:
         super().__init__(jl.DataAxesFormats.AsAxis(axis))
 
 
@@ -147,7 +144,7 @@ class Axis(QueryOperation):
     for details.
     """
 
-    def __init__(self, axis: Optional[str] = None) -> None:
+    def __init__(self, axis: str | None = None) -> None:
         super().__init__(jl.DataAxesFormats.Axis(axis))
 
 
@@ -446,7 +443,7 @@ class SquareRowIs(QueryOperation):
 #: A Python class to use instead of Julia's ``Daf.Query``. See the Julia
 #: `documentation <https://tanaylab.github.io/DataAxesFormats.jl/v0.3.0/queries.html#DataAxesFormats.Queries.Query>`__
 #: for details.
-Query = Union[Axis, LookupScalar, Names, QuerySequence]
+Query = Axis | LookupScalar | Names | QuerySequence
 
 
 def parse_query(query_string: str) -> QueryOperation:
@@ -515,7 +512,7 @@ def unescape_value(escaped: str) -> str:
 
 
 def full_vector_query(
-    axis_query: str | Query, vector_query: str | Query, vector_name: Optional[str] = None
+    axis_query: str | Query, vector_query: str | Query, vector_name: str | None = None
 ) -> QueryOperation:
     """
     Combine a query for an axis and a suffix query for a vector property into a full query for the vector values of the

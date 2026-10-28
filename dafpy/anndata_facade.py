@@ -43,10 +43,9 @@ from typing import FrozenSet
 from typing import Iterator
 from typing import Mapping
 from typing import MutableMapping
-from typing import Optional
 from typing import Set
 from typing import Tuple
-from typing import Union
+from typing import TypeAlias
 
 import numpy as np
 import pandas as pd
@@ -66,7 +65,7 @@ _MASK_NAME = "__mask__"
 _AXIS_MATRIX_KEY_RE = re.compile(r"^([^:]+):(.+)$")
 
 #: A matrix as returned by the facade: dense, or sparse in compressed columns format.
-_Matrix = Union[np.ndarray, sp.csc_matrix]
+_Matrix: TypeAlias = np.ndarray | sp.csc_matrix
 
 # pylint: disable=missing-function-docstring
 
@@ -97,9 +96,7 @@ def _prepare_vector(value: Any) -> Any:
     return value
 
 
-def _to_bool_mask(  # pylint: disable=too-many-return-statements
-    index: Any, entries: np.ndarray
-) -> Optional[np.ndarray]:
+def _to_bool_mask(index: Any, entries: np.ndarray) -> np.ndarray | None:  # pylint: disable=too-many-return-statements
     """
     Convert ``index`` to a Boolean mask aligned with *entries*.
 
@@ -197,7 +194,7 @@ class DafAxisFrameReader:
         # Match pandas DataFrame: len(df) is the number of *rows*.
         return self._daf.axis_length(self._axis)
 
-    def __getitem__(self, key: Union[str, list]) -> Union[pd.Series, pd.DataFrame]:
+    def __getitem__(self, key: str | list) -> pd.Series | pd.DataFrame:
         if isinstance(key, str):
             if key in self._hidden:
                 raise KeyError(key)
@@ -619,7 +616,7 @@ class DafAnnDataReader:  # pylint: disable=too-many-instance-attributes
         """
         return self._varm_proxy
 
-    def to_df(self, layer: Optional[str] = None) -> pd.DataFrame:
+    def to_df(self, layer: str | None = None) -> pd.DataFrame:
         """
         Return ``X`` (or a named ``layer``) as a ``pandas`` ``DataFrame``.
 
